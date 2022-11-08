@@ -25,10 +25,14 @@ import sys
 import random
 import struct
 import binascii
-import PyTango
 import time
 import json
 import pickle
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestMacroServerSetUp
@@ -1075,7 +1079,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(10)
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -1092,12 +1096,12 @@ class MacroServerPoolsTest(unittest.TestCase):
                          list(self._ms.ms.keys())[0])
         pools = msp.getPools(list(self._ms.door.keys())[0])
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
         pools = msp.getPools("sdfs")
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
         self.myAssertRaise(Exception, msp.updateMacroServer,
@@ -1107,12 +1111,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         pools = msp.getPools(list(self._ms.door.keys())[0])
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
         pools = msp.getPools("sdfs")
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
         self._ms.dps[list(self._ms.ms.keys())[0]].DoorList = []
@@ -1140,7 +1144,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             ms2.setUp()
 
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(ms2.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             ms2.dps[list(ms2.ms.keys())[0]].Init()
@@ -1161,12 +1165,12 @@ class MacroServerPoolsTest(unittest.TestCase):
                                  list(ms2.ms.keys())[0])
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 pools = msp.getPools("sdfs")
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 self.myAssertRaise(Exception, msp.updateMacroServer,
@@ -1176,12 +1180,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 pools = msp.getPools("sdfs")
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 ms2.dps[list(ms2.ms.keys())[0]].DoorList = []
@@ -1211,7 +1215,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             ms3.setUp()
 
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             for j, ms in enumerate(mss):
                 db.put_device_property(ms, {'PoolNames': self._pool.dp.name()})
                 ms3.dps[ms].Init()
@@ -1230,12 +1234,12 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.assertEqual(msp.getMacroServer(doors[i]), ms)
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 pools = msp.getPools("sdfs")
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 self.myAssertRaise(Exception, msp.updateMacroServer,
@@ -1245,12 +1249,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 pools = msp.getPools("sdfs")
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 ms3.dps[ms].DoorList = []
@@ -2802,7 +2806,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -2872,7 +2876,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -2949,7 +2953,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -3023,7 +3027,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -3097,7 +3101,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -3178,7 +3182,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -3256,7 +3260,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
@@ -3327,7 +3331,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
-        db = PyTango.Database()
+        db = tango.Database()
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
@@ -3392,7 +3396,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
-        db = PyTango.Database()
+        db = tango.Database()
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
@@ -3457,7 +3461,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
-        db = PyTango.Database()
+        db = tango.Database()
 
         arr = [
             {"name": "client2_short", "full_name": "ttestp09/testts/t2r228"},

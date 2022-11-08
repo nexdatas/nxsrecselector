@@ -36,18 +36,18 @@ class StreamSet(object):
         """ streamset constractor
 
         :param streams: tango-like steamset class
-        :type streams: :class:`StreamSet` or :class:`PyTango.Device_4Impl`
+        :type streams: :class:`StreamSet` or :class:`tango.Device_4Impl`
         """
 
-        #: (:class:`PyTango.log4tango.TangoStream`) Tango fatal log stream
+        #: (:class:`tango.log4tango.TangoStream`) Tango fatal log stream
         self.log_fatal = None
-        #: (:class:`PyTango.log4tango.TangoStream`) Tango error log stream
+        #: (:class:`tango.log4tango.TangoStream`) Tango error log stream
         self.log_error = None
-        #: (:class:`PyTango.log4tango.TangoStream`) Tango warn log stream
+        #: (:class:`tango.log4tango.TangoStream`) Tango warn log stream
         self.log_warn = None
-        #: (:class:`PyTango.log4tango.TangoStream`) Tango info log stream
+        #: (:class:`tango.log4tango.TangoStream`) Tango info log stream
         self.log_info = None
-        #: (:class:`PyTango.log4tango.TangoStream`) Tango debug log stream
+        #: (:class:`tango.log4tango.TangoStream`) Tango debug log stream
         self.log_debug = None
         #: (:obj:`set <:obj:`str` >`) if tango server
         if not hasattr(streams, "__call__"):

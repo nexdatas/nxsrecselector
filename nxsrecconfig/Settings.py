@@ -21,12 +21,16 @@
 
 import json
 import gc
-import PyTango
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
 # from lxml import etree
 import sys
 import weakref
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
@@ -67,7 +71,7 @@ class Settings(object):
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
 
-        #: (:class:`StreamSet` or :class:`PyTango.Device_4Impl`) stream set
+        #: (:class:`StreamSet` or :class:`tango.Device_4Impl`) stream set
         self._streams = StreamSet(weakref.ref(server) if server else None)
 
         #: (:obj:`str`) default NeXus path
@@ -90,7 +94,7 @@ class Settings(object):
             self._streams.error(
                 "Settings::Settings() - "
                 "Reading/Writinh Encoded Attributes for python3 and "
-                "PyTango < 9.2.5"
+                "tango < 9.2.5"
                 " is not supported ")
 
         #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
@@ -113,8 +117,8 @@ class Settings(object):
         #: (:obj:`str`) configuration file
         self.profileFile = '/tmp/nxsrecconfig.cfg'
 
-        #: (:class:`PyTango.Database`) tango database
-        self.__db = PyTango.Database()
+        #: (:class:`tango.Database`) tango database
+        self.__db = tango.Database()
 
         #:  (:obj:`list` <:obj:`str`>) muted channel filters
         self.mutedChannelFilters = ["*tip551*"]
@@ -1057,7 +1061,7 @@ class Settings(object):
         try:
             TangoUtils.command(
                 nexusconfig_device, "createConfiguration", cp)
-        except PyTango.CommunicationFailed as cf:
+        except tango.CommunicationFailed as cf:
             if len(cf.args) >= 2 and \
                cf.args[1].reason == "API_DeviceTimedOut":
                 TangoUtils.wait(nexusconfig_device)

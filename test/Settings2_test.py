@@ -25,11 +25,15 @@ import sys
 import random
 import struct
 import binascii
-import PyTango
 import json
 import string
 import time
 import nxsrecconfig
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestMacroServerSetUp
@@ -81,7 +85,7 @@ IS64BIT = (struct.calcsize("P") == 8)
 DB_AVAILABLE = []
 
 #: tango version
-TGVER = PyTango.__version_info__[0]
+TGVER = tango.__version_info__[0]
 
 if sys.version_info > (3,):
     long = int
@@ -2330,7 +2334,7 @@ class Settings2Test(unittest.TestCase):
     def subtest_constructor(self):
         # properties
 
-        db = PyTango.Database()
+        db = tango.Database()
         msp = MacroServerPools(10)
 
         icf = TangoUtils.getDeviceName(db, "NXSConfigServer")
@@ -2356,7 +2360,7 @@ class Settings2Test(unittest.TestCase):
         self.assertEqual(rs.profileFile, '/tmp/nxsrecconfig.cfg')
         self.assertEqual(rs.configDevice, icf)
         self.assertEqual(rs.door, idoor)
-        cf = PyTango.DeviceProxy(rs.configDevice)
+        cf = tango.DeviceProxy(rs.configDevice)
         self.assertEqual(
             cf.availableSelections(),
             rs.availableProfiles())

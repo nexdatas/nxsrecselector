@@ -20,7 +20,6 @@
 """  Tango Utilities """
 
 import re
-import PyTango
 import time
 import json
 import pickle
@@ -29,16 +28,22 @@ import fnmatch
 import socket
 import sys
 
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
+
 if sys.version_info > (3,):
     unicode = str
 
 
-#: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
+#: (:obj:`bool`) tango bug #213 flag related to EncodedAttributes in python3
 PYTG_BUG_213 = False
 if sys.version_info > (3,):
     try:
         PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
-            map(int, PyTango.__version__.split(".")[:3]))
+            map(int, tango.__version__.split(".")[:3]))
         if PYTGMAJOR <= 9:
             if PYTGMAJOR == 9:
                 if PYTGMINOR < 2:
@@ -258,14 +263,14 @@ class TangoUtils(object):
 
     """  Tango Utilities """
 
-    #: (:obj:`dict` <:class:`PyTango.CmdArgType`, :obj:`str`>)
+    #: (:obj:`dict` <:class:`tango.CmdArgType`, :obj:`str`>)
     #: map of Tango:Numpy types
-    tTnp = {PyTango.DevLong64: "int64", PyTango.DevLong: "int32",
-            PyTango.DevShort: "int16", PyTango.DevUChar: "uint8",
-            PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
-            PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
-            PyTango.DevFloat: "float32", PyTango.DevString: "string",
-            PyTango.DevBoolean: "bool", PyTango.DevEncoded: "encoded"}
+    tTnp = {tango.DevLong64: "int64", tango.DevLong: "int32",
+            tango.DevShort: "int16", tango.DevUChar: "uint8",
+            tango.DevULong64: "uint64", tango.DevULong: "uint32",
+            tango.DevUShort: "uint16", tango.DevDouble: "float64",
+            tango.DevFloat: "float32", tango.DevString: "string",
+            tango.DevBoolean: "bool", tango.DevEncoded: "encoded"}
 
     @classmethod
     def openProxy(cls, device, counter=1000):
@@ -274,11 +279,11 @@ class TangoUtils(object):
         :param device: device name
         :type device: :obj:`str`
         :returns: DeviceProxy of device
-        :rtype: :class:`PyTango.DeviceProxy`
+        :rtype: :class:`tango.DeviceProxy`
         """
         found = False
         cnt = 0
-        cnfServer = PyTango.DeviceProxy(Utils.tostr(device))
+        cnfServer = tango.DeviceProxy(Utils.tostr(device))
 
         while not found and cnt < counter:
             if cnt > 1:
@@ -286,13 +291,13 @@ class TangoUtils(object):
             try:
                 cnfServer.ping()
                 found = True
-            except PyTango.DevFailed:
+            except tango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
                     raise
             cnt += 1
-        cnfServer.set_source(PyTango.DevSource.DEV)
+        cnfServer.set_source(tango.DevSource.DEV)
         return cnfServer
 
     @classmethod
@@ -300,12 +305,12 @@ class TangoUtils(object):
         """waits for device proxy not running
 
         :param proxy: device proxy
-        :type proxy: :class:`PyTango.DeviceProxy`
+        :type proxy: :class:`tango.DeviceProxy`
         :returns: if proxy device ready
         :rtype: :obj:`str`
         """
 
-        dstate = getattr(PyTango.DevState, state) if state else None
+        dstate = getattr(tango.DevState, state) if state else None
         found = False
         cnt = 0
         while not found and cnt < counter:
@@ -318,7 +323,7 @@ class TangoUtils(object):
                         found = True
                 else:
                     found = True
-            except PyTango.DevFailed:
+            except tango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -333,15 +338,15 @@ class TangoUtils(object):
         :param names: given device names
         :type names: :obj:`list` <:obj:`str`>
         :returns: list of device DeviceProxies
-        :rtype: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :rtype: :obj:`list` <:class:`tango.DeviceProxy`>
         """
         dps = []
         for name in names:
-            dp = PyTango.DeviceProxy(Utils.tostr(name))
+            dp = tango.DeviceProxy(Utils.tostr(name))
             try:
                 dp.ping()
                 dps.append(dp)
-            except PyTango.DevFailed:
+            except tango.DevFailed:
                 pass
         return dps
 
@@ -350,7 +355,7 @@ class TangoUtils(object):
         """ finds device of give class
 
         :param db: tango database
-        :type db: :class:`PyTango.DeviceProxy`
+        :type db: :class:`tango.DeviceProxy`
         :param cname: device class name
         :type cname: :obj:`str`
         :returns: device name if exists
@@ -361,11 +366,11 @@ class TangoUtils(object):
         device = ''
         for server in servers:
             try:
-                dp = PyTango.DeviceProxy(Utils.tostr(server))
+                dp = tango.DeviceProxy(Utils.tostr(server))
                 dp.ping()
                 device = server
                 break
-            except PyTango.DevFailed:
+            except tango.DevFailed:
                 pass
         return device
 
@@ -390,7 +395,7 @@ class TangoUtils(object):
                 return "tango://%s" % ":".join(lsource)
 
         else:
-            db = PyTango.Database()
+            db = tango.Database()
             host, port = db.get_db_host(), db.get_db_port()
             if fqdn:
                 host = socket.getfqdn(host)
@@ -409,31 +414,31 @@ class TangoUtils(object):
         shp = []
         dt = 'float64'
         ut = 'No unit'
-        ap = PyTango.AttributeProxy(source)
+        ap = tango.AttributeProxy(source)
         da = None
         ac = None
 
         try:
             ac = ap.get_config()
-            if ac.data_format != PyTango.AttrDataFormat.SCALAR:
+            if ac.data_format != tango.AttrDataFormat.SCALAR:
                 da = ap.read()
                 vl = da.value
-        except PyTango.DevFailed:
+        except tango.DevFailed:
             pass
-            # if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
+            # if ac and ac.data_format != tango.AttrDataFormat.SCALAR \
             #         and (da is None or not hasattr(da, 'dim_x')):
             #     raise
 
         if vl is not None:
             shp = list(numpy.shape(vl))
         elif da is not None:
-            if ac.data_format != PyTango.AttrDataFormat.SCALAR:
+            if ac.data_format != tango.AttrDataFormat.SCALAR:
                 if da.dim_x and da.dim_x > 1:
                     shp = [da.dim_y, da.dim_x] \
                         if da.dim_y \
                         else [da.dim_x]
         elif ac is not None:
-            if ac.data_format != PyTango.AttrDataFormat.SCALAR:
+            if ac.data_format != tango.AttrDataFormat.SCALAR:
                 if ac.max_dim_x and ac.max_dim_x > 1:
                     shp = [ac.max_dim_y, ac.max_dim_x] \
                         if ac.max_dim_y \
@@ -448,7 +453,7 @@ class TangoUtils(object):
         """ executes command on server on python package
 
         :param server: tango server name or package name
-        :type server: :class:`PyTango.DeviceProxy` \
+        :type server: :class:`tango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param command: command name
         :type command: :obj:`str`
@@ -484,7 +489,7 @@ class MSUtils(object):
         dp = TangoUtils.openProxy(ms)
         if PYTG_BUG_213:
             raise OldTangoError(
-                "Reading Encoded Attributes not supported in PyTango < 9.2.5")
+                "Reading Encoded Attributes not supported in tango < 9.2.5")
         rec = dp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
@@ -542,7 +547,7 @@ class MSUtils(object):
         """ provides macro server of given door
 
         :param db: tango database
-        :type db: :class:`PyTango.Database`
+        :type db: :class:`tango.Database`
         :param door: given door
         :type door: :obj:`str`
         :returns: first MacroServer of the given door
@@ -561,7 +566,7 @@ class MSUtils(object):
                 mserver = "%s/%s" % (hostname, Utils.tostr(server))
             else:
                 mserver = Utils.tostr(server)
-            dp = PyTango.DeviceProxy(Utils.tostr(mserver))
+            dp = tango.DeviceProxy(Utils.tostr(mserver))
             if hasattr(dp, "DoorList") and dp.DoorList:
                 lst = [str(dr).lower() for dr in dp.DoorList]
                 if lst and door.lower() in lst:
@@ -580,7 +585,7 @@ class MSUtils(object):
         """
         if PYTG_BUG_213:
             raise OldTangoError(
-                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
+                "Writing Encoded Attributes not supported in tango < 9.2.5")
         try:
             pk = pickle.dumps(value, protocol=2)
             dp.Environment = ['pickle', pk]
@@ -615,7 +620,7 @@ class PoolUtils(object):
         """ provides device controller full names
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param devices: alias names
         :type devices: :obj:`list` <:obj:`str`>
         :returns: device controller full names
@@ -637,7 +642,7 @@ class PoolUtils(object):
         """ provides channel sources
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param devices: alias names
         :type devices: :obj:`list` <:obj:`str`>
         :returns: device sources
@@ -659,7 +664,7 @@ class PoolUtils(object):
         """ provides experimental Channels
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param listattr: pool attribute with list
         :type listattr: :obj:`str`
         :param typefilter: pool attribute with list
@@ -689,7 +694,7 @@ class PoolUtils(object):
         """ find device names from aliases
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param names: alias names if None returns name for all aliases
         :type names: :obj:`list` <:obj:`str`>
         :returns: full device name
@@ -712,7 +717,7 @@ class PoolUtils(object):
         """ find aliases from fullnames
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param names: fullnames if None returns all aliases
         :type names: :obj:`list` <:obj:`str`>
         :returns: full device name
@@ -736,7 +741,7 @@ class PoolUtils(object):
         """ find measurement group name from alias
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param alias: mntgrp alias
         :type alias: :obj:`str`
         :returns: full name of the measurement group alias
@@ -759,7 +764,7 @@ class PoolUtils(object):
         """ provides tiemrs of given pools
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param filters: device name filter list
         :type filters: :obj:`list` <:obj:`str`>
         :returns: list of timer names
@@ -793,7 +798,7 @@ class PoolUtils(object):
         """ provides channels of given pools
 
         :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param filters: device name filter list
         :type filters: :obj:`list` <:obj:`str`>
         :returns: list of channel names
@@ -865,14 +870,14 @@ class PoolUtils(object):
         """
         source = None
         try:
-            dp = PyTango.DeviceProxy(Utils.tostr(name))
+            dp = tango.DeviceProxy(Utils.tostr(name))
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")
-                ap = PyTango.AttributeProxy(sds[-1])
+                ap = tango.AttributeProxy(sds[-1])
                 if ap is None:
                     raise Exception("Empty proxy")
                 source = sds[-1]
-        except PyTango.DevFailed:
+        except tango.DevFailed:
             pass
         return source

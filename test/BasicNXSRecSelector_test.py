@@ -22,8 +22,12 @@
 import unittest
 import sys
 import time
-import PyTango
 import json
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import ServerSetUp
@@ -85,7 +89,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
         return list(json.loads(rs.profileConfiguration).keys())
 
     def setProp(self, rc, name, value):
-        db = PyTango.Database()
+        db = tango.Database()
         name = "" + name[0].upper() + name[1:]
         db.put_device_property(
             self._sv.new_device_info_writer.name,
@@ -102,11 +106,11 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
-                xmlc = PyTango.DeviceProxy(
+                xmlc = tango.DeviceProxy(
                     self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
                 xmlc.set_timeout_millis(25000)
-                if xmlc.state() == PyTango.DevState.ON:
+                if xmlc.state() == tango.DevState.ON:
                     found = True
                 found = True
             except Exception as e:
@@ -122,7 +126,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
                 "Cannot connect to %s" %
                 self._sv.new_device_info_writer.name)
 
-        self.assertEqual(xmlc.state(), PyTango.DevState.ON)
+        self.assertEqual(xmlc.state(), tango.DevState.ON)
         return xmlc
 
     # opens config server
@@ -135,11 +139,11 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
-                xmlc = PyTango.DeviceProxy(
+                xmlc = tango.DeviceProxy(
                     self._sv2.new_device_info_writer.name)
                 time.sleep(0.01)
                 xmlc.set_timeout_millis(25000)
-                if xmlc.state() == PyTango.DevState.ON:
+                if xmlc.state() == tango.DevState.ON:
                     found = True
                 found = True
             except Exception as e:
@@ -155,7 +159,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
                 "Cannot connect to %s" %
                 self._sv2.new_device_info_writer.name)
 
-        self.assertEqual(xmlc.state(), PyTango.DevState.ON)
+        self.assertEqual(xmlc.state(), tango.DevState.ON)
         return xmlc
 
     def subtest_constructor(self):
@@ -167,7 +171,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
         pm = ProfileManager(se)
         amgs = pm.availableMntGrps()
         # print "AMGs", amgs
-        cf = PyTango.DeviceProxy(rs.configDevice)
+        cf = tango.DeviceProxy(rs.configDevice)
         # print "AvSels", cf.availableSelections()
         # print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(rs.door))

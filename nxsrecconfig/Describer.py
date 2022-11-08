@@ -22,7 +22,12 @@
 import re
 import sys
 import json
-import PyTango
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
 # from lxml import etree
@@ -156,14 +161,14 @@ class Describer(object):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server
-        :type nexusconfig_device: :class:`PyTango.DeviceProxy` \
+        :type nexusconfig_device: :class:`tango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param tree: flag for output tree dictionary
         :type tree: :obj:`bool`
         :param pyevalfromscript: if evalulate PYEVAL datasources from script
         :type pyevalfromscript: :obj:`bool`
         """
-        #: (:class:`PyTango.DeviceProxy` \
+        #: (:class:`tango.DeviceProxy` \
         #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
         #:    configuration server
         self.__nexusconfig_device = nexusconfig_device
@@ -609,7 +614,7 @@ class Describer(object):
                     "dataSources", [Utils.tostr(name)])
             else:
                 dsource = [dsxml]
-        except PyTango.DevFailed:
+        except tango.DevFailed:
             dsource = []
         if len(dsource) > 0:
             if sys.version_info > (3,):

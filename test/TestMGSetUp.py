@@ -22,9 +22,13 @@
 import os
 import sys
 import subprocess
-
-import PyTango
 import time
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 try:
     import TestMG
 except Exception:
@@ -41,7 +45,7 @@ class TestMeasurementGroupSetUp(object):
         instance = name.upper()
         device = "mntgrp/pool/%s" % name
         # information about tango writer
-        self.new_device_info_writer = PyTango.DbDevInfo()
+        self.new_device_info_writer = tango.DbDevInfo()
         # information about tango writer class
         self.new_device_info_writer._class = "MeasurementGroup"
         # information about tango writer server
@@ -64,14 +68,14 @@ class TestMeasurementGroupSetUp(object):
         self.start()
 
     def add(self):
-        db = PyTango.Database()
+        db = tango.Database()
         db.add_device(self.new_device_info_writer)
         db.add_server(self.new_device_info_writer.server,
                       self.new_device_info_writer)
 
     # starts server
     def start(self):
-        db = PyTango.Database()
+        db = tango.Database()
         path = os.path.dirname(TestMG.__file__)
         if not path:
             path = '.'
@@ -102,9 +106,9 @@ class TestMeasurementGroupSetUp(object):
                     time.sleep(0.01)
                     cnt += 1
                     continue
-                self.dp = PyTango.DeviceProxy(dvname)
+                self.dp = tango.DeviceProxy(dvname)
                 time.sleep(0.01)
-                if self.dp.state() == PyTango.DevState.ON:
+                if self.dp.state() == tango.DevState.ON:
                     found = True
             except Exception:
                 found = False
@@ -119,7 +123,7 @@ class TestMeasurementGroupSetUp(object):
         self.stop()
 
     def delete(self):
-        db = PyTango.Database()
+        db = tango.Database()
         db.delete_server(self.new_device_info_writer.server)
 
     # stops server

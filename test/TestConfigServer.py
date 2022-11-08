@@ -30,11 +30,14 @@
 # ============================================================================
 #
 
-
-import PyTango
 import sys
 import json
 import re
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 # =================================================================
 #   TestConfigServer Class Description:
@@ -48,7 +51,7 @@ import re
 # =================================================================
 
 
-class NXSConfigServer(PyTango.Device_4Impl):
+class NXSConfigServer(tango.Device_4Impl):
 
     # -------- Add you global variables here --------------------------
 
@@ -57,7 +60,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         NXSConfigServer.init_device(self)
@@ -73,7 +76,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def init_device(self):
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
 
         self.attr_XMLString = ""
         self.attr_Version = "2.0.0"
@@ -488,13 +491,13 @@ class NXSConfigServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
     def SetState(self, state):
         if state == "RUNNING":
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
         elif state == "FAULT":
-            self.set_state(PyTango.DevState.FAULT)
+            self.set_state(tango.DevState.FAULT)
         elif state == "ALARM":
-            self.set_state(PyTango.DevState.ALARM)
+            self.set_state(tango.DevState.ALARM)
         else:
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
 
     # -----------------------------------------------------------------
     #    GetCommandVariable command:
@@ -522,7 +525,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
 #    NXSConfigServerClass class definition
 #
 # =================================================================
-class NXSConfigServerClass(PyTango.DeviceClass):
+class NXSConfigServerClass(tango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
@@ -535,80 +538,80 @@ class NXSConfigServerClass(PyTango.DeviceClass):
     #    Command definitions
     cmd_list = {
         'SetState':
-            [[PyTango.DevString, "ScalarString"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "ScalarString"],
+             [tango.DevVoid, ""]],
         'Open':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'Close':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'Components':
-            [[PyTango.DevVarStringArray, "list of component names"],
-             [PyTango.DevVarStringArray, "list of required components"]],
+            [[tango.DevVarStringArray, "list of component names"],
+             [tango.DevVarStringArray, "list of required components"]],
         'Selections':
-            [[PyTango.DevVarStringArray, "list of selection names"],
-             [PyTango.DevVarStringArray, "list of required selections"]],
+            [[tango.DevVarStringArray, "list of selection names"],
+             [tango.DevVarStringArray, "list of required selections"]],
         'InstantiatedComponents':
-            [[PyTango.DevVarStringArray, "list of component names"],
-             [PyTango.DevVarStringArray, "list of instantiated components"]],
+            [[tango.DevVarStringArray, "list of component names"],
+             [tango.DevVarStringArray, "list of instantiated components"]],
         'DataSources':
-            [[PyTango.DevVarStringArray, "list of DataSource names"],
-             [PyTango.DevVarStringArray, "list of required DataSources"]],
+            [[tango.DevVarStringArray, "list of DataSource names"],
+             [tango.DevVarStringArray, "list of required DataSources"]],
         'AvailableComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "list of available component names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "list of available component names"]],
         'AvailableSelections':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "list of available selection names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "list of available selection names"]],
         'AvailableDataSources':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of available DataSource names"]],
         'StoreSelection':
-            [[PyTango.DevString, "selection name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "selection name"],
+             [tango.DevVoid, ""]],
         'CreateConfiguration':
-            [[PyTango.DevVarStringArray, "list of component names"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVarStringArray, "list of component names"],
+             [tango.DevVoid, ""]],
         'MandatoryComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "component names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "component names"]],
         'StoreComponent':
-            [[PyTango.DevString, "component name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "component name"],
+             [tango.DevVoid, ""]],
         'StoreDataSource':
-            [[PyTango.DevString, "datasource name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "datasource name"],
+             [tango.DevVoid, ""]],
         'DeleteComponent':
-            [[PyTango.DevString, "component name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "component name"],
+             [tango.DevVoid, ""]],
         'DeleteSelection':
-            [[PyTango.DevString, "selection name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "selection name"],
+             [tango.DevVoid, ""]],
         'DeleteDataSource':
-            [[PyTango.DevString, "datasource name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "datasource name"],
+             [tango.DevVoid, ""]],
         'SetCommandVariable':
-            [[PyTango.DevVarStringArray, "(name,jsonstring)"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVarStringArray, "(name,jsonstring)"],
+             [tango.DevVoid, ""]],
         'GetCommandVariable':
-            [[PyTango.DevString, "name"],
-             [PyTango.DevString, "jsonstring"]],
+            [[tango.DevString, "name"],
+             [tango.DevString, "jsonstring"]],
         'ComponentVariables':
-            [[PyTango.DevString, "component name"],
-             [PyTango.DevVarStringArray, "list of variable names"]],
+            [[tango.DevString, "component name"],
+             [tango.DevVarStringArray, "list of variable names"]],
         'DependentComponents':
-            [[PyTango.DevVarStringArray, "component names"],
-             [PyTango.DevVarStringArray, "list of component names"]],
+            [[tango.DevVarStringArray, "component names"],
+             [tango.DevVarStringArray, "list of component names"]],
     }
 
     #    Attribute definitions
     attr_list = {
         'XMLString':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "XML configuration",
                  'description':
@@ -616,70 +619,70 @@ class NXSConfigServerClass(PyTango.DeviceClass):
                  "performing StoreComponent and StoreDataSource."
                  "\nMoreover, after performing CreateConfiguration "
                  "it contains the resulting XML configuration.",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'Selection':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Selected Component",
                  'description':
                  "It allows to pass JSON strings into database during "
                  "performing StoreSelection.",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'JSONSettings':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Arguments of MySQLdb.connect(...)",
                  'description': "The JSON string with parameters of "
                  "MySQLdb.connect(...).",
                  'Memorized': "true",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'Variables':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "XML configuration variables",
                  'description': "The JSON string with "
                  "XML configuration variables",
             }],
         'STEPDataSources':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "datasources to be switched into STEP mode",
                  'description': "datasources to be switched "
                  "into STEP mode during creating configuration process",
             }],
         'CanFailDataSources':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "datasources to be switched into CanFail mode",
                  'description': "datasources to be switched "
                  "into CanFail mode during creating configuration process",
             }],
         'LinkDataSources':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "datasources to be switched into Link mode",
                  'description': "datasources to be switched "
                  "into Link mode during creating configuration process",
             }],
         'Version':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
              {
                  'label': "Configuration Version",
                  'description': "Configuration version",
@@ -690,7 +693,7 @@ class NXSConfigServerClass(PyTango.DeviceClass):
 #    NXSConfigServerClass Constructor
 # -----------------------------------------------------------------
     def __init__(self, name):
-        PyTango.DeviceClass.__init__(self, name)
+        tango.DeviceClass.__init__(self, name)
         self.set_type(name)
         # print "In TestConfigServerClass  constructor"
 
@@ -704,14 +707,14 @@ if __name__ == '__main__':
     try:
         argv = list(sys.argv)
         argv[0] = "NXSConfigServer"
-        py = PyTango.Util(argv)
+        py = tango.Util(argv)
         py.add_class(NXSConfigServerClass, NXSConfigServer)
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

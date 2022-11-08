@@ -25,12 +25,16 @@ import sys
 import random
 import struct
 import binascii
-import PyTango
 import json
 import pickle
 import string
 import time
 import nxsrecconfig
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestMacroServerSetUp
@@ -1148,7 +1152,7 @@ class SelectorTest(unittest.TestCase):
         se = Selector(None, self.__version)
         self.assertEqual(se.moduleLabel, 'module')
         msp = MacroServerPools(10)
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0], {})
         se = Selector(msp, self.__version)
         self.assertEqual(se.moduleLabel, 'module')
@@ -1159,13 +1163,13 @@ class SelectorTest(unittest.TestCase):
         se["Door"] = val["Door"]
         self.assertEqual(se.getPools(), [])
         self.assertEqual(se.getMacroServer(), list(self._ms.ms.keys())[0])
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         pools = se.getPools()
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), list(self._ms.ms.keys())[0])
 
@@ -1185,7 +1189,7 @@ class SelectorTest(unittest.TestCase):
             ms2.setUp()
 
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             se = Selector(msp, self.__version)
             db.put_device_property(list(ms2.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
@@ -1207,7 +1211,7 @@ class SelectorTest(unittest.TestCase):
                 # print "door", se["Door"]
                 pools = se.getPools()
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
                 self.assertEqual(msp.getMacroServer(doors[i]),
                                  list(ms2.ms.keys())[0])
@@ -1234,7 +1238,7 @@ class SelectorTest(unittest.TestCase):
             ms3.setUp()
 
             msp = MacroServerPools(10)
-            db = PyTango.Database()
+            db = tango.Database()
             se = Selector(msp, self.__version)
             for j, ms in enumerate(mss):
                 db.put_device_property(ms,
@@ -1248,7 +1252,7 @@ class SelectorTest(unittest.TestCase):
                 se["Door"] = doors[i]
                 pools = se.getPools()
                 self.assertEqual(len(pools), 1)
-                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
                 self.assertEqual(msp.getMacroServer(doors[i]), ms)
                 self.assertEqual(se.getMacroServer(), ms)
@@ -1271,7 +1275,7 @@ class SelectorTest(unittest.TestCase):
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -1309,7 +1313,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(dd, res)
 
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), list(self._ms.ms.keys())[0])
 
@@ -1328,7 +1332,7 @@ class SelectorTest(unittest.TestCase):
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -1366,7 +1370,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(dd, res)
 
         self.assertEqual(len(pools), 1)
-        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), list(self._ms.ms.keys())[0])
 
@@ -1427,7 +1431,7 @@ class SelectorTest(unittest.TestCase):
         for i in range(20):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
-            db = PyTango.Database()
+            db = tango.Database()
             self.assertTrue(se["ConfigDevice"],
                             TangoUtils.getDeviceName(db, "NXSConfigServer"))
             se["Door"] = val["Door"]
@@ -1503,7 +1507,7 @@ class SelectorTest(unittest.TestCase):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
-            db = PyTango.Database()
+            db = tango.Database()
             self.assertTrue(se["WriterDevice"],
                             TangoUtils.getDeviceName(db, "NXSDataWriter"))
             se["WriterDevice"] = val["WriterDevice"]
@@ -1573,7 +1577,7 @@ class SelectorTest(unittest.TestCase):
         for i in range(20):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
-            db = PyTango.Database()
+            db = tango.Database()
             self.assertTrue(se["Door"],
                             TangoUtils.getDeviceName(db, "Door"))
             se["Door"] = val["Door"]
@@ -1765,18 +1769,18 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        db = PyTango.Database()
+        db = tango.Database()
 
         inst = se.setConfigInstance()
         icf = TangoUtils.getDeviceName(db, "NXSConfigServer")
-        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertTrue(isinstance(inst, tango.DeviceProxy))
         self.assertEqual(inst.name(), icf)
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
 
         se["ConfigDevice"] = val["ConfigDevice"]
         inst = se.setConfigInstance()
-        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertTrue(isinstance(inst, tango.DeviceProxy))
         self.assertEqual(inst.name(), val["ConfigDevice"])
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
@@ -1791,7 +1795,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertRaise(Exception, se.setConfigInstance)
 
         se.reset()
-        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertTrue(isinstance(inst, tango.DeviceProxy))
         self.assertEqual(inst.name(), icf)
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
@@ -1806,7 +1810,7 @@ class SelectorTest(unittest.TestCase):
         self.assertTrue(isinstance(inst, XMLConfigurator))
         se["ConfigDevice"] = ''
         inst = se.setConfigInstance()
-        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertTrue(isinstance(inst, tango.DeviceProxy))
         self.assertEqual(inst.name(), icf)
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
@@ -1820,7 +1824,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        # db = PyTango.Database()
+        # db = tango.Database()
 
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
@@ -1867,7 +1871,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        # db = PyTango.Database()
+        # db = tango.Database()
 
         se["ConfigDevice"] = val["ConfigDevice"]
         for i in range(5):
@@ -1945,7 +1949,7 @@ class SelectorTest(unittest.TestCase):
         #        "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        # db = PyTango.Database()
+        # db = tango.Database()
 
         if DB_AVAILABLE:
 
@@ -1972,7 +1976,7 @@ class SelectorTest(unittest.TestCase):
         #        "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        # db = PyTango.Database()
+        # db = tango.Database()
 
         se["ConfigDevice"] = 'module'
         inst = se.setConfigInstance()
@@ -2023,7 +2027,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(val["Door"])
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2132,7 +2136,7 @@ class SelectorTest(unittest.TestCase):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2258,7 +2262,7 @@ class SelectorTest(unittest.TestCase):
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2426,7 +2430,7 @@ class SelectorTest(unittest.TestCase):
             val["ChannelProperties"] = json.dumps({})
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -6049,7 +6053,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # channelerrors = []
@@ -6149,7 +6153,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # channelerrors = []
@@ -6249,7 +6253,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # channelerrors = []
@@ -6351,7 +6355,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # channelerrors = []
@@ -6450,7 +6454,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # channelerrors = []
@@ -6551,7 +6555,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # channelerrors = []
@@ -6646,7 +6650,7 @@ class SelectorTest(unittest.TestCase):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(1)
             se = Selector(msp, self.__version)
@@ -6749,7 +6753,7 @@ class SelectorTest(unittest.TestCase):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(1)
             se = Selector(msp, self.__version)
@@ -6831,7 +6835,7 @@ class SelectorTest(unittest.TestCase):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
@@ -6911,7 +6915,7 @@ class SelectorTest(unittest.TestCase):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
@@ -6991,7 +6995,7 @@ class SelectorTest(unittest.TestCase):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(1)
             se = Selector(msp, self.__version)
@@ -7069,7 +7073,7 @@ class SelectorTest(unittest.TestCase):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(1)
             se = Selector(msp, self.__version)
@@ -7147,7 +7151,7 @@ class SelectorTest(unittest.TestCase):
         # ]
 
         try:
-            # db = PyTango.Database()
+            # db = tango.Database()
             simps2.setUp()
             msp = MacroServerPools(1)
             se = Selector(msp, self.__version)

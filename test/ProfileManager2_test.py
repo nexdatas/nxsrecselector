@@ -25,11 +25,15 @@ import sys
 import random
 import struct
 import binascii
-import PyTango
 import json
 import string
 import time
 import nxsrecconfig
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestMacroServerSetUp
@@ -73,7 +77,7 @@ if sys.version_info > (3,):
 IS64BIT = (struct.calcsize("P") == 8)
 
 #: tango version
-TGVER = PyTango.__version_info__[0]
+TGVER = tango.__version_info__[0]
 
 # list of available databases
 DB_AVAILABLE = []
@@ -1903,7 +1907,7 @@ class ProfileManager2Test(unittest.TestCase):
         mgt = ProfileManager(se)
         self.assertEqual(mgt.availableMntGrps(), [])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -1960,7 +1964,7 @@ class ProfileManager2Test(unittest.TestCase):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -2043,7 +2047,7 @@ class ProfileManager2Test(unittest.TestCase):
         mgt = ProfileManager(se)
         self.assertEqual(mgt.availableMntGrps(), [])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -2110,7 +2114,7 @@ class ProfileManager2Test(unittest.TestCase):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {
@@ -2248,7 +2252,7 @@ class ProfileManager2Test(unittest.TestCase):
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2314,7 +2318,7 @@ class ProfileManager2Test(unittest.TestCase):
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["OrderedChannels"] = json.dumps([])
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -2373,7 +2377,7 @@ class ProfileManager2Test(unittest.TestCase):
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["OrderedChannels"] = json.dumps([])
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -2421,7 +2425,7 @@ class ProfileManager2Test(unittest.TestCase):
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2478,7 +2482,7 @@ class ProfileManager2Test(unittest.TestCase):
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2540,7 +2544,7 @@ class ProfileManager2Test(unittest.TestCase):
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2609,7 +2613,7 @@ class ProfileManager2Test(unittest.TestCase):
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -2688,7 +2692,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -2728,7 +2732,7 @@ class ProfileManager2Test(unittest.TestCase):
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 jpcnf = mgt.updateProfile()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 self.assertEqual(json.loads(se["ComponentPreselection"]), {})
@@ -2788,7 +2792,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -2901,7 +2905,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                 jpcnf = mgt.updateProfile()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
@@ -2962,7 +2966,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -3083,7 +3087,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -3205,7 +3209,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -3328,7 +3332,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -3444,7 +3448,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                 jpcnf = mgt.updateProfile()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
@@ -3555,7 +3559,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -3702,7 +3706,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                 jpcnf = mgt.updateProfile()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
@@ -3816,7 +3820,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -3983,7 +3987,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     jpcnf = mgt.updateProfile()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -4102,7 +4106,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -4304,7 +4308,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     jpcnf = mgt.updateProfile()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -4433,7 +4437,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -4643,7 +4647,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     jpcnf = mgt.updateProfile()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -4810,7 +4814,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -5021,7 +5025,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     jpcnf = mgt.updateProfile()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -5189,7 +5193,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -5428,7 +5432,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     jpcnf = mgt.updateProfile()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -5611,7 +5615,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -5915,7 +5919,7 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertTrue(mgt.isMntGrpUpdated())
                     pcnf = json.loads(jpcnf)
                     # mgdp =
-                    PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgt.mntGrpConfiguration()
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -6097,7 +6101,7 @@ class ProfileManager2Test(unittest.TestCase):
         try:
             for j in range(10):
                 self.setUp()
-                db = PyTango.Database()
+                db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
@@ -6458,7 +6462,7 @@ class ProfileManager2Test(unittest.TestCase):
                         self.assertTrue(mgt[mg].isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
                         # mgdp =
-                        PyTango.DeviceProxy(
+                        tango.DeviceProxy(
                             tmg[mg].new_device_info_writer.name)
                         jcnf = mgt[mg].mntGrpConfiguration()
                         cnf = json.loads(jcnf)
@@ -6834,7 +6838,7 @@ class ProfileManager2Test(unittest.TestCase):
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
                     self.assertEqual(ltmpcf, tmpcf2)
                     tmpcf['label'] = mg2
-                    mgdp = PyTango.DeviceProxy(
+                    mgdp = tango.DeviceProxy(
                         tmg[mg2].new_device_info_writer.name)
                     # print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)

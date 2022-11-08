@@ -21,10 +21,15 @@
 
 import json
 import sys
-import PyTango
 import lxml.etree
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 
 from .Utils import Utils, TangoUtils, PoolUtils
 
@@ -40,12 +45,12 @@ class DynamicComponent(object):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server
-        :type  nexusconfig_device: :obj:`PyTango.DeviceProxy` \
+        :type  nexusconfig_device: :obj:`tango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param defaultpath:  default dynamic component path
         :type defaultpath: :obj:`str`
         """
-        #: (:class:`PyTango.DeviceProxy` \
+        #: (:class:`tango.DeviceProxy` \
         #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
         #:    configuration server
         self.__nexusconfig_device = nexusconfig_device
@@ -77,8 +82,8 @@ class DynamicComponent(object):
         #:       alias nexus types dictionary
         self.__nexusshapes = {}
 
-        #: (:class:`PyTango.Database` ) pytango database server
-        self.__db = PyTango.Database()
+        #: (:class:`tango.Database` ) pytango database server
+        self.__db = tango.Database()
 
         #: (:obj:`str`) default dynamic component path
         self.__ldefaultpath = defaultpath

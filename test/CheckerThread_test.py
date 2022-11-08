@@ -27,7 +27,11 @@ import random
 import struct
 import threading
 import binascii
-import PyTango
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestServerSetUp
@@ -164,7 +168,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -173,7 +177,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                None))
@@ -182,7 +186,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
                                None))
@@ -191,7 +195,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -286,7 +290,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -295,7 +299,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                None))
@@ -304,7 +308,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
                                None))
@@ -313,7 +317,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("OFF")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -408,7 +412,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                '@ScalarDouble'))
@@ -417,7 +421,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                None))
@@ -426,7 +430,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
                                None))
@@ -435,7 +439,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                '@ScalarDouble'))
@@ -530,7 +534,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                'GetDouble()'))
@@ -539,7 +543,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                None))
@@ -548,7 +552,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
                                None))
@@ -557,7 +561,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                'GetDouble()'))
@@ -663,7 +667,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(
+        dp = tango.DeviceProxy(
             self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem(
@@ -675,7 +679,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(
+        dp = tango.DeviceProxy(
             self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem(
@@ -686,7 +690,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem(
             "ds3", self._simps.new_device_info_writer.name, None))
@@ -695,7 +699,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -789,7 +793,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -798,7 +802,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                None))
@@ -807,7 +811,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
                                None))
@@ -816,7 +820,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -909,7 +913,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
         ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                'ScalarDouble'))
@@ -918,7 +922,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
                                None))
@@ -927,7 +931,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci6)
 
         ci7 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
         ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
                                None))
@@ -936,7 +940,7 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
-        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp = tango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
         ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
                                'ScalarDouble'))

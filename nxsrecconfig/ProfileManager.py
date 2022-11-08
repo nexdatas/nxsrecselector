@@ -21,7 +21,11 @@
 
 import json
 import sys
-import PyTango
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 from .Utils import TangoUtils, PoolUtils, MSUtils, Utils
 from .Describer import Describer
@@ -60,11 +64,11 @@ class ProfileManager(object):
 
         #: (:obj:`str`) macro server name
         self.__macroServerName = None
-        #: (:class:`PyTango.DeviceProxy` \
+        #: (:class:`tango.DeviceProxy` \
         #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
         #:     configuration server proxy
         self.__configServer = None
-        #: (:obj:`list` <:obj:`PyTango.DeviceProxy`>) pool server proxies
+        #: (:obj:`list` <:obj:`tango.DeviceProxy`>) pool server proxies
         self.__pools = None
 
         #: (:obj:`list` <:obj:`str`>) default preselectedComponents
@@ -834,7 +838,7 @@ class ProfileManager(object):
         :param mntgrp: current mntgrp
         :type mntgrp: :obj:`str`
         :returns: active pool proxy
-        :rtype: :obj:`PyTango.DeviceProxy`:
+        :rtype: :obj:`tango.DeviceProxy`:
         """
         apool = []
         lpool = [None, 0]
@@ -870,7 +874,7 @@ class ProfileManager(object):
             try:
                 TangoUtils.command(apool, "CreateMeasurementGroup",
                                    [mntGrpName, timer])
-            except PyTango.CommunicationFailed as cf:
+            except tango.CommunicationFailed as cf:
                 if len(cf.args) >= 2 and \
                    cf.args[1].reason == "API_DeviceTimedOut":
                     TangoUtils.wait(apool)

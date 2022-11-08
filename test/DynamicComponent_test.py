@@ -25,13 +25,17 @@ import sys
 import random
 import struct
 import binascii
-import PyTango
 import json
 import string
 import time
 import lxml
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestServerSetUp
@@ -1458,7 +1462,7 @@ class DynamicComponentTest(unittest.TestCase):
         simps3 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t3r228", "S3")
 
-        db = PyTango.Database()
+        db = tango.Database()
         try:
             simps2.setUp()
             simps3.setUp()
@@ -1619,7 +1623,7 @@ class DynamicComponentTest(unittest.TestCase):
         simps3 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t3r228", "S3")
 
-        db = PyTango.Database()
+        db = tango.Database()
         try:
             simps2.setUp()
             simps3.setUp()
@@ -1866,7 +1870,7 @@ class DynamicComponentTest(unittest.TestCase):
         simps4 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t4r228", "S4")
 
-        db = PyTango.Database()
+        db = tango.Database()
         try:
             simps2.setUp()
             simps3.setUp()
@@ -2497,7 +2501,7 @@ class DynamicComponentTest(unittest.TestCase):
             {"name": "myclient_long"},
         ]
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         try:
             dc = DynamicComponent(self._cf.dp)
             for i, ar in enumerate(arr):
@@ -2679,7 +2683,7 @@ class DynamicComponentTest(unittest.TestCase):
             {"name": "myclient_long"},
         ]
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         try:
             dc = DynamicComponent(self._cf.dp)
             for i, ar in enumerate(arr):
@@ -2924,7 +2928,7 @@ class DynamicComponentTest(unittest.TestCase):
         simps4 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t4r228", "S4")
 
-        db = PyTango.Database()
+        db = tango.Database()
 
         try:
             simps2.setUp()
@@ -3016,7 +3020,7 @@ class DynamicComponentTest(unittest.TestCase):
         simps4 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t4r228", "S4")
 
-        db = PyTango.Database()
+        db = tango.Database()
 
         try:
             simps2.setUp()
@@ -3487,7 +3491,7 @@ class DynamicComponentTest(unittest.TestCase):
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         try:
             for i in range(8):
                 # print "I = ", i
@@ -3711,7 +3715,7 @@ class DynamicComponentTest(unittest.TestCase):
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         try:
             for i in range(8):
                 for ds, dsxml in self.smydss.items():
