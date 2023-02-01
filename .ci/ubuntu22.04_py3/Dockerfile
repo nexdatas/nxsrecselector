@@ -6,7 +6,7 @@ RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl softw
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jammy main" -y
+RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/ubuntu jammy main" -y
 
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
 ENV RUNLEVEL=1
