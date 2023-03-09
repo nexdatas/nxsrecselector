@@ -1,3 +1,7 @@
+2022-03-09 Jan Kotanski <jankotan@gmail.com>
+	* send FATAL, ERROR and WARN logs to stderr by default (#71)
+	* tagged as v3.26.3
+
 2022-06-22 Jan Kotanski <jankotan@gmail.com>
 	* add workaround for etree.tosting bug
 	* tagged as v3.26.2
