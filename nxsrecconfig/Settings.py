@@ -54,7 +54,7 @@ class Settings(object):
     def __init__(self, server=None, numberofthreads=None,
                  defaultnexuspath=None,
                  defaulttimezone=None, defaultmntgrp=None,
-                 syncsnapshot=False):
+                 syncsnapshot=False, writepoolmotorpositions=False):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -65,6 +65,9 @@ class Settings(object):
         :type defaultnexuspath: :obj:`str`
         :param syncsnapshot: preselection merges current ScanSnapshot
         :type syncsnapshot: :obj:`bool`
+        :param writepoolmotorpositions: add dynamic components
+                                        for all pool motor positions
+        :type writepoolmotorpositions: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -90,6 +93,8 @@ class Settings(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.syncSnapshot = syncsnapshot
+        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        self.writepoolmotorpositions = writepoolmotorpositions
         if PYTG_BUG_213:
             self._streams.error(
                 "Settings::Settings() - "
@@ -111,7 +116,8 @@ class Settings(object):
         #: profile
         self.__profileManager = ProfileManager(
             self.__selector,
-            syncsnapshot=syncsnapshot
+            syncsnapshot=syncsnapshot,
+            writepoolmotorpositions=writepoolmotorpositions
         )
 
         #: (:obj:`str`) configuration file

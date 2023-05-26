@@ -96,8 +96,10 @@ class NXSRecSelector(tango.Device_4Impl):
         defaultzone = self.DefaultTimeZone or None
         defaultmntgrp = self.DefaultMntGrp or None
         syncsnapshot = bool(self.SyncSnapshot)
+        writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         self.__stg = STG(self, numberofthreads, defaultpath,
-                         defaultzone, defaultmntgrp, syncsnapshot)
+                         defaultzone, defaultmntgrp, syncsnapshot,
+                         writepoolmotorpositions)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1874,6 +1876,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'SyncSnapshot':
         [tango.DevBoolean,
          "preselection merges the current ScanSnapshot",
+         [False]],
+        'WritePoolMotorPositions':
+        [tango.DevBoolean,
+         "add dynamic components for all pool motor positions",
          [False]],
         'MasterTimerFirst':
         [tango.DevBoolean,

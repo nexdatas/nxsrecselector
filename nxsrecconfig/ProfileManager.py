@@ -51,13 +51,17 @@ class ProfileManager(object):
 
     """  Manages Measurement Group and Profile from Selector"""
 
-    def __init__(self, selector, syncsnapshot=False):
+    def __init__(self, selector, syncsnapshot=False,
+                 writepoolmotorpositions=False):
         """ constructor
 
         :param selector: selector object
         :type selector: :class:`nxsrecconfig.Selector.Selector`
         :param syncsnapshot: preselection merges current ScanSnapshot
         :type syncsnapshot: :obj:`bool`
+        :param writepoolmotorpositions: add dynamic components
+                                        for all pool motor positions
+        :type writepoolmotorpositions: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -90,6 +94,9 @@ class ProfileManager(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.__syncsnapshot = syncsnapshot
+
+        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        self.__writepoolmotorpositions = writepoolmotorpositions
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -141,6 +148,22 @@ class ProfileManager(object):
         except ValueError:
             pass
         return mntgrps
+
+    def getPoolMotors(self):
+        """ available mntgrps
+
+        :returns: list of available measurement groups
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        self.__updateMacroServer()
+        self.__updatePools()
+        motors = None
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        fpool = self.__getActivePool(amntgrp)
+        if fpool:
+            motors = PoolUtils.getMotorPositionAttributes([fpool])
+        motors = motors if motors else []
+        return motors
 
     def components(self):
         """ provides selected components
@@ -422,10 +445,19 @@ class ProfileManager(object):
         """
         if not self.__macroServerName:
             self.__updateMacroServer()
-        snapshot = MSUtils.getEnv(
-            'PreScanSnapshot', self.__macroServerName)
-        tangods = [[ds[1], ds[1], ds[0]] for ds in snapshot]
-        snpds = dict([(ds[1], False) for ds in snapshot])
+        snapshot = []
+        tangods = []
+        snpds = {}
+        if self.__syncsnapshot:
+            snapshot = MSUtils.getEnv(
+                'PreScanSnapshot', self.__macroServerName)
+            tangods = [[ds[1], ds[1], ds[0]] for ds in snapshot]
+        poolds = []
+        if self.__writepoolmotorpositions:
+            poolds = self.getPoolMotors()
+            if poolds:
+                tangods.extend(poolds)
+        snpds = dict([(ds[0], False) for ds in tangods])
         mydsg = {}
         self.createDataSources(tangods, mydsg)
         jpcps = json.loads(self.__selector["ComponentPreselection"])
@@ -482,13 +514,13 @@ class ProfileManager(object):
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
-                if self.__syncsnapshot:
+                if self.__syncsnapshot or self.__writepoolmotorpositions:
                     self.__addPreselectedComponents(
                         self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
-        elif self.__syncsnapshot:
+        elif self.__syncsnapshot or self.__writepoolmotorpositions:
             changed = self.__addPreselectedComponents(
                 self.defaultPreselectedComponents)
             if changed:
