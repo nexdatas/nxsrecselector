@@ -1,3 +1,7 @@
+2023-05-26 Jan Kotanski <jankotan@gmail.com>
+	* add WritePoolMotorPositions property
+	* tagged as v3.27.0
+
 2022-03-09 Jan Kotanski <jankotan@gmail.com>
 	* send FATAL, ERROR and WARN logs to stderr by default (#71)
 	* tagged as v3.26.3

@@ -760,6 +760,35 @@ class PoolUtils(object):
         return argout
 
     @classmethod
+    def getMotorPositionAttributes(cls, pools):
+        """ find motor names
+
+        :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
+        :returns: full name of the measurement group alias
+        :rtype: :obj:`str`
+        :returns: (name , name , motor position attribute)
+        :rtype: :obj:`list` <:obj:`str`,:obj:`str`, :obj:`str`>
+        """
+        lst = []
+        for pool in pools:
+            if pool.MotorList:
+                lst += pool.MotorList
+        argout = []
+        for elm in lst:
+            chan = json.loads(elm)
+            if "name" in elm and "full_name" in elm:
+                name = chan['name']
+                fname = chan['full_name']
+                if name and fname:
+                    if fname.startswith("tango://"):
+                        fname = fname[8:]
+                    if not fname.lower().endswith("/position"):
+                        fname = fname + "/position"
+                argout.append([name, name, fname])
+        return argout
+
+    @classmethod
     def getTimers(cls, pools, filters=None):
         """ provides tiemrs of given pools
 
