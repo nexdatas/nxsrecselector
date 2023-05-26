@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.22.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.27.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -36,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.22</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.27</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -112,7 +111,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <h1>Source code for nxsrecconfig.Settings</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
@@ -138,22 +137,26 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">gc</span>
-<span class="kn">import</span> <span class="nn">PyTango</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">et</span>
-<span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="k">import</span> <span class="n">XMLParser</span>
+<span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="kn">import</span> <span class="n">XMLParser</span>
 <span class="c1"># from lxml import etree</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">weakref</span>
 
-<span class="kn">from</span> <span class="nn">.Describer</span> <span class="k">import</span> <span class="n">Describer</span>
-<span class="kn">from</span> <span class="nn">.DynamicComponent</span> <span class="k">import</span> <span class="n">DynamicComponent</span>
-<span class="kn">from</span> <span class="nn">.Utils</span> <span class="k">import</span> <span class="p">(</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">tango</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">PyTango</span> <span class="k">as</span> <span class="nn">tango</span>
+
+<span class="kn">from</span> <span class="nn">.Describer</span> <span class="kn">import</span> <span class="n">Describer</span>
+<span class="kn">from</span> <span class="nn">.DynamicComponent</span> <span class="kn">import</span> <span class="n">DynamicComponent</span>
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">MSUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">PYTG_BUG_213</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.ProfileManager</span> <span class="k">import</span> <span class="n">ProfileManager</span>
-<span class="kn">from</span> <span class="nn">.Selector</span> <span class="k">import</span> <span class="n">Selector</span>
-<span class="kn">from</span> <span class="nn">.Release</span> <span class="k">import</span> <span class="n">__version__</span>
-<span class="kn">from</span> <span class="nn">.MacroServerPools</span> <span class="k">import</span> <span class="n">MacroServerPools</span>
-<span class="kn">from</span> <span class="nn">.StreamSet</span> <span class="k">import</span> <span class="n">StreamSet</span>
+<span class="kn">from</span> <span class="nn">.ProfileManager</span> <span class="kn">import</span> <span class="n">ProfileManager</span>
+<span class="kn">from</span> <span class="nn">.Selector</span> <span class="kn">import</span> <span class="n">Selector</span>
+<span class="kn">from</span> <span class="nn">.Release</span> <span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span> <span class="nn">.MacroServerPools</span> <span class="kn">import</span> <span class="n">MacroServerPools</span>
+<span class="kn">from</span> <span class="nn">.StreamSet</span> <span class="kn">import</span> <span class="n">StreamSet</span>
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
     <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
@@ -164,10 +167,10 @@
     <span class="sd">&quot;&quot;&quot; NeXus Sardana Recorder settings</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaultnexuspath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaulttimezone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">defaultmntgrp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; contructor</span>
 
 <span class="sd">        :param server: NXSRecSelector server</span>
@@ -178,13 +181,16 @@
 <span class="sd">        :type defaultnexuspath: :obj:`str`</span>
 <span class="sd">        :param syncsnapshot: preselection merges current ScanSnapshot</span>
 <span class="sd">        :type syncsnapshot: :obj:`bool`</span>
+<span class="sd">        :param writepoolmotorpositions: add dynamic components</span>
+<span class="sd">                                        for all pool motor positions</span>
+<span class="sd">        :type writepoolmotorpositions: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
         <span class="c1">#: (:obj:`int`) number of threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numberOfThreads</span> <span class="o">=</span> <span class="n">numberofthreads</span> <span class="ow">or</span> <span class="mi">20</span>
 
-        <span class="c1">#: (:class:`StreamSet` or :class:`PyTango.Device_4Impl`) stream set</span>
+        <span class="c1">#: (:class:`StreamSet` or :class:`tango.Device_4Impl`) stream set</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span> <span class="o">=</span> <span class="n">StreamSet</span><span class="p">(</span><span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">server</span><span class="p">)</span> <span class="k">if</span> <span class="n">server</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="c1">#: (:obj:`str`) default NeXus path</span>
@@ -203,11 +209,13 @@
 
         <span class="c1">#: (:obj:`bool`) preselection merges current ScanSnapshot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syncSnapshot</span> <span class="o">=</span> <span class="n">syncsnapshot</span>
+        <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writepoolmotorpositions</span> <span class="o">=</span> <span class="n">writepoolmotorpositions</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                 <span class="s2">&quot;Settings::Settings() - &quot;</span>
                 <span class="s2">&quot;Reading/Writinh Encoded Attributes for python3 and &quot;</span>
-                <span class="s2">&quot;PyTango &lt; 9.2.5&quot;</span>
+                <span class="s2">&quot;tango &lt; 9.2.5&quot;</span>
                 <span class="s2">&quot; is not supported &quot;</span><span class="p">)</span>
 
         <span class="c1">#: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \</span>
@@ -224,16 +232,17 @@
         <span class="c1">#: profile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span> <span class="o">=</span> <span class="n">ProfileManager</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">,</span>
-            <span class="n">syncsnapshot</span><span class="o">=</span><span class="n">syncsnapshot</span>
+            <span class="n">syncsnapshot</span><span class="o">=</span><span class="n">syncsnapshot</span><span class="p">,</span>
+            <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="n">writepoolmotorpositions</span>
         <span class="p">)</span>
 
         <span class="c1">#: (:obj:`str`) configuration file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">profileFile</span> <span class="o">=</span> <span class="s1">&#39;/tmp/nxsrecconfig.cfg&#39;</span>
 
-        <span class="c1">#: (:class:`PyTango.Database`) tango database</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+        <span class="c1">#: (:class:`tango.Database`) tango database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        <span class="c1">#:  (:obj:`list` &lt;:obj:`str`&gt;) timer filters</span>
+        <span class="c1">#:  (:obj:`list` &lt;:obj:`str`&gt;) muted channel filters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mutedChannelFilters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*tip551*&quot;</span><span class="p">]</span>
         <span class="c1">#: (:obj:`str`) default device groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultDeviceGroups</span> <span class="o">=</span> \
@@ -467,7 +476,29 @@
     <span class="n">timerFilters</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getTimerFilters</span><span class="p">,</span>
         <span class="n">__setTimerFilters</span><span class="p">,</span>
-        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;timerFilters&#39;</span><span class="p">)</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;timer filters&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getMutedPreScanAttrFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get method for  timeFilters attribute</span>
+
+<span class="sd">        :returns: list of timer filters</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span>
+
+    <span class="k">def</span> <span class="nf">__setMutedPreScanAttrFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set method for timeFilters attribute</span>
+
+<span class="sd">        :param filters: list of filters</span>
+<span class="sd">        :type filters: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span> <span class="o">=</span> <span class="n">filters</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) muted prescan attribute filters</span>
+    <span class="n">mutedPreScanAttrFilters</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">__getMutedPreScanAttrFilters</span><span class="p">,</span>
+        <span class="n">__setMutedPreScanAttrFilters</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;muted prescan attribute filters&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getMasterTimerFirst</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get method for masterTimerFirst attribute</span>
@@ -1081,8 +1112,8 @@
 <div class="viewcode-block" id="Settings.saveProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.saveProfile">[docs]</a>    <span class="k">def</span> <span class="nf">saveProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; saves configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fl</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profileFile</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">fl</span><span class="p">)</span></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profileFile</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">fl</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Settings.storeProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.storeProfile">[docs]</a>    <span class="k">def</span> <span class="nf">storeProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; saves configuration</span>
@@ -1097,8 +1128,8 @@
 <div class="viewcode-block" id="Settings.loadProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.loadProfile">[docs]</a>    <span class="k">def</span> <span class="nf">loadProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; loads configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fl</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profileFile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fl</span><span class="p">))</span></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profileFile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fl</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Settings.componentClientSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentClientSources">[docs]</a>    <span class="k">def</span> <span class="nf">componentClientSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cps</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides description of client datasources</span>
@@ -1152,7 +1183,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
                 <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="s2">&quot;createConfiguration&quot;</span><span class="p">,</span> <span class="n">cp</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">CommunicationFailed</span> <span class="k">as</span> <span class="n">cf</span><span class="p">:</span>
+        <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">CommunicationFailed</span> <span class="k">as</span> <span class="n">cf</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> \
                <span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s2">&quot;API_DeviceTimedOut&quot;</span><span class="p">:</span>
                 <span class="n">TangoUtils</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="p">)</span>
@@ -1310,7 +1341,11 @@
 <span class="sd">        :returns: string with mntgrp configuration</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">updateProfile</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">isDoorRunning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">updateProfile</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;Door is RUNNING. Cannot update the Measurement Group&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Settings.importMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.importMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">importMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; import setting from active measurement</span>
@@ -1432,7 +1467,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
     </p>
   </div>
 </footer>
