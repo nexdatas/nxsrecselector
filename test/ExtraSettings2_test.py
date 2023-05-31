@@ -181,7 +181,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                 timers = {}
                 ntms = self._rnd.randint(1, 5)
-                tms = self._rnd.sample(set(
+                tms = self._rnd.sample(list(
                     [ch for ch in self.smychsXX.keys()
                      if not ch.startswith("client")]), ntms)
                 for tm in tms:
@@ -260,7 +260,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                     comps = set()
 
                     ncps = self._rnd.randint(1, len(amycps) - 1)
-                    lcps = self._rnd.sample(set(amycps.keys()), ncps)
+                    lcps = self._rnd.sample(list(amycps.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self._rnd.randint(0, 1))
@@ -268,7 +268,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                                 comps.add(cp)
 
                     ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
-                    alcps = self._rnd.sample(set(amycps.keys()), ancps)
+                    alcps = self._rnd.sample(list(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self._rnd.randint(0, 1))
@@ -276,14 +276,14 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                                 comps.add(cp)
 
                     ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self._rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self._rnd.sample(list(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
                     ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
-                    ldss = self._rnd.sample(set(amydss.keys()), ndss)
+                    ldss = self._rnd.sample(list(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -294,7 +294,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                     mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
-                            set(amycps.keys()), mncps) if cp not in wrong]
+                            list(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -353,12 +353,12 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                     lheds = []
                     if chds:
                         nhe = self._rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self._rnd.sample(set(chds), nhe)
+                        lheds = self._rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self._rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self._rnd.sample(set(comps), nhe)
+                        lhecp = self._rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -635,7 +635,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                 timers = {}
                 ntms = self._rnd.randint(1, 5)
-                tms = self._rnd.sample(set(
+                tms = self._rnd.sample(list(
                     [ch for ch in self.smychsXX.keys()
                      if not ch.startswith("client")]), ntms)
                 for tm in tms:
@@ -714,7 +714,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                     comps = set()
 
                     ncps = self._rnd.randint(1, len(amycps) - 1)
-                    lcps = self._rnd.sample(set(amycps.keys()), ncps)
+                    lcps = self._rnd.sample(list(amycps.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self._rnd.randint(0, 1))
@@ -722,7 +722,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                                 comps.add(cp)
 
                     ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
-                    alcps = self._rnd.sample(set(amycps.keys()), ancps)
+                    alcps = self._rnd.sample(list(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self._rnd.randint(0, 1))
@@ -730,14 +730,14 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                                 comps.add(cp)
 
                     ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self._rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self._rnd.sample(list(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
                     ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
-                    ldss = self._rnd.sample(set(amydss.keys()), ndss)
+                    ldss = self._rnd.sample(list(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -745,20 +745,20 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                     nadss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     aadss = [ds for ds in self._rnd.sample(
-                        set(amydss.keys()), nadss)]
+                        list(amydss.keys()), nadss)]
                     nadss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     indss = [ds for ds in self._rnd.sample(
-                        set(amydss.keys()), nadss)]
+                        list(amydss.keys()), nadss)]
 
                     for tm in ltimers:
                         dss[tm] = bool(self._rnd.randint(0, 1))
 
                     mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
-                        set(amycps.keys()), mncps) if cp not in wrong]
+                        list(amycps.keys()), mncps) if cp not in wrong]
                     oncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     ocps = [cp for cp in self._rnd.sample(
-                        set(amycps.keys()), oncps) if cp not in wrong]
+                        list(amycps.keys()), oncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -864,12 +864,12 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                     lheds = []
                     if chds:
                         nhe = self._rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self._rnd.sample(set(chds), nhe)
+                        lheds = self._rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self._rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self._rnd.sample(set(comps), nhe)
+                        lhecp = self._rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -1189,7 +1189,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         timers = {}
                         ntms = 1  # self._rnd.randint(1, 5)
-                        tms = self._rnd.sample(set(
+                        tms = self._rnd.sample(list(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
                         for tm in tms:
@@ -1272,7 +1272,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         comps = set()
 
                         ncps = self._rnd.randint(1, len(amycps) - 1)
-                        lcps = self._rnd.sample(set(amycps.keys()), ncps)
+                        lcps = self._rnd.sample(list(amycps.keys()), ncps)
                         for cp in lcps:
                             if cp not in wrong:
                                 cps[mg][cp] = bool(self._rnd.randint(0, 1))
@@ -1281,7 +1281,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         ancps = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
-                        alcps = self._rnd.sample(set(amycps.keys()), ancps)
+                        alcps = self._rnd.sample(list(amycps.keys()), ancps)
                         for cp in alcps:
                             if cp not in wrong:
                                 acps[mg][cp] = bool(self._rnd.randint(0, 1))
@@ -1290,7 +1290,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         ndss = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
-                        ldss = self._rnd.sample(set(amycps.keys()), ndss)
+                        ldss = self._rnd.sample(list(amycps.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
@@ -1298,7 +1298,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         ndss = self._rnd.randint(
                             1, len(list(amydss.keys())) - 1)
-                        ldss = self._rnd.sample(set(amydss.keys()), ndss)
+                        ldss = self._rnd.sample(list(amydss.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
@@ -1307,11 +1307,11 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         nadss = self._rnd.randint(
                             1, len(list(amydss.keys())) - 1)
                         aadss[mg] = [ds for ds in self._rnd.sample(
-                            set(amydss.keys()), nadss)]
+                            list(amydss.keys()), nadss)]
                         nadss = self._rnd.randint(
                             1, len(list(amydss.keys())) - 1)
                         indss = [ds for ds in self._rnd.sample(
-                            set(amydss.keys()), nadss)]
+                            list(amydss.keys()), nadss)]
 
                         aindss = {}
                         for cp in indss:
@@ -1324,11 +1324,11 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         mncps = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
                         mcps = [cp for cp in self._rnd.sample(
-                                set(amycps.keys()), mncps) if cp not in wrong]
+                                list(amycps.keys()), mncps) if cp not in wrong]
                         oncps = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
                         ocps = [cp for cp in self._rnd.sample(
-                                set(amycps.keys()), oncps) if cp not in wrong]
+                                list(amycps.keys()), oncps) if cp not in wrong]
                         for cp in mcps:
                             comps.add(cp)
 
@@ -1440,12 +1440,12 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         lheds = []
                         if chds:
                             nhe = self._rnd.randint(0, len(set(chds)) - 1)
-                            lheds = self._rnd.sample(set(chds), nhe)
+                            lheds = self._rnd.sample(list(chds), nhe)
 
                         lhecp = []
                         if comps:
                             nhe = self._rnd.randint(0, len(set(comps)) - 1)
-                            lhecp = self._rnd.sample(set(comps), nhe)
+                            lhecp = self._rnd.sample(list(comps), nhe)
 
                         lhe = lheds + lhecp
 
@@ -2578,7 +2578,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         timers = {}
                         ntms = 1  # self._rnd.randint(1, 5)
-                        tms = self._rnd.sample(set(
+                        tms = self._rnd.sample(list(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
                         for tm in tms:
@@ -2661,7 +2661,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         comps = set()
 
                         ncps = self._rnd.randint(1, len(amycps) - 1)
-                        lcps = self._rnd.sample(set(amycps.keys()), ncps)
+                        lcps = self._rnd.sample(list(amycps.keys()), ncps)
                         for cp in lcps:
                             if cp not in wrong:
                                 cps[mg][cp] = bool(self._rnd.randint(0, 1))
@@ -2670,7 +2670,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         ancps = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
-                        alcps = self._rnd.sample(set(amycps.keys()), ancps)
+                        alcps = self._rnd.sample(list(amycps.keys()), ancps)
                         for cp in alcps:
                             if cp not in wrong:
                                 acps[mg][cp] = bool(self._rnd.randint(0, 1))
@@ -2679,7 +2679,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         ndss = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
-                        ldss = self._rnd.sample(set(amycps.keys()), ndss)
+                        ldss = self._rnd.sample(list(amycps.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
@@ -2687,7 +2687,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
 
                         ndss = self._rnd.randint(
                             1, len(list(amydss.keys())) - 1)
-                        ldss = self._rnd.sample(set(amydss.keys()), ndss)
+                        ldss = self._rnd.sample(list(amydss.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
@@ -2696,11 +2696,11 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         nadss = self._rnd.randint(
                             1, len(list(amydss.keys())) - 1)
                         aadss[mg] = [ds for ds in self._rnd.sample(
-                            set(amydss.keys()), nadss)]
+                            list(amydss.keys()), nadss)]
                         nadss = self._rnd.randint(
                             1, len(list(amydss.keys())) - 1)
                         indss = [ds for ds in self._rnd.sample(
-                            set(amydss.keys()), nadss)]
+                            list(amydss.keys()), nadss)]
                         aindss = {}
                         for cp in indss:
                             if cp not in wrong:
@@ -2712,11 +2712,11 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         mncps = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
                         mcps = [cp for cp in self._rnd.sample(
-                                set(amycps.keys()), mncps) if cp not in wrong]
+                                list(amycps.keys()), mncps) if cp not in wrong]
                         oncps = self._rnd.randint(
                             1, len(list(amycps.keys())) - 1)
                         ocps = [cp for cp in self._rnd.sample(
-                                set(amycps.keys()), oncps) if cp not in wrong]
+                                list(amycps.keys()), oncps) if cp not in wrong]
                         for cp in mcps:
                             comps.add(cp)
 
@@ -2828,12 +2828,12 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                         lheds = []
                         if chds:
                             nhe = self._rnd.randint(0, len(set(chds)) - 1)
-                            lheds = self._rnd.sample(set(chds), nhe)
+                            lheds = self._rnd.sample(list(chds), nhe)
 
                         lhecp = []
                         if comps:
                             nhe = self._rnd.randint(0, len(set(comps)) - 1)
-                            lhecp = self._rnd.sample(set(comps), nhe)
+                            lhecp = self._rnd.sample(list(comps), nhe)
 
                         lhe = lheds + lhecp
 
@@ -4046,7 +4046,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
             for cp in self.mycps.keys():
@@ -4073,7 +4073,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycps.keys()), nmem)
 
             res = json.loads(rs.componentClientSources(mem))
             self.checkICP(res, mem,
@@ -4094,17 +4094,17 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
             nccp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            ccp = self._rnd.sample(set(self.mycps.keys()), nccp)
+            ccp = self._rnd.sample(list(self.mycps.keys()), nccp)
             cps = {}
             for cp in ccp:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
             nacp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            acp = self._rnd.sample(set(self.mycps.keys()), nacp)
+            acp = self._rnd.sample(list(self.mycps.keys()), nacp)
             acps = {}
             for cp in acp:
                 acps[cp] = bool(self._rnd.randint(0, 1))
@@ -4136,11 +4136,11 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(
                 ["CPDICT", json.dumps(self.mycpsvar)])
             nmem = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycpsvar.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycpsvar.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
             nccp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
-            ccp = self._rnd.sample(set(self.mycpsvar.keys()), nccp)
+            ccp = self._rnd.sample(list(self.mycpsvar.keys()), nccp)
             cps = {}
             for cp in ccp:
                 cps[cp] = bool(self._rnd.randint(0, 1))
@@ -4149,7 +4149,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["CHECKVARIABLES",
                                             json.dumps(rs.configVariables)])
             nacp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
-            acp = self._rnd.sample(set(self.mycpsvar.keys()), nacp)
+            acp = self._rnd.sample(list(self.mycpsvar.keys()), nacp)
             acps = {}
             for cp in acp:
                 acps[cp] = bool(self._rnd.randint(0, 1))
@@ -4236,7 +4236,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
             for cp in self.mycps.keys():
@@ -4262,7 +4262,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycps.keys()), nmem)
 
             res = json.loads(rs.componentSources(mem))
             self.checkICP(res, mem,
@@ -4283,17 +4283,17 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
             nccp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            ccp = self._rnd.sample(set(self.mycps.keys()), nccp)
+            ccp = self._rnd.sample(list(self.mycps.keys()), nccp)
             cps = {}
             for cp in ccp:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
             nacp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            acp = self._rnd.sample(set(self.mycps.keys()), nacp)
+            acp = self._rnd.sample(list(self.mycps.keys()), nacp)
             acps = {}
             for cp in acp:
                 acps[cp] = bool(self._rnd.randint(0, 1))
@@ -4325,11 +4325,11 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(
                 ["CPDICT", json.dumps(self.mycpsvar)])
             nmem = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
-            mem = self._rnd.sample(set(self.mycpsvar.keys()), nmem)
+            mem = self._rnd.sample(list(self.mycpsvar.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
             nccp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
-            ccp = self._rnd.sample(set(self.mycpsvar.keys()), nccp)
+            ccp = self._rnd.sample(list(self.mycpsvar.keys()), nccp)
             cps = {}
             for cp in ccp:
                 cps[cp] = bool(self._rnd.randint(0, 1))
@@ -4338,7 +4338,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             self._cf.dp.SetCommandVariable(["CHECKVARIABLES",
                                             json.dumps(rs.configVariables)])
             nacp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
-            acp = self._rnd.sample(set(self.mycpsvar.keys()), nacp)
+            acp = self._rnd.sample(list(self.mycpsvar.keys()), nacp)
             acps = {}
             for cp in acp:
                 acps[cp] = bool(self._rnd.randint(0, 1))
@@ -8513,7 +8513,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
         for i in range(20):
             mncps = self._rnd.randint(0, len(list(mycps.keys())))
             mcps = [
-                cp for cp in self._rnd.sample(set(mycps.keys()), mncps)
+                cp for cp in self._rnd.sample(list(mycps.keys()), mncps)
             ]
 
             gencp = dict((cp, mycps[cp]) for cp in mcps)
@@ -8629,7 +8629,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
                 mncps = self._rnd.randint(0, len(list(self.smycps.keys())))
                 components = [
                     cp for cp in self._rnd.sample(
-                        set(self.smycps.keys()),
+                        list(self.smycps.keys()),
                         mncps
                     )
                 ]

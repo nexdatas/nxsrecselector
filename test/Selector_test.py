@@ -2288,7 +2288,7 @@ class SelectorTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(set(cps.keys()), self.__rnd.randint(
+            ccps = self.__rnd.sample(list(cps.keys()), self.__rnd.randint(
                 1, len(list(cps.keys()))))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
