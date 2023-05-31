@@ -1625,7 +1625,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
 
                 nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                mem = self.__rnd.sample(list(self.mycps.keys()), nmem)
 
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1646,7 +1646,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                mem = self.__rnd.sample(list(self.mycps.keys()), nmem)
 
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1668,7 +1668,7 @@ class DescriberTest(unittest.TestCase):
 
                 nmem = self.__rnd.randint(
                     1, len(list(self.mydss.keys())) - 1)
-                mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
+                mem = self.__rnd.sample(list(self.mydss.keys()), nmem)
 
                 server = Server()
                 server.dsdict = self.mydss
@@ -1689,7 +1689,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                mem = self.__rnd.sample(list(self.mycps.keys()), nmem)
 
                 server = Server()
                 server.dsdict = self.mydss
@@ -1710,7 +1710,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
 
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1730,7 +1730,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
 
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1752,7 +1752,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1772,7 +1772,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1794,7 +1794,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
 
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = Server()
                 server.dsdict = self.mydss
@@ -1814,7 +1814,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
 
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = Server()
                 server.dsdict = self.mydss
@@ -1836,7 +1836,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = Server()
                 server.dsdict = self.mydss
@@ -1856,7 +1856,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 server = Server()
                 server.dsdict = self.mydss
@@ -1878,10 +1878,10 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
 
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                mem = self.__rnd.sample(list(self.mycps.keys()), nmem)
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
@@ -1901,10 +1901,10 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
                 ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                cps = self.__rnd.sample(list(self.mycps.keys()), ncps)
 
                 nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                mem = self.__rnd.sample(list(self.mycps.keys()), nmem)
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps

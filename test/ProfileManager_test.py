@@ -2313,7 +2313,7 @@ class ProfileManagerTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ddss = self.__rnd.sample(set(dss.keys()), self.__rnd.randint(
+            ddss = self.__rnd.sample(list(dss.keys()), self.__rnd.randint(
                 1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:
@@ -2491,12 +2491,12 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
             ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
             mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+            mcps = self.__rnd.sample(list(self.mycps.keys()), mncps)
 
             tdss = [ds for ds in dss if dss[ds]]
             tcps = [cp for cp in cps if cps[cp]]
@@ -2549,18 +2549,18 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
             ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
             mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+            mcps = self.__rnd.sample(list(self.mycps.keys()), mncps)
 
             tdss = [ds for ds in dss if dss[ds]]
             tcps = [cp for cp in cps if cps[cp]]
@@ -2612,18 +2612,18 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
             ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
             mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+            mcps = self.__rnd.sample(list(self.mycps.keys()), mncps)
 
             # tdss = [ds for ds in dss if dss[ds]]
             # tcps = [cp for cp in cps if cps[cp]]
@@ -2682,24 +2682,24 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
             ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.mydss.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
             mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+            mcps = self.__rnd.sample(list(self.mycps.keys()), mncps)
 
             se["ComponentSelection"] = json.dumps(cps)
             se["DataSourceSelection"] = json.dumps(dss)
@@ -2874,26 +2874,26 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
             ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.mycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self.__rnd.randint(0, 1))
 
             ancps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            alcps = self.__rnd.sample(set(self.mycps.keys()), ancps)
+            alcps = self.__rnd.sample(list(self.mycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.mydss.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     if ds not in wrong:
@@ -2901,7 +2901,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = [cp for cp in self.__rnd.sample(
-                    set(self.mycps.keys()), mncps) if cp not in wrong]
+                    list(self.mycps.keys()), mncps) if cp not in wrong]
 
             se["ComponentSelection"] = json.dumps(cps)
             se["ComponentPreselection"] = json.dumps(acps)
@@ -3415,26 +3415,26 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
             ncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.smycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self.__rnd.randint(0, 1))
 
             ancps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
-            alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
+            alcps = self.__rnd.sample(list(self.smycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.smycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.smydss.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.smydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
@@ -3442,7 +3442,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             mncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             mcps = [cp for cp in self.__rnd.sample(
-                    set(self.smycps.keys()), mncps) if cp not in wrong]
+                    list(self.smycps.keys()), mncps) if cp not in wrong]
 
             se["ComponentSelection"] = json.dumps(cps)
             se["ComponentPreselection"] = json.dumps(acps)
@@ -3645,7 +3645,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             comps = set()
             ncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
-            lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
+            lcps = self.__rnd.sample(list(self.smycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self.__rnd.randint(0, 1))
@@ -3653,7 +3653,7 @@ class ProfileManagerTest(unittest.TestCase):
                         comps.add(cp)
 
             ancps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
-            alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
+            alcps = self.__rnd.sample(list(self.smycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self.__rnd.randint(0, 1))
@@ -3661,14 +3661,14 @@ class ProfileManagerTest(unittest.TestCase):
                         comps.add(cp)
 
             ndss = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.smycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
             ndss = self.__rnd.randint(1, len(list(self.smydss.keys())) - 1)
-            ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
+            ldss = self.__rnd.sample(list(self.smydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
@@ -3676,7 +3676,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             mncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             mcps = [cp for cp in self.__rnd.sample(
-                    set(self.smycps.keys()), mncps) if cp not in wrong]
+                    list(self.smycps.keys()), mncps) if cp not in wrong]
             for cp in mcps:
                 comps.add(cp)
 
@@ -3713,12 +3713,12 @@ class ProfileManagerTest(unittest.TestCase):
             lheds = []
             if chds:
                 nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                lheds = self.__rnd.sample(set(chds), nhe)
+                lheds = self.__rnd.sample(list(chds), nhe)
 
             lhecp = []
             if comps:
                 nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                lhecp = self.__rnd.sample(set(comps), nhe)
+                lhecp = self.__rnd.sample(list(comps), nhe)
 
             lhe = lheds + lhecp
 
@@ -3955,21 +3955,21 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ncps = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
-                    lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
+                    lcps = self.__rnd.sample(list(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
 
                     ancps = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
-                    alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
+                    alcps = self.__rnd.sample(list(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
 
                     ndss = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
-                    ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
+                    ldss = self.__rnd.sample(list(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
@@ -3977,7 +3977,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ndss = self.__rnd.randint(
                         1, len(list(self.smydssXX.keys())) - 1)
-                    ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
+                    ldss = self.__rnd.sample(list(self.smydssXX.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
@@ -3987,7 +3987,7 @@ class ProfileManagerTest(unittest.TestCase):
                         1, len(list(self.smycps2.keys())) - 1)
                     mcps = [
                         cp for cp in self.__rnd.sample(
-                            set(self.smycps2.keys()), mncps)
+                            list(self.smycps2.keys()), mncps)
                         if cp not in wrong]
 
                     adss = dict(dss)
@@ -4243,7 +4243,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ncps = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
-                    lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
+                    lcps = self.__rnd.sample(list(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
@@ -4252,7 +4252,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ancps = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
-                    alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
+                    alcps = self.__rnd.sample(list(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
@@ -4261,7 +4261,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ndss = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
-                    ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
+                    ldss = self.__rnd.sample(list(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
@@ -4269,7 +4269,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ndss = self.__rnd.randint(
                         1, len(list(self.smydssXX.keys())) - 1)
-                    ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
+                    ldss = self.__rnd.sample(list(self.smydssXX.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
@@ -4278,7 +4278,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mncps = self.__rnd.randint(
                         1, len(list(self.smycps2.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(self.smycps2.keys()), mncps)
+                            list(self.smycps2.keys()), mncps)
                             if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
@@ -4323,12 +4323,12 @@ class ProfileManagerTest(unittest.TestCase):
                     lheds = []
                     if chds:
                         nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self.__rnd.sample(set(chds), nhe)
+                        lheds = self.__rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self.__rnd.sample(set(comps), nhe)
+                        lhecp = self.__rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -4589,7 +4589,7 @@ class ProfileManagerTest(unittest.TestCase):
                     comps = set()
 
                     ncps = self.__rnd.randint(1, len(amycps) - 1)
-                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    lcps = self.__rnd.sample(list(amycps.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
@@ -4597,7 +4597,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    alcps = self.__rnd.sample(list(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
@@ -4605,14 +4605,14 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
                     ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -4620,7 +4620,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(amycps.keys()), mncps) if cp not in wrong]
+                            list(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -4671,12 +4671,12 @@ class ProfileManagerTest(unittest.TestCase):
                     lheds = []
                     if chds:
                         nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self.__rnd.sample(set(chds), nhe)
+                        lheds = self.__rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self.__rnd.sample(set(comps), nhe)
+                        lhecp = self.__rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -4988,7 +4988,7 @@ class ProfileManagerTest(unittest.TestCase):
                     comps = set()
 
                     ncps = self.__rnd.randint(1, len(amycps) - 1)
-                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    lcps = self.__rnd.sample(list(amycps.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
@@ -4996,7 +4996,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    alcps = self.__rnd.sample(list(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
@@ -5004,14 +5004,14 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
                     ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -5019,7 +5019,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                        set(amycps.keys()), mncps) if cp not in wrong]
+                        list(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -5070,12 +5070,12 @@ class ProfileManagerTest(unittest.TestCase):
                     lheds = []
                     if chds:
                         nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self.__rnd.sample(set(chds), nhe)
+                        lheds = self.__rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self.__rnd.sample(set(comps), nhe)
+                        lhecp = self.__rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -5328,7 +5328,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                 timers = {}
                 ntms = self.__rnd.randint(1, 5)
-                tms = self.__rnd.sample(set(
+                tms = self.__rnd.sample(list(
                     [ch for ch in self.smychsXX.keys()
                      if not ch.startswith("client")]), ntms)
                 for tm in tms:
@@ -5407,7 +5407,7 @@ class ProfileManagerTest(unittest.TestCase):
                     comps = set()
 
                     ncps = self.__rnd.randint(1, len(amycps) - 1)
-                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    lcps = self.__rnd.sample(list(amycps.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
@@ -5415,7 +5415,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    alcps = self.__rnd.sample(list(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
@@ -5423,14 +5423,14 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
                     ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -5441,7 +5441,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(amycps.keys()), mncps) if cp not in wrong]
+                            list(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -5494,12 +5494,12 @@ class ProfileManagerTest(unittest.TestCase):
                     lheds = []
                     if chds:
                         nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self.__rnd.sample(set(chds), nhe)
+                        lheds = self.__rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self.__rnd.sample(set(comps), nhe)
+                        lhecp = self.__rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -5771,7 +5771,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                 timers = {}
                 ntms = self.__rnd.randint(1, 5)
-                tms = self.__rnd.sample(set(
+                tms = self.__rnd.sample(list(
                     [ch for ch in self.smychsXX.keys()
                      if not ch.startswith("client")]), ntms)
                 for tm in tms:
@@ -5850,7 +5850,7 @@ class ProfileManagerTest(unittest.TestCase):
                     comps = set()
 
                     ncps = self.__rnd.randint(1, len(amycps) - 1)
-                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    lcps = self.__rnd.sample(list(amycps.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
@@ -5858,7 +5858,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    alcps = self.__rnd.sample(list(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
@@ -5866,14 +5866,14 @@ class ProfileManagerTest(unittest.TestCase):
                                 comps.add(cp)
 
                     ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
                     ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
-                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    ldss = self.__rnd.sample(list(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -5881,20 +5881,20 @@ class ProfileManagerTest(unittest.TestCase):
 
                     nadss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     aadss = [ds for ds in self.__rnd.sample(
-                        set(amydss.keys()), nadss)]
+                        list(amydss.keys()), nadss)]
                     nadss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     indss = dict((ds, True) for ds in self.__rnd.sample(
-                        set(amydss.keys()), nadss))
+                        list(amydss.keys()), nadss))
 
                     for tm in ltimers:
                         dss[tm] = bool(self.__rnd.randint(0, 1))
 
                     mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                        set(amycps.keys()), mncps) if cp not in wrong]
+                        list(amycps.keys()), mncps) if cp not in wrong]
                     oncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     ocps = [cp for cp in self.__rnd.sample(
-                        set(amycps.keys()), oncps) if cp not in wrong]
+                        list(amycps.keys()), oncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -5994,12 +5994,12 @@ class ProfileManagerTest(unittest.TestCase):
                     lheds = []
                     if chds:
                         nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                        lheds = self.__rnd.sample(set(chds), nhe)
+                        lheds = self.__rnd.sample(list(chds), nhe)
 
                     lhecp = []
                     if comps:
                         nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                        lhecp = self.__rnd.sample(set(comps), nhe)
+                        lhecp = self.__rnd.sample(list(comps), nhe)
 
                     lhe = lheds + lhecp
 
@@ -6317,7 +6317,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         timers = {}
                         ntms = 1  # self.__rnd.randint(1, 5)
-                        tms = self.__rnd.sample(set(
+                        tms = self.__rnd.sample(list(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
                         for tm in tms:
@@ -6401,7 +6401,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         ncps = self.__rnd.randint(
                             1, len(amycps) - 1)
-                        lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                        lcps = self.__rnd.sample(list(amycps.keys()), ncps)
                         for cp in lcps:
                             if cp not in wrong:
                                 cps[mg][cp] = bool(self.__rnd.randint(0, 1))
@@ -6410,7 +6410,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         ancps = self.__rnd.randint(
                             1, len(list(amycps.keys())) - 1)
-                        alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                        alcps = self.__rnd.sample(list(amycps.keys()), ancps)
                         for cp in alcps:
                             if cp not in wrong:
                                 acps[mg][cp] = bool(self.__rnd.randint(0, 1))
@@ -6419,7 +6419,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         ndss = self.__rnd.randint(
                             1, len(list(amycps.keys())) - 1)
-                        ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                        ldss = self.__rnd.sample(list(amycps.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
@@ -6427,7 +6427,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         ndss = self.__rnd.randint(
                             1, len(list(amydss.keys())) - 1)
-                        ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                        ldss = self.__rnd.sample(list(amydss.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
@@ -6436,11 +6436,11 @@ class ProfileManagerTest(unittest.TestCase):
                         nadss = self.__rnd.randint(
                             1, len(list(amydss.keys())) - 1)
                         aadss[mg] = [ds for ds in self.__rnd.sample(
-                            set(amydss.keys()), nadss)]
+                            list(amydss.keys()), nadss)]
                         nadss = self.__rnd.randint(
                             1, len(list(amydss.keys())) - 1)
                         indss = dict((ds, True) for ds in self.__rnd.sample(
-                            set(amydss.keys()), nadss))
+                            list(amydss.keys()), nadss))
 
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self.__rnd.randint(0, 1))
@@ -6448,11 +6448,11 @@ class ProfileManagerTest(unittest.TestCase):
                         mncps = self.__rnd.randint(
                             1, len(list(amycps.keys())) - 1)
                         mcps = [cp for cp in self.__rnd.sample(
-                                set(amycps.keys()), mncps) if cp not in wrong]
+                                list(amycps.keys()), mncps) if cp not in wrong]
                         oncps = self.__rnd.randint(
                             1, len(list(amycps.keys())) - 1)
                         ocps = [cp for cp in self.__rnd.sample(
-                                set(amycps.keys()), oncps) if cp not in wrong]
+                                list(amycps.keys()), oncps) if cp not in wrong]
                         for cp in mcps:
                             comps.add(cp)
 
@@ -6558,12 +6558,12 @@ class ProfileManagerTest(unittest.TestCase):
                         lheds = []
                         if chds:
                             nhe = self.__rnd.randint(0, len(set(chds)) - 1)
-                            lheds = self.__rnd.sample(set(chds), nhe)
+                            lheds = self.__rnd.sample(list(chds), nhe)
 
                         lhecp = []
                         if comps:
                             nhe = self.__rnd.randint(0, len(set(comps)) - 1)
-                            lhecp = self.__rnd.sample(set(comps), nhe)
+                            lhecp = self.__rnd.sample(list(comps), nhe)
 
                         lhe = lheds + lhecp
 

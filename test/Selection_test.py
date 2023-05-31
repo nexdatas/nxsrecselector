@@ -187,7 +187,7 @@ class SelectionTest(unittest.TestCase):
             el["ComponentSelection"] = json.dumps(cps)
             el["DataSourceSelection"] = json.dumps(dss)
             el["UnplottedComponents"] = json.dumps(
-                self.__rnd.sample(set(dss.keys()), self.__rnd.randint(
+                self.__rnd.sample(list(dss.keys()), self.__rnd.randint(
                     1, len(list(dss.keys())))))
             el["DataSourcePreselection"] = json.dumps(pdss)
             self.dump(el)
@@ -315,7 +315,7 @@ class SelectionTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(set(cps.keys()), self.__rnd.randint(
+            ccps = self.__rnd.sample(list(cps.keys()), self.__rnd.randint(
                 1, len(list(cps.keys()))))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
