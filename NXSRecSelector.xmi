@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
   <classes name="NXSRecSelector" pogoRevision="9.7">
-    <description description="Tango server with Sardana Recorder settings&#xA;&#xA;Source code: https://github.com/nexdatas/nxsrecselector&#xA;Web page: https://nexdatas.github.io/nxsrecselector&#xA;NexDaTaS Web page: https://nexdatas.github.io&#xA;" title="Selector Server for NeXus Sardana Recorder" sourcePath="/home/jkotan/ndts/nexdatas.recselector" language="Python" filestogenerate="XMI   file,Protected Regions,html Pages" license="GPL" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false" descriptionHtmlExists="false">
+    <description description="Tango server with Sardana Recorder settings&#xA;&#xA;Source code: https://github.com/nexdatas/nxsrecselector&#xA;Web page: https://nexdatas.github.io/nxsrecselector&#xA;NexDaTaS Web page: https://nexdatas.github.io&#xA;" title="Selector Server for NeXus Sardana Recorder" sourcePath="/home/jkotan/ndts/nexdatas.recselector" language="Python" filestogenerate="XMI   file,Code files,Protected Regions,html Pages" license="GPL" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false" descriptionHtmlExists="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at desy.de - jan.kotanski" author="jan.kotanski" emailDomain="desy.de" classFamily="Acquisition" siteSpecific="" platform="All Platforms" bus="Not Applicable" manufacturer="DESY" reference=""/>
     </description>
@@ -67,6 +67,26 @@
       <type xsi:type="pogoDsl:BooleanType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>False</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="TangoSourceFaultStates" description="list of tango fault states for tango datasources">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>FAULT</DefaultPropValue>
+      <DefaultPropValue>DISABLE</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="TangoSourceOffStates" description="list of tango off states for tango datasources">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>OFF</DefaultPropValue>
+      <DefaultPropValue>INIT</DefaultPropValue>
+      <DefaultPropValue>INSERT</DefaultPropValue>
+      <DefaultPropValue>CLOSE</DefaultPropValue>
+      <DefaultPropValue>UNKNOWN</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="TangoSourceAlarmStates" description="list of tango alarm states for tango datasources">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>ALARM</DefaultPropValue>
     </deviceProperties>
     <commands name="AvailableComponents" description="Return a list of available component names" execMethod="available_components" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="">

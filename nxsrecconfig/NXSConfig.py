@@ -113,6 +113,12 @@ class NXSRecSelector(tango.Device_4Impl):
             self.DefaultPreselectedComponents or []
         self.__stg.defaultCanFailDataSources = \
             self.DefaultCanFailDataSources or []
+        self.__stg.tangoSourceFaultStates = \
+            self.TangoSourceFaultStates or []
+        self.__stg.tangoSourceAlarmStates = \
+            self.TangoSourceAlarmStates or []
+        self.__stg.tangoSourceOffStates = \
+            self.TangoSourceOffStates or []
         self.__stg.clientRecordKeys = \
             self.ClientRecordKeys or []
 
@@ -1889,6 +1895,18 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevVarStringArray,
          "list of default datasources in the CanFail mode",
          []],
+        'TangoSourceFaultStates':
+        [tango.DevVarStringArray,
+         "list of tango fault states for tango datasources",
+         ["FAULT", "DISABLE"]],
+        'TangoSourceOffStates':
+        [tango.DevVarStringArray,
+         "list of tango off states for tango datasources",
+         ["OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN"]],
+        'TangoSourceAlarmStates':
+        [tango.DevVarStringArray,
+         "list of tango alarm states for tango datasources",
+         ["ALARM"]],
     }
 
     #: (:obj:`dict` <:obj:`str`, \
