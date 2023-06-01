@@ -82,7 +82,7 @@ class Settings(object):
             "/$var.entryname#'scan'$var.serialno:NXentry/" \
             "NXinstrument/collection"
 
-        #: (:obj:`str`) default CanFail DataSources
+        #: (:obj:`list` <:obj:`str`>) default CanFail DataSources
         self.defaultCanFailDataSources = []
 
         #: (:obj:`str`) default time zone
@@ -317,6 +317,72 @@ class Settings(object):
         __getDefaultPreselectedComponents,
         __setDefaultPreselectedComponents,
         doc='default Preselected components')
+
+    def __getTangoSourceFaultStates(self):
+        """ get method for tangoSourceFaultStates attribute
+
+        :returns: list of state
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__msp.tangoSourceFaultStates
+
+    def __setTangoSourceFaultStates(self, states):
+        """ set method for tangoSourceFaultStates attribute
+
+        :param states: list of states
+        :type states: :obj:`list` <:obj:`str`>
+        """
+        self.__msp.tangoSourceFaultStates = [st for st in states if st]
+
+    #: (:obj:`list` <:obj:`str`>) tango source fault state
+    tangoSourceFaultStates = property(
+        __getTangoSourceFaultStates,
+        __setTangoSourceFaultStates,
+        doc='tango sources fault states')
+
+    def __getTangoSourceOffStates(self):
+        """ get method for tangoSourceOffStates attribute
+
+        :returns: list of state
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__msp.tangoSourceOffStates
+
+    def __setTangoSourceOffStates(self, states):
+        """ set method for tangoSourceOffStates attribute
+
+        :param states: list of states
+        :type states: :obj:`list` <:obj:`str`>
+        """
+        self.__msp.tangoSourceOffStates = [st for st in states if st]
+
+    #: (:obj:`list` <:obj:`str`>) tango source off state
+    tangoSourceOffStates = property(
+        __getTangoSourceOffStates,
+        __setTangoSourceOffStates,
+        doc='tango sources off states')
+
+    def __getTangoSourceAlarmStates(self):
+        """ get method for tangoSourceAlarmStates attribute
+
+        :returns: list of state
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__msp.tangoSourceAlarmStates
+
+    def __setTangoSourceAlarmStates(self, states):
+        """ set method for tangoSourceAlarmStates attribute
+
+        :param states: list of states
+        :type states: :obj:`list` <:obj:`str`>
+        """
+        self.__msp.tangoSourceAlarmStates = [st for st in states if st]
+
+    #: (:obj:`list` <:obj:`str`>) tango source alarm state
+    tangoSourceAlarmStates = property(
+        __getTangoSourceAlarmStates,
+        __setTangoSourceAlarmStates,
+        doc='tango sources alarm states')
 
     def __getClientRecordKeys(self):
         """ get method for clientRecordKeys attribute

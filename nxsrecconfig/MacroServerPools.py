@@ -46,8 +46,6 @@ class MacroServerPools(object):
 
     """ sardanamacro server and pools """
 
-    #
-
     def __init__(self, numberOfThreads):
         """ constructor
 
@@ -83,6 +81,16 @@ class MacroServerPools(object):
             "MntGrp",
             "ScanDir"
         ]
+
+        #: (:obj:`list` <:obj:`str`>) tango datasources off states
+        self.tangoSourceOffStates = [
+            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN"]
+
+        #: (:obj:`list` <:obj:`str`>) tango datasources alarm states
+        self.tangoSourceAlarmStates = ["ALARM"]
+
+        #: (:obj:`list` <:obj:`str`>) tango datasources fault states
+        self.tangoSourceFaultStates = ["FAULT", "DISABLE"]
 
     def updateMacroServer(self, door):
         """ updates MacroServer and sardana pools for given door
@@ -296,6 +304,9 @@ class MacroServerPools(object):
 
         for i in range(min(self.__numberOfThreads, len(toCheck))):
             thd = CheckerThread(i, cqueue)
+            thd.tangoSourceOffStates = self.tangoSourceOffStates
+            thd.tangoSourceAlarmStates = self.tangoSourceAlarmStates
+            thd.tangoSourceFaultStates = self.tangoSourceFaultStates
             threads.append(thd)
             thd.start()
 
