@@ -85,16 +85,6 @@ class Settings(object):
         #: (:obj:`list` <:obj:`str`>) default CanFail DataSources
         self.defaultCanFailDataSources = []
 
-        #: (:obj:`list` <:obj:`str`>) tango datasources off states
-        self.tangoSourceOffStates = [
-            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN"]
-
-        #: (:obj:`list` <:obj:`str`>) tango datasources alarm states
-        self.tangoSourceAlarmStates = ["ALARM"]
-
-        #: (:obj:`list` <:obj:`str`>) tango datasources fault states
-        self.tangoSourceFaultStates = ["FAULT", "DISABLE"]
-
         #: (:obj:`str`) default time zone
         self.defaultTimeZone = defaulttimezone or "Europe/Berlin"
 
