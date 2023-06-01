@@ -119,6 +119,9 @@ class NXSRecSelector(tango.Device_4Impl):
             self.TangoSourceAlarmStates or []
         self.__stg.tangoSourceOffStates = \
             self.TangoSourceOffStates or []
+        # print(self.TangoSourceFaultStates)
+        # print(self.TangoSourceAlarmStates)
+        # print(self.TangoSourceOffStates)
         self.__stg.clientRecordKeys = \
             self.ClientRecordKeys or []
 

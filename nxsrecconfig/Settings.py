@@ -332,7 +332,7 @@ class Settings(object):
         :param states: list of states
         :type states: :obj:`list` <:obj:`str`>
         """
-        self.__msp.tangoSourceFaultStates = states
+        self.__msp.tangoSourceFaultStates = [st for st in states if st]
 
     #: (:obj:`list` <:obj:`str`>) tango source fault state
     tangoSourceFaultStates = property(
@@ -354,7 +354,7 @@ class Settings(object):
         :param states: list of states
         :type states: :obj:`list` <:obj:`str`>
         """
-        self.__msp.tangoSourceOffStates = states
+        self.__msp.tangoSourceOffStates = [st for st in states if st]
 
     #: (:obj:`list` <:obj:`str`>) tango source off state
     tangoSourceOffStates = property(
@@ -376,7 +376,7 @@ class Settings(object):
         :param states: list of states
         :type states: :obj:`list` <:obj:`str`>
         """
-        self.__msp.tangoSourceAlarmStates = states
+        self.__msp.tangoSourceAlarmStates = [st for st in states if st]
 
     #: (:obj:`list` <:obj:`str`>) tango source alarm state
     tangoSourceAlarmStates = property(

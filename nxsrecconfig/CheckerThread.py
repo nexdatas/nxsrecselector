@@ -137,6 +137,9 @@ class CheckerThread(threading.Thread):
         :param checkeritem: device list item
         :type checkeritem: :obj:`list` <:class:`CheckerItem`>
         """
+        # print("F", self.tangoSourceFaultStates)
+        # print("A", self.tangoSourceAlarmStates)
+        # print("O", self.tangoSourceOffStates)
         for ds in checkeritem:
             try:
                 if ds.attr:
