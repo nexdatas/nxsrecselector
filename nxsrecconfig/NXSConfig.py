@@ -113,15 +113,12 @@ class NXSRecSelector(tango.Device_4Impl):
             self.DefaultPreselectedComponents or []
         self.__stg.defaultCanFailDataSources = \
             self.DefaultCanFailDataSources or []
-        self.__stg.tangoSourceFaultStates = \
-            self.TangoSourceFaultStates or []
-        self.__stg.tangoSourceAlarmStates = \
-            self.TangoSourceAlarmStates or []
-        self.__stg.tangoSourceOffStates = \
-            self.TangoSourceOffStates or []
-        # print(self.TangoSourceFaultStates)
-        # print(self.TangoSourceAlarmStates)
-        # print(self.TangoSourceOffStates)
+        self.__stg.tangoSourceErrorStates = \
+            self.TangoSourceErrorStates or []
+        self.__stg.tangoSourceWarningStates = \
+            self.TangoSourceWarningStates or []
+        # print(self.TangoSourceErrorStates)
+        # print(self.TangoSourceWarningStates)
         self.__stg.clientRecordKeys = \
             self.ClientRecordKeys or []
 
@@ -1898,17 +1895,14 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevVarStringArray,
          "list of default datasources in the CanFail mode",
          []],
-        'TangoSourceFaultStates':
+        'TangoSourceErrorStates':
         [tango.DevVarStringArray,
-         "list of tango fault states for tango datasources",
-         ["FAULT", "DISABLE"]],
-        'TangoSourceOffStates':
+         "list of tango error states for tango datasources",
+         ["OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN",
+          "FAULT", "DISABLE"]],
+        'TangoSourceWarningStates':
         [tango.DevVarStringArray,
-         "list of tango off states for tango datasources",
-         ["OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN"]],
-        'TangoSourceAlarmStates':
-        [tango.DevVarStringArray,
-         "list of tango alarm states for tango datasources",
+         "list of tango warning states for tango datasources",
          ["ALARM"]],
     }
 

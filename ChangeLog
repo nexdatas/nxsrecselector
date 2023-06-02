@@ -1,5 +1,5 @@
 2023-06-02 Jan Kotanski <jankotan@gmail.com>
-	* add TangoSourceFaultStates,TangoSourceAlarmStates and TangoSourceOffStates properties
+	* add TangoSourceErrorStates and TangoSourceWarningStates properties (#82, #80)
 	* tagged as v3.28.0
 
 2023-05-26 Jan Kotanski <jankotan@gmail.com>

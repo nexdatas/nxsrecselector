@@ -68,13 +68,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>False</DefaultPropValue>
     </deviceProperties>
-    <deviceProperties name="TangoSourceFaultStates" description="list of tango fault states for tango datasources">
-      <type xsi:type="pogoDsl:StringVectorType"/>
-      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <DefaultPropValue>FAULT</DefaultPropValue>
-      <DefaultPropValue>DISABLE</DefaultPropValue>
-    </deviceProperties>
-    <deviceProperties name="TangoSourceOffStates" description="list of tango off states for tango datasources">
+    <deviceProperties name="TangoSourceErrorStates" description="list of tango error states for tango datasources">
       <type xsi:type="pogoDsl:StringVectorType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>OFF</DefaultPropValue>
@@ -82,8 +76,10 @@
       <DefaultPropValue>INSERT</DefaultPropValue>
       <DefaultPropValue>CLOSE</DefaultPropValue>
       <DefaultPropValue>UNKNOWN</DefaultPropValue>
+      <DefaultPropValue>DISABLE</DefaultPropValue>
+      <DefaultPropValue>FAULT</DefaultPropValue>
     </deviceProperties>
-    <deviceProperties name="TangoSourceAlarmStates" description="list of tango alarm states for tango datasources">
+    <deviceProperties name="TangoSourceWarningStates" description="list of tango warning states for tango datasources">
       <type xsi:type="pogoDsl:StringVectorType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>ALARM</DefaultPropValue>
