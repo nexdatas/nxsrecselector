@@ -175,9 +175,9 @@ class CheckerThread(threading.Thread):
                     if v[0].has_failed or v[0].value is None:
                         raise Exception("Empty Attribute")
                 if str(state) in self.tangoSourceAlarmStates:
-                    raise AlarmStateError("ALARM STATE")
-            except AlarmStateError:
-                checkeritem.message = "ALARM_STATE"
+                    raise AlarmStateError("%s STATE" % state)
+            except AlarmStateError as e:
+                checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
                     checkeritem.errords = "%s [%s]" % (ds.name, dvat)
                 else:
