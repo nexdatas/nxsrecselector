@@ -199,14 +199,11 @@
         <span class="p">]</span>
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources off states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceOffStates</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INSERT&quot;</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INSERT&quot;</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">,</span> <span class="s2">&quot;FAULT&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources alarm states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">]</span>
-
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources fault states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;FAULT&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources warning states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="MacroServerPools.updateMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer">[docs]</a>    <span class="k">def</span> <span class="nf">updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates MacroServer and sardana pools for given door</span>
@@ -420,9 +417,8 @@
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__numberOfThreads</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">toCheck</span><span class="p">))):</span>
             <span class="n">thd</span> <span class="o">=</span> <span class="n">CheckerThread</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">cqueue</span><span class="p">)</span>
-            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceOffStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceOffStates</span>
-            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span>
-            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span>
+            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span>
+            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span>
             <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thd</span><span class="p">)</span>
             <span class="n">thd</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 

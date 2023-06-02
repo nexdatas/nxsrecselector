@@ -222,15 +222,12 @@
         <span class="c1">#: (:class:`Queue.Queue`) queue with runnable elements</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__queue</span> <span class="o">=</span> <span class="n">queue</span>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources off states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceOffStates</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INSERT&quot;</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">]</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources error states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INSERT&quot;</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">,</span> <span class="s2">&quot;FAULT&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources alarm states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">]</span>
-
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources fault states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;FAULT&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources warning states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="CheckerThread.run"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; runner</span>
@@ -253,9 +250,8 @@
 <span class="sd">        :param checkeritem: device list item</span>
 <span class="sd">        :type checkeritem: :obj:`list` &lt;:class:`CheckerItem`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># print(&quot;F&quot;, self.tangoSourceFaultStates)</span>
-        <span class="c1"># print(&quot;A&quot;, self.tangoSourceAlarmStates)</span>
-        <span class="c1"># print(&quot;O&quot;, self.tangoSourceOffStates)</span>
+        <span class="c1"># print(&quot;E&quot;, self.tangoSourceErrorStates)</span>
+        <span class="c1"># print(&quot;W&quot;, self.tangoSourceWarningStates)</span>
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">checkeritem</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">attr</span><span class="p">:</span>
@@ -269,10 +265,10 @@
                 <span class="n">TangoUtils</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
                 <span class="n">dp</span><span class="o">.</span><span class="n">set_timeout_millis</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
                 <span class="n">state</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">FaultStateError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> STATE&quot;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceOffStates</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">OffStateError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> STATE&quot;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
+                <span class="c1"># if str(state) in self.tangoSourceOffStates:</span>
+                <span class="c1">#     raise OffStateError(&quot;%s STATE&quot; % state)</span>
                 <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">attr</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">gattr</span> <span class="ow">in</span> <span class="n">ATTRIBUTESTOCHECK</span><span class="p">:</span>
@@ -290,7 +286,7 @@
                     <span class="n">v</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">read_attributes</span><span class="p">([</span><span class="n">ds</span><span class="o">.</span><span class="n">attr</span><span class="p">])</span>
                     <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">has_failed</span> <span class="ow">or</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Empty Attribute&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">AlarmStateError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> STATE&quot;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">AlarmStateError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">checkeritem</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
