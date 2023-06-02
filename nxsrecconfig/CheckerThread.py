@@ -106,15 +106,12 @@ class CheckerThread(threading.Thread):
         #: (:class:`Queue.Queue`) queue with runnable elements
         self.__queue = queue
 
-        #: (:obj:`list` <:obj:`str`>) tango datasources off states
-        self.tangoSourceOffStates = [
-            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN"]
+        #: (:obj:`list` <:obj:`str`>) tango datasources error states
+        self.tangoSourceErrorStates = [
+            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN", "FAULT", "DISABLE"]
 
-        #: (:obj:`list` <:obj:`str`>) tango datasources alarm states
-        self.tangoSourceAlarmStates = ["ALARM"]
-
-        #: (:obj:`list` <:obj:`str`>) tango datasources fault states
-        self.tangoSourceFaultStates = ["FAULT", "DISABLE"]
+        #: (:obj:`list` <:obj:`str`>) tango datasources warning states
+        self.tangoSourceWarningStates = ["ALARM"]
 
     def run(self):
         """ runner
@@ -137,9 +134,8 @@ class CheckerThread(threading.Thread):
         :param checkeritem: device list item
         :type checkeritem: :obj:`list` <:class:`CheckerItem`>
         """
-        # print("F", self.tangoSourceFaultStates)
-        # print("A", self.tangoSourceAlarmStates)
-        # print("O", self.tangoSourceOffStates)
+        # print("E", self.tangoSourceErrorStates)
+        # print("W", self.tangoSourceWarningStates)
         for ds in checkeritem:
             try:
                 if ds.attr:
@@ -153,10 +149,10 @@ class CheckerThread(threading.Thread):
                 TangoUtils.wait(dp, state=None)
                 dp.set_timeout_millis(10000)
                 state = dp.state()
-                if str(state) in self.tangoSourceFaultStates:
+                if str(state) in self.tangoSourceErrorStates:
                     raise FaultStateError("%s STATE" % state)
-                if str(state) in self.tangoSourceOffStates:
-                    raise OffStateError("%s STATE" % state)
+                # if str(state) in self.tangoSourceOffStates:
+                #     raise OffStateError("%s STATE" % state)
                 dp.ping()
                 if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
@@ -174,7 +170,7 @@ class CheckerThread(threading.Thread):
                     v = dp.read_attributes([ds.attr])
                     if v[0].has_failed or v[0].value is None:
                         raise Exception("Empty Attribute")
-                if str(state) in self.tangoSourceAlarmStates:
+                if str(state) in self.tangoSourceWarningStates:
                     raise AlarmStateError("%s STATE" % state)
             except AlarmStateError as e:
                 checkeritem.message = Utils.tostr(e)

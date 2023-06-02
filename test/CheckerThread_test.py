@@ -376,9 +376,8 @@ class CheckerItemTest(unittest.TestCase):
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
         el = CheckerThread(idn, cqueue)
-        el.tangoSourceOffStates = ["ALARM"]
-        el.tangoSourceAlarmStates = ["FAULT"]
-        el.tangoSourceFaultStates = ["OFF"]
+        el.tangoSourceErrorStates = ["ALARM", "OFF"]
+        el.tangoSourceWarningStates = ["FAULT"]
         self.assertEqual(el.index, idn)
         el.run()
         self.assertTrue(cqueue.empty())
@@ -502,9 +501,8 @@ class CheckerItemTest(unittest.TestCase):
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
         el = CheckerThread(idn, cqueue)
-        el.tangoSourceOffStates = []
-        el.tangoSourceAlarmStates = []
-        el.tangoSourceFaultStates = []
+        el.tangoSourceErrorStates = []
+        el.tangoSourceWarningStates = []
         self.assertEqual(el.index, idn)
         el.run()
         self.assertTrue(cqueue.empty())
