@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.27.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.28.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.27</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.28</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -198,7 +198,7 @@
             <span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span> \
             <span class="s2">&quot;NXinstrument/collection&quot;</span>
 
-        <span class="c1">#: (:obj:`str`) default CanFail DataSources</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) default CanFail DataSources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultCanFailDataSources</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1">#: (:obj:`str`) default time zone</span>
@@ -433,6 +433,72 @@
         <span class="n">__getDefaultPreselectedComponents</span><span class="p">,</span>
         <span class="n">__setDefaultPreselectedComponents</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;default Preselected components&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getTangoSourceFaultStates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get method for tangoSourceFaultStates attribute</span>
+
+<span class="sd">        :returns: list of state</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span>
+
+    <span class="k">def</span> <span class="nf">__setTangoSourceFaultStates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set method for tangoSourceFaultStates attribute</span>
+
+<span class="sd">        :param states: list of states</span>
+<span class="sd">        :type states: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span> <span class="o">=</span> <span class="p">[</span><span class="n">st</span> <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">states</span> <span class="k">if</span> <span class="n">st</span><span class="p">]</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango source fault state</span>
+    <span class="n">tangoSourceFaultStates</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">__getTangoSourceFaultStates</span><span class="p">,</span>
+        <span class="n">__setTangoSourceFaultStates</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;tango sources fault states&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getTangoSourceOffStates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get method for tangoSourceOffStates attribute</span>
+
+<span class="sd">        :returns: list of state</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">tangoSourceOffStates</span>
+
+    <span class="k">def</span> <span class="nf">__setTangoSourceOffStates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set method for tangoSourceOffStates attribute</span>
+
+<span class="sd">        :param states: list of states</span>
+<span class="sd">        :type states: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">tangoSourceOffStates</span> <span class="o">=</span> <span class="p">[</span><span class="n">st</span> <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">states</span> <span class="k">if</span> <span class="n">st</span><span class="p">]</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango source off state</span>
+    <span class="n">tangoSourceOffStates</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">__getTangoSourceOffStates</span><span class="p">,</span>
+        <span class="n">__setTangoSourceOffStates</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;tango sources off states&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getTangoSourceAlarmStates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get method for tangoSourceAlarmStates attribute</span>
+
+<span class="sd">        :returns: list of state</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span>
+
+    <span class="k">def</span> <span class="nf">__setTangoSourceAlarmStates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set method for tangoSourceAlarmStates attribute</span>
+
+<span class="sd">        :param states: list of states</span>
+<span class="sd">        :type states: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span> <span class="o">=</span> <span class="p">[</span><span class="n">st</span> <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">states</span> <span class="k">if</span> <span class="n">st</span><span class="p">]</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango source alarm state</span>
+    <span class="n">tangoSourceAlarmStates</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">__getTangoSourceAlarmStates</span><span class="p">,</span>
+        <span class="n">__setTangoSourceAlarmStates</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;tango sources alarm states&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getClientRecordKeys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get method for clientRecordKeys attribute</span>

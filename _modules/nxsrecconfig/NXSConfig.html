@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.27.0 documentation</title>
+    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.28.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.27</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.28</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -229,6 +229,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">DefaultPreselectedComponents</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">defaultCanFailDataSources</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">DefaultCanFailDataSources</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">tangoSourceFaultStates</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">TangoSourceFaultStates</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">tangoSourceAlarmStates</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">TangoSourceAlarmStates</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">tangoSourceOffStates</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">TangoSourceOffStates</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="c1"># print(self.TangoSourceFaultStates)</span>
+        <span class="c1"># print(self.TangoSourceAlarmStates)</span>
+        <span class="c1"># print(self.TangoSourceOffStates)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">clientRecordKeys</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">ClientRecordKeys</span> <span class="ow">or</span> <span class="p">[]</span></div>
 
@@ -2005,6 +2014,18 @@
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
          <span class="s2">&quot;list of default datasources in the CanFail mode&quot;</span><span class="p">,</span>
          <span class="p">[]],</span>
+        <span class="s1">&#39;TangoSourceFaultStates&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
+         <span class="s2">&quot;list of tango fault states for tango datasources&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s2">&quot;FAULT&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]],</span>
+        <span class="s1">&#39;TangoSourceOffStates&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
+         <span class="s2">&quot;list of tango off states for tango datasources&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INSERT&quot;</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">]],</span>
+        <span class="s1">&#39;TangoSourceAlarmStates&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
+         <span class="s2">&quot;list of tango alarm states for tango datasources&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">]],</span>
     <span class="p">}</span>
 
     <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, \</span>
