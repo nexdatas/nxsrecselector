@@ -1899,11 +1899,11 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevVarStringArray,
          "list of tango error states for tango datasources",
          ["OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN",
-          "FAULT", "DISABLE"]],
+          "FAULT"]],
         'TangoSourceWarningStates':
         [tango.DevVarStringArray,
          "list of tango warning states for tango datasources",
-         ["ALARM"]],
+         ["ALARM", "DISABLE"]],
     }
 
     #: (:obj:`dict` <:obj:`str`, \

@@ -1,3 +1,7 @@
+2023-06-07 Jan Kotanski <jankotan@gmail.com>
+	* move DISABLE state to TangoSourceWarningStates (#85)
+	* tagged as v3.29.0
+
 2023-06-02 Jan Kotanski <jankotan@gmail.com>
 	* add TangoSourceErrorStates and TangoSourceWarningStates properties (#82, #80)
 	* tagged as v3.28.0

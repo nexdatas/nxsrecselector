@@ -108,10 +108,10 @@ class CheckerThread(threading.Thread):
 
         #: (:obj:`list` <:obj:`str`>) tango datasources error states
         self.tangoSourceErrorStates = [
-            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN", "FAULT", "DISABLE"]
+            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN", "FAULT"]
 
         #: (:obj:`list` <:obj:`str`>) tango datasources warning states
-        self.tangoSourceWarningStates = ["ALARM"]
+        self.tangoSourceWarningStates = ["ALARM", "DISABLE"]
 
     def run(self):
         """ runner
