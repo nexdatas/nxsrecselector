@@ -84,10 +84,10 @@ class MacroServerPools(object):
 
         #: (:obj:`list` <:obj:`str`>) tango datasources off states
         self.tangoSourceErrorStates = [
-            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN", "FAULT", "DISABLE"]
+            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN", "FAULT"]
 
         #: (:obj:`list` <:obj:`str`>) tango datasources warning states
-        self.tangoSourceWarningStates = ["ALARM"]
+        self.tangoSourceWarningStates = ["ALARM", "DISABLE"]
 
     def updateMacroServer(self, door):
         """ updates MacroServer and sardana pools for given door

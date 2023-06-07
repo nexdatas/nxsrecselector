@@ -76,13 +76,13 @@
       <DefaultPropValue>INSERT</DefaultPropValue>
       <DefaultPropValue>CLOSE</DefaultPropValue>
       <DefaultPropValue>UNKNOWN</DefaultPropValue>
-      <DefaultPropValue>DISABLE</DefaultPropValue>
       <DefaultPropValue>FAULT</DefaultPropValue>
     </deviceProperties>
     <deviceProperties name="TangoSourceWarningStates" description="list of tango warning states for tango datasources">
       <type xsi:type="pogoDsl:StringVectorType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>ALARM</DefaultPropValue>
+      <DefaultPropValue>DISABLE</DefaultPropValue>
     </deviceProperties>
     <commands name="AvailableComponents" description="Return a list of available component names" execMethod="available_components" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="">
