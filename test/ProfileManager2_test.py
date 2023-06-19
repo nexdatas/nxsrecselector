@@ -3928,7 +3928,7 @@ class ProfileManager2Test(unittest.TestCase):
                         1, len(list(self.smycps2.keys())) - 1)
                     mcps = [
                         cp for cp in self.__rnd.sample(
-                            set(self.smycps2.keys()), mncps)
+                            list(self.smycps2.keys()), mncps)
                         if cp not in wrong]
 
                     adss = dict(dss)

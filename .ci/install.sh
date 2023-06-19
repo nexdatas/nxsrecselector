@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # workaround for a bug in debian9, i.e. starting mysql hangs
-if [ "$1" = "debian11" ]; then
+if [ "$1" = "debian11" ] || [ "$1" = "debian12" ]; then
     docker exec --user root ndts service mariadb restart
 else
     docker exec --user root ndts service mysql stop

@@ -210,7 +210,7 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
         self.assertEqual(set(rs.mandatoryComponents()), set())
         mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
         mcps = [cp for cp in self._rnd.sample(
-                set(self.mycps.keys()), mncps) if cp not in wrong]
+                list(self.mycps.keys()), mncps) if cp not in wrong]
 
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
