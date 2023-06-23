@@ -628,7 +628,7 @@ class ProfileManager(object):
         self.__clearChannels(dsg, hel, compdatasources)
 
         # fill in dsg, timers hel
-        if "timer" in conf.keys() and "controllers" in conf.keys():
+        if"controllers" in conf.keys():
             avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
             tangods = self.__readChannels(
                 conf, timers, dsg, hel, synchronizer, synchronization)
@@ -713,7 +713,7 @@ class ProfileManager(object):
         :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         """
         tangods = []
-        timers[conf["timer"]] = ''
+        # timers[conf["timer"]] = ''
         for ctrlname, ctrl in conf["controllers"].items():
             if 'units' in ctrl.keys() and \
                     '0' in ctrl['units'].keys():
@@ -810,7 +810,7 @@ class ProfileManager(object):
         dtimers = PoolUtils.getAliases(self.__pools, timers)
         avtimers = avtimers or []
         otimers = [tm for tm in dtimers.values() if tm in avtimers]
-        if dtimers[conf["timer"]] in otimers:
+        if "timer" in conf and dtimers[conf["timer"]] in otimers:
             otimers.remove(dtimers[conf["timer"]])
             otimers.insert(0, dtimers[conf["timer"]])
         elif not otimers:
@@ -940,8 +940,8 @@ class ProfileManager(object):
         if not fullname:
             raise Exception(
                 "Timer or Monitor cannot be found amount the servers")
-        cnf['monitor'] = fullname
-        cnf['timer'] = fullname
+        # cnf['monitor'] = fullname
+        # cnf['timer'] = fullname
         if len(mtimers) > 1:
             ltimers.clear()
             ltimers.update(set(mtimers[1:]))
