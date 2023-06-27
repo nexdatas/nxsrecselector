@@ -45,14 +45,19 @@ import DynamicComponent_test
 import Utils_test
 import ProfileManager_test
 import ProfileManager2_test
+import ProfileManager3_test
 import BasicSettings_test
 import BasicSettings2_test
+import BasicSettings3_test
 import ExtraSettings_test
 import ExtraSettings2_test
+import ExtraSettings3_test
 import BasicNXSRecSelector_test
 import BasicNXSRecSelector2_test
+import BasicNXSRecSelector3_test
 import ExtraNXSRecSelector_test
 import ExtraNXSRecSelector2_test
+import ExtraNXSRecSelector3_test
 import Converter_test
 import ConverterXtoY_test
 import Converter1to2_test
@@ -154,17 +159,26 @@ def main():
     profilesuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ProfileManager2_test))
 
+    profilesuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ProfileManager3_test))
+
     settingssuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicSettings_test))
 
     settingssuite1b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicSettings2_test))
 
+    settingssuite1b.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(BasicSettings3_test))
+
     settingssuite2.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings_test))
 
     settingssuite2b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings2_test))
+
+    settingssuite2b.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings3_test))
 
     serversuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
@@ -174,6 +188,10 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(
             BasicNXSRecSelector2_test))
 
+    serversuite1b.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            BasicNXSRecSelector3_test))
+
     serversuite2.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             ExtraNXSRecSelector_test))
@@ -181,6 +199,10 @@ def main():
     serversuite2b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             ExtraNXSRecSelector2_test))
+
+    serversuite2b.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            ExtraNXSRecSelector3_test))
 
     # test runner
     runner = unittest.TextTestRunner()

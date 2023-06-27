@@ -33,11 +33,10 @@ try:
     import ServerSetUp
 except Exception:
     from . import ServerSetUp
-
 try:
-    import BasicSettings_test
+    import ExtraSettings3_test
 except Exception:
-    from . import BasicSettings_test
+    from . import ExtraSettings3_test
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
@@ -46,13 +45,13 @@ from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
-class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
+class ExtraNXSRecSelector3Test(ExtraSettings3_test.ExtraSettings3Test):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        BasicSettings_test.BasicSettingsTest.__init__(self, methodName)
+        ExtraSettings3_test.ExtraSettings3Test.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -62,7 +61,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        BasicSettings_test.BasicSettingsTest.setUp(self)
+        ExtraSettings3_test.ExtraSettings3Test.setUp(self)
         self._sv.setUp()
 
     # test starter
@@ -74,7 +73,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        BasicSettings_test.BasicSettingsTest.tearDown(self)
+        ExtraSettings3_test.ExtraSettings3Test.tearDown(self)
 
     # test closer
     # \brief Common tear down oif Tango Server
@@ -82,7 +81,6 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-        #    print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
@@ -127,7 +125,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
                 self._sv.new_device_info_writer.name)
 
         self.assertEqual(xmlc.state(), tango.DevState.ON)
-        self.setProp(xmlc, "masterTimer", [True])
+        self.setProp(xmlc, "masterTimer", [False])
         return xmlc
 
     # opens config server
@@ -161,7 +159,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
                 self._sv2.new_device_info_writer.name)
 
         self.assertEqual(xmlc.state(), tango.DevState.ON)
-        self.setProp(xmlc, "masterTimer", [True])
+        self.setProp(xmlc, "masterTimer", [False])
         return xmlc
 
     def subtest_constructor(self):
@@ -187,7 +185,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
             self.assertEqual('nxsmntgrp', amntgrp)
 
         # print "MntGrp", rs.mntGrp
-        # # memorize attirbutes
+        # memorize attirbutes
         # print "ConfigDevice", rs.configDevice
         # print "Door", rs.door
         # print "DeviceGroups", rs.deviceGroups

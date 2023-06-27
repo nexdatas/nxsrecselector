@@ -2324,10 +2324,14 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(v, dct2[k])
 
     def openRecSelector(self):
-        return Settings()
+        st = Settings()
+        st.masterTimer = True
+        return st
 
     def openRecSelector2(self):
-        return Settings()
+        st = Settings()
+        st.masterTimer = True
+        return st
 
     def subtest_constructor(self):
         # properties

@@ -89,6 +89,8 @@ class ProfileManager(object):
 
         #: (:obj:`bool` ) master timer/monitor with the first index
         self.masterTimerFirst = False
+        #: (:obj:`bool` ) set master timer/monitor like for older MGs
+        self.masterTimer = False
         #: (:obj:`bool`) mntgrp with synchronization
         self.__withsynch = True
 
@@ -628,7 +630,8 @@ class ProfileManager(object):
         self.__clearChannels(dsg, hel, compdatasources)
 
         # fill in dsg, timers hel
-        if"controllers" in conf.keys():
+        if "controllers" in conf.keys() and \
+           (not self.masterTimer or "timer" in conf.keys()):
             avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
             tangods = self.__readChannels(
                 conf, timers, dsg, hel, synchronizer, synchronization)
@@ -691,8 +694,7 @@ class ProfileManager(object):
             if ch in hel:
                 hel.remove(ch)
 
-    @classmethod
-    def __readChannels(cls, conf, timers, dsg, hel, synchronizer,
+    def __readChannels(self, conf, timers, dsg, hel, synchronizer,
                        synchronization):
         """ reads channels from mntgrp configutation
 
@@ -713,7 +715,8 @@ class ProfileManager(object):
         :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         """
         tangods = []
-        # timers[conf["timer"]] = ''
+        if self.masterTimer:
+            timers[conf["timer"]] = ''
         for ctrlname, ctrl in conf["controllers"].items():
             if 'units' in ctrl.keys() and \
                     '0' in ctrl['units'].keys():
@@ -940,8 +943,9 @@ class ProfileManager(object):
         if not fullname:
             raise Exception(
                 "Timer or Monitor cannot be found amount the servers")
-        # cnf['monitor'] = fullname
-        # cnf['timer'] = fullname
+        if self.masterTimer:
+            cnf['monitor'] = fullname
+            cnf['timer'] = fullname
         if len(mtimers) > 1:
             ltimers.clear()
             ltimers.update(set(mtimers[1:]))

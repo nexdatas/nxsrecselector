@@ -29,30 +29,29 @@ try:
 except Exception:
     import PyTango as tango
 
-try:
-    import ServerSetUp
-except Exception:
-    from . import ServerSetUp
-
-try:
-    import BasicSettings_test
-except Exception:
-    from . import BasicSettings_test
-
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import MSUtils
 
+try:
+    import ServerSetUp
+except Exception:
+    from . import ServerSetUp
+try:
+    import BasicSettings3_test
+except Exception:
+    from . import BasicSettings3_test
+
 
 # test fixture
-class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
+class BasicNXSRecSelector3Test(BasicSettings3_test.BasicSettings3Test):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        BasicSettings_test.BasicSettingsTest.__init__(self, methodName)
+        BasicSettings3_test.BasicSettings3Test.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -62,7 +61,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        BasicSettings_test.BasicSettingsTest.setUp(self)
+        BasicSettings3_test.BasicSettings3Test.setUp(self)
         self._sv.setUp()
 
     # test starter
@@ -74,7 +73,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        BasicSettings_test.BasicSettingsTest.tearDown(self)
+        BasicSettings3_test.BasicSettings3Test.tearDown(self)
 
     # test closer
     # \brief Common tear down oif Tango Server
@@ -82,7 +81,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-        #    print "VAL", json.loads(rs.profileConfiguration)
+        #     print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
@@ -187,7 +186,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
             self.assertEqual('nxsmntgrp', amntgrp)
 
         # print "MntGrp", rs.mntGrp
-        # # memorize attirbutes
+        # memorize attirbutes
         # print "ConfigDevice", rs.configDevice
         # print "Door", rs.door
         # print "DeviceGroups", rs.deviceGroups

@@ -105,6 +105,7 @@ class NXSRecSelector(tango.Device_4Impl):
         self.__stg.timerFilters = self.TimerFilters or [
             "*dgg*", "*/timer/*", "*/ctctrl0*"]
         self.__stg.masterTimerFirst = bool(self.MasterTimerFirst)
+        self.__stg.masterTimer = bool(self.MasterTimer)
         self.__stg.mutedChannelFilters = self.MutedChannelFilters \
             or ["*tip551*"]
         self.__stg.mutedPreScanAttrFilters = self.MutedPreScanAttrFilters or []
@@ -1890,6 +1891,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'MasterTimerFirst':
         [tango.DevBoolean,
          "the master timer channel of MG with the index: 0",
+         [False]],
+        'MasterTimer':
+        [tango.DevBoolean,
+         "set the master timer/monitor channel for older MG",
          [False]],
         'DefaultCanFailDataSources':
         [tango.DevVarStringArray,
