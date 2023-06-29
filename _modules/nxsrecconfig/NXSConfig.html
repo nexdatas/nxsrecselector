@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.29.0 documentation</title>
+    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.30.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.29</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.30</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -221,6 +221,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimerFilters</span> <span class="ow">or</span> <span class="p">[</span>
             <span class="s2">&quot;*dgg*&quot;</span><span class="p">,</span> <span class="s2">&quot;*/timer/*&quot;</span><span class="p">,</span> <span class="s2">&quot;*/ctctrl0*&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MasterTimerFirst</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">masterTimer</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MasterTimer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mutedChannelFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MutedChannelFilters</span> \
             <span class="ow">or</span> <span class="p">[</span><span class="s2">&quot;*tip551*&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MutedPreScanAttrFilters</span> <span class="ow">or</span> <span class="p">[]</span>
@@ -2006,6 +2007,10 @@
         <span class="s1">&#39;MasterTimerFirst&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
          <span class="s2">&quot;the master timer channel of MG with the index: 0&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="kc">False</span><span class="p">]],</span>
+        <span class="s1">&#39;MasterTimer&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
+         <span class="s2">&quot;set the master timer/monitor channel for older MG&quot;</span><span class="p">,</span>
          <span class="p">[</span><span class="kc">False</span><span class="p">]],</span>
         <span class="s1">&#39;DefaultCanFailDataSources&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.29.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.30.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.29</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.30</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -205,6 +205,8 @@
 
         <span class="c1">#: (:obj:`bool` ) master timer/monitor with the first index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool` ) set master timer/monitor like for older MGs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">masterTimer</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) mntgrp with synchronization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__withsynch</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -744,7 +746,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__clearChannels</span><span class="p">(</span><span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">compdatasources</span><span class="p">)</span>
 
         <span class="c1"># fill in dsg, timers hel</span>
-        <span class="k">if</span> <span class="s2">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="s2">&quot;controllers&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;controllers&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+           <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimer</span> <span class="ow">or</span> <span class="s2">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">avtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getTimers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span><span class="p">)</span>
             <span class="n">tangods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__readChannels</span><span class="p">(</span>
                 <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span> <span class="n">synchronization</span><span class="p">)</span>
@@ -807,8 +810,7 @@
             <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
                 <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__readChannels</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__readChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span>
                        <span class="n">synchronization</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reads channels from mntgrp configutation</span>
 
@@ -829,7 +831,8 @@
 <span class="sd">        :rtype: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tangods</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">timers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimer</span><span class="p">:</span>
+            <span class="n">timers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">ctrlname</span><span class="p">,</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s2">&quot;controllers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="s1">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
                     <span class="s1">&#39;0&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -926,10 +929,10 @@
         <span class="n">dtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">timers</span><span class="p">)</span>
         <span class="n">avtimers</span> <span class="o">=</span> <span class="n">avtimers</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">otimers</span> <span class="o">=</span> <span class="p">[</span><span class="n">tm</span> <span class="k">for</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">dtimers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">avtimers</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]]</span> <span class="ow">in</span> <span class="n">otimers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]]</span> <span class="ow">in</span> <span class="n">otimers</span><span class="p">:</span>
             <span class="n">otimers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]])</span>
             <span class="n">otimers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]])</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">otimers</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">otimers</span><span class="p">:</span>
             <span class="n">otimers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s2">&quot;timer&quot;</span><span class="p">]])</span>
 
         <span class="n">tms</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;Timer&quot;</span><span class="p">])</span>
@@ -1048,16 +1051,17 @@
         <span class="c1">#   mtimers = [tm for tm in mtimers if tm in avtimers]</span>
 
         <span class="n">timer</span> <span class="o">=</span> <span class="n">mtimers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">mtimers</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;Timer or Monitor not defined&quot;</span><span class="p">)</span>
-        <span class="n">fullname</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="p">[</span><span class="n">timer</span><span class="p">])[</span><span class="n">timer</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">fullname</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;Timer or Monitor cannot be found amount the servers&quot;</span><span class="p">)</span>
-        <span class="n">cnf</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
-        <span class="n">cnf</span><span class="p">[</span><span class="s1">&#39;timer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimer</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Timer or Monitor not defined&quot;</span><span class="p">)</span>
+            <span class="n">fullname</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="p">[</span><span class="n">timer</span><span class="p">])[</span><span class="n">timer</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fullname</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Timer or Monitor cannot be found amount the servers&quot;</span><span class="p">)</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s1">&#39;timer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mtimers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ltimers</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
             <span class="n">ltimers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mtimers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
