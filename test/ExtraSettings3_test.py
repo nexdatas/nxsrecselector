@@ -156,7 +156,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
-        self.myAssertRaise(Exception, rs.updateMntGrp)
+        # self.myAssertRaise(Exception, rs.updateMntGrp)
 
         db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
@@ -440,9 +440,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(json.loads(mp["Timer"]), ltimers)
                     self.assertEqual(mp["MntGrp"], "mg2")
                     myctrls = {}
-                    fgtm = "/".join(
-                        self.smychsXX[str(ltimers[0])]['source'].split(
-                            "/")[:-1])
+                    # fgtm = "/".join(
+                    #     self.smychsXX[str(ltimers[0])]['source'].split(
+                    #         "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -544,9 +544,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             'synchronization': 0}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % fgtm,
                            "description": "Measurement Group",
-                           "timer": "%s" % fgtm,
                            "label": "mg2"}
 #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
@@ -610,7 +608,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
-        self.myAssertRaise(Exception, rs.updateMntGrp)
+        # self.myAssertRaise(Exception, rs.updateMntGrp)
 
         db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
@@ -947,9 +945,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(json.loads(mp["Timer"]), ltimers)
                     self.assertEqual(mp["MntGrp"], "mg2")
                     myctrls = {}
-                    fgtm = "/".join(
-                        self.smychsXX[str(ltimers[0])]['source'].split(
-                            "/")[:-1])
+                    # fgtm = "/".join(
+                    #     self.smychsXX[str(ltimers[0])]['source'].split(
+                    #         "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -1052,11 +1050,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                                 'synchronization': 0}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % fgtm,
                            "description": "Measurement Group",
-                           "timer": "%s" % fgtm,
                            "label": "mg2"}
-#                    print "SMG", smg
+                    #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
                     rs.mntGrp = "nxsmntgrp"
@@ -1481,7 +1477,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         self.myAssertDict(
                             json.loads(mp[mg]["UserData"]), records[mg])
                         self.assertEqual(
-                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                           json.loads(mp[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(mp[mg]["MntGrp"], mg)
                         self.dump(rs[mg], name=mg)
                         self.assertTrue(not rs[mg].isMntGrpUpdated())
@@ -1531,9 +1527,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             json.loads(mp[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(mp[mg]["MntGrp"], mg)
                         myctrls = {}
-                        fgtm = "/".join(
-                            self.smychsXX[str(ltimers[mg][0])]['source'].split(
-                                "/")[:-1])
+                        # fgtm = "/".join(
+                        #     self.smychsXX[str(ltimers[mg][0])]['source'].split(
+                        #         "/")[:-1])
                         for cl in ctrls:
                             tgc = {}
                             ttdv = None
@@ -1637,9 +1633,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                 'synchronization': 0}
 
                         smg = {"controllers": myctrls,
-                               "monitor": "%s" % fgtm,
                                "description": "Measurement Group",
-                               "timer": "%s" % fgtm,
                                "label": mg}
         #                    print "SMG", smg
                         self.myAssertDict(smg, pcnf)
@@ -1760,9 +1754,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
                     self.assertEqual(
-                        json.loads(lmp["Timer"])[0], ltimers[mg1][0])
-                    self.assertEqual(
-                        set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
+                        len(json.loads(lmp["Timer"])), 0)
+                    # self.assertEqual(
+                    #     set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lmp["MntGrp"], mg1)
 
 #                    print "MGS", mg1, mg2, mg3, mg4
@@ -1827,9 +1821,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         json.loads(lmp["UserData"]), records[mg1])
 
                     self.assertEqual(
-                        json.loads(lmp["Timer"])[0], ltimers[mg2][0])
-                    self.assertEqual(
-                        set(json.loads(lmp["Timer"])), set(ltimers[mg2]))
+                        len(json.loads(lmp["Timer"])), 0)
+                    # self.assertEqual(
+                    #     set(json.loads(lmp["Timer"])), set(ltimers[mg2]))
                     self.assertEqual(lmp["MntGrp"], mg2)
 
                     self.myAssertDict(
@@ -1903,23 +1897,27 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                 else:
                                     ladss[ds] = False
 
-                    for tm in json.loads(mp[mg2]["Timer"]):
+                    # for tm in json.loads(mp[mg2]["Timer"]):
+                    #     if tm in ladss:
+                    #         if tm in llhe:
+                    #             ladss[tm] = False
+                    #             llhe.remove(tm)
+                    # for tm in json.loads(mp[mg1]["Timer"]):
+                    #     if tm in ladss:
+                    #         if tm in json.loads(
+                    #                 mp[mg2]["UnplottedComponents"]):
+                    #             ladss[tm] = False
+                    #             if tm not in json.loads(mp[mg2]["Timer"]):
+                    #                 if tm in llhe:
+                    #                     llhe.remove(tm)
+                    for tm in ltimers[mg2]:
                         if tm in ladss:
-                            if tm in llhe:
-                                ladss[tm] = False
-                                llhe.remove(tm)
-                    for tm in json.loads(mp[mg1]["Timer"]):
-                        if tm in ladss:
+                            ladss[tm] = True
+                        if tm not in llhe:
                             if tm in json.loads(
-                                    mp[mg2]["UnplottedComponents"]):
-                                ladss[tm] = False
-                                if tm not in json.loads(mp[mg2]["Timer"]):
-                                    if tm in llhe:
-                                        llhe.remove(tm)
+                                    lmp["UnplottedComponents"]):
+                                llhe.add(tm)
 
-#                    print "T1", json.loads(mp[mg1]["Timer"])
-#                    print "T2", json.loads(mp[mg2]["Timer"])
-#                    print "LT", json.loads(lmp["Timer"])
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), ladss)
 
@@ -2072,6 +2070,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             if not adss[mg3][tm]:
                                 if tm in mylhe:
                                     mylhe.remove(tm)
+                    for tm in ltimers[mg3]:
+                        if tm in adss[mg3].keys():
+                            adss[mg3][tm] = True
+
                     lmp = json.loads(lrs.profileConfiguration)
 
                     self.assertEqual(
@@ -2081,10 +2083,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
                     # switch to nonexisting active profile
@@ -2134,10 +2136,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], wmg)
 
                     # switch to active profile mg3
@@ -2176,6 +2178,13 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
+
+                    for tm in ltimers[mg3]:
+                        if tm not in mylhe:
+                            if tm in json.loads(
+                                    lmp["UnplottedComponents"]):
+                                mylhe.add(tm)
+
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -2189,10 +2198,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
                     # try switch to unnamed active profile
@@ -2241,10 +2250,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
                     # try switch to unnamed active profile
@@ -2289,10 +2298,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
                     # fetch non-existing mg
@@ -2331,10 +2340,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], wmg)
 
                     # fetch non-existing selection
@@ -2414,10 +2423,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg4][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg4]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg4]))
                     self.assertEqual(lmp["MntGrp"], mg4)
 
                     ladss = {}
@@ -2453,24 +2462,31 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         if ds in lhe2[mg4]:
                             llhe.add(ds)
 
-                    for tm in json.loads(mp[mg4]["Timer"]):
-                        if tm in ladss:
-                            if tm in llhe:
-                                ladss[tm] = False
-                                llhe.remove(tm)
-                    for tm in json.loads(mp[mg3]["Timer"]):
-                        if tm in ladss:
-                            if tm in json.loads(
-                                    mp[mg4]["UnplottedComponents"]):
-                                ladss[tm] = False
-                                if tm not in json.loads(mp[mg4]["Timer"]):
-                                    if tm in llhe:
-                                        llhe.remove(tm)
+                    # for tm in json.loads(mp[mg4]["Timer"]):
+                    #     if tm in ladss:
+                    #         if tm in llhe:
+                    #             ladss[tm] = False
+                    #             llhe.remove(tm)
+                    # for tm in json.loads(mp[mg3]["Timer"]):
+                    #     if tm in ladss:
+                    #         if tm in json.loads(
+                    #                 mp[mg4]["UnplottedComponents"]):
+                    #             ladss[tm] = False
+                    #             if tm not in json.loads(mp[mg4]["Timer"]):
+                    #                 if tm in llhe:
+                    #                     llhe.remove(tm)
 
                     for ds in self.smychs.keys():
                         if ds in llhe:
                             if ds in lhe2[mg3] and ds not in lhe2[mg4]:
                                 llhe.remove(ds)
+                    for tm in ltimers[mg4]:
+                        if tm in ladss:
+                            ladss[tm] = True
+                        if tm not in llhe:
+                            if tm in json.loads(
+                                     lmp["UnplottedComponents"]):
+                                llhe.add(tm)
 
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       ladss)
@@ -2919,10 +2935,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             json.loads(mp[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(mp[mg]["MntGrp"], mg)
                         myctrls = {}
-                        fgtm = "/".join(
-                            self.smychsXX[
-                                str(ltimers[mg][0])]['source'].split(
-                                    "/")[:-1])
+                        # fgtm = "/".join(
+                        #     self.smychsXX[
+                        #         str(ltimers[mg][0])]['source'].split(
+                        #             "/")[:-1])
                         for cl in ctrls:
                             tgc = {}
                             ttdv = None
@@ -3026,9 +3042,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                 'synchronization': 0}
 
                         smg = {"controllers": myctrls,
-                               "monitor": "%s" % fgtm,
                                "description": "Measurement Group",
-                               "timer": "%s" % fgtm,
                                "label": mg}
         #                    print "SMG", smg
                         self.myAssertDict(smg, pcnf)
@@ -3160,9 +3174,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
                     self.assertEqual(
-                        json.loads(lmp["Timer"])[0], ltimers[mg1][0])
-                    self.assertEqual(
-                        set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
+                        len(json.loads(lmp["Timer"])), 0)
+                    # self.assertEqual(
+                    #     set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lmp["MntGrp"], mg1)
 
 #                    print "MGS", mg1, mg2, mg3, mg4
@@ -3232,9 +3246,9 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         json.loads(lmp["UserData"]), records[mg1])
 
                     self.assertEqual(
-                        json.loads(lmp["Timer"])[0], ltimers[mg2][0])
-                    self.assertEqual(
-                        set(json.loads(lmp["Timer"])), set(ltimers[mg2]))
+                        json.loads(len(lmp["Timer"])), 0)
+                    # self.assertEqual(
+                    #     set(json.loads(lmp["Timer"])), set(ltimers[mg2]))
                     self.assertEqual(lmp["MntGrp"], mg2)
 
                     self.myAssertDict(
@@ -3293,23 +3307,26 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             else:
                                 ladss[ds] = adss[mg1][ds]
 
-                    for tm in json.loads(mp[mg2]["Timer"]):
+                    # for tm in json.loads(mp[mg2]["Timer"]):
+                    #     if tm in ladss:
+                    #         if tm in llhe:
+                    #             ladss[tm] = False
+                    #             llhe.remove(tm)
+                    # for tm in json.loads(mp[mg1]["Timer"]):
+                    #     if tm in ladss:
+                    #         if tm in json.loads(
+                    #                 mp[mg2]["UnplottedComponents"]):
+                    #             ladss[tm] = False
+                    #             if tm not in json.loads(mp[mg2]["Timer"]):
+                    #                 if tm in llhe:
+                    #                     llhe.remove(tm)
+                    for tm in ltimers[mg2]:
                         if tm in ladss:
-                            if tm in llhe:
-                                ladss[tm] = False
-                                llhe.remove(tm)
-                    for tm in json.loads(mp[mg1]["Timer"]):
-                        if tm in ladss:
+                            ladss[tm] = True
+                        if tm not in llhe:
                             if tm in json.loads(
-                                    mp[mg2]["UnplottedComponents"]):
-                                ladss[tm] = False
-                                if tm not in json.loads(mp[mg2]["Timer"]):
-                                    if tm in llhe:
-                                        llhe.remove(tm)
-
-#                    print "T1", json.loads(mp[mg1]["Timer"])
-#                    print "T2", json.loads(mp[mg2]["Timer"])
-#                    print "LT", json.loads(lmp["Timer"])
+                                    lmp["UnplottedComponents"]):
+                                llhe.add(tm)
                     # ???
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), ladss)
@@ -3458,6 +3475,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             if not adss[mg3][tm]:
                                 if tm in mylhe:
                                     mylhe.remove(tm)
+                    for tm in ltimers[mg3]:
+                        if tm in adss[mg3].keys():
+                            adss[mg3][tm] = True
+
                     lmp = json.loads(lrs.profileConfiguration)
 
                     self.assertEqual(
@@ -3467,10 +3488,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
                     # switch to nonexisting active profile
@@ -3518,10 +3539,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], wmg)
 
                     # switch to active profile mg3
@@ -3579,10 +3600,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lmp["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lmp["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lmp["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lmp["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
                     # try switch to unnamed active profile

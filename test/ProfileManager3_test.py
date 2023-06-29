@@ -121,7 +121,7 @@ except Exception:
 
 
 # test fixture
-class ProfileManager2Test(unittest.TestCase):
+class ProfileManager3Test(unittest.TestCase):
 
     # constructor
     # \param methodName name of the test method
@@ -2738,11 +2738,9 @@ class ProfileManager2Test(unittest.TestCase):
             se["Timer"] = '["%s"]' % ar["name"]
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             smg = {"controllers": {},
-                   "monitor": "%s" % dv,
                    "description": "Measurement Group",
-                   "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
                 self.assertEqual(json.loads(se["ComponentPreselection"]), {})
@@ -2835,7 +2833,7 @@ class ProfileManager2Test(unittest.TestCase):
         ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-        self.myAssertRaise(Exception, mgt.updateProfile)
+        # self.myAssertRaise(Exception, mgt.updateProfile)
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
@@ -2901,11 +2899,9 @@ class ProfileManager2Test(unittest.TestCase):
             se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             smg = {"controllers": {},
-                   "monitor": "%s" % dv,
                    "description": "Measurement Group",
-                   "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
@@ -3386,7 +3382,7 @@ class ProfileManager2Test(unittest.TestCase):
         ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-        self.myAssertRaise(Exception, mgt.updateProfile)
+        # self.myAssertRaise(Exception, mgt.updateProfile)
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -3453,7 +3449,7 @@ class ProfileManager2Test(unittest.TestCase):
             se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = mgt.dataSources()
             chds.extend(mgt.componentDataSources())
             chds = sorted([ds for ds in chds if not ds.startswith('client')])
@@ -3536,16 +3532,12 @@ class ProfileManager2Test(unittest.TestCase):
                                 'synchronization': 0,
                             }
                         },
-                        "monitor": "%s" % dv,
                         "description": "Measurement Group",
-                        "timer": "%s" % dv,
                         "label": "nxsmntgrp"}
                 else:
                     smg = {"controllers":
                            {},
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
 #                print "SMG", smg
                 self.myAssertDict(smg, pcnf)
@@ -3616,7 +3608,7 @@ class ProfileManager2Test(unittest.TestCase):
         ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-        self.myAssertRaise(Exception, mgt.updateProfile)
+        # self.myAssertRaise(Exception, mgt.updateProfile)
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -3690,7 +3682,7 @@ class ProfileManager2Test(unittest.TestCase):
             se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = [ds for ds in mgt.dataSources()
                     if not ds.startswith('client')]
             # chds1 = list(chds)
@@ -3796,16 +3788,12 @@ class ProfileManager2Test(unittest.TestCase):
                             {'channels': tgc,
                              'synchronization': 0,
                              }},
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
                 else:
                     smg = {"controllers":
                            {},
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
 
                 # print "SMG", smg
@@ -3917,7 +3905,7 @@ class ProfileManager2Test(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in acqch]
             pool.ExpChannelList = [json.dumps(a) for a in expch]
 
-            self.myAssertRaise(Exception, mgt.updateProfile)
+            # self.myAssertRaise(Exception, mgt.updateProfile)
             self._cf.dp.SetCommandVariable(
                 ["CPDICT", json.dumps(self.smycps2)])
             self._cf.dp.SetCommandVariable(
@@ -4002,7 +3990,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = mgt.dataSources()
                     chds.extend(mgt.componentDataSources())
                     chds = sorted([
@@ -4092,9 +4080,7 @@ class ProfileManager2Test(unittest.TestCase):
                                            }
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
@@ -4206,7 +4192,7 @@ class ProfileManager2Test(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in acqch]
             pool.ExpChannelList = [json.dumps(a) for a in expch]
 
-            self.myAssertRaise(Exception, mgt.updateProfile)
+            # self.myAssertRaise(Exception, mgt.updateProfile)
             self._cf.dp.SetCommandVariable(
                 ["CPDICT", json.dumps(self.smycps2)])
             self._cf.dp.SetCommandVariable(
@@ -4297,7 +4283,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     # chds1 = list(chds)
@@ -4423,9 +4409,7 @@ class ProfileManager2Test(unittest.TestCase):
                             }
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
@@ -4540,7 +4524,7 @@ class ProfileManager2Test(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in acqch]
             pool.ExpChannelList = [json.dumps(a) for a in expch]
 
-            self.myAssertRaise(Exception, mgt.updateProfile)
+            # self.myAssertRaise(Exception, mgt.updateProfile)
             amycps = dict(self.smycps2)
             amycps.update(self.smycps)
             amydss = dict(self.smydssXX)
@@ -4631,7 +4615,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp2')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     # chds1 = list(chds)
@@ -4803,9 +4787,7 @@ class ProfileManager2Test(unittest.TestCase):
                                                 }
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
@@ -4921,7 +4903,7 @@ class ProfileManager2Test(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in acqch]
             pool.ExpChannelList = [json.dumps(a) for a in expch]
 
-            self.myAssertRaise(Exception, mgt.updateProfile)
+            # self.myAssertRaise(Exception, mgt.updateProfile)
             amycps = dict(self.smycps2)
             amycps.update(self.smycps)
             amydss = dict(self.smydssXX)
@@ -5012,7 +4994,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='mg2')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     # chds1 = list(chds)
@@ -5183,9 +5165,7 @@ class ProfileManager2Test(unittest.TestCase):
                                                 'synchronization': 0}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "mg2"}
 #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
@@ -5505,9 +5485,9 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                     myctrls = {}
-                    fgtm = "/".join(
-                        self.smychsXX[str(ltimers[0])]['source'].split(
-                            "/")[:-1])
+                    # fgtm = "/".join(
+                    #     self.smychsXX[str(ltimers[0])]['source'].split(
+                    #         "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -5606,9 +5586,7 @@ class ProfileManager2Test(unittest.TestCase):
                                                 'synchronization': 0}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % fgtm,
                            "description": "Measurement Group",
-                           "timer": "%s" % fgtm,
                            "label": "mg2"}
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
@@ -6207,7 +6185,8 @@ class ProfileManager2Test(unittest.TestCase):
                         mgt[mg].masterTimer = False
                         self.assertEqual(
                             set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
-                        self.myAssertRaise(Exception, mgt[mg].updateProfile)
+                        # self.myAssertRaise(Exception, mgt[mg].updateProfile)
+                        # mgt[mg].updateProfile()
 
                         self.assertEqual(
                             set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
@@ -6544,10 +6523,10 @@ class ProfileManager2Test(unittest.TestCase):
                             json.loads(se[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(se[mg]["MntGrp"], mg)
                         myctrls = {}
-                        fgtm = "/".join(
-                            self.smychsXX[
-                                str(ltimers[mg][0])]['source'].split(
-                                    "/")[:-1])
+                        # fgtm = "/".join(
+                        #     self.smychsXX[
+                        #         str(ltimers[mg][0])]['source'].split(
+                        #             "/")[:-1])
                         for cl in ctrls:
                             tgc = {}
                             ttdv = None
@@ -6651,9 +6630,7 @@ class ProfileManager2Test(unittest.TestCase):
                                 'synchronization': 0}
 
                         smg = {"controllers": myctrls,
-                               "monitor": "%s" % fgtm,
                                "description": "Measurement Group",
-                               "timer": "%s" % fgtm,
                                "label": mg}
         #                    print "SMG", smg
                         self.myAssertDict(smg, pcnf)
@@ -6662,7 +6639,8 @@ class ProfileManager2Test(unittest.TestCase):
                         se[mg]["Door"] = val["Door"]
                         se[mg]["ConfigDevice"] = val["ConfigDevice"]
                         se[mg]["MntGrp"] = mg
-                        self.myAssertRaise(Exception, mgt[mg].isMntGrpUpdated)
+                        # self.myAssertRaise(
+                        #       Exception, mgt[mg].isMntGrpUpdated)
                         mgt[mg].fetchProfile()
 
                         self.assertTrue(mgt[mg].isMntGrpUpdated())
@@ -6705,7 +6683,7 @@ class ProfileManager2Test(unittest.TestCase):
                     pool.ExpChannelList = pools[mg1][1]
                     lmgt = ProfileManager(lse)
                     lmgt.masterTimer = False
-                    self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
+                    # self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
 
                     lmgt.switchProfile(False)
 
@@ -6734,9 +6712,9 @@ class ProfileManager2Test(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(lse["UserData"]), records[mg1])
                     self.assertEqual(
-                        json.loads(lse["Timer"])[0], ltimers[mg1][0])
-                    self.assertEqual(
-                        set(json.loads(lse["Timer"])), set(ltimers[mg1]))
+                        len(json.loads(lse["Timer"])), 0)
+                    # self.assertEqual(
+                    #      set(json.loads(lse["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lse["MntGrp"], mg1)
 
                     # print "MGS", mg1, mg2, mg3, mg4
@@ -6789,10 +6767,10 @@ class ProfileManager2Test(unittest.TestCase):
                         json.loads(lse["UserData"]), records[mg1])
 
                     self.assertEqual(
-                        json.loads(lse["Timer"])[0], ltimers[mg2][0])
+                        len(json.loads(lse["Timer"])), 0)
                     # print "TIME2", ltimers[mg2]
-                    self.assertEqual(
-                        set(json.loads(lse["Timer"])), set(ltimers[mg2]))
+                    # self.assertEqual(
+                    #     set(json.loads(lse["Timer"])), set(ltimers[mg2]))
                     self.assertEqual(lse["MntGrp"], mg2)
 
                     # print "ADDS", json.loads(se[mg1]["DataSourceSelection"]),
@@ -6867,28 +6845,20 @@ class ProfileManager2Test(unittest.TestCase):
                                 else:
                                     ladss[ds] = False
 
-                    for tm in json.loads(se[mg2]["Timer"]):
+                    for tm in ltimers[mg2]:
                         if tm in ladss:
-                            if tm in llhe:
-                                ladss[tm] = False
-                                llhe.remove(tm)
-                    for tm in json.loads(se[mg1]["Timer"]):
-                        if tm in ladss:
+                            ladss[tm] = True
+                        if tm not in llhe:
                             if tm in json.loads(
-                                    se[mg2]["UnplottedComponents"]):
-                                ladss[tm] = False
-                                if tm not in json.loads(se[mg2]["Timer"]):
-                                    if tm in llhe:
-                                        llhe.remove(tm)
+                                     lse["UnplottedComponents"]):
+                                llhe.add(tm)
 
-                    # print "T1", json.loads(se[mg1]["Timer"])
-                    # print "T2", json.loads(se[mg2]["Timer"])
-                    # print "LT", json.loads(lse["Timer"])
                     self.myAssertDict(
-                        json.loads(lse["DataSourceSelection"]), ladss)
+                         json.loads(lse["DataSourceSelection"]), ladss)
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         set(llhe))
+
                     # import mntgrp mg2 (with content mg1)
                     # after change in mntgrp device
 
@@ -7031,6 +7001,9 @@ class ProfileManager2Test(unittest.TestCase):
                             if not adss[mg3][tm]:
                                 if tm in mylhe:
                                     mylhe.remove(tm)
+                    for tm in ltimers[mg3]:
+                        if tm in adss[mg3].keys():
+                            adss[mg3][tm] = True
 
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
@@ -7039,16 +7012,16 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg3][0])
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
                     self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg3]))
+                                     set([]))
                     self.assertEqual(lse["MntGrp"], mg3)
 
                     # switch to nonexisting active profile
 
-#                    self.assertTrue(lmgt.isMntGrpUpdated())
-#                    self.assertTrue(lmgt.isMntGrpUpdated())
+                    #  self.assertTrue(lmgt.isMntGrpUpdated())
+                    #  self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = "wrong_mg"
                     lse["MntGrp"] = mg3
                     MSUtils.setEnv(
@@ -7091,11 +7064,11 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg3][0])
-                    # print "TIME", ltimers[mg3]
+                    # print(json.loads(lse["Timer"]), ltimers[mg3])
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
                     self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg3]))
+                                     set([]))
                     self.assertEqual(lse["MntGrp"], wmg)
 
                     # switch to active profile mg3
@@ -7133,12 +7106,16 @@ class ProfileManager2Test(unittest.TestCase):
                             "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
+                    for tm in ltimers[mg3]:
+                        if tm not in mylhe:
+                            if tm in json.loads(
+                                    lse["UnplottedComponents"]):
+                                mylhe.add(tm)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
-
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
@@ -7146,10 +7123,10 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg3][0])
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
                     self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg3]))
+                                     set([]))
                     self.assertEqual(lse["MntGrp"], mg3)
 
                     # try switch to unnamed active profile
@@ -7197,10 +7174,10 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg3][0])
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
                     self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg3]))
+                                     set([]))
                     self.assertEqual(lse["MntGrp"], mg3)
 
                     # try switch to unnamed active profile
@@ -7244,10 +7221,10 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg3][0])
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
                     self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg3]))
+                                     set([]))
                     self.assertEqual(lse["MntGrp"], mg3)
 
                     # fetch non-existing mg
@@ -7285,10 +7262,10 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg3]))
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lse["Timer"])),
+                    #                  set(ltimers[mg3]))
                     self.assertEqual(lse["MntGrp"], wmg)
                     # print "MYLHE", mylhe
                     # fetch non-existing selection
@@ -7367,10 +7344,10 @@ class ProfileManager2Test(unittest.TestCase):
                                      pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
-                                     ltimers[mg4][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
-                                     set(ltimers[mg4]))
+                    self.assertEqual(len(json.loads(lse["Timer"])),
+                                     0)
+                    # self.assertEqual(set(json.loads(lse["Timer"])),
+                    #                  set(ltimers[mg4]))
                     self.assertEqual(lse["MntGrp"], mg4)
 
                     ladss = {}
@@ -7407,25 +7384,17 @@ class ProfileManager2Test(unittest.TestCase):
                         if ds in lhe2[mg4]:
                             llhe.add(ds)
 
-                    for tm in json.loads(se[mg4]["Timer"]):
-                        if tm in ladss:
-                            if tm in llhe:
-                                ladss[tm] = False
-                                llhe.remove(tm)
-                    for tm in json.loads(se[mg3]["Timer"]):
-                        if tm in ladss:
-                            if tm in json.loads(
-                                    se[mg4]["UnplottedComponents"]):
-                                ladss[tm] = False
-                                if tm not in json.loads(se[mg4]["Timer"]):
-                                    if tm in llhe:
-                                        llhe.remove(tm)
-
                     for ds in self.smychs.keys():
                         if ds in llhe:
                             if ds in lhe2[mg3] and ds not in lhe2[mg4]:
                                 llhe.remove(ds)
-
+                    for tm in ltimers[mg4]:
+                        if tm in ladss:
+                            ladss[tm] = True
+                        if tm not in llhe:
+                            if tm in json.loads(
+                                     lse["UnplottedComponents"]):
+                                llhe.add(tm)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       ladss)
 

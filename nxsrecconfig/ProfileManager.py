@@ -816,7 +816,7 @@ class ProfileManager(object):
         if "timer" in conf and dtimers[conf["timer"]] in otimers:
             otimers.remove(dtimers[conf["timer"]])
             otimers.insert(0, dtimers[conf["timer"]])
-        elif not otimers:
+        elif "timer" in conf and not otimers:
             otimers.insert(0, dtimers[conf["timer"]])
 
         tms = json.loads(self.__selector["Timer"])
@@ -935,15 +935,15 @@ class ProfileManager(object):
         #   mtimers = [tm for tm in mtimers if tm in avtimers]
 
         timer = mtimers[0] if mtimers else ''
-        if not timer:
-            raise Exception(
-                "Timer or Monitor not defined")
-        fullname = PoolUtils.getFullDeviceNames(
-            self.__pools, [timer])[timer]
-        if not fullname:
-            raise Exception(
-                "Timer or Monitor cannot be found amount the servers")
         if self.masterTimer:
+            if not timer:
+                raise Exception(
+                    "Timer or Monitor not defined")
+            fullname = PoolUtils.getFullDeviceNames(
+                self.__pools, [timer])[timer]
+            if not fullname:
+                raise Exception(
+                    "Timer or Monitor cannot be found amount the servers")
             cnf['monitor'] = fullname
             cnf['timer'] = fullname
         if len(mtimers) > 1:

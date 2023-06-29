@@ -11985,11 +11985,9 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 #        self.myAssertRaise(Exception, rs.updateMntGrp)
         for ar in arr:
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name=val["MntGrp"])
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             smg = {"controllers": {},
-                   "monitor": "%s" % dv,
                    "description": "Measurement Group",
-                   "timer": "%s" % dv,
                    "label": "nxsmntgrp2"}
             mp = json.loads(rs.profileConfiguration)
             mp["Timer"] = '["%s"]' % ar["name"]
@@ -12156,11 +12154,9 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
             mp = json.loads(rs.profileConfiguration)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             smg = {"controllers": {},
-                   "monitor": "%s" % dv,
                    "description": "Measurement Group",
-                   "timer": "%s" % dv,
                    "label": "nxsmntgrp2"}
             try:
                 self.myAssertDict(json.loads(mp["ComponentPreselection"]),
@@ -12676,7 +12672,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
             rs.profileConfiguration = str(json.dumps(mp))
             mp = json.loads(rs.profileConfiguration)
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = rs.selectedDataSources()
             chds.extend(rs.componentDataSources())
             chds = sorted([ds for ds in chds if not ds.startswith('client')])
@@ -12755,18 +12751,14 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                             {'channels': tgc,
                              'synchronization': 0}
                             },
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
                 else:
                     smg = {"controllers":
                            {},
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
-#                print "SMG", smg
+                #             print "SMG", smg
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)
                 rs.mntGrp = "nxsmntgrp"
@@ -12909,7 +12901,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
             mp = json.loads(rs.profileConfiguration)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = [ds for ds in rs.selectedDataSources()
                     if not ds.startswith('client')]
             # chds1 = list(chds)
@@ -13024,16 +13016,12 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                             {'channels': tgc,
                              'synchronization': 0,
                              }},
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
                 else:
                     smg = {"controllers":
                            {},
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
 
 #                print "SMG", smg
@@ -13228,7 +13216,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp2')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = rs.selectedDataSources()
                     chds.extend(rs.componentDataSources())
                     chds = sorted([
@@ -13322,9 +13310,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                                            'timer': ttdv}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
@@ -13526,7 +13512,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp2')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
                     # chds1 = list(chds)
@@ -13660,9 +13646,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                                            'timer': ttdv}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
 #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
@@ -13867,7 +13851,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp2')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
                     # chds1 = list(chds)
@@ -14048,9 +14032,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                                                 'synchronization': 0}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
 #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
@@ -14269,7 +14251,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='mg2')
-                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    # dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
                     # chds1 = list(chds)
@@ -14463,9 +14445,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                                                 'synchronization': 0}
 
                     smg = {"controllers": myctrls,
-                           "monitor": "%s" % dv,
                            "description": "Measurement Group",
-                           "timer": "%s" % dv,
                            "label": "mg2"}
 #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
