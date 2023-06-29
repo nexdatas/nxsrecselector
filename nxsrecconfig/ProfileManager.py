@@ -89,6 +89,8 @@ class ProfileManager(object):
 
         #: (:obj:`bool` ) master timer/monitor with the first index
         self.masterTimerFirst = False
+        #: (:obj:`bool` ) set master timer/monitor like for older MGs
+        self.masterTimer = False
         #: (:obj:`bool`) mntgrp with synchronization
         self.__withsynch = True
 
@@ -628,7 +630,8 @@ class ProfileManager(object):
         self.__clearChannels(dsg, hel, compdatasources)
 
         # fill in dsg, timers hel
-        if "timer" in conf.keys() and "controllers" in conf.keys():
+        if "controllers" in conf.keys() and \
+           (not self.masterTimer or "timer" in conf.keys()):
             avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
             tangods = self.__readChannels(
                 conf, timers, dsg, hel, synchronizer, synchronization)
@@ -691,8 +694,7 @@ class ProfileManager(object):
             if ch in hel:
                 hel.remove(ch)
 
-    @classmethod
-    def __readChannels(cls, conf, timers, dsg, hel, synchronizer,
+    def __readChannels(self, conf, timers, dsg, hel, synchronizer,
                        synchronization):
         """ reads channels from mntgrp configutation
 
@@ -713,7 +715,8 @@ class ProfileManager(object):
         :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         """
         tangods = []
-        timers[conf["timer"]] = ''
+        if self.masterTimer:
+            timers[conf["timer"]] = ''
         for ctrlname, ctrl in conf["controllers"].items():
             if 'units' in ctrl.keys() and \
                     '0' in ctrl['units'].keys():
@@ -810,10 +813,10 @@ class ProfileManager(object):
         dtimers = PoolUtils.getAliases(self.__pools, timers)
         avtimers = avtimers or []
         otimers = [tm for tm in dtimers.values() if tm in avtimers]
-        if dtimers[conf["timer"]] in otimers:
+        if "timer" in conf and dtimers[conf["timer"]] in otimers:
             otimers.remove(dtimers[conf["timer"]])
             otimers.insert(0, dtimers[conf["timer"]])
-        elif not otimers:
+        elif "timer" in conf and not otimers:
             otimers.insert(0, dtimers[conf["timer"]])
 
         tms = json.loads(self.__selector["Timer"])
@@ -932,16 +935,17 @@ class ProfileManager(object):
         #   mtimers = [tm for tm in mtimers if tm in avtimers]
 
         timer = mtimers[0] if mtimers else ''
-        if not timer:
-            raise Exception(
-                "Timer or Monitor not defined")
-        fullname = PoolUtils.getFullDeviceNames(
-            self.__pools, [timer])[timer]
-        if not fullname:
-            raise Exception(
-                "Timer or Monitor cannot be found amount the servers")
-        cnf['monitor'] = fullname
-        cnf['timer'] = fullname
+        if self.masterTimer:
+            if not timer:
+                raise Exception(
+                    "Timer or Monitor not defined")
+            fullname = PoolUtils.getFullDeviceNames(
+                self.__pools, [timer])[timer]
+            if not fullname:
+                raise Exception(
+                    "Timer or Monitor cannot be found amount the servers")
+            cnf['monitor'] = fullname
+            cnf['timer'] = fullname
         if len(mtimers) > 1:
             ltimers.clear()
             ltimers.update(set(mtimers[1:]))

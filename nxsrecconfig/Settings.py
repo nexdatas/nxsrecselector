@@ -450,6 +450,28 @@ class Settings(object):
         __setMasterTimerFirst,
         doc='master timer channels with the 0 index')
 
+    def __getMasterTimer(self):
+        """ get method for masterTimer attribute
+
+        :returns: master channels with the 0 index
+        :rtype: :obj:`bool`
+        """
+        return self.__profileManager.masterTimer
+
+    def __setMasterTimer(self, flag):
+        """ set method for masterTimer attribute
+
+        :param components: master channels with the 0 index
+        :type components: :obj:`bool`
+        """
+        self.__profileManager.masterTimer = flag
+
+    #: (:obj:`bool`) set master channels
+    masterTimer = property(
+        __getMasterTimer,
+        __setMasterTimer,
+        doc='set master timer/monitor for older MGs')
+
     def __getConfigDevice(self):
         """ get method for configDevice attribute
 

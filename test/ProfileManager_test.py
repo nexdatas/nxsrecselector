@@ -1936,16 +1936,19 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
 
         db = tango.Database()
@@ -1988,16 +1991,19 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
 
         try:
@@ -2075,10 +2081,12 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.deleteProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.deleteProfile, None)
 
         msp = MacroServerPools(10)
@@ -2086,6 +2094,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
 
         db = tango.Database()
@@ -2137,10 +2146,12 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         msp = MacroServerPools(10)
@@ -2148,6 +2159,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
 
         try:
@@ -2257,6 +2269,7 @@ class ProfileManagerTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
+            pm.masterTimer = True
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -2304,6 +2317,7 @@ class ProfileManagerTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
+            pm.masterTimer = True
 
             cps = {}
             dss = {}
@@ -2370,6 +2384,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         pm = ProfileManager(se)
+        pm.masterTimer = True
 
         cps = {}
         dss = {}
@@ -2430,6 +2445,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         pm = ProfileManager(se)
+        pm.masterTimer = True
 
         cps = {}
         dss = {}
@@ -2479,6 +2495,7 @@ class ProfileManagerTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
+            pm.masterTimer = True
 
             cps = {}
             dss = {}
@@ -2539,6 +2556,7 @@ class ProfileManagerTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
+            pm.masterTimer = True
 
             cps = {}
             dss = {}
@@ -2602,6 +2620,7 @@ class ProfileManagerTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
+            pm.masterTimer = True
 
             cps = {}
             dss = {}
@@ -2672,6 +2691,7 @@ class ProfileManagerTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
+            pm.masterTimer = True
 
             cps = {}
             dss = {}
@@ -2726,10 +2746,12 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -2738,6 +2760,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -2827,10 +2850,12 @@ class ProfileManagerTest(unittest.TestCase):
                  'dim7', 'dim8', 'tann1c', 'mycp3', 'exp_t01']
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -2838,6 +2863,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -3001,10 +3027,12 @@ class ProfileManagerTest(unittest.TestCase):
                  'dim1', 'dim2', 'dim3', 'dim4', 'dim5', 'dim5', 'dim6',
                  'dim7', 'dim8', 'tann1c']
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -3012,6 +3040,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -3122,10 +3151,12 @@ class ProfileManagerTest(unittest.TestCase):
 
         wrong = ['mycp3']
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -3133,6 +3164,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -3244,10 +3276,12 @@ class ProfileManagerTest(unittest.TestCase):
 
         wrong = ['tann1', 'tann0']
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -3255,6 +3289,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -3367,10 +3402,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -3378,6 +3415,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -3596,10 +3634,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -3607,6 +3647,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -3865,10 +3906,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -3876,6 +3919,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -4152,10 +4196,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -4163,6 +4209,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -4492,10 +4539,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -4504,6 +4553,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -4890,10 +4940,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -4902,6 +4954,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -5290,10 +5343,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -5302,6 +5357,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -5733,10 +5789,12 @@ class ProfileManagerTest(unittest.TestCase):
         wrong = []
 
         mgt = ProfileManager(None)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -5745,6 +5803,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
         mgt = ProfileManager(se)
+        mgt.masterTimer = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -6303,6 +6362,7 @@ class ProfileManagerTest(unittest.TestCase):
                         se[mg]["ConfigDevice"] = val["ConfigDevice"]
                         se[mg]["MntGrp"] = mg
                         mgt[mg] = ProfileManager(se[mg])
+                        mgt[mg].masterTimer = True
                         self.assertEqual(
                             set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
                         self.myAssertRaise(Exception, mgt[mg].updateProfile)
@@ -6812,6 +6872,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pool.AcqChannelList = pools[mg1][0]
                     pool.ExpChannelList = pools[mg1][1]
                     lmgt = ProfileManager(lse)
+                    lmgt.masterTimer = True
                     self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
 
                     lmgt.switchProfile(False)

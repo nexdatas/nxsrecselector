@@ -84,6 +84,15 @@
       <DefaultPropValue>ALARM</DefaultPropValue>
       <DefaultPropValue>DISABLE</DefaultPropValue>
     </deviceProperties>
+    <deviceProperties name="ClientRecordKeys" description="list of record keys for CLIENT datasources">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <deviceProperties name="MasterTimer" description="set the master timer/monitor channel for older MG">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>False</DefaultPropValue>
+    </deviceProperties>
     <commands name="AvailableComponents" description="Return a list of available component names" execMethod="available_components" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
