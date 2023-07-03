@@ -348,6 +348,17 @@ class ProfileManager(object):
         if self.mutedPreScanAttrFilters:
             mginfo['snapshot'] = PoolUtils.filterOutTango(
                 mginfo['snapshot'], self.mutedPreScanAttrFilters)
+
+        unique_snapshot = []
+        unique_names = []
+        for sn in mginfo['snapshot']:
+            if sn[0] not in unique_names and \
+               sn[1] not in unique_names:
+                unique_names.append(sn[0])
+                unique_names.append(sn[1])
+                unique_snapshot.append(sn)
+        mginfo['snapshot'] = unique_snapshot
+
         MSUtils.setEnvs(
             {'PreScanSnapshot': mginfo['snapshot'],
              'ActiveMntGrp': mginfo['alias']},
