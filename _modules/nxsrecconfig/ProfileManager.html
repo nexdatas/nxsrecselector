@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.30.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.30.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -464,6 +464,17 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span><span class="p">:</span>
             <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">filterOutTango</span><span class="p">(</span>
                 <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span><span class="p">)</span>
+
+        <span class="n">unique_snapshot</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">unique_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">sn</span> <span class="ow">in</span> <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_names</span> <span class="ow">and</span> \
+               <span class="n">sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_names</span><span class="p">:</span>
+                <span class="n">unique_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">unique_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">unique_snapshot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">)</span>
+        <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unique_snapshot</span>
+
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span>
             <span class="p">{</span><span class="s1">&#39;PreScanSnapshot&#39;</span><span class="p">:</span> <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">],</span>
              <span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">:</span> <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;alias&#39;</span><span class="p">]},</span>
