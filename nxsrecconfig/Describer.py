@@ -42,10 +42,11 @@ class DSItem(object):
 
     """ Basic DataSource item
     """
-    __slots__ = 'name', 'dstype', 'record'
+    __slots__ = 'name', 'dstype', 'record', 'parentobj'
 
     #
-    def __init__(self, name=None, dstype=None, record=None, dsitem=None):
+    def __init__(self, name=None, dstype=None, record=None, dsitem=None,
+                 parentobj=None):
         """ constructor
 
         :param name: datasource name
@@ -56,6 +57,8 @@ class DSItem(object):
         :type record: :obj:`str`
         :param dsitem: datasource item
         :type dsitem: :class:`DSItem`
+        :param parentobj: datasource parent object
+        :type parentobj: :obj:`str`
         """
         if dsitem:
             #: (:obj:`str`) datasource name
@@ -64,10 +67,14 @@ class DSItem(object):
             self.dstype = dsitem.dstype
             #: (:obj:`str`) datasource record
             self.record = dsitem.record
+            #: (:obj:`str`) datasource parentobj
+            self.parentobj = dsitem.parentobj
         else:
             self.name = Utils.tostr(name) if name is not None else None
             self.dstype = Utils.tostr(dstype) if dstype is not None else None
             self.record = Utils.tostr(record) if record is not None else None
+            self.parentobj = Utils.tostr(parentobj) \
+                if parentobj is not None else None
 
 
 class ExDSItem(DSItem):
@@ -263,6 +270,7 @@ class Describer(object):
                         elem["dsname"] = ds
                         elem["strategy"] = vds.mode
                         elem["dstype"] = vds.dstype
+                        elem["parentobj"] = vds.parentobj
                         elem["record"] = vds.record
                         elem["nxtype"] = vds.nxtype
                         elem["shape"] = vds.shape
@@ -321,7 +329,10 @@ class Describer(object):
             dstype = node.get("type")
             name = node.get("name")
             record = Utils.getRecord(node)
-            dslist.append(DSItem(name, dstype, record))
+            dslist.append(
+                DSItem(name, dstype, record,
+                       parentobj=(parent.tag
+                                  if hasattr(parent, "tag") else None)))
             if name and Utils.tostr(dstype) == 'PYEVAL':
                 if dsxmls and self.__pyevalfromscript:
                     dslist.extend(self.__findsubdatasources(dsxmls[0]))
@@ -329,7 +340,8 @@ class Describer(object):
                     self.__getDSFromNode(node, dslist)
         if not name and not dslist:
             dstxt = Utils.getText(parent)
-            dsitem = DSItem()
+            dsitem = DSItem(parentobj=(parent.tag
+                                       if hasattr(parent, "tag") else None))
             index = dstxt.find("$%s." % label)
             while index != -1:
                 try:
@@ -351,14 +363,21 @@ class Describer(object):
                         "dataSources", [Utils.tostr(name)])
                 else:
                     dsxmls = None
-                    dsitem = DSItem(name, "__ERROR__", "__ERROR__")
+                    dsitem = DSItem(
+                        name, "__ERROR__", "__ERROR__",
+                        parentobj=(parent.tag
+                                   if hasattr(parent, "tag") else None))
                 if dsxmls:
                     dsitem = self.__describeDataSource(name, dsxmls[0])
                     if dsitem.dstype:
                         dstype = dsitem.dstype
                         break
                 else:
-                    dsitem = DSItem(name, None, None)
+                    dsitem = DSItem(
+                        name, None, None,
+                        parentobj=(parent.tag
+                                   if hasattr(parent, "tag") else None)
+                    )
                 index = dstxt.find("$%s." % label, index + 1)
             dslist.append(dsitem)
             if name and Utils.tostr(dstype) == 'PYEVAL':
@@ -413,7 +432,8 @@ class Describer(object):
                     if dsitem.dstype:
                         dslist.append(dsitem)
                 else:
-                    dslist.append(DSItem(name, None, None))
+                    dslist.append(
+                        DSItem(name, None, None, parentobj="datasource"))
             index = dsxml.find("$%s." % label, index + 1)
         return dslist
 
