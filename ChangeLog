@@ -1,3 +1,7 @@
+2023-07-07 Jan Kotanski <jankotan@gmail.com>
+	* add parentobj to DSItem description (#93)
+	* tagged as v3.31.0
+
 2023-07-04 Jan Kotanski <jankotan@gmail.com>
 	* remove duplicated channels from the sardana snapshot (#93)
 	* tagged as v3.30.1

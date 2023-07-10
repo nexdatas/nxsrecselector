@@ -648,62 +648,67 @@ class SettingsTest(unittest.TestCase):
         self.rescps = {
             'mycp': {},
             'mycp2': {},
-            'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
+            'mycp3': {'ann': [('STEP', 'TANGO', '', None, None, "field")]},
             'exp_t01': {
                 'exp_t01': [
                     ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
-                     'NX_FLOAT', None)]},
+                     'NX_FLOAT', None, "field")]},
             'dim1': {
                 'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [34], "field")]},
             'dim2': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasources.ann'])]},
+                     ['$datasources.ann'], "field")]},
             'dim3': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [1234])]},
+                     [1234], "field")]},
             'dim4': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasources.ann2'])],
+                     ['$datasources.ann2'], "field")],
                 'ann2': [
-                    ('CONFIG', 'CLIENT', '', None, None)],
+                    ('CONFIG', 'CLIENT', '', None, None, "dim")],
             },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasources.ann'])],
-                'ann': [('CONFIG', 'TANGO', '', None, None)],
+                     ['$datasources.ann'], "field")],
+                'ann': [('CONFIG', 'TANGO', '', None, None, "dim")],
             },
             'dim6': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasources.ann', 123])]},
+                 ['$datasources.ann', 123], "field")]},
             'dim7': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 [None, None])]},
+                 [None, None], "field")]},
             'dim8': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 [None, 123])]},
+                 [None, 123], "field")]},
             'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
-                                       'NX_FLOAT', None)],
+                                       'NX_FLOAT', None, "field")],
                      '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
-                                       'NX_FLOAT', None)],
+                                       'NX_FLOAT', None, "field")],
                      '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
-                                       'NX_FLOAT', [2048])],
+                                       'NX_FLOAT', [2048], "field")],
                      },
             'scan2': {
-                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None,
+                         "field")],
+                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None,
+                         "field")],
                 'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                         [2048])],
+                         [2048], "field")],
             },
             'scan3': {
-                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
-                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None,
+                         "field"),
+                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None,
+                         "field")],
                 'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                         [2048])],
+                         [2048], "field")],
             },
         }
 
@@ -2187,13 +2192,17 @@ class SettingsTest(unittest.TestCase):
     @classmethod
     def findElement(cls, cp, ds, vds, rv):
         found = False
+        # print(vds)
         for el in rv:
+            # if  el["dsname"] == ds:
+            #     print(el)
             if el["cpname"] == cp and el["dsname"] == ds \
                     and el["strategy"] == vds[0] \
                     and el["dstype"] == vds[1] \
                     and el["record"] == vds[2] \
                     and el["nxtype"] == vds[3] \
-                    and el["shape"] == vds[4]:
+                    and el["shape"] == vds[4] \
+                    and el["parentobj"] == vds[5]:
                 found = True
                 break
         if not found:
@@ -2212,8 +2221,12 @@ class SettingsTest(unittest.TestCase):
                     if dstype is not None:
                         if vds[1] != dstype:
                             continue
+                    # if not self.findElement(cp, ds, vds, rv):
+                    #     print("NOT FIND", vds)
                     self.assertTrue(self.findElement(cp, ds, vds, rv))
                     dscnt += 1
+        # print("CNT",dscnt, rv)
+
         self.assertEqual(dscnt, len(rv))
 
     # test starter
