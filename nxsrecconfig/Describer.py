@@ -276,7 +276,6 @@ class Describer(object):
                         elem["shape"] = vds.shape
                         elem["cpname"] = cp
                         result.append(elem)
-                        print("APPEND", elem)
         return result
 
     def __fillintree(self, cps, strategy, dstype):
@@ -304,7 +303,7 @@ class Describer(object):
                         if ds not in tr:
                             tr[ds] = []
                         tr[ds].append((vds.mode, vds.dstype, vds.record,
-                                       vds.nxtype, vds.shape))
+                                       vds.nxtype, vds.shape, vds.parentobj))
             result[cp] = tr
         return result
 
@@ -329,17 +328,13 @@ class Describer(object):
         for node in nodes:
             dstype = node.get("type")
             name = node.get("name")
-            print("NAME", name)
             record = Utils.getRecord(node)
             dslist.append(
                 DSItem(name, dstype, record,
                        parentobj=(parent.tag
                                   if hasattr(parent, "tag") else None)))
-            print("p1", name, (parent.tag
-                               if hasattr(parent, "tag") else None))
             if name and Utils.tostr(dstype) == 'PYEVAL':
                 if dsxmls and self.__pyevalfromscript:
-                    print("SUB", dsxmls[0])
                     dslist.extend(self.__findsubdatasources(dsxmls[0]))
                 else:
                     self.__getDSFromNode(node, dslist)
@@ -347,8 +342,6 @@ class Describer(object):
             dstxt = Utils.getText(parent)
             dsitem = DSItem(parentobj=(parent.tag
                                        if hasattr(parent, "tag") else None))
-            print("p2", label, name, (parent.tag
-                                      if hasattr(parent, "tag") else None))
             index = dstxt.find("$%s." % label)
             while index != -1:
                 try:
@@ -364,23 +357,17 @@ class Describer(object):
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
-                print("NAME",  name)
                 if Utils.tostr(name) in self.__availableDataSources:
-                    print("AVAIL1")
                     dsxmls = TangoUtils.command(
                         self.__nexusconfig_device,
                         "dataSources", [Utils.tostr(name)])
                 else:
-                    print("AVAIL2")
                     dsxmls = None
                     dsitem = DSItem(
                         name, "__ERROR__", "__ERROR__",
                         parentobj=(parent.tag
                                    if hasattr(parent, "tag") else None))
-                    print("p3", name, (parent.tag
-                                       if hasattr(parent, "tag") else None))
                 if dsxmls:
-                    print("AVAIL3")
                     dsitem = self.__describeDataSource(name, dsxmls[0])
                     dsitem.parentobj = (
                         parent.tag
@@ -389,19 +376,15 @@ class Describer(object):
                         dstype = dsitem.dstype
                         break
                 else:
-                    print("AVAIL4")
                     dsitem = DSItem(
                         name, None, None,
                         parentobj=(parent.tag
                                    if hasattr(parent, "tag") else None)
                     )
-                print("p4", name, (parent.tag
-                                   if hasattr(parent, "tag") else None))
                 index = dstxt.find("$%s." % label, index + 1)
             dslist.append(dsitem)
             if name and Utils.tostr(dstype) == 'PYEVAL':
                 if dsxmls and self.__pyevalfromscript:
-                    print("SUB2", dsxmls[0])
                     dslist.extend(self.__findsubdatasources(dsxmls[0]))
 
         return dslist
@@ -574,7 +557,6 @@ class Describer(object):
 
                         name = dss.appendDSList(self.__getDSFromNode(parent),
                                                 mode, nxtype, shape)
-                        print("RET", name)
                         if name:
                             break
         return dss

@@ -1115,9 +1115,6 @@ class Settings(object):
             cp = self.components
         dc = describer.components(cp, '', '', self.configVariables)
         jdc = json.dumps(dc)
-        for dd in dc:
-            if dd["dsname"] == "ann2":
-                print("DD", dd, cp)
         return jdc
 
     def createWriterConfiguration(self, cps):
