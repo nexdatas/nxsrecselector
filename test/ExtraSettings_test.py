@@ -4302,6 +4302,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
             mem = self._rnd.sample(list(self.mycps.keys()), nmem)
 
             res = json.loads(rs.componentSources(mem))
+            # print(res)
             self.checkICP(res, mem,
                           strategy=None)
 

@@ -69,6 +69,7 @@ class ExDSItemTest(unittest.TestCase):
         self.assertEqual(el.mode, None)
         self.assertEqual(el.nxtype, None)
         self.assertEqual(el.shape, None)
+        self.assertEqual(el.parentobj, None)
 
         el = ExDSItem(None, "mymode", "mynxtype", [23, 4, 5])
         self.assertEqual(el.name, None)
@@ -77,11 +78,13 @@ class ExDSItemTest(unittest.TestCase):
         self.assertEqual(el.mode, "mymode")
         self.assertEqual(el.nxtype, "mynxtype")
         self.assertEqual(el.shape, [23, 4, 5])
+        self.assertEqual(el.parentobj, None)
 
-        el = DSItem("myname3", "mytype3", "myrecord3")
+        el = DSItem("myname3", "mytype3", "myrecord3", parentobj="field")
         self.assertEqual(el.name, "myname3")
         self.assertEqual(el.dstype, "mytype3")
         self.assertEqual(el.record, "myrecord3")
+        self.assertEqual(el.parentobj, "field")
 
         el2 = ExDSItem(el, "mymode2", "mynxtype2", [4, 5])
         self.assertEqual(el2.name, "myname3")
@@ -89,6 +92,7 @@ class ExDSItemTest(unittest.TestCase):
         self.assertEqual(el2.record, "myrecord3")
         self.assertEqual(el2.mode, "mymode2")
         self.assertEqual(el2.nxtype, "mynxtype2")
+        self.assertEqual(el.parentobj, "field")
         self.assertEqual(el2.shape, [4, 5])
 
 
