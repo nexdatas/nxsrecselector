@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig package &#8212; NXSRecSelector 3.30.1 documentation</title>
+    <title>nxsrecconfig package &#8212; NXSRecSelector 3.31.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.30</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.31</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -587,7 +587,7 @@
 <p>Component Describer</p>
 <dl class="py class">
 <dt id="nxsrecconfig.Describer.DSItem">
-<em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.Describer.</code><code class="sig-name descname">DSItem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dstype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">record</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dsitem</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#DSItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.DSItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.Describer.</code><code class="sig-name descname">DSItem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dstype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">record</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dsitem</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parentobj</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#DSItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.DSItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Basic DataSource item</p>
 <p>constructor</p>
@@ -598,6 +598,7 @@
 <li><p><strong>dstype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – datasource type</p></li>
 <li><p><strong>record</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – datasource record</p></li>
 <li><p><strong>dsitem</strong> (<a class="reference internal" href="#nxsrecconfig.Describer.DSItem" title="nxsrecconfig.Describer.DSItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DSItem</span></code></a>) – datasource item</p></li>
+<li><p><strong>parentobj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – datasource parent object</p></li>
 </ul>
 </dd>
 </dl>
@@ -611,6 +612,12 @@
 <dt id="nxsrecconfig.Describer.DSItem.name">
 <code class="sig-name descname">name</code><a class="headerlink" href="#nxsrecconfig.Describer.DSItem.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) datasource name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nxsrecconfig.Describer.DSItem.parentobj">
+<code class="sig-name descname">parentobj</code><a class="headerlink" href="#nxsrecconfig.Describer.DSItem.parentobj" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) datasource parentobj</p>
 </dd></dl>
 
 <dl class="py attribute">

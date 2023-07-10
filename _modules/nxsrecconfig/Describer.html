@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Describer &#8212; NXSRecSelector 3.30.1 documentation</title>
+    <title>nxsrecconfig.Describer &#8212; NXSRecSelector 3.31.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.30</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.31</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -158,10 +158,11 @@
 
     <span class="sd">&quot;&quot;&quot; Basic DataSource item</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;dstype&#39;</span><span class="p">,</span> <span class="s1">&#39;record&#39;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;dstype&#39;</span><span class="p">,</span> <span class="s1">&#39;record&#39;</span><span class="p">,</span> <span class="s1">&#39;parentobj&#39;</span>
 
     <span class="c1">#</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dsitem</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dsitem</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">parentobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param name: datasource name</span>
@@ -172,6 +173,8 @@
 <span class="sd">        :type record: :obj:`str`</span>
 <span class="sd">        :param dsitem: datasource item</span>
 <span class="sd">        :type dsitem: :class:`DSItem`</span>
+<span class="sd">        :param parentobj: datasource parent object</span>
+<span class="sd">        :type parentobj: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dsitem</span><span class="p">:</span>
             <span class="c1">#: (:obj:`str`) datasource name</span>
@@ -180,10 +183,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dstype</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span>
             <span class="c1">#: (:obj:`str`) datasource record</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">record</span>
+            <span class="c1">#: (:obj:`str`) datasource parentobj</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parentobj</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">parentobj</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dstype</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dstype</span><span class="p">)</span> <span class="k">if</span> <span class="n">dstype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parentobj</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">parentobj</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="n">parentobj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="ExDSItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem">[docs]</a><span class="k">class</span> <span class="nc">ExDSItem</span><span class="p">(</span><span class="n">DSItem</span><span class="p">):</span>
@@ -379,6 +386,7 @@
                         <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span>
                         <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;strategy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">mode</span>
                         <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">dstype</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;parentobj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">parentobj</span>
                         <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;record&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">record</span>
                         <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;nxtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">nxtype</span>
                         <span class="n">elem</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">shape</span>
@@ -411,7 +419,7 @@
                         <span class="k">if</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tr</span><span class="p">:</span>
                             <span class="n">tr</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                         <span class="n">tr</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">vds</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">dstype</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">record</span><span class="p">,</span>
-                                       <span class="n">vds</span><span class="o">.</span><span class="n">nxtype</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+                                       <span class="n">vds</span><span class="o">.</span><span class="n">nxtype</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">parentobj</span><span class="p">))</span>
             <span class="n">result</span><span class="p">[</span><span class="n">cp</span><span class="p">]</span> <span class="o">=</span> <span class="n">tr</span>
         <span class="k">return</span> <span class="n">result</span>
 
@@ -437,15 +445,24 @@
             <span class="n">dstype</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
             <span class="n">record</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">getRecord</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-            <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">record</span><span class="p">))</span>
+            <span class="n">parentobj</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">tag</span>
+                         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span>
+                       <span class="n">parentobj</span><span class="o">=</span><span class="n">parentobj</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dstype</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;PYEVAL&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">dsxmls</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pyevalfromscript</span><span class="p">:</span>
-                    <span class="n">dslist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__findsubdatasources</span><span class="p">(</span><span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parent</span><span class="p">:</span>
+                        <span class="n">parentobj</span> <span class="o">=</span> <span class="s2">&quot;datasource&quot;</span>
+                    <span class="n">dslist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__findsubdatasources</span><span class="p">(</span><span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">parentobj</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromNode</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">dslist</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dslist</span><span class="p">:</span>
             <span class="n">dstxt</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">getText</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
-            <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">()</span>
+            <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span>
+                <span class="n">parentobj</span><span class="o">=</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">tag</span>
+                           <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">))</span>
             <span class="n">index</span> <span class="o">=</span> <span class="n">dstxt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
             <span class="k">while</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -467,27 +484,41 @@
                         <span class="s2">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">dsxmls</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;__ERROR__&quot;</span><span class="p">,</span> <span class="s2">&quot;__ERROR__&quot;</span><span class="p">)</span>
+                    <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span>
+                        <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;__ERROR__&quot;</span><span class="p">,</span> <span class="s2">&quot;__ERROR__&quot;</span><span class="p">,</span>
+                        <span class="n">parentobj</span><span class="o">=</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">tag</span>
+                                   <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">dsxmls</span><span class="p">:</span>
                     <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">dsitem</span><span class="o">.</span><span class="n">parentobj</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">parent</span><span class="o">.</span><span class="n">tag</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span>
                         <span class="n">dstype</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span>
                         <span class="k">break</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span>
+                        <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">parentobj</span><span class="o">=</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">tag</span>
+                                   <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="n">dstxt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsitem</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dstype</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;PYEVAL&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">dsxmls</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pyevalfromscript</span><span class="p">:</span>
-                    <span class="n">dslist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__findsubdatasources</span><span class="p">(</span><span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="n">dslist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__findsubdatasources</span><span class="p">(</span>
+                            <span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;datasource&quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">dslist</span>
 
-    <span class="k">def</span> <span class="nf">__findsubdatasources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsxml</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__findsubdatasources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsxml</span><span class="p">,</span> <span class="n">parentobj</span><span class="o">=</span><span class="s2">&quot;datasource&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; finds datasources in pyeval scripts</span>
 
 <span class="sd">        :param dsxml: pyeval xml</span>
 <span class="sd">        :type dsxml: :obj:`str`</span>
+<span class="sd">        :param parentobj: parentobj</span>
+<span class="sd">        :type parentobj: :obj:`str`</span>
 <span class="sd">        :returns: list with datasource items (DSItem)</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:class:`DSItem`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -526,10 +557,12 @@
                     <span class="s2">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
                 <span class="k">if</span> <span class="n">chdsxml</span><span class="p">:</span>
                     <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">chdsxml</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">dsitem</span><span class="o">.</span><span class="n">parentobj</span> <span class="o">=</span> <span class="n">parentobj</span>
                     <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span>
                         <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsitem</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+                    <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parentobj</span><span class="o">=</span><span class="n">parentobj</span><span class="p">))</span>
             <span class="n">index</span> <span class="o">=</span> <span class="n">dsxml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dslist</span>
 
@@ -647,7 +680,6 @@
                         <span class="n">dimensions</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;dimensions&quot;</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">dimensions</span><span class="p">:</span>
                             <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getShape</span><span class="p">(</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
                         <span class="n">name</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">appendDSList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromNode</span><span class="p">(</span><span class="n">parent</span><span class="p">),</span>
                                                 <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
