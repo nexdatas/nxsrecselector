@@ -410,125 +410,149 @@ class DescriberTest(unittest.TestCase):
         self.rescps = {
             'mycp': {},
             'mycp2': {},
-            'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
-            'exp_t01': {'exp_t01': [
-                ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
-                 'NX_FLOAT', None)]},
-            'dim1': {'tann1c': [
-                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
-            'dim2': {'tann1c': [
-                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasources.ann'])]},
-            'dim3': {'tann1c': [
-                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 [1234])]},
-            'dim4': {'tann1c': [
-                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasources.ann2'])],
+            'mycp3': {'ann': [('STEP', 'TANGO', '', None, None, "field")]},
+            'exp_t01': {
+                'exp_t01': [
+                    ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
+                     'NX_FLOAT', None, "field")]},
+            'dim1': {
+                'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [34], "field")]},
+            'dim2': {
+                'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasources.ann'], "field")]},
+            'dim3': {
+                'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [1234], "field")]},
+            'dim4': {
+                'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasources.ann2'], "field")],
                 'ann2': [
-                    ('CONFIG', 'CLIENT', '', None, None)],
+                    ('CONFIG', 'CLIENT', '', None, None, "dim")],
             },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasources.ann'])],
-                'ann': [('CONFIG', 'TANGO', '', None, None)],
+                     ['$datasources.ann'], "field")],
+                'ann': [('CONFIG', 'TANGO', '', None, None, "dim")],
             },
             'dim6': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasources.ann', 123])]},
+                 ['$datasources.ann', 123], "field")]},
             'dim7': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 [None, None])]},
+                 [None, None], "field")]},
             'dim8': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 [None, 123])]},
-            'scan': {
-                '__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
-                                  'NX_FLOAT', None)],
-                '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
-                                  'NX_FLOAT', None)],
-                '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
-                                  'NX_FLOAT', [2048])],
-            },
+                 [None, 123], "field")]},
+            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
+                                       'NX_FLOAT', None, "field")],
+                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
+                                       'NX_FLOAT', None, "field")],
+                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
+                                       'NX_FLOAT', [2048], "field")],
+                     },
             'scan2': {
-                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None,
+                         "field")],
+                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None,
+                         "field")],
                 'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                         [2048])],
+                         [2048], "field")],
             },
             'scan3': {
-                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
-                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None,
+                         "field"),
+                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None,
+                         "field")],
                 'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                         [2048])],
+                         [2048], "field")],
             },
             'pyeval0': {
-                'pyeval0ds': [('INIT', 'PYEVAL', '', 'NX_INT8', None)],
+                'pyeval0ds': [
+                    ('INIT', 'PYEVAL', '', 'NX_INT8', None, "field")],
             },
             'pyeval1': {
-                'pyeval1ds': [('STEP', 'PYEVAL', '', 'NX_INT32', None)],
+                'pyeval1ds': [
+                    ('STEP', 'PYEVAL', '', 'NX_INT32', None, "field")],
             },
             'pyeval1a': {
-                'pyeval1ads': [('STEP', 'PYEVAL', '', 'NX_INT32', None)],
+                'pyeval1ads': [
+                    ('STEP', 'PYEVAL', '', 'NX_INT32', None, "field")],
             },
             'pyeval2': {
-                'pyeval2ds': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                'pyeval2ds': [
+                    ('STEP', 'PYEVAL', '', 'NX_FLOAT', None, "field")],
             },
             'pyeval2a': {
-                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                'pyeval2ads': [
+                    ('STEP', 'PYEVAL', '', 'NX_FLOAT', None, "field")],
             },
             'pyeval2b': {
-                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'pyeval2bds': [
+                    ('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None, "field")],
             },
             'pyeval2b2': {
-                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'pyeval2bds': [
+                    ('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None, "field")],
             },
             'pyeval2b3': {
-                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
-                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
-            },
+                'pyeval2ads': [
+                    ('STEP', 'PYEVAL', '', 'NX_FLOAT', None, "field")],
+                'pyeval2bds': [
+                    ('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None, "field")],
+            }
         }
 
         self.rescps_pfs = {
             'pyeval1a': {
-                'pyeval1ads': [('STEP', 'PYEVAL', '', 'NX_INT32', None)],
+                'pyeval1ads': [
+                    ('STEP', 'PYEVAL', '', 'NX_INT32', None, "field")],
                 'tann1c': [
                     ('STEP', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT32',
-                     None)],
+                     None, "datasource")],
             },
             'pyeval2a': {
-                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                'pyeval2ads': [
+                    ('STEP', 'PYEVAL', '', 'NX_FLOAT', None, "field")],
                 'tann1c': [
                     ('STEP', 'TANGO', 'dsf/sd/we/myattr2', 'NX_FLOAT',
-                     None)],
+                     None, "datasource")],
                 'tann0': [
                     ('STEP', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT',
-                     None)],
+                     None, "datasource")],
             },
             'pyeval2b': {
-                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'pyeval2bds': [
+                    ('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None, "field")],
                 'tann0': [
                     ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
-                     None)],
+                     None, "datasource")],
             },
             'pyeval2b2': {
-                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'pyeval2bds': [
+                    ('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None, "field")],
                 'tann0': [
                     ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
-                     None)],
+                     None, "datasource")],
             },
             'pyeval2b3': {
-                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'pyeval2bds': [
+                    ('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None, "field")],
                 'tann0': [
                     ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
-                     None),
+                     None, "datasource"),
                     ('STEP', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT',
-                     None)],
-                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                     None, "datasource")],
+                'pyeval2ads': [
+                    ('STEP', 'PYEVAL', '', 'NX_FLOAT', None, "field")],
                 'tann1c': [
                     ('STEP', 'TANGO', 'dsf/sd/we/myattr2', 'NX_FLOAT',
-                     None)],
+                     None, "datasource")],
             },
         }
 
@@ -785,6 +809,8 @@ class DescriberTest(unittest.TestCase):
 
                 self.assertEqual(sorted(vl.keys()), sorted(cresk))
                 for ds in cresk:
+                    # print("EL", ds, cres[ds])
+                    # print("VDS", vl[ds])
                     self.assertEqual(
                         sorted(self.dsfilter(cres[ds], strategy, dstype)),
                         sorted(vl[ds]))
@@ -798,7 +824,8 @@ class DescriberTest(unittest.TestCase):
                     and el["dstype"] == vds[1] \
                     and el["record"] == vds[2] \
                     and el["nxtype"] == vds[3] \
-                    and el["shape"] == vds[4]:
+                    and el["shape"] == vds[4] \
+                    and el["parentobj"] == vds[5]:
                 found = True
                 break
         if not found:
@@ -1559,6 +1586,7 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 res2 = dict(self.rescps)
                 res2.update(self.rescps_pfs)
+                # print("RES", res)
                 self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst, dct=res2)
 

@@ -329,19 +329,24 @@ class Describer(object):
             dstype = node.get("type")
             name = node.get("name")
             record = Utils.getRecord(node)
+            parentobj = (parent.tag
+                         if hasattr(parent, "tag") else None)
             dslist.append(
                 DSItem(name, dstype, record,
-                       parentobj=(parent.tag
-                                  if hasattr(parent, "tag") else None)))
+                       parentobj=parentobj))
             if name and Utils.tostr(dstype) == 'PYEVAL':
                 if dsxmls and self.__pyevalfromscript:
-                    dslist.extend(self.__findsubdatasources(dsxmls[0]))
+                    if node not in parent:
+                        parentobj = "datasource"
+                    dslist.extend(
+                        self.__findsubdatasources(dsxmls[0]), parentobj)
                 else:
                     self.__getDSFromNode(node, dslist)
         if not name and not dslist:
             dstxt = Utils.getText(parent)
-            dsitem = DSItem(parentobj=(parent.tag
-                                       if hasattr(parent, "tag") else None))
+            dsitem = DSItem(
+                parentobj=(parent.tag
+                           if hasattr(parent, "tag") else None))
             index = dstxt.find("$%s." % label)
             while index != -1:
                 try:
@@ -385,15 +390,19 @@ class Describer(object):
             dslist.append(dsitem)
             if name and Utils.tostr(dstype) == 'PYEVAL':
                 if dsxmls and self.__pyevalfromscript:
-                    dslist.extend(self.__findsubdatasources(dsxmls[0]))
+                    dslist.extend(
+                        self.__findsubdatasources(
+                            dsxmls[0], "datasource"))
 
         return dslist
 
-    def __findsubdatasources(self, dsxml):
+    def __findsubdatasources(self, dsxml, parentobj="datasource"):
         """ finds datasources in pyeval scripts
 
         :param dsxml: pyeval xml
         :type dsxml: :obj:`str`
+        :param parentobj: parentobj
+        :type parentobj: :obj:`str`
         :returns: list with datasource items (DSItem)
         :rtype: :obj:`list` <:class:`DSItem`>
         """
@@ -432,11 +441,12 @@ class Describer(object):
                     "dataSources", [Utils.tostr(name)])
                 if chdsxml:
                     dsitem = self.__describeDataSource(name, chdsxml[0])
+                    dsitem.parentobj = parentobj
                     if dsitem.dstype:
                         dslist.append(dsitem)
                 else:
                     dslist.append(
-                        DSItem(name, None, None, parentobj="datasource"))
+                        DSItem(name, None, None, parentobj=parentobj))
             index = dsxml.find("$%s." % label, index + 1)
         return dslist
 
@@ -554,7 +564,6 @@ class Describer(object):
                         dimensions = parent.findall("dimensions")
                         if dimensions:
                             shape = self.__getShape(dimensions[0])
-
                         name = dss.appendDSList(self.__getDSFromNode(parent),
                                                 mode, nxtype, shape)
                         if name:
