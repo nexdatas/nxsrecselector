@@ -57,7 +57,7 @@
     <deviceProperties name="MasterTimerFirst" description="the master timer channel of MG with the index: 0">
       <type xsi:type="pogoDsl:BooleanType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <DefaultPropValue>False</DefaultPropValue>
+      <DefaultPropValue>True</DefaultPropValue>
     </deviceProperties>
     <deviceProperties name="MutedPreScanAttrFilters" description="list of muted attribute channel filters for PreScanSnapshot">
       <type xsi:type="pogoDsl:StringVectorType"/>
