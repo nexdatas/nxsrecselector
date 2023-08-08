@@ -3504,7 +3504,11 @@ class ProfileManager3Test(unittest.TestCase):
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
 #                print "CNF", cnf
 #                print "CHDS", chds
-                for i, ds in enumerate(chds):
+                i = 1
+                for ds in chds:
+                    if ds == ar['name']:
+                        cri = i
+                        i = 0
                     cnt = self.smychs[str(ds)]
                     try:
                         chn = {'ndim': 0,
@@ -3531,6 +3535,10 @@ class ProfileManager3Test(unittest.TestCase):
                     except Exception:
                         # print ds, cnt
                         raise
+                    if ds == ar['name']:
+                        i = cri
+                    else:
+                        i += 1
                 if tgc:
                     smg = {
                         "controllers":
@@ -3760,7 +3768,11 @@ class ProfileManager3Test(unittest.TestCase):
                 self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
-                for i, ds in enumerate(chds):
+                i = 1
+                for ds in chds:
+                    if ds == ar['name']:
+                        cri = i
+                        i = 0
                     cnt = self.smychs[str(ds)]
                     try:
                         chn = {'ndim': 0,
@@ -3791,6 +3803,10 @@ class ProfileManager3Test(unittest.TestCase):
                     except Exception:
                         # print ds, cnt
                         raise
+                    if ds == ar['name']:
+                        i = cri
+                    else:
+                        i += 1
                 if tgc:
                     smg = {"controllers":
                            {'__tango__':
@@ -4043,6 +4059,7 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -4051,7 +4068,13 @@ class ProfileManager3Test(unittest.TestCase):
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
                                 cnt = self.smychsXX[str(ds)]
-                                i = chds.index(str(ds))
+                                if ds == ar['name']:
+                                    cri = chds.index(str(ds))
+                                    i = 0
+                                else:
+                                    i = chds.index(str(ds))
+                                    if i > cri:
+                                        i = i + 1
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
@@ -4367,6 +4390,7 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -4375,7 +4399,13 @@ class ProfileManager3Test(unittest.TestCase):
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
                                 cnt = self.smychsXX[str(ds)]
-                                i = chds.index(str(ds))
+                                if ds == ar['name']:
+                                    cri = chds.index(str(ds))
+                                    i = 0
+                                else:
+                                    i = chds.index(str(ds))
+                                    if i > cri:
+                                        i = i + 1
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
@@ -4707,6 +4737,7 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -4716,7 +4747,13 @@ class ProfileManager3Test(unittest.TestCase):
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
-                                    i = chds.index(str(ds))
+                                    if ds == ar['name']:
+                                        cri = chds.index(str(ds))
+                                        i = 0
+                                    else:
+                                        i = chds.index(str(ds))
+                                        if i > cri:
+                                            i = i + 1
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
@@ -4761,7 +4798,13 @@ class ProfileManager3Test(unittest.TestCase):
                     for ds in chds:
                         if ds in self.smychs:
                             cnt = self.smychs[str(ds)]
-                            i = chds.index(str(ds))
+                            if ds == ar['name']:
+                                cri = chds.index(str(ds))
+                                i = 0
+                            else:
+                                i = chds.index(str(ds))
+                                if i > cri:
+                                    i = i + 1
                             try:
                                 chn = {'ndim': 0,
                                        'index': i,
@@ -5086,6 +5129,7 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "mg2")
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -5095,7 +5139,13 @@ class ProfileManager3Test(unittest.TestCase):
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
-                                    i = chds.index(str(ds))
+                                    if ds == ar['name']:
+                                        cri = chds.index(str(ds))
+                                        i = 0
+                                    else:
+                                        i = chds.index(str(ds))
+                                        if i > cri:
+                                            i = i + 1
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
@@ -5139,7 +5189,13 @@ class ProfileManager3Test(unittest.TestCase):
                     for ds in chds:
                         if ds in self.smychs:
                             cnt = self.smychs[str(ds)]
-                            i = chds.index(str(ds))
+                            if ds == ar['name']:
+                                cri = chds.index(str(ds))
+                                i = 0
+                            else:
+                                i = chds.index(str(ds))
+                                if i > cri:
+                                    i = i + 1
                             try:
                                 chn = {'ndim': 0,
                                        'index': i,
@@ -5497,6 +5553,7 @@ class ProfileManager3Test(unittest.TestCase):
                     # fgtm = "/".join(
                     #     self.smychsXX[str(ltimers[0])]['source'].split(
                     #         "/")[:-1])
+                    cri = chds.index(str(ltimers[0]))
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -5506,7 +5563,13 @@ class ProfileManager3Test(unittest.TestCase):
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
-                                    i = chds.index(str(ds))
+                                    if ds == ltimers[0]:
+                                        cri = chds.index(str(ds))
+                                        i = 0
+                                    else:
+                                        i = chds.index(str(ds))
+                                        if i < cri:
+                                            i = i + 1
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
@@ -5561,7 +5624,13 @@ class ProfileManager3Test(unittest.TestCase):
                     for ds in chds:
                         if ds in self.smychs:
                             cnt = self.smychs[str(ds)]
-                            i = chds.index(str(ds))
+                            if ds == ltimers[0]:
+                                cri = chds.index(str(ds))
+                                i = 0
+                            else:
+                                i = chds.index(str(ds))
+                                if i < cri:
+                                    i = i + 1
                             try:
                                 chn = {'ndim': 0,
                                        'index': i,
@@ -6536,6 +6605,7 @@ class ProfileManager3Test(unittest.TestCase):
                         #     self.smychsXX[
                         #         str(ltimers[mg][0])]['source'].split(
                         #             "/")[:-1])
+                        cri = chds.index(str(ltimers[mg][0]))
                         for cl in ctrls:
                             tgc = {}
                             ttdv = None
@@ -6545,7 +6615,13 @@ class ProfileManager3Test(unittest.TestCase):
                                 if ds in chds and cl == exp['controller']:
                                     if ds in self.smychsXX.keys():
                                         cnt = self.smychsXX[str(ds)]
-                                        i = chds.index(str(ds))
+                                        if ds == ltimers[mg][0]:
+                                            cri = chds.index(str(ds))
+                                            i = 0
+                                        else:
+                                            i = chds.index(str(ds))
+                                            if i < cri:
+                                                i = i + 1
                                         try:
                                             tdv = "/".join(
                                                 cnt['source'].split("/")[:-1])
@@ -6602,7 +6678,13 @@ class ProfileManager3Test(unittest.TestCase):
                         for ds in chds:
                             if ds in self.smychs:
                                 cnt = self.smychs[str(ds)]
-                                i = chds.index(str(ds))
+                                if ds == ltimers[mg][0]:
+                                    cri = chds.index(str(ds))
+                                    i = 0
+                                else:
+                                    i = chds.index(str(ds))
+                                    if i < cri:
+                                        i = i + 1
         #                            print "INDEX", i, ds
                                 try:
                                     chn = {'ndim': 0,
