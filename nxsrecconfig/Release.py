@@ -20,4 +20,4 @@
 """  NeXus Sardana Recorder Settings - Release """
 
 #: (:obj:`str`) package version
-__version__ = "3.31.0"
+__version__ = "3.32.0"

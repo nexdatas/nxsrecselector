@@ -1891,7 +1891,7 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'MasterTimerFirst':
         [tango.DevBoolean,
          "the master timer channel of MG with the index: 0",
-         [False]],
+         [True]],
         'MasterTimer':
         [tango.DevBoolean,
          "set the master timer/monitor channel for older MG",

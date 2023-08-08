@@ -88,7 +88,7 @@ class ProfileManager(object):
         self.mutedPreScanAttrFilters = []
 
         #: (:obj:`bool` ) master timer/monitor with the first index
-        self.masterTimerFirst = False
+        self.masterTimerFirst = True
         #: (:obj:`bool` ) set master timer/monitor like for older MGs
         self.masterTimer = False
         #: (:obj:`bool`) mntgrp with synchronization
@@ -586,7 +586,6 @@ class ProfileManager(object):
             self.__pools, 'ExpChannelList',
             ['CTExpChannel', 'OneDExpChannel', 'TwoDExpChannel']))
         tchannels = tchannels | ltimers
-
         if self.masterTimerFirst and timer and timer in aliases:
             index = 1
         for al in aliases:

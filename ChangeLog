@@ -1,3 +1,7 @@
+2023-08-08 Jan Kotanski <jankotan@gmail.com>
+	* set MasterTimerFirst to true (#99)
+	* tagged as v3.32.0
+
 2023-07-07 Jan Kotanski <jankotan@gmail.com>
 	* add parentobj to DSItem description (#93)
 	* tagged as v3.31.0
