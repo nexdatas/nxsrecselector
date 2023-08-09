@@ -810,7 +810,6 @@ class ProfileManager(object):
                                     hel.remove(name)
                                 if 'index' in ch:
                                     idch[int(ch["index"])] = ch['name']
-                                    print("TANGO", ch['name'], ch['label'], ch['source'])
                                 if 'synchronizer' in ctrl and \
                                    ctrl['synchronizer'].lower() != 'software':
                                     synchronizer[name] = \
