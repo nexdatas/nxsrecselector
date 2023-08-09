@@ -627,6 +627,7 @@ class ProfileManager(object):
         conf = json.loads(jconf)
         otimers = None
         timers = {}
+        idch = {}
 
         dsg = json.loads(self.__selector["DataSourceSelection"])
         hel = set(json.loads(self.__selector["UnplottedComponents"]))
@@ -644,10 +645,11 @@ class ProfileManager(object):
            (not self.masterTimer or "timer" in conf.keys()):
             avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
             tangods = self.__readChannels(
-                conf, timers, dsg, hel, synchronizer, synchronization)
+                conf, timers, dsg, hel, synchronizer, synchronization, idch)
             self.__readTangoChannels(
-                conf, tangods, dsg, hel, synchronizer, synchronization)
+                conf, tangods, dsg, hel, synchronizer, synchronization, idch)
             otimers = self.__reorderTimers(conf, timers, dsg, hel, avtimers)
+            ochs = self.__reorderChannels(idch)
 
         props["synchronizer"] = synchronizer
         props["synchronization"] = synchronization
@@ -671,6 +673,11 @@ class ProfileManager(object):
             jtimers = json.dumps(otimers)
             if self.__selector["Timer"] != jtimers:
                 self.__selector["Timer"] = jtimers
+                changed = True
+        if ochs is not None:
+            jochs = json.dumps(ochs)
+            if self.__selector["OrderedChannels"] != jochs:
+                self.__selector["OrderedChannels"] = jochs
                 changed = True
         if self.__selector["MntGrp"] not in \
            self.__configServer.availableSelections():
@@ -705,7 +712,7 @@ class ProfileManager(object):
                 hel.remove(ch)
 
     def __readChannels(self, conf, timers, dsg, hel, synchronizer,
-                       synchronization):
+                       synchronization, idch):
         """ reads channels from mntgrp configutation
 
         :param conf: mntgrp configuration
@@ -721,6 +728,8 @@ class ProfileManager(object):
         :param synchronization: channel synchronization,
                 i.e. Trigger=0, Gate=1, Start=2
         :type synchronization: :obj:`dict` <:obj:`str`, :obj:`int`>
+        :param idch: index channels
+        :type idch: :obj:`dict` <:obj:`int`, :obj:`str`>
         :returns: tango datasources list with elements (name, label, source)
         :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         """
@@ -746,6 +755,8 @@ class ProfileManager(object):
                         dsg[ch['name']] = True
                         if not bool(ch['plot_type']):
                             hel.add(ch['name'])
+                        if 'index' in ch:
+                            idch[int(ch["index"])] = ch['name']
                         elif ch['name'] in hel:
                             hel.remove(ch['name'])
                         if 'synchronizer' in ctrl \
@@ -758,7 +769,7 @@ class ProfileManager(object):
         return tangods
 
     def __readTangoChannels(self, conf, tangods, dsg, hel, synchronizer,
-                            synchronization):
+                            synchronization, idch):
         """ reads Tango channels from mntgrp configutation
 
         :param conf: mntgrp configuration
@@ -772,6 +783,8 @@ class ProfileManager(object):
         :type synchronizer: :obj:`dict` <:obj:`str`, :obj:`str`>
         :param synchronization: channel synchronization, i.e. Trigger=0, Gate=1
         :type synchronization: :obj:`dict` <:obj:`str`, :obj:`int`>
+        :param idch: index channels
+        :type idch: :obj:`dict` <:obj:`int`, :obj:`str`>
         :param hel: list of hidden elements
         :type hel: :obj:`list` <:obj:`str`>
         """
@@ -795,6 +808,9 @@ class ProfileManager(object):
                                     hel.add(name)
                                 elif ch['name'] in hel:
                                     hel.remove(name)
+                                if 'index' in ch:
+                                    idch[int(ch["index"])] = ch['name']
+                                    print("TANGO", ch['name'], ch['label'], ch['source'])
                                 if 'synchronizer' in ctrl and \
                                    ctrl['synchronizer'].lower() != 'software':
                                     synchronizer[name] = \
@@ -838,6 +854,37 @@ class ProfileManager(object):
                     dsg[tm] = False
                     hel.remove(tm)
         return otimers
+
+    def __reorderChannels(self, idch):
+        """ reorder ordered channels
+
+        :param idch: index channels
+        :type idch: :obj:`dict` <:obj:`int`, :obj:`str`>
+        :returns: new orderedchannels
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        lindex = -1
+        pchannels = None
+        if hasattr(idch, "items"):
+            pchs = json.loads(self.__selector["OrderedChannels"])
+            pchannels = []
+            for ch in pchs:
+                if ch not in pchannels:
+                    pchannels.append(ch)
+            sidch = sorted(idch.items())
+            for ind, name in sidch:
+                if name not in pchannels:
+                    lindex += 1
+                    pchannels.insert(lindex, name)
+                else:
+                    oind = pchannels.index(name)
+                    if oind < lindex:
+                        pchannels.pop(oind)
+                        pchannels.insert(lindex, name)
+                    else:
+                        lindex = oind
+
+        return pchannels
 
     def __checkClientRecords(self, datasources, description):
         """ checks client records
