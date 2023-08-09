@@ -2339,11 +2339,13 @@ class SettingsTest(unittest.TestCase):
     def openRecSelector(self):
         st = Settings()
         st.masterTimer = True
+        st.masterTimerFirst = False
         return st
 
     def openRecSelector2(self):
         st = Settings()
         st.masterTimer = True
+        st.masterTimerFirst = False
         return st
 
     def subtest_constructor(self):
