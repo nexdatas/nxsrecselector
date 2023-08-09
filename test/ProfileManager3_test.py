@@ -5712,11 +5712,13 @@ class ProfileManager3Test(unittest.TestCase):
 
         mgt = ProfileManager(None)
         mgt.masterTimer = False
+        mgt.masterTimerFirst = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         mgt.masterTimer = False
+        mgt.masterTimerFirst = True
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
@@ -5726,6 +5728,7 @@ class ProfileManager3Test(unittest.TestCase):
         se["MntGrp"] = val["MntGrp"]
         mgt = ProfileManager(se)
         mgt.masterTimer = False
+        mgt.masterTimerFirst = True
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
 
@@ -6054,6 +6057,7 @@ class ProfileManager3Test(unittest.TestCase):
                     # fgtm = "/".join(
                     #     self.smychsXX[str(ltimers[0])]['source'].split(
                     #         "/")[:-1])
+                    cri = chds.index(str(ltimers[0]))
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -6063,7 +6067,13 @@ class ProfileManager3Test(unittest.TestCase):
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
-                                    i = chds.index(str(ds))
+                                    if ds == ltimers[0]:
+                                        cri = chds.index(str(ds))
+                                        i = 0
+                                    else:
+                                        i = chds.index(str(ds))
+                                        if i < cri:
+                                            i = i + 1
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
@@ -6118,7 +6128,13 @@ class ProfileManager3Test(unittest.TestCase):
                     for ds in chds:
                         if ds in self.smychs:
                             cnt = self.smychs[str(ds)]
-                            i = chds.index(str(ds))
+                            if ds == ltimers[0]:
+                                cri = chds.index(str(ds))
+                                i = 0
+                            else:
+                                i = chds.index(str(ds))
+                                if i < cri:
+                                    i = i + 1
                             try:
                                 chn = {'ndim': 0,
                                        'index': i,
@@ -6261,6 +6277,7 @@ class ProfileManager3Test(unittest.TestCase):
                         se[mg]["MntGrp"] = mg
                         mgt[mg] = ProfileManager(se[mg])
                         mgt[mg].masterTimer = False
+                        mgt[mg].masterTimerFirst = True
                         self.assertEqual(
                             set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
                         # self.myAssertRaise(Exception, mgt[mg].updateProfile)
