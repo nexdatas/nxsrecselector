@@ -1555,6 +1555,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         # fgtm = "/".join(
                         #     self.smychsXX[str(ltimers[mg][0])]['source'].split(
                         #         "/")[:-1])
+                        cri = chds.index(str(ltimers[mg][0]))
                         for cl in ctrls:
                             tgc = {}
                             ttdv = None
@@ -1564,7 +1565,13 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                                 if ds in chds and cl == exp['controller']:
                                     if ds in self.smychsXX.keys():
                                         cnt = self.smychsXX[str(ds)]
-                                        i = chds.index(str(ds))
+                                        if ds == ltimers[mg][0]:
+                                            cri = chds.index(str(ds))
+                                            i = 0
+                                        else:
+                                            i = chds.index(str(ds))
+                                            if i < cri:
+                                                i = i + 1
                                         try:
                                             tdv = "/".join(
                                                 cnt['source'].split("/")[:-1])
@@ -1621,8 +1628,13 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         for ds in chds:
                             if ds in self.smychs:
                                 cnt = self.smychs[str(ds)]
-                                i = chds.index(str(ds))
-        #                            print "INDEX", i, ds
+                                if ds == ltimers[mg][0]:
+                                    cri = chds.index(str(ds))
+                                    i = 0
+                                else:
+                                    i = chds.index(str(ds))
+                                    if i < cri:
+                                        i = i + 1
                                 try:
                                     chn = {'ndim': 0,
                                            'index': i,
