@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.31.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.32.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.31</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.32</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -204,7 +204,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1">#: (:obj:`bool` ) master timer/monitor with the first index</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool` ) set master timer/monitor like for older MGs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">masterTimer</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) mntgrp with synchronization</span>
@@ -702,7 +702,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="s1">&#39;ExpChannelList&#39;</span><span class="p">,</span>
             <span class="p">[</span><span class="s1">&#39;CTExpChannel&#39;</span><span class="p">,</span> <span class="s1">&#39;OneDExpChannel&#39;</span><span class="p">,</span> <span class="s1">&#39;TwoDExpChannel&#39;</span><span class="p">]))</span>
         <span class="n">tchannels</span> <span class="o">=</span> <span class="n">tchannels</span> <span class="o">|</span> <span class="n">ltimers</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="ow">and</span> <span class="n">timer</span> <span class="ow">and</span> <span class="n">timer</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
