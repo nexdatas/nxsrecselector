@@ -12718,7 +12718,11 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                 self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
 #                print "CNF", cnf
 #                print "CHDS", chds
-                for i, ds in enumerate(chds):
+                i = 1
+                for ds in chds:
+                    if ds == ar['name']:
+                        cri = i
+                        i = 0
                     cnt = self.smychs[str(ds)]
                     try:
                         chn = {'ndim': 0,
@@ -12745,6 +12749,10 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                     except Exception:
                         # print ds, cnt
                         raise
+                    if ds == ar['name']:
+                        i = cri
+                    else:
+                        i += 1
                 if tgc:
                     smg = {"controllers":
                            {'__tango__':
@@ -12979,7 +12987,11 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                 self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
 #                print "CNF", cnf
 #                print "CHDS", chds
-                for i, ds in enumerate(chds):
+                i = 1
+                for ds in chds:
+                    if ds == ar['name']:
+                        cri = i
+                        i = 0
                     cnt = self.smychs[str(ds)]
                     try:
                         chn = {'ndim': 0,
@@ -13010,6 +13022,10 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                     except Exception:
                         # print ds, cnt
                         raise
+                    if ds == ar['name']:
+                        i = cri
+                    else:
+                        i += 1
                 if tgc:
                     smg = {"controllers":
                            {'__tango__':
@@ -13265,6 +13281,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
                     self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -13274,6 +13291,13 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                             if ds in chds and cl == exp['controller']:
                                 cnt = self.smychsXX[str(ds)]
                                 i = chds.index(str(ds))
+                                if ds == ar['name']:
+                                    cri = chds.index(str(ds))
+                                    i = 0
+                                else:
+                                    i = chds.index(str(ds))
+                                    if i > cri:
+                                        i = i + 1
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
@@ -13596,6 +13620,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 #                    print "CNF", cnf
 #                    print "CHDS", chds
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -13604,7 +13629,13 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
                                 cnt = self.smychsXX[str(ds)]
-                                i = chds.index(str(ds))
+                                if ds == ar['name']:
+                                    cri = chds.index(str(ds))
+                                    i = 0
+                                else:
+                                    i = chds.index(str(ds))
+                                    if i > cri:
+                                        i = i + 1
 #                                print "INDEX", i, ds
                                 try:
                                     tdv = "/".join(
@@ -13943,6 +13974,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 #                    print "CNF", cnf
 #                    print "CHDS", chds
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -13952,7 +13984,13 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
-                                    i = chds.index(str(ds))
+                                    if ds == ar['name']:
+                                        cri = chds.index(str(ds))
+                                        i = 0
+                                    else:
+                                        i = chds.index(str(ds))
+                                        if i > cri:
+                                            i = i + 1
 #                                    print "INDEX", i, ds
                                     try:
                                         tdv = "/".join(
@@ -13997,8 +14035,13 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                     for ds in chds:
                         if ds in self.smychs:
                             cnt = self.smychs[str(ds)]
-                            i = chds.index(str(ds))
-#                            print "INDEX", i, ds
+                            if ds == ar['name']:
+                                cri = chds.index(str(ds))
+                                i = 0
+                            else:
+                                i = chds.index(str(ds))
+                                if i > cri:
+                                    i = i + 1
                             try:
                                 chn = {'ndim': 0,
                                        'index': i,
@@ -14355,6 +14398,7 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
 #                    print "CNF", cnf
 #                    print "CHDS", chds
                     myctrls = {}
+                    cri = -1
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -14364,8 +14408,13 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
-                                    i = chds.index(str(ds))
-#                                    print "INDEX", i, ds
+                                    if ds == ar['name']:
+                                        cri = chds.index(str(ds))
+                                        i = 0
+                                    else:
+                                        i = chds.index(str(ds))
+                                        if i > cri:
+                                            i = i + 1
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
@@ -14409,7 +14458,13 @@ class BasicSettings3Test(Settings3_test.Settings3Test):
                     for ds in chds:
                         if ds in self.smychs:
                             cnt = self.smychs[str(ds)]
-                            i = chds.index(str(ds))
+                            if ds == ar['name']:
+                                cri = chds.index(str(ds))
+                                i = 0
+                            else:
+                                i = chds.index(str(ds))
+                                if i > cri:
+                                    i = i + 1
 #                            print "INDEX", i, ds
                             try:
                                 chn = {'ndim': 0,

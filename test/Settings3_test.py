@@ -39,11 +39,13 @@ class Settings3Test(Settings2_test.Settings2Test):
     def openRecSelector(self):
         st = Settings2_test.Settings2Test.openRecSelector(self)
         st.masterTimer = False
+        st.masterTimerFirst = True
         return st
 
     def openRecSelector2(self):
         st = Settings2_test.Settings2Test.openRecSelector(self)
         st.masterTimer = False
+        st.masterTimerFirst = True
         return st
 
 

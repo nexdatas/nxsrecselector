@@ -128,6 +128,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
 
         self.assertEqual(xmlc.state(), tango.DevState.ON)
         self.setProp(xmlc, "masterTimer", [True])
+        self.setProp(xmlc, "masterTimerFirst", [False])
         return xmlc
 
     # opens config server
@@ -162,6 +163,7 @@ class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
 
         self.assertEqual(xmlc.state(), tango.DevState.ON)
         self.setProp(xmlc, "masterTimer", [True])
+        self.setProp(xmlc, "masterTimerFirst", [False])
         return xmlc
 
     def subtest_constructor(self):
