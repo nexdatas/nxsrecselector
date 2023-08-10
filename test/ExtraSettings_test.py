@@ -2031,6 +2031,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                          "Timer"],
                         name=mg2)
 
+                    lmp = json.loads(lrs.profileConfiguration)
                     ochs = self.orderedChannels(tmpcf2)
                     lochs = json.loads(lmp["OrderedChannels"])
                     self.assertEqual(sorted(lochs), sorted(pdss[mg2]))
