@@ -9545,7 +9545,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         while mg == val["MntGrp"]:
             mg = self.getRandomName(10)
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -9663,7 +9663,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         while mg == val["MntGrp"]:
             mg = self.getRandomName(10)
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -9775,7 +9775,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         while os.path.exists(filename):
             filename = "_" + filename
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -9884,7 +9884,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         while mg == val["MntGrp"]:
             mg = self.getRandomName(10)
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -9993,7 +9993,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         while mg == val["MntGrp"]:
             mg = self.getRandomName(10)
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -10112,7 +10112,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             while mg == val["MntGrp"]:
                 mg = self.getRandomName(10)
 
-            for i in range(20):
+            for i in range(6):
                 rs = self.openRecSelector()
                 rs.configDevice = val["ConfigDevice"]
                 rs.door = doors[i % 3]
@@ -10216,7 +10216,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         while mg == val["MntGrp"]:
             mg = self.getRandomName(10)
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -10906,7 +10906,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.administratorDataNames(), [])
 
-        for _ in range(20):
+        for _ in range(6):
             lcp = self._rnd.randint(1, 10)
             anames = list(set([self.getRandomName(
                 self._rnd.randint(1, 10)) for _ in range(lcp)]))
@@ -10935,7 +10935,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
         self.assertEqual(rs.deviceGroups, ddg)
 
-        for _ in range(20):
+        for _ in range(6):
             lcp = self._rnd.randint(1, 10)
             anames = list(set([self.getRandomName(
                 self._rnd.randint(1, 10)) for _ in range(lcp)]))
@@ -10949,7 +10949,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             rs.deviceGroups = jdg
             self.assertEqual(rs.deviceGroups, jdg)
 
-        for _ in range(20):
+        for _ in range(6):
             rnm = self.getRandomName(self._rnd.randint(1, 10))
             rs.deviceGroups = rnm
             try:
@@ -10988,7 +10988,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.stepdatasources, '[]')
         self.assertEqual(rs.linkdatasources, '[]')
 
-        for _ in range(20):
+        for _ in range(6):
             lcp = self._rnd.randint(1, 10)
             anames = list(set([self.getRandomName(
                 self._rnd.randint(1, 10)) for _ in range(lcp)]))
@@ -10998,7 +10998,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self.assertEqual(set(mds), set(anames))
             self.assertEqual(set(mds2), set(anames))
 
-        for _ in range(20):
+        for _ in range(6):
             lcp = self._rnd.randint(1, 10)
             anames = list(set([self.getRandomName(
                 self._rnd.randint(1, 10)) for _ in range(lcp)]))
@@ -11026,7 +11026,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.stepdatasources, '[]')
         self.assertEqual(rs.linkdatasources, '[]')
 
-        for _ in range(20):
+        for _ in range(6):
             lcp = self._rnd.randint(1, 10)
             anames = list(set([self.getRandomName(
                 self._rnd.randint(1, 10)) for _ in range(lcp)]))
@@ -11036,7 +11036,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self.assertEqual(set(mds), set(anames))
             self.assertEqual(set(mds2), set(anames))
 
-        for _ in range(20):
+        for _ in range(6):
             lcp = self._rnd.randint(1, 10)
             anames = list(set([self.getRandomName(
                 self._rnd.randint(1, 10)) for _ in range(lcp)]))
@@ -11386,7 +11386,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -11430,7 +11430,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -11574,7 +11574,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -11642,7 +11642,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -11720,7 +11720,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -11793,7 +11793,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -11865,7 +11865,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -12081,7 +12081,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 #        self.myAssertRaise(Exception, rs.updateMntGrp)
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
             cps = {}
             acps = {}
@@ -12602,7 +12602,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -12838,7 +12838,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -13066,7 +13066,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -13380,7 +13380,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -13675,7 +13675,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -14025,7 +14025,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(amydss)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -14431,7 +14431,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(amydss)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}

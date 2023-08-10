@@ -515,7 +515,6 @@ class ProfileManager(object):
         if pdss != self.__selector["DataSourcePreselection"]:
             self.__selector["DataSourcePreselection"] = pdss
             changed = True
-        # print(changed)
         return changed
 
     def fetchProfile(self):
@@ -626,6 +625,7 @@ class ProfileManager(object):
         self.__updatePools()
         conf = json.loads(jconf)
         otimers = None
+        ochs = None
         timers = {}
         idch = {}
 
@@ -647,7 +647,7 @@ class ProfileManager(object):
             tangods = self.__readChannels(
                 conf, timers, dsg, hel, synchronizer, synchronization, idch)
             self.__readTangoChannels(
-                conf, tangods, dsg, hel, synchronizer, synchronization, idch)
+                conf, tangods, dsg, hel, synchronizer, synchronization)
             otimers = self.__reorderTimers(conf, timers, dsg, hel, avtimers)
             ochs = self.__reorderChannels(idch)
 
@@ -712,7 +712,7 @@ class ProfileManager(object):
                 hel.remove(ch)
 
     def __readChannels(self, conf, timers, dsg, hel, synchronizer,
-                       synchronization, idch):
+                       synchronization, idch=None):
         """ reads channels from mntgrp configutation
 
         :param conf: mntgrp configuration
@@ -755,10 +755,10 @@ class ProfileManager(object):
                         dsg[ch['name']] = True
                         if not bool(ch['plot_type']):
                             hel.add(ch['name'])
-                        if 'index' in ch:
-                            idch[int(ch["index"])] = ch['name']
                         elif ch['name'] in hel:
                             hel.remove(ch['name'])
+                        if idch is not None and 'index' in ch:
+                            idch[int(ch["index"])] = ch['name']
                         if 'synchronizer' in ctrl \
                            and ctrl['synchronizer'].lower() != 'software':
                             synchronizer[ch['name']] = ctrl['synchronizer']
@@ -769,7 +769,7 @@ class ProfileManager(object):
         return tangods
 
     def __readTangoChannels(self, conf, tangods, dsg, hel, synchronizer,
-                            synchronization, idch):
+                            synchronization, idch=None):
         """ reads Tango channels from mntgrp configutation
 
         :param conf: mntgrp configuration
@@ -808,7 +808,7 @@ class ProfileManager(object):
                                     hel.add(name)
                                 elif ch['name'] in hel:
                                     hel.remove(name)
-                                if 'index' in ch:
+                                if idch is not None and 'index' in ch:
                                     idch[int(ch["index"])] = ch['name']
                                 if 'synchronizer' in ctrl and \
                                    ctrl['synchronizer'].lower() != 'software':

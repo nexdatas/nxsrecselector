@@ -35,6 +35,7 @@ class Settings3Test(Settings2_test.Settings2Test):
 
     def __init__(self, methodName):
         Settings2_test.Settings2Test.__init__(self, methodName)
+        self._masterTimerFirst = True
 
     def openRecSelector(self):
         st = Settings2_test.Settings2Test.openRecSelector(self)
