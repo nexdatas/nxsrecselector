@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.32.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.33.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.32</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.33</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -631,7 +631,6 @@
         <span class="k">if</span> <span class="n">pdss</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdss</span>
             <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1"># print(changed)</span>
         <span class="k">return</span> <span class="n">changed</span>
 
 <div class="viewcode-block" id="ProfileManager.fetchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">fetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -742,7 +741,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="n">conf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jconf</span><span class="p">)</span>
         <span class="n">otimers</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">ochs</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">timers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">idch</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="n">dsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
         <span class="n">hel</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UnplottedComponents&quot;</span><span class="p">]))</span>
@@ -760,10 +761,11 @@
            <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimer</span> <span class="ow">or</span> <span class="s2">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">avtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getTimers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span><span class="p">)</span>
             <span class="n">tangods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__readChannels</span><span class="p">(</span>
-                <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span> <span class="n">synchronization</span><span class="p">)</span>
+                <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span> <span class="n">synchronization</span><span class="p">,</span> <span class="n">idch</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__readTangoChannels</span><span class="p">(</span>
                 <span class="n">conf</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span> <span class="n">synchronization</span><span class="p">)</span>
             <span class="n">otimers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderTimers</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">avtimers</span><span class="p">)</span>
+            <span class="n">ochs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderChannels</span><span class="p">(</span><span class="n">idch</span><span class="p">)</span>
 
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">synchronizer</span>
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">synchronization</span>
@@ -787,6 +789,11 @@
             <span class="n">jtimers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">otimers</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;Timer&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jtimers</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;Timer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jtimers</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">ochs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">jochs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ochs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jochs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jochs</span>
                 <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> \
            <span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="o">.</span><span class="n">availableSelections</span><span class="p">():</span>
@@ -821,7 +828,7 @@
                 <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__readChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span>
-                       <span class="n">synchronization</span><span class="p">):</span>
+                       <span class="n">synchronization</span><span class="p">,</span> <span class="n">idch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reads channels from mntgrp configutation</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
@@ -837,6 +844,8 @@
 <span class="sd">        :param synchronization: channel synchronization,</span>
 <span class="sd">                i.e. Trigger=0, Gate=1, Start=2</span>
 <span class="sd">        :type synchronization: :obj:`dict` &lt;:obj:`str`, :obj:`int`&gt;</span>
+<span class="sd">        :param idch: index channels</span>
+<span class="sd">        :type idch: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
 <span class="sd">        :returns: tango datasources list with elements (name, label, source)</span>
 <span class="sd">        :rtype: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -864,6 +873,8 @@
                             <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
                         <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
                             <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">idch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="p">:</span>
+                            <span class="n">idch</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">])]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
                         <span class="k">if</span> <span class="s1">&#39;synchronizer&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span> \
                            <span class="ow">and</span> <span class="n">ctrl</span><span class="p">[</span><span class="s1">&#39;synchronizer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;software&#39;</span><span class="p">:</span>
                             <span class="n">synchronizer</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ctrl</span><span class="p">[</span><span class="s1">&#39;synchronizer&#39;</span><span class="p">]</span>
@@ -874,7 +885,7 @@
         <span class="k">return</span> <span class="n">tangods</span>
 
     <span class="k">def</span> <span class="nf">__readTangoChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span>
-                            <span class="n">synchronization</span><span class="p">):</span>
+                            <span class="n">synchronization</span><span class="p">,</span> <span class="n">idch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reads Tango channels from mntgrp configutation</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
@@ -888,6 +899,8 @@
 <span class="sd">        :type synchronizer: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        :param synchronization: channel synchronization, i.e. Trigger=0, Gate=1</span>
 <span class="sd">        :type synchronization: :obj:`dict` &lt;:obj:`str`, :obj:`int`&gt;</span>
+<span class="sd">        :param idch: index channels</span>
+<span class="sd">        :type idch: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
 <span class="sd">        :param hel: list of hidden elements</span>
 <span class="sd">        :type hel: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -911,6 +924,8 @@
                                     <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                                 <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
                                     <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="n">idch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="p">:</span>
+                                    <span class="n">idch</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">])]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
                                 <span class="k">if</span> <span class="s1">&#39;synchronizer&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span> <span class="ow">and</span> \
                                    <span class="n">ctrl</span><span class="p">[</span><span class="s1">&#39;synchronizer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;software&#39;</span><span class="p">:</span>
                                     <span class="n">synchronizer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> \
@@ -954,6 +969,37 @@
                     <span class="n">dsg</span><span class="p">[</span><span class="n">tm</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">otimers</span>
+
+    <span class="k">def</span> <span class="nf">__reorderChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reorder ordered channels</span>
+
+<span class="sd">        :param idch: index channels</span>
+<span class="sd">        :type idch: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
+<span class="sd">        :returns: new orderedchannels</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lindex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">pchannels</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">idch</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">):</span>
+            <span class="n">pchs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">])</span>
+            <span class="n">pchannels</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">pchs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pchannels</span><span class="p">:</span>
+                    <span class="n">pchannels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+            <span class="n">sidch</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">idch</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">sidch</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pchannels</span><span class="p">:</span>
+                    <span class="n">lindex</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">pchannels</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lindex</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">oind</span> <span class="o">=</span> <span class="n">pchannels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">oind</span> <span class="o">&lt;</span> <span class="n">lindex</span><span class="p">:</span>
+                        <span class="n">pchannels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">oind</span><span class="p">)</span>
+                        <span class="n">pchannels</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lindex</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lindex</span> <span class="o">=</span> <span class="n">oind</span>
+
+        <span class="k">return</span> <span class="n">pchannels</span>
 
     <span class="k">def</span> <span class="nf">__checkClientRecords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; checks client records</span>
