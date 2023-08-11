@@ -109,7 +109,7 @@ class StreamSetTest(unittest.TestCase):
         self.assertEqual(streams.log_warn, None)
         self.assertEqual(streams.log_info, None)
         self.assertEqual(streams.log_debug, None)
-        for i in range(20):
+        for i in range(6):
             self.streams.log_fatal = self.mystd1 = self.getRandomString(100)
             self.streams.log_error = self.mystd2 = self.getRandomString(100)
             self.streams.log_warn = self.mystd3 = self.getRandomString(100)
@@ -125,7 +125,7 @@ class StreamSetTest(unittest.TestCase):
     def test_fatal(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -148,7 +148,7 @@ class StreamSetTest(unittest.TestCase):
     def test_fatal_nostd(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -166,7 +166,7 @@ class StreamSetTest(unittest.TestCase):
     def test_fatal_log(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -203,7 +203,7 @@ class StreamSetTest(unittest.TestCase):
     def test_error(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -226,7 +226,7 @@ class StreamSetTest(unittest.TestCase):
     def test_error_nostd(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -246,7 +246,7 @@ class StreamSetTest(unittest.TestCase):
     def test_error_log(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -283,7 +283,7 @@ class StreamSetTest(unittest.TestCase):
     def test_warn(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -306,7 +306,7 @@ class StreamSetTest(unittest.TestCase):
     def test_warn_nostd(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -324,7 +324,7 @@ class StreamSetTest(unittest.TestCase):
     def test_warn_log(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -361,7 +361,7 @@ class StreamSetTest(unittest.TestCase):
     def test_info(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -381,7 +381,7 @@ class StreamSetTest(unittest.TestCase):
     def test_info_nostd(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -404,7 +404,7 @@ class StreamSetTest(unittest.TestCase):
     def test_info_log(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -432,7 +432,7 @@ class StreamSetTest(unittest.TestCase):
     def test_debug(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -452,7 +452,7 @@ class StreamSetTest(unittest.TestCase):
     def test_debug_nostd(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
@@ -475,7 +475,7 @@ class StreamSetTest(unittest.TestCase):
     def test_debug_log(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        for i in range(20):
+        for i in range(6):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()

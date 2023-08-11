@@ -150,6 +150,7 @@ class SettingsTest(unittest.TestCase):
         self._wr = TestWriterSetUp.TestWriterSetUp()
         self._pool = TestPoolSetUp.TestPoolSetUp()
         self._simps = TestServerSetUp.TestServerSetUp()
+        self._masterTimerFirst = False
 
         try:
             self._seed = long(binascii.hexlify(os.urandom(16)), 16)
@@ -2055,6 +2056,26 @@ class SettingsTest(unittest.TestCase):
         self._ms.tearDown()
         self._wr.tearDown()
 
+    @classmethod
+    def orderedChannels(cls, mgconf):
+        idch = {}
+        ochs = []
+        if mgconf is not None and 'controllers' in mgconf:
+            crls = mgconf['controllers']
+            for ctrlname, ctrl in crls.items():
+                if ctrlname != "__tango__":
+                    if 'units' in ctrl.keys() and \
+                       '0' in ctrl['units'].keys():
+                        uctrl = ctrl['units']['0']
+                    else:
+                        uctrl = ctrl
+                    if 'channels' in uctrl.keys():
+                        for ch in uctrl['channels'].values():
+                            if 'index' in ch:
+                                idch[int(ch["index"])] = ch['name']
+        ochs = [it[1] for (it) in sorted(idch.items())]
+        return ochs
+
     def checkDS(self, rv, cv):
         self.assertEqual(sorted(rv.keys()), sorted(cv))
         for vl in cv:
@@ -2362,6 +2383,7 @@ class SettingsTest(unittest.TestCase):
 
         se = Selector(msp, self.version)
         pm = ProfileManager(se)
+        pm.masterTimerFirst = self._masterTimerFirst
         amgs = pm.availableMntGrps()
         # print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
@@ -2449,7 +2471,7 @@ class SettingsTest(unittest.TestCase):
         expch = []
         pdss = []
         mgt = ProfileManager(se)
-
+        mgt.masterTimerFirst = self._masterTimerFirst
         pool = self._pool.dp
         timers = {}
         ntms = self._rnd.randint(1, 5)

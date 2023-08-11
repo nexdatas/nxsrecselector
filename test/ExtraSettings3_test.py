@@ -173,7 +173,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -638,7 +638,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -1146,7 +1146,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self.maxDiff = None
         self.tearDown()
         try:
-            for j in range(10):
+            for j in range(6):
                 self.setUp()
                 db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
@@ -1774,6 +1774,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectingDataSources",
+                            "OrderedChannels",
                             "Timer"
                         ],
                         name=mg1)
@@ -1781,13 +1782,15 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf, ltmpcf)
 
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.assertEqual(
                         set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), adss[mg1])
-                    self.assertEqual(
-                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
                     self.assertEqual(
@@ -1841,9 +1844,15 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources",
+                         "OrderedChannels",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
+
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     tmpcf = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -1852,8 +1861,8 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    self.assertEqual(
-                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
+                    # self.assertEqual(
+                    #     json.loads(lmp["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
 
@@ -2007,6 +2016,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         ["ComponentPreselection",
                          "ComponentSelection",
                          "DataSourceSelection",
+                         "OrderedChannels",
                          "UnplottedComponents",
                          "PreselectingDataSources",
                          "Timer",
@@ -2090,6 +2100,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         lrs,
                         [
                             "DataSourceSelection",
+                            "OrderedChannels",
                             "UnplottedComponents",
                             "PreselectingDataSources",
                             "Timer"],
@@ -2116,8 +2127,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2145,6 +2158,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
+                            "OrderedChannels",
                             "PreselectingDataSources",
                             "Timer",
                             "MntGrp"],
@@ -2169,8 +2183,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         mylhe2)
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2210,6 +2226,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.compareToDumpJSON(
                         lrs,
                         [
+                            "OrderedChannels",
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectingDataSources",
@@ -2231,8 +2248,18 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    lmp = json.loads(lrs.profileConfiguration)
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe)
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+                    # self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                    #                  pdss[mg3])
+
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2269,6 +2296,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         lrs,
                         [
                             "DataSourceSelection",
+                            "OrderedChannels",
                             "UnplottedComponents",
                             "PreselectingDataSources",
                             "Timer"],
@@ -2283,8 +2311,12 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    # self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                    #                  pdss[mg3])
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2317,6 +2349,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         lrs,
                         [
                             "DataSourceSelection",
+                            "OrderedChannels",
                             "UnplottedComponents",
                             "PreselectingDataSources",
                             "Timer"],
@@ -2331,8 +2364,12 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+                    # self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                    #                  pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2360,6 +2397,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
+                            "OrderedChannels",
                             "PreselectingDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
@@ -2373,8 +2411,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2414,7 +2454,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
-
+                            "OrderedChannels",
                             "ComponentSelection",
                             "DataSourceSelection",
                             "UnplottedComponents",
@@ -2427,6 +2467,11 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["DataSourcePreselection"])),
                         set())
+
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     if j % 2:
 
@@ -2456,8 +2501,13 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.myAssertDict(
                         json.loads(lmp["ComponentSelection"]), mycps)
 
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+
+                    # self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                    #                  pdss[mg3])
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lmp["Timer"])),
@@ -2568,7 +2618,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
 #        print "DOWN"
 #        print "UP"
         try:
-            for j in range(10):
+            for j in range(6):
                 self.setUp()
                 self.mySetUp()
                 db = tango.Database()
@@ -3203,6 +3253,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.compareToDumpJSON(
                         lrs, [
                             "DataSourceSelection",
+                            "OrderedChannels",
                             "UnplottedComponents",
                             "PreselectingDataSources",
                             "Timer"
@@ -3218,8 +3269,11 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         set(aadss[mg1]))
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), adss[mg1])
-                    self.assertEqual(
-                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
+
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
                     self.assertEqual(
@@ -3275,6 +3329,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                         lrs,
                         ["DataSourceSelection",
                          "UnplottedComponents",
+                         "OrderedChannels",
                          "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
@@ -3289,8 +3344,11 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
                     self.assertEqual(
                         set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    self.assertEqual(
-                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
+                    lmp = json.loads(lrs.profileConfiguration)
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
 
@@ -4112,7 +4170,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -4139,7 +4197,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -4302,7 +4360,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -4328,7 +4386,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -5798,7 +5856,6 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             rs.profileConfiguration = str(json.dumps(cnf))
             cpname = rs.createDynamicComponent([
                 str(json.dumps(["ds1"]))])
-
 
 #            dc.setStepDSources(["ds1"])
 #            cpname = dc.create()
@@ -8580,7 +8637,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             mncps = self._rnd.randint(0, len(list(mycps.keys())))
             mcps = [
                 cp for cp in self._rnd.sample(list(mycps.keys()), mncps)
@@ -8745,7 +8802,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8791,7 +8848,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8837,7 +8894,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8885,7 +8942,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)

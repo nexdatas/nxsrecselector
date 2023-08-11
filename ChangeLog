@@ -1,3 +1,7 @@
+2023-08-10 Jan Kotanski <jankotan@gmail.com>
+	* dont change order of channels in the MG configuration (#101)
+	* tagged as v3.33.0
+
 2023-08-08 Jan Kotanski <jankotan@gmail.com>
 	* set MasterTimerFirst to true (#99)
 	* tagged as v3.32.0

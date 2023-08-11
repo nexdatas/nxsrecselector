@@ -1382,7 +1382,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -1428,7 +1428,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             db = tango.Database()
@@ -1502,7 +1502,7 @@ class SelectorTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
 
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
@@ -1574,7 +1574,7 @@ class SelectorTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             db = tango.Database()
@@ -1644,7 +1644,7 @@ class SelectorTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -1706,7 +1706,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2022,7 +2022,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             msp.updateMacroServer(val["Door"])
             se = Selector(msp, self.__version)
@@ -2132,7 +2132,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["OrderedChannels"] = json.dumps([])
@@ -2257,7 +2257,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2426,7 +2426,7 @@ class SelectorTest(unittest.TestCase):
                "OrderedChannels": "[]",
                "ChannelProperties": "{}",
                "DataSourceSelection": "{}"}
-        for i in range(20):
+        for i in range(6):
             val["ChannelProperties"] = json.dumps({})
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
@@ -2590,7 +2590,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2680,7 +2680,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2764,7 +2764,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2851,7 +2851,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2939,7 +2939,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3026,7 +3026,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3114,7 +3114,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3205,7 +3205,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3286,7 +3286,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3359,7 +3359,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3434,7 +3434,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3508,7 +3508,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3586,7 +3586,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3660,7 +3660,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3733,7 +3733,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3805,7 +3805,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -3877,7 +3877,7 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]

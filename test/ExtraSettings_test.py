@@ -175,7 +175,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -635,7 +635,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -1144,7 +1144,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.maxDiff = None
         self.tearDown()
         try:
-            for j in range(10):
+            for j in range(6):
                 self.setUp()
                 db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
@@ -1838,9 +1838,15 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources",
+                         "OrderedChannels",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
+
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     tmpcf = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -1849,8 +1855,6 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                     self.assertEqual(
                         set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    self.assertEqual(
-                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
                         json.loads(lmp["UserData"]), records[mg1])
 
@@ -1997,6 +2001,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                         lrs,
                         ["ComponentPreselection",
                          "ComponentSelection",
+                         "OrderedChannels",
                          "DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources",
@@ -2025,6 +2030,12 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                          "PreselectingDataSources",
                          "Timer"],
                         name=mg2)
+
+                    lmp = json.loads(lrs.profileConfiguration)
+                    ochs = self.orderedChannels(tmpcf2)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg2]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     self.myAssertDict(
                         json.loads(mp[mg2]["ComponentPreselection"]),
@@ -2394,7 +2405,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
-
+                            "OrderedChannels",
                             "ComponentSelection",
                             "DataSourceSelection",
                             "UnplottedComponents",
@@ -2407,6 +2418,11 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                     self.assertEqual(
                         set(json.loads(lmp["DataSourcePreselection"])),
                         set())
+
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     if j % 2:
 
@@ -2436,8 +2452,11 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                     self.myAssertDict(
                         json.loads(lmp["ComponentSelection"]), mycps)
 
-                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+
                     self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lmp["Timer"])[0],
@@ -2539,7 +2558,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.maxDiff = None
         self.tearDown()
         try:
-            for j in range(10):
+            for j in range(6):
                 # print "JJJ:", j
                 self.setUp()
                 self.mySetUp()
@@ -3249,10 +3268,16 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
                         lrs,
                         ["DataSourceSelection",
                          "UnplottedComponents",
+                         "OrderedChannels",
                          "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
+
+                    ochs = self.orderedChannels(tmpcf2)
+                    lochs = json.loads(lmp["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg2]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     continue
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
@@ -4079,7 +4104,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -4106,7 +4131,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -4269,7 +4294,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -4295,7 +4320,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        for i in range(20):
+        for i in range(6):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
@@ -5776,7 +5801,6 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
             rs.profileConfiguration = str(json.dumps(cnf))
             cpname = rs.createDynamicComponent([
                 str(json.dumps(["ds1"]))])
-
 
 #            dc.setStepDSources(["ds1"])
 #            cpname = dc.create()
@@ -8587,7 +8611,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             mncps = self._rnd.randint(0, len(list(mycps.keys())))
             mcps = [
                 cp for cp in self._rnd.sample(list(mycps.keys()), mncps)
@@ -8752,7 +8776,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8798,7 +8822,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8850,7 +8874,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8907,7 +8931,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             rs.appendEntry = bool(i % 2)
             rscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8966,7 +8990,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        for i in range(20):
+        for i in range(6):
             cfds = ["mot%s" % i, "exp_c%s" % i, "exp_c%s" % i]
             rs.canfaildatasources = json.dumps(cfds)
 

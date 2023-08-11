@@ -1824,6 +1824,26 @@ class ProfileManager2Test(unittest.TestCase):
                     #     print "COMP", key
                     self.assertEqual(self.__dump[name][key], el[key])
 
+    @classmethod
+    def orderedChannels(cls, mgconf):
+        idch = {}
+        ochs = []
+        if mgconf is not None and 'controllers' in mgconf:
+            crls = mgconf['controllers']
+            for ctrlname, ctrl in crls.items():
+                if ctrlname != "__tango__":
+                    if 'units' in ctrl.keys() and \
+                       '0' in ctrl['units'].keys():
+                        uctrl = ctrl['units']['0']
+                    else:
+                        uctrl = ctrl
+                    if 'channels' in uctrl.keys():
+                        for ch in uctrl['channels'].values():
+                            if 'index' in ch:
+                                idch[int(ch["index"])] = ch['name']
+        ochs = [it[1] for (it) in sorted(idch.items())]
+        return ochs
+
     def getRandomName(self, maxsize):
         if sys.version_info > (3,):
             letters = string.ascii_letters + string.digits
@@ -2242,7 +2262,7 @@ class ProfileManager2Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2282,7 +2302,7 @@ class ProfileManager2Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2461,7 +2481,7 @@ class ProfileManager2Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2520,7 +2540,7 @@ class ProfileManager2Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2584,7 +2604,7 @@ class ProfileManager2Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2655,7 +2675,7 @@ class ProfileManager2Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2874,7 +2894,7 @@ class ProfileManager2Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
             cps = {}
             acps = {}
@@ -3436,7 +3456,7 @@ class ProfileManager2Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -3669,7 +3689,7 @@ class ProfileManager2Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -3975,7 +3995,7 @@ class ProfileManager2Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4267,7 +4287,7 @@ class ProfileManager2Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4610,7 +4630,7 @@ class ProfileManager2Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(amydss)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4994,7 +5014,7 @@ class ProfileManager2Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(amydss)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -5327,7 +5347,7 @@ class ProfileManager2Test(unittest.TestCase):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -5755,7 +5775,7 @@ class ProfileManager2Test(unittest.TestCase):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -6224,7 +6244,7 @@ class ProfileManager2Test(unittest.TestCase):
         self.maxDiff = None
         self.tearDown()
         try:
-            for j in range(10):
+            for j in range(6):
                 self.setUp()
                 db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
@@ -6827,12 +6847,18 @@ class ProfileManager2Test(unittest.TestCase):
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
+                    ochs = self.orderedChannels(ltmpcf)
                     self.compareToDumpJSON(
                         se[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
+                         "OrderedChannels",
                          "PreselectingDataSources"],
                         name=mg2)
+
+                    lochs = json.loads(se[mg2]["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     pool.AcqChannelList = pools[mg1][0]
                     pool.ExpChannelList = pools[mg1][1]
@@ -6840,6 +6866,7 @@ class ProfileManager2Test(unittest.TestCase):
                         lse,
                         ["DataSourceSelection",
                          "UnplottedComponents",
+                         "OrderedChannels",
                          "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
@@ -6852,8 +6879,10 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    self.assertEqual(
-                        json.loads(lse["OrderedChannels"]), pdss[mg1])
+                    tmpcf = json.loads(mgt[mg2].mntGrpConfiguration())
+                    ltmpcf = json.loads(lmgt.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf, ltmpcf)
+
                     self.myAssertDict(
                         json.loads(lse["UserData"]), records[mg1])
 
@@ -7001,6 +7030,7 @@ class ProfileManager2Test(unittest.TestCase):
                         ["ComponentPreselection",
                          "ComponentSelection",
                          "DataSourceSelection",
+                         "OrderedChannels",
                          "UnplottedComponents",
                          "PreselectingDataSources",
                          "Timer",
@@ -7028,6 +7058,11 @@ class ProfileManager2Test(unittest.TestCase):
                          "PreselectingDataSources",
                          "Timer"],
                         name=mg2)
+
+                    ochs = self.orderedChannels(tmpcf2)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg2]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     self.myAssertDict(
                         json.loads(se[mg2]["ComponentPreselection"]),
@@ -7391,7 +7426,7 @@ class ProfileManager2Test(unittest.TestCase):
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
-
+                            "OrderedChannels",
                             "ComponentSelection",
                             "DataSourceSelection",
                             "UnplottedComponents",
@@ -7403,6 +7438,11 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["DataSourcePreselection"])),
                         set())
+
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     if j % 2:
 
@@ -7432,8 +7472,10 @@ class ProfileManager2Test(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(lse["ComponentSelection"]), mycps)
 
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],

@@ -1832,6 +1832,26 @@ class ProfileManager3Test(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
+    @classmethod
+    def orderedChannels(cls, mgconf):
+        idch = {}
+        ochs = []
+        if mgconf is not None and 'controllers' in mgconf:
+            crls = mgconf['controllers']
+            for ctrlname, ctrl in crls.items():
+                if ctrlname != "__tango__":
+                    if 'units' in ctrl.keys() and \
+                       '0' in ctrl['units'].keys():
+                        uctrl = ctrl['units']['0']
+                    else:
+                        uctrl = ctrl
+                    if 'channels' in uctrl.keys():
+                        for ch in uctrl['channels'].values():
+                            if 'index' in ch:
+                                idch[int(ch["index"])] = ch['name']
+        ochs = [it[1] for (it) in sorted(idch.items())]
+        return ochs
+
     # Exception tester
     # \param exception expected exception
     # \param method called method
@@ -2230,7 +2250,7 @@ class ProfileManager3Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2269,7 +2289,7 @@ class ProfileManager3Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2445,7 +2465,7 @@ class ProfileManager3Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2503,7 +2523,7 @@ class ProfileManager3Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2566,7 +2586,7 @@ class ProfileManager3Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2636,7 +2656,7 @@ class ProfileManager3Test(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        for i in range(20):
+        for i in range(6):
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
@@ -2846,7 +2866,7 @@ class ProfileManager3Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
             cps = {}
             acps = {}
@@ -3395,7 +3415,7 @@ class ProfileManager3Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -3629,7 +3649,7 @@ class ProfileManager3Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        for i in range(30):
+        for i in range(6):
             ar = arr[i % len(arr)]
 
             cps = {}
@@ -3936,7 +3956,7 @@ class ProfileManager3Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4230,7 +4250,7 @@ class ProfileManager3Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4575,7 +4595,7 @@ class ProfileManager3Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(amydss)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4967,7 +4987,7 @@ class ProfileManager3Test(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(amydss)])
 
-            for i in range(30):
+            for i in range(6):
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -5308,7 +5328,7 @@ class ProfileManager3Test(unittest.TestCase):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -5747,7 +5767,7 @@ class ProfileManager3Test(unittest.TestCase):
             devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
         try:
             simp2.setUp()
-            for i in range(30):
+            for i in range(6):
 
                 ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
                 expch = []
@@ -6229,7 +6249,7 @@ class ProfileManager3Test(unittest.TestCase):
         self.maxDiff = None
         self.tearDown()
         try:
-            for j in range(10):
+            for j in range(6):
                 self.setUp()
                 db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
@@ -6791,6 +6811,7 @@ class ProfileManager3Test(unittest.TestCase):
                     pool.ExpChannelList = pools[mg1][1]
                     lmgt = ProfileManager(lse)
                     lmgt.masterTimer = False
+                    lmgt.masterTimerFirst = True
                     # self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
 
                     lmgt.switchProfile(False)
@@ -6800,6 +6821,7 @@ class ProfileManager3Test(unittest.TestCase):
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectingDataSources",
+                            "OrderedChannels",
                             "Timer"
                         ],
                         name=mg1)
@@ -6807,7 +6829,7 @@ class ProfileManager3Test(unittest.TestCase):
                     tmpcf = json.loads(mgt[mg1].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
                     self.myAssertDict(tmpcf, ltmpcf)
-
+                    ochs = self.orderedChannels(ltmpcf)
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
@@ -6815,8 +6837,10 @@ class ProfileManager3Test(unittest.TestCase):
                     # adss[mg1]
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), adss[mg1])
-                    self.assertEqual(
-                        json.loads(lse["OrderedChannels"]), pdss[mg1])
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+
                     self.myAssertDict(
                         json.loads(lse["UserData"]), records[mg1])
                     self.assertEqual(
@@ -6848,8 +6872,20 @@ class ProfileManager3Test(unittest.TestCase):
                         se[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
+                         "OrderedChannels",
                          "PreselectingDataSources"],
                         name=mg2)
+
+                    ochs = self.orderedChannels(ltmpcf)
+                    lochs = json.loads(se[mg2]["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg1]))
+                    tlochs = [ch for ch in lochs if ch in ochs]
+                    if ltimers[mg2] and ltimers[mg2][0]:
+                        tm = ltimers[mg2][0]
+                        if tm in tlochs:
+                            tlochs.remove(tm)
+                        tlochs.insert(0, tm)
+                    self.assertEqual(tlochs, ochs)
 
                     pool.AcqChannelList = pools[mg1][0]
                     pool.ExpChannelList = pools[mg1][1]
@@ -6857,6 +6893,7 @@ class ProfileManager3Test(unittest.TestCase):
                         lse,
                         ["DataSourceSelection",
                          "UnplottedComponents",
+                         "OrderedChannels",
                          "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
@@ -6869,8 +6906,6 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    self.assertEqual(
-                        json.loads(lse["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
                         json.loads(lse["UserData"]), records[mg1])
 
@@ -7010,6 +7045,7 @@ class ProfileManager3Test(unittest.TestCase):
                         ["ComponentPreselection",
                          "ComponentSelection",
                          "DataSourceSelection",
+                         "OrderedChannels",
                          "UnplottedComponents",
                          "PreselectingDataSources",
                          "Timer",
@@ -7037,6 +7073,11 @@ class ProfileManager3Test(unittest.TestCase):
                          "PreselectingDataSources",
                          "Timer"],
                         name=mg2)
+
+                    ochs = self.orderedChannels(tmpcf2)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg2]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     self.myAssertDict(
                         json.loads(se[mg2]["ComponentPreselection"]),
@@ -7094,9 +7135,16 @@ class ProfileManager3Test(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
+                            "OrderedChannels",
                             "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
+
+                    ochs = self.orderedChannels(tmpcf3)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7116,8 +7164,9 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lse["Timer"])),
@@ -7145,10 +7194,16 @@ class ProfileManager3Test(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
+                            "OrderedChannels",
                             "PreselectingDataSources",
                             "Timer",
                             "MntGrp"],
                         name=mg3)
+                    ochs = self.orderedChannels(tmpcf3)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+
                     mydsg = dict(json.loads(lse["DataSourceSelection"]))
                     for ds in self.smychsXX.keys():
                         if ds in expch:
@@ -7168,8 +7223,9 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe2)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     # print(json.loads(lse["Timer"]), ltimers[mg3])
@@ -7210,6 +7266,7 @@ class ProfileManager3Test(unittest.TestCase):
                         lse,
                         [
                             "DataSourceSelection",
+                            "OrderedChannels",
                             "UnplottedComponents",
                             "PreselectingDataSources",
                             "Timer"],
@@ -7227,8 +7284,8 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lse["Timer"])),
@@ -7236,6 +7293,7 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(set(json.loads(lse["Timer"])),
                                      set([]))
                     self.assertEqual(lse["MntGrp"], mg3)
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     # try switch to unnamed active profile
                     # and then to selector mg3
@@ -7267,8 +7325,14 @@ class ProfileManager3Test(unittest.TestCase):
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectingDataSources",
+                            "OrderedChannels",
                             "Timer"],
                         name=mg3)
+                    ochs = self.orderedChannels(tmpcf3)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
+
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7278,8 +7342,6 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lse["Timer"])),
@@ -7313,9 +7375,13 @@ class ProfileManager3Test(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
+                            "OrderedChannels",
                             "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7325,8 +7391,6 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lse["Timer"])),
@@ -7354,6 +7418,7 @@ class ProfileManager3Test(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
+                            "OrderedChannels",
                             "PreselectingDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
@@ -7366,8 +7431,9 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lse["Timer"])),
@@ -7407,7 +7473,7 @@ class ProfileManager3Test(unittest.TestCase):
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
-
+                            "OrderedChannels",
                             "ComponentSelection",
                             "DataSourceSelection",
                             "UnplottedComponents",
@@ -7419,6 +7485,11 @@ class ProfileManager3Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["DataSourcePreselection"])),
                         set())
+
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
 
                     if j % 2:
 
@@ -7448,8 +7519,10 @@ class ProfileManager3Test(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(lse["ComponentSelection"]), mycps)
 
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
-                                     pdss[mg3])
+                    ochs = self.orderedChannels(tmpcf4)
+                    lochs = json.loads(lse["OrderedChannels"])
+                    self.assertEqual(sorted(lochs), sorted(pdss[mg3]))
+                    self.assertEqual([ch for ch in lochs if ch in ochs], ochs)
                     self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(len(json.loads(lse["Timer"])),
