@@ -54,7 +54,8 @@ class Settings(object):
     def __init__(self, server=None, numberofthreads=None,
                  defaultnexuspath=None,
                  defaulttimezone=None, defaultmntgrp=None,
-                 syncsnapshot=False, writepoolmotorpositions=False):
+                 syncsnapshot=False, writepoolmotorpositions=False,
+                 defaultnexustype=None):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -68,6 +69,8 @@ class Settings(object):
         :param writepoolmotorpositions: add dynamic components
                                         for all pool motor positions
         :type writepoolmotorpositions: :obj:`bool`
+        :param defaultnexustype:  default dynamic component nexus type
+        :type defaultnexustype: :obj:`str`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -81,6 +84,9 @@ class Settings(object):
         self.defaultNeXusPath = defaultnexuspath or \
             "/$var.entryname#'scan'$var.serialno:NXentry/" \
             "NXinstrument/collection"
+
+        #: (:obj:`str`) default NeXus type
+        self.defaultNeXusType = defaultnexustype or "NX_CHAR"
 
         #: (:obj:`list` <:obj:`str`>) default CanFail DataSources
         self.defaultCanFailDataSources = []
@@ -1322,7 +1328,7 @@ class Settings(object):
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(
-            nexusconfig_device, self.defaultNeXusPath)
+            nexusconfig_device, self.defaultNeXusPath, self.defaultNeXusType)
         if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
                 dcpcreator.setStepDSources(

@@ -95,11 +95,12 @@ class NXSRecSelector(tango.Device_4Impl):
         defaultpath = self.DefaultNeXusPath or None
         defaultzone = self.DefaultTimeZone or None
         defaultmntgrp = self.DefaultMntGrp or None
+        defaultnexustype = self.DefaultNeXusType or None
         syncsnapshot = bool(self.SyncSnapshot)
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         self.__stg = STG(self, numberofthreads, defaultpath,
                          defaultzone, defaultmntgrp, syncsnapshot,
-                         writepoolmotorpositions)
+                         writepoolmotorpositions, defaultnexustype)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1844,6 +1845,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
          "default NeXus path",
          ["/$var.entryname#'scan'$var.serialno:NXentry/"
           "NXinstrument/collection"]],
+        'DefaultNeXusType':
+        [tango.DevString,
+         "default dynamic component NeXus data type",
+         ["NX_CHAR"]],
         'DefaultTimeZone':
         [tango.DevString,
          "default Time Zone",
