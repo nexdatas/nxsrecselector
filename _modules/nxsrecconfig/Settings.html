@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.33.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.34.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.33</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.34</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -170,7 +170,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaultnexuspath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaulttimezone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">defaultmntgrp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">defaultnexustype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; contructor</span>
 
 <span class="sd">        :param server: NXSRecSelector server</span>
@@ -184,6 +185,8 @@
 <span class="sd">        :param writepoolmotorpositions: add dynamic components</span>
 <span class="sd">                                        for all pool motor positions</span>
 <span class="sd">        :type writepoolmotorpositions: :obj:`bool`</span>
+<span class="sd">        :param defaultnexustype:  default dynamic component nexus type</span>
+<span class="sd">        :type defaultnexustype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
@@ -197,6 +200,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusPath</span> <span class="o">=</span> <span class="n">defaultnexuspath</span> <span class="ow">or</span> \
             <span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span> \
             <span class="s2">&quot;NXinstrument/collection&quot;</span>
+
+        <span class="c1">#: (:obj:`str`) default NeXus type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusType</span> <span class="o">=</span> <span class="n">defaultnexustype</span> <span class="ow">or</span> <span class="s2">&quot;NX_CHAR&quot;</span>
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) default CanFail DataSources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultCanFailDataSources</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1438,7 +1444,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">dcpcreator</span> <span class="o">=</span> <span class="n">DynamicComponent</span><span class="p">(</span>
-            <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusPath</span><span class="p">)</span>
+            <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusPath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusType</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">dcpcreator</span><span class="o">.</span><span class="n">setStepDSources</span><span class="p">(</span>

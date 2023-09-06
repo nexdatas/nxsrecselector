@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 3.33.0 documentation</title>
+    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 3.34.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.33</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.34</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -157,7 +157,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">,</span>
                  <span class="n">defaultpath</span><span class="o">=</span><span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span>
-                 <span class="s2">&quot;NXinstrument/collection&quot;</span><span class="p">):</span>
+                 <span class="s2">&quot;NXinstrument/collection&quot;</span><span class="p">,</span>
+                 <span class="n">defaulttype</span><span class="o">=</span><span class="s2">&quot;NX_CHAR&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param nexusconfig_device: configserver configuration server</span>
@@ -209,6 +210,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__links</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) standard dynamic link flag for INIT strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`str`) default data type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttype</span> <span class="o">=</span> <span class="n">defaulttype</span>
 
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
         <span class="c1">#:    map of numpy types : NEXUS</span>
@@ -401,7 +404,7 @@
                     <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
                 <span class="n">created</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
-                <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;NX_CHAR&#39;</span>
+                <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttype</span>
                 <span class="k">if</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">avds</span><span class="p">:</span>
                     <span class="n">dsource</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span> <span class="s2">&quot;dataSources&quot;</span><span class="p">,</span>
@@ -418,7 +421,7 @@
                     <span class="k">if</span> <span class="n">dss</span> <span class="ow">and</span> <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shapeFromTango</span><span class="p">(</span><span class="n">dss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">nxtype</span><span class="p">:</span>
-                            <span class="n">nxtype</span> <span class="o">=</span> <span class="s1">&#39;NX_CHAR&#39;</span>
+                            <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttype</span>
 
                 <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getProp</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__nexustypes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">)</span>
