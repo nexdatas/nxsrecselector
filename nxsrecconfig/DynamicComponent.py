@@ -41,7 +41,8 @@ class DynamicComponent(object):
 
     def __init__(self, nexusconfig_device,
                  defaultpath="/$var.entryname#'scan'$var.serialno:NXentry/"
-                 "NXinstrument/collection"):
+                 "NXinstrument/collection",
+                 defaulttype="NX_CHAR"):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server
@@ -93,6 +94,8 @@ class DynamicComponent(object):
         self.__links = True
         #: (:obj:`bool`) standard dynamic link flag for INIT strategy
         self.__ilinks = False
+        #: (:obj:`str`) default data type
+        self.__defaulttype = defaulttype
 
         #: (:obj:`dict` <:obj:`str` , :obj:`str`> ) \
         #:    map of numpy types : NEXUS
@@ -285,7 +288,7 @@ class DynamicComponent(object):
                     definition, path, link)
                 created.append(ds)
 
-                shape, nxtype = None, 'NX_CHAR'
+                shape, nxtype = None, self.__defaulttype
                 if ds in avds:
                     dsource = TangoUtils.command(
                         self.__nexusconfig_device, "dataSources",
@@ -302,7 +305,7 @@ class DynamicComponent(object):
                     if dss and shape is None:
                         shape, nxtype = self.__shapeFromTango(dss[0])
                         if not nxtype:
-                            nxtype = 'NX_CHAR'
+                            nxtype = self.__defaulttype
 
                 nxtype = self.__getProp(
                     self.__nexustypes, self.__nexuslabels, ds, nxtype)
