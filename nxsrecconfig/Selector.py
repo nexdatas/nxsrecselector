@@ -28,7 +28,7 @@ except Exception:
 
 # import getpass
 from os.path import expanduser
-from .Utils import TangoUtils, PoolUtils, Utils
+from .Utils import TangoUtils, PoolUtils, Utils, MSUtils
 from .Selection import Selection
 from .Converter import Converter
 
@@ -283,6 +283,24 @@ class Selector(object):
         """ set method for timeZone attribute
         """
         self.__selection.resetTimeZone()
+
+    def isDoorValid(self):
+        """ checks if Door valid
+
+        :returns: valid Door device flag
+        :rtype: :obj:`bool`
+        """
+        door = self["Door"]
+        if door:
+            if ":" in door.split("/")[0] and len(door.split("/")) > 1:
+                host, port = door.split("/")[0].split(":")
+                db = tango.Database(host, int(port))
+                macroserver = MSUtils.getMacroServer(db, door, False)
+            else:
+                macroserver = MSUtils.getMacroServer(self.__db, door, False)
+            if not macroserver:
+                door = ""
+        return bool(door)
 
     def resetPreselectedComponents(self, components):
         """ resets preselected components to set of given components

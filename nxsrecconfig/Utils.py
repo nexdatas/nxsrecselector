@@ -543,19 +543,22 @@ class MSUtils(object):
         MSUtils.writeEnvAttr(dc, dp)
 
     @classmethod
-    def getMacroServer(cls, db, door):
+    def getMacroServer(cls, db, door, find=True):
         """ provides macro server of given door
 
         :param db: tango database
         :type db: :class:`tango.Database`
         :param door: given door
         :type door: :obj:`str`
+        :param find: find new macroserver if door does not exist
+        :type find: :obj:`bool`
         :returns: first MacroServer of the given door
         :rtype: :obj:`str`
         """
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
         ms = ""
+        mss = []
         sdoor = door.split("/")
         hostname = None
         if len(sdoor) > 1 and ":" in sdoor[0]:
@@ -567,11 +570,16 @@ class MSUtils(object):
             else:
                 mserver = Utils.tostr(server)
             dp = tango.DeviceProxy(Utils.tostr(mserver))
+            if hasattr(dp, "DoorList"):
+                mss.append(mserver)
             if hasattr(dp, "DoorList") and dp.DoorList:
                 lst = [str(dr).lower() for dr in dp.DoorList]
                 if lst and door.lower() in lst:
                     ms = mserver
                     break
+        if find and door != 'module' and not ms and mss:
+            if hasattr(dp, "DoorList"):
+                ms = mss[0]
         return ms
 
     @classmethod

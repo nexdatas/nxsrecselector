@@ -312,12 +312,14 @@ class ProfileManager(object):
         if name in inst.AvailableSelections():
             inst.deleteSelection(name)
 
-    def updateProfile(self, sync=False):
+    def updateProfile(self, sync=False, resetDoor=False):
         """ sets active measurement group from components and
         import setting from active measurement
 
 
         :param sync: make profile and mntgrp synchronization
+        :type sync: :obj:`bool`
+        :param sync: reset door device name flag
         :type sync: :obj:`bool`
         :returns: json dictionary with mntgrp configuration information
         :rtype: :obj:`str`
@@ -341,6 +343,8 @@ class ProfileManager(object):
         conf = Utils.tostr(dpmg.configuration)
         self.__selector['MntGrpConfiguration'] = conf
         mginfo['configuration'] = conf
+        if resetDoor:
+            self.__selector["Door"] = ""
         if sync:
             self.__setFromMntGrpConf(conf, componentdatasources)
         self.__selector.storeSelection()

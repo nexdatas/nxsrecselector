@@ -99,6 +99,10 @@ class Settings(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.syncSnapshot = syncsnapshot
+        #: (:obj:`bool`) reset Door when it is invalid
+        self.resetInvalidDoor = True
+        #: (:obj:`bool`) merge profiles to available measurement groups
+        self.mergeProfilesToMntGrps = False
         #: (:obj:`bool`) add dynamic components for all pool motor positions
         self.writepoolmotorpositions = writepoolmotorpositions
         if PYTG_BUG_213:
@@ -1281,7 +1285,10 @@ class Settings(object):
         :returns: string with mntgrp configuration
         :rtype: :obj:`str`
         """
-        return self.__profileManager.updateProfile(False)
+        reset = False
+        if self.resetInvalidDoor:
+            reset = not self.__selector.isDoorValid()
+        return self.__profileManager.updateProfile(False, reset)
 
     def switchProfile(self, toActive=True):
         """ switch to active measurement
@@ -1314,7 +1321,15 @@ class Settings(object):
         :returns: list of available measurement groups
         :rtype: :obj:`list` <:obj:`str`>
         """
-        return self.__profileManager.availableMntGrps()
+        if not self.mergeProfilesToMntGrps:
+            return self.__profileManager.availableMntGrps()
+        else:
+            avmgs = self.__profileManager.availableMntGrps() or []
+            avprs = self.availableProfiles() or []
+            for pr in avprs:
+                if pr not in avmgs:
+                    avmgs.append(pr)
+            return avmgs
 
 # Dynamic component methods
 

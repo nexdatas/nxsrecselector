@@ -1045,8 +1045,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        self.myAssertRaise(Exception, msp.updateMacroServer,
-                           "sfdsTESTdfdf/sdfsdf/sdffsf")
+        # self.myAssertRaise(Exception, msp.updateMacroServer,
+        #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.assertEqual(
+            msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+            list(self._ms.ms.keys())[0])
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
@@ -1058,8 +1061,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(msp.getPools(list(self._ms.door.keys())[0]), [])
         self.myAssertRaise(Exception, msp.getPools, "")
 
-        self.myAssertRaise(Exception, msp.updateMacroServer,
-                           "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.assertEqual(
+            msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+            list(self._ms.ms.keys())[0])
+        # self.myAssertRaise(Exception, msp.updateMacroServer,
+        #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
@@ -1067,11 +1073,17 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(msp.getPools(list(self._ms.door.keys())[0]), [])
 
         self._ms.dps[list(self._ms.ms.keys())[0]].DoorList = []
-        self.myAssertRaise(Exception, msp.updateMacroServer,
-                           list(self._ms.door.keys())[0])
-        self.myAssertRaise(Exception, msp.getMacroServer, "")
-        self.myAssertRaise(Exception,
-                           msp.getPools, list(self._ms.door.keys())[0])
+        # self.myAssertRaise(Exception, msp.updateMacroServer,
+        #                    list(self._ms.door.keys())[0])
+        msp.updateMacroServer(list(self._ms.door.keys())[0])
+        # self.myAssertRaise(Exception, msp.getMacroServer, "")
+        self.assertEqual(
+            msp.getMacroServer(""),
+            list(self._ms.ms.keys())[0])
+        self.assertEqual(
+            msp.getPools(list(self._ms.door.keys())[0]), [])
+        # self.myAssertRaise(Exception,
+        #                    msp.getPools, list(self._ms.door.keys())[0])
 
     # constructor test
     # \brief It tests default settings
@@ -1084,8 +1096,11 @@ class MacroServerPoolsTest(unittest.TestCase):
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self.myAssertRaise(Exception, msp.updateMacroServer,
-                           "sfdsTESTdfdf/sdfsdf/sdffsf")
+        # self.myAssertRaise(Exception, msp.updateMacroServer,
+        #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.assertEqual(
+            msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+            list(self._ms.ms.keys())[0])
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
@@ -1104,8 +1119,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-        self.myAssertRaise(Exception, msp.updateMacroServer,
-                           "sfdsTESTdfdf/sdfsdf/sdffsf")
+        # self.myAssertRaise(Exception, msp.updateMacroServer,
+        #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.assertEqual(
+            msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+            list(self._ms.ms.keys())[0])
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
 
@@ -1120,13 +1138,24 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
         self._ms.dps[list(self._ms.ms.keys())[0]].DoorList = []
-        self.myAssertRaise(Exception, msp.updateMacroServer,
-                           list(self._ms.door.keys())[0])
-        self.myAssertRaise(Exception, msp.getMacroServer, "")
-        self.myAssertRaise(Exception, msp.getPools, "")
-
-        self.myAssertRaise(Exception,
-                           msp.getPools, list(self._ms.door.keys())[0])
+        self.assertEqual(
+            msp.updateMacroServer(list(self._ms.door.keys())[0]),
+            list(self._ms.ms.keys())[0])
+        # self.myAssertRaise(Exception, msp.updateMacroServer,
+        #                    list(self._ms.door.keys())[0])
+        # self.myAssertRaise(Exception, msp.getMacroServer, "")
+        self.assertEqual(
+            msp.getMacroServer(""),
+            list(self._ms.ms.keys())[0])
+        # self.myAssertRaise(Exception, msp.getPools, "")
+        self.assertEqual(len(msp.getPools("")), 1)
+        self.assertEqual(
+            msp.getPools("")[0].name(),
+            self._pool.dp.name())
+        self.assertEqual(len(msp.getPools(list(self._ms.door.keys())[0])), 1)
+        self.assertEqual(
+            msp.getPools(list(self._ms.door.keys())[0])[0].name(),
+            self._pool.dp.name())
 
     # constructor test
     # \brief It tests default settings
@@ -1152,8 +1181,11 @@ class MacroServerPoolsTest(unittest.TestCase):
             for i in range(3):
                 ms2.dps[list(ms2.ms.keys())[0]].DoorList = doors
                 # print "doors", doors[i]
-                self.myAssertRaise(Exception, msp.updateMacroServer,
-                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
+                # self.myAssertRaise(Exception, msp.updateMacroServer,
+                #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.assertEqual(
+                    msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+                    list(ms2.ms.keys())[0])
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
@@ -1173,8 +1205,11 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                self.myAssertRaise(Exception, msp.updateMacroServer,
-                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
+                # self.myAssertRaise(Exception, msp.updateMacroServer,
+                #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.assertEqual(
+                    msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+                    list(ms2.ms.keys())[0])
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
 
@@ -1189,11 +1224,26 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 ms2.dps[list(ms2.ms.keys())[0]].DoorList = []
-                self.myAssertRaise(Exception, msp.updateMacroServer, doors[i])
-                self.myAssertRaise(Exception, msp.getMacroServer, "")
-                self.myAssertRaise(Exception, msp.getPools, "")
+                self.assertEqual(
+                    msp.updateMacroServer(doors[i]), list(ms2.ms.keys())[0])
+                self.assertEqual(
+                    msp.getMacroServer(""), list(ms2.ms.keys())[0])
+                pools = msp.getPools("")
+                self.assertEqual(len(pools), 1)
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
+                self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                self.myAssertRaise(Exception, msp.getPools, doors[i])
+                pools = msp.getPools(doors[i])
+                self.assertEqual(len(pools), 1)
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
+                self.assertEqual(pools[0].name(), self._pool.dp.name())
+
+                # self.myAssertRaise(
+                #     Exception, msp.updateMacroServer, doors[i])
+                # self.myAssertRaise(Exception, msp.getMacroServer, "")
+                # self.myAssertRaise(Exception, msp.getPools, "")
+
+                # self.myAssertRaise(Exception, msp.getPools, doors[i])
         finally:
             ms2.tearDown()
 
@@ -1223,8 +1273,11 @@ class MacroServerPoolsTest(unittest.TestCase):
             for i, ms in enumerate(mss):
                 ms3.dps[ms].DoorList = [doors[i]]
                 # print "ms", ms, "doors", doors[i]
-                self.myAssertRaise(Exception, msp.updateMacroServer,
-                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.assertEqual(
+                    msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+                    list(ms3.ms.keys())[0])
+                # self.myAssertRaise(Exception, msp.updateMacroServer,
+                #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
@@ -1242,8 +1295,11 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                self.myAssertRaise(Exception, msp.updateMacroServer,
-                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
+                # self.myAssertRaise(Exception, msp.updateMacroServer,
+                #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.assertEqual(
+                    msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+                    list(ms3.ms.keys())[0])
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
 
@@ -1258,11 +1314,25 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
                 ms3.dps[ms].DoorList = []
-                self.myAssertRaise(Exception, msp.updateMacroServer, doors[i])
-                self.myAssertRaise(Exception, msp.getMacroServer, "")
-                self.myAssertRaise(Exception, msp.getPools, "")
+                self.assertEqual(
+                    msp.updateMacroServer(doors[i]), list(ms3.ms.keys())[0])
+                self.assertEqual(
+                    msp.getMacroServer(""), list(ms3.ms.keys())[0])
+                pools = msp.getPools("")
+                self.assertEqual(len(pools), 1)
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
+                self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                self.myAssertRaise(Exception, msp.getPools, doors[i])
+                pools = msp.getPools(doors[i])
+                self.assertEqual(len(pools), 1)
+                self.assertTrue(isinstance(pools[0], tango.DeviceProxy))
+                self.assertEqual(pools[0].name(), self._pool.dp.name())
+                # self.myAssertRaise(
+                #     Exception, msp.updateMacroServer, doors[i])
+                # self.myAssertRaise(Exception, msp.getMacroServer, "")
+                # self.myAssertRaise(Exception, msp.getPools, "")
+
+                # self.myAssertRaise(Exception, msp.getPools, doors[i])
         finally:
             ms3.tearDown()
 

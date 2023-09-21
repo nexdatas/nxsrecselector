@@ -1197,8 +1197,11 @@ class SelectorTest(unittest.TestCase):
 
             for i in range(3):
                 ms2.dps[list(ms2.ms.keys())[0]].DoorList = doors
-                self.myAssertRaise(Exception, msp.updateMacroServer,
-                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
+                # self.myAssertRaise(Exception, msp.updateMacroServer,
+                #                    "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.assertEqual(
+                    msp.updateMacroServer("sfdsTESTdfdf/sdfsdf/sdffsf"),
+                    msname)
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
@@ -1596,9 +1599,11 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.myAssertRaise(Exception, self.setDoor, se, "dfd")
+            # self.myAssertRaise(Exception, self.setDoor, se, "dfd")
+            self.setDoor(se, "dfd")
             self.assertTrue(se["Door"], "dfd")
-            self.myAssertRaise(Exception, se.getMacroServer)
+            # self.myAssertRaise(Exception, se.getMacroServer)
+            self.assertEqual(se.getMacroServer(), msname)
             self.myAssertRaise(Exception, self.setDoor, se, "module")
             self.myAssertRaise(Exception, se.getMacroServer)
             self.assertTrue(se["Door"], "module")

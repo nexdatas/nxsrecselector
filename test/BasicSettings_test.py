@@ -12039,6 +12039,105 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 tmg.tearDown()
 
     # updateMntGrp test
+    def test_updateMntGrp_merge(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        rs = self.openRecSelector()
+        self.setProp(rs, "mergeProfilesToMntGrps", [True])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = tango.Database()
+        db.put_device_property(list(self._ms.ms.keys())[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [val["MntGrp"]])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+#        self.myAssertRaise(Exception, rs.updateMntGrp)
+        for ar in arr:
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name=val["MntGrp"])
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
+                   "label": "nxsmntgrp2"}
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            try:
+                self.assertEqual(json.loads(mp["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(mp["ComponentSelection"]), {})
+                self.assertEqual(json.loads(mp["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.assertEqual(json.loads(mp["UserData"]), {})
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], val["MntGrp"])
+                jpcnf = rs.updateMntGrp()
+                pcnf = json.loads(jpcnf)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
+                jcnf = mgdp.Configuration
+                cnf = json.loads(jcnf)
+                mp = json.loads(rs.profileConfiguration)
+                self.assertEqual(json.loads(mp["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(mp["ComponentSelection"]), {})
+                self.assertEqual(json.loads(mp["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.assertEqual(json.loads(mp["UserData"]), {})
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], val["MntGrp"])
+                self.myAssertDict(smg, cnf)
+                self.myAssertDict(smg, pcnf)
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                rs.storeProfile()
+
+                rs.mntGrp = "nxsmntgrp"
+
+                rs.profileConfiguration = str(json.dumps({}))
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                self.assertEqual(json.loads(mp["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(mp["ComponentSelection"]), {})
+                self.assertEqual(json.loads(mp["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.assertEqual(json.loads(mp["UserData"]), {})
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+            finally:
+                rs.deleteProfile(val["MntGrp"])
+                tmg.tearDown()
+
+    # updateMntGrp test
     def test_updateMntGrp_components_nopool(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
