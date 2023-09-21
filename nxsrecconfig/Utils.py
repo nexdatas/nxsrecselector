@@ -556,6 +556,7 @@ class MSUtils(object):
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
         ms = ""
+        mss = []
         sdoor = door.split("/")
         hostname = None
         if len(sdoor) > 1 and ":" in sdoor[0]:
@@ -567,11 +568,16 @@ class MSUtils(object):
             else:
                 mserver = Utils.tostr(server)
             dp = tango.DeviceProxy(Utils.tostr(mserver))
+            if hasattr(dp, "DoorList"):
+                mss.append(mserver)
             if hasattr(dp, "DoorList") and dp.DoorList:
                 lst = [str(dr).lower() for dr in dp.DoorList]
                 if lst and door.lower() in lst:
                     ms = mserver
                     break
+        if not ms and mss:
+            if hasattr(dp, "DoorList"):
+                ms = mss[0]
         return ms
 
     @classmethod

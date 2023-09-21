@@ -226,7 +226,11 @@ class Selector(object):
                 self.__db, "Door")
             changed = True
         if changed:
-            self.__msp.updateMacroServer(self.__selection["Door"])
+            ms = self.__msp.updateMacroServer(self.__selection["Door"])
+            if not ms:
+                self.__selection["Door"] = TangoUtils.getDeviceName(
+                    self.__db, "Door")
+                self.__msp.updateMacroServer(self.__selection["Door"])
 
     def __preGetPreselectingDataSources(self):
         """ get method for preselectedDataSources attribute
