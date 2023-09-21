@@ -1,5 +1,7 @@
 2023-09-05 Jan Kotanski <jankotan@gmail.com>
-	* set Door if the one from the current profile  does not exist (#109)
+	* set Door if the one from the current profile does not exist (#109)
+	* add MergeProfilesToMntGrps property (#109)
+	* add ResetInvalidDoor property (#109)
 	* tagged as v3.35.0
 
 2023-09-05 Jan Kotanski <jankotan@gmail.com>
