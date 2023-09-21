@@ -1281,7 +1281,8 @@ class Settings(object):
         :returns: string with mntgrp configuration
         :rtype: :obj:`str`
         """
-        return self.__profileManager.updateProfile(False)
+        return self.__profileManager.updateProfile(
+            False, not self.__selector.isDoorValid())
 
     def switchProfile(self, toActive=True):
         """ switch to active measurement
