@@ -94,6 +94,8 @@ class MacroServerPools(object):
 
         :param door: door device name
         :type door: :obj:`str`
+        :returns: macroserver device name
+        :rtype: :obj:`str`
         """
         self.__macroserver = ""
         self.__pools = []
@@ -119,6 +121,7 @@ class MacroServerPools(object):
                      for pn in poolNames]
         self.__pools = TangoUtils.getProxies(poolNames)
         self.__macroserver = macroserver
+        return self.__macroserver
 
     def getMacroServer(self, door):
         """ door macro server device name
