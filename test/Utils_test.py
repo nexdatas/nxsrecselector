@@ -749,7 +749,7 @@ class UtilsTest(unittest.TestCase):
             [self._simps.new_device_info_writer.name, 'test/door/1'],
             [self._simps.new_device_info_writer.name, 'test/door/2'],
             [self._simps2.new_device_info_writer.name, 'test/door/3'],
-            ["", 'test/door/4'],
+            [self._simps.new_device_info_writer.name, 'test/door/4'],
         ]
 
         self._simps2.dp.DoorList = [

@@ -341,6 +341,19 @@ class ProfileManager(object):
         conf = Utils.tostr(dpmg.configuration)
         self.__selector['MntGrpConfiguration'] = conf
         mginfo['configuration'] = conf
+        door = self.__selector["Door"]
+        if door:
+            if ":" in door.split("/")[0] and len(door.split("/")) > 1:
+                host, port = door.split("/")[0].split(":")
+                db = tango.Database(host, int(port))
+                macroserver = MSUtils.getMacroServer(db, door, False)
+            else:
+                macroserver = MSUtils.getMacroServer(
+                    tango.Database(), door, False)
+            if not macroserver:
+                door = ""
+        if not door:
+            self.__selector["Door"] = ""
         if sync:
             self.__setFromMntGrpConf(conf, componentdatasources)
         self.__selector.storeSelection()

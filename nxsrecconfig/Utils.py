@@ -543,13 +543,15 @@ class MSUtils(object):
         MSUtils.writeEnvAttr(dc, dp)
 
     @classmethod
-    def getMacroServer(cls, db, door):
+    def getMacroServer(cls, db, door, find=True):
         """ provides macro server of given door
 
         :param db: tango database
         :type db: :class:`tango.Database`
         :param door: given door
         :type door: :obj:`str`
+        :param find: find new macroserver if door does not exist
+        :type find: :obj:`bool`
         :returns: first MacroServer of the given door
         :rtype: :obj:`str`
         """
@@ -575,7 +577,7 @@ class MSUtils(object):
                 if lst and door.lower() in lst:
                     ms = mserver
                     break
-        if not ms and mss:
+        if find and door != 'module' and not ms and mss:
             if hasattr(dp, "DoorList"):
                 ms = mss[0]
         return ms
