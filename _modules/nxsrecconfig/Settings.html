@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.34.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.35.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.34</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.35</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -215,6 +215,10 @@
 
         <span class="c1">#: (:obj:`bool`) preselection merges current ScanSnapshot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syncSnapshot</span> <span class="o">=</span> <span class="n">syncsnapshot</span>
+        <span class="c1">#: (:obj:`bool`) reset Door when it is invalid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetInvalidDoor</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) merge profiles to available measurement groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mergeProfilesToMntGrps</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writepoolmotorpositions</span> <span class="o">=</span> <span class="n">writepoolmotorpositions</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
@@ -1397,7 +1401,10 @@
 <span class="sd">        :returns: string with mntgrp configuration</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">updateProfile</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="n">reset</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resetInvalidDoor</span><span class="p">:</span>
+            <span class="n">reset</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">isDoorValid</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">updateProfile</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">reset</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Settings.switchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.switchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">switchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toActive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; switch to active measurement</span>
@@ -1430,7 +1437,15 @@
 <span class="sd">        :returns: list of available measurement groups</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">availableMntGrps</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">mergeProfilesToMntGrps</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">availableMntGrps</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">avmgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">availableMntGrps</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="n">avprs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableProfiles</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">pr</span> <span class="ow">in</span> <span class="n">avprs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">avmgs</span><span class="p">:</span>
+                    <span class="n">avmgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">avmgs</span></div>
 
 <span class="c1"># Dynamic component methods</span>
 

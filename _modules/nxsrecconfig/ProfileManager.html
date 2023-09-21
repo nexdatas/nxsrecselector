@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.34.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.35.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.34</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.35</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -428,12 +428,14 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">inst</span><span class="o">.</span><span class="n">AvailableSelections</span><span class="p">():</span>
             <span class="n">inst</span><span class="o">.</span><span class="n">deleteSelection</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ProfileManager.updateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.updateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">updateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager.updateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.updateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">updateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resetDoor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets active measurement group from components and</span>
 <span class="sd">        import setting from active measurement</span>
 
 
 <span class="sd">        :param sync: make profile and mntgrp synchronization</span>
+<span class="sd">        :type sync: :obj:`bool`</span>
+<span class="sd">        :param sync: reset door device name flag</span>
 <span class="sd">        :type sync: :obj:`bool`</span>
 <span class="sd">        :returns: json dictionary with mntgrp configuration information</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -457,6 +459,8 @@
         <span class="n">conf</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s1">&#39;MntGrpConfiguration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf</span>
         <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;configuration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf</span>
+        <span class="k">if</span> <span class="n">resetDoor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sync</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig package &#8212; NXSRecSelector 3.34.0 documentation</title>
+    <title>nxsrecconfig package &#8212; NXSRecSelector 3.35.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.34</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.35</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1065,6 +1065,12 @@ of given component</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>door</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – door device name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>macroserver device name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2944,7 +2950,7 @@ Command definitions</p>
 
 <dl class="py attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list">
-<code class="sig-name descname">device_property_list</code><em class="property"> = {'AdminDataNames': [tango._tango.CmdArgType.DevVarStringArray, 'list of administrator data names', []], 'ClientRecordKeys': [tango._tango.CmdArgType.DevVarStringArray, 'list of record keys for CLIENT datasources', []], 'DefaultCanFailDataSources': [tango._tango.CmdArgType.DevVarStringArray, 'list of default datasources in the CanFail mode', []], 'DefaultMntGrp': [tango._tango.CmdArgType.DevString, 'default measurement group name', ['nxsmntgrp']], 'DefaultNeXusPath': [tango._tango.CmdArgType.DevString, 'default NeXus path', [&quot;/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection&quot;]], 'DefaultNeXusType': [tango._tango.CmdArgType.DevString, 'default dynamic component NeXus data type', ['NX_CHAR']], 'DefaultPreselectedComponents': [tango._tango.CmdArgType.DevVarStringArray, 'list of default preselected components', []], 'DefaultTimeZone': [tango._tango.CmdArgType.DevString, 'default Time Zone', ['Europe/Berlin']], 'MasterTimer': [tango._tango.CmdArgType.DevBoolean, 'set the master timer/monitor channel for older MG', [False]], 'MasterTimerFirst': [tango._tango.CmdArgType.DevBoolean, 'the master timer channel of MG with the index: 0', [True]], 'MutedChannelFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted channel filters', []], 'MutedPreScanAttrFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted attribute channel filters for PreScanSnapshot', []], 'NumberOfThreads': [tango._tango.CmdArgType.DevLong, 'maximal number of threads', [20]], 'PoolBlacklist': [tango._tango.CmdArgType.DevVarStringArray, 'blacklist of pools', []], 'SyncSnapshot': [tango._tango.CmdArgType.DevBoolean, 'preselection merges the current ScanSnapshot', [False]], 'TangoSourceErrorStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango error states for tango datasources', ['OFF', 'INIT', 'INSERT', 'CLOSE', 'UNKNOWN', 'FAULT']], 'TangoSourceWarningStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango warning states for tango datasources', ['ALARM', 'DISABLE']], 'TimerFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of timer device name filters', []], 'WritePoolMotorPositions': [tango._tango.CmdArgType.DevBoolean, 'add dynamic components for all pool motor positions', [False]]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">device_property_list</code><em class="property"> = {'AdminDataNames': [tango._tango.CmdArgType.DevVarStringArray, 'list of administrator data names', []], 'ClientRecordKeys': [tango._tango.CmdArgType.DevVarStringArray, 'list of record keys for CLIENT datasources', []], 'DefaultCanFailDataSources': [tango._tango.CmdArgType.DevVarStringArray, 'list of default datasources in the CanFail mode', []], 'DefaultMntGrp': [tango._tango.CmdArgType.DevString, 'default measurement group name', ['nxsmntgrp']], 'DefaultNeXusPath': [tango._tango.CmdArgType.DevString, 'default NeXus path', [&quot;/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection&quot;]], 'DefaultNeXusType': [tango._tango.CmdArgType.DevString, 'default dynamic component NeXus data type', ['NX_CHAR']], 'DefaultPreselectedComponents': [tango._tango.CmdArgType.DevVarStringArray, 'list of default preselected components', []], 'DefaultTimeZone': [tango._tango.CmdArgType.DevString, 'default Time Zone', ['Europe/Berlin']], 'MasterTimer': [tango._tango.CmdArgType.DevBoolean, 'set the master timer/monitor channel for older MG', [False]], 'MasterTimerFirst': [tango._tango.CmdArgType.DevBoolean, 'the master timer channel of MG with the index: 0', [True]], 'MergeProfilesToMntGrps': [tango._tango.CmdArgType.DevBoolean, 'merge profiles to available measurement groups', [False]], 'MutedChannelFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted channel filters', []], 'MutedPreScanAttrFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted attribute channel filters for PreScanSnapshot', []], 'NumberOfThreads': [tango._tango.CmdArgType.DevLong, 'maximal number of threads', [20]], 'PoolBlacklist': [tango._tango.CmdArgType.DevVarStringArray, 'blacklist of pools', []], 'ResetInvalidDoor': [tango._tango.CmdArgType.DevBoolean, 'reset Door when it is invalid', [True]], 'SyncSnapshot': [tango._tango.CmdArgType.DevBoolean, 'preselection merges the current ScanSnapshot', [False]], 'TangoSourceErrorStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango error states for tango datasources', ['OFF', 'INIT', 'INSERT', 'CLOSE', 'UNKNOWN', 'FAULT']], 'TangoSourceWarningStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango warning states for tango datasources', ['ALARM', 'DISABLE']], 'TimerFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of timer device name filters', []], 'WritePoolMotorPositions': [tango._tango.CmdArgType.DevBoolean, 'add dynamic components for all pool motor positions', [False]]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt; ] ] &gt; ) Device Properties</p>
 </dd></dl>
 
@@ -3219,12 +3225,15 @@ with elements (name, label, source)</p></li>
 
 <dl class="py method">
 <dt id="nxsrecconfig.ProfileManager.ProfileManager.updateProfile">
-<code class="sig-name descname">updateProfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sync</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/ProfileManager.html#ProfileManager.updateProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.ProfileManager.ProfileManager.updateProfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">updateProfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sync</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">resetDoor</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/ProfileManager.html#ProfileManager.updateProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.ProfileManager.ProfileManager.updateProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>sets active measurement group from components and
 import setting from active measurement</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sync</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – make profile and mntgrp synchronization</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sync</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – make profile and mntgrp synchronization</p></li>
+<li><p><strong>sync</strong> – reset door device name flag</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>json dictionary with mntgrp configuration information</p>
@@ -3553,6 +3562,20 @@ It adds new channels to DataSourceSelection</p>
 <li><p><strong>names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – names of required variables</p></li>
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> , <cite>any</cite>&gt;) – dictionary with resulting data</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="nxsrecconfig.Selector.Selector.isDoorValid">
+<code class="sig-name descname">isDoorValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Selector.html#Selector.isDoorValid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Selector.Selector.isDoorValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks if Door valid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>valid Door device flag</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -4147,6 +4170,12 @@ for all pool motor positions</p></li>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) master channels with the 0 index</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt id="nxsrecconfig.Settings.Settings.mergeProfilesToMntGrps">
+<code class="sig-name descname">mergeProfilesToMntGrps</code><a class="headerlink" href="#nxsrecconfig.Settings.Settings.mergeProfilesToMntGrps" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) merge profiles to available measurement groups</p>
+</dd></dl>
+
 <dl class="py method">
 <dt id="nxsrecconfig.Settings.Settings.mntGrp">
 <em class="property">property </em><code class="sig-name descname">mntGrp</code><a class="headerlink" href="#nxsrecconfig.Settings.Settings.mntGrp" title="Permalink to this definition">¶</a></dt>
@@ -4291,6 +4320,12 @@ for all pool motor positions</p></li>
 <dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – dynamic component name</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nxsrecconfig.Settings.Settings.resetInvalidDoor">
+<code class="sig-name descname">resetInvalidDoor</code><a class="headerlink" href="#nxsrecconfig.Settings.Settings.resetInvalidDoor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) reset Door when it is invalid</p>
 </dd></dl>
 
 <dl class="py method">
@@ -4675,13 +4710,14 @@ when log stream does not exist</p></li>
 
 <dl class="py method">
 <dt id="nxsrecconfig.Utils.MSUtils.getMacroServer">
-<em class="property">classmethod </em><code class="sig-name descname">getMacroServer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db</span></em>, <em class="sig-param"><span class="n">door</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Utils.html#MSUtils.getMacroServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Utils.MSUtils.getMacroServer" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">getMacroServer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db</span></em>, <em class="sig-param"><span class="n">door</span></em>, <em class="sig-param"><span class="n">find</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Utils.html#MSUtils.getMacroServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Utils.MSUtils.getMacroServer" title="Permalink to this definition">¶</a></dt>
 <dd><p>provides macro server of given door</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>db</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/database.html#tango.Database" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Database</span></code></a>) – tango database</p></li>
 <li><p><strong>door</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – given door</p></li>
+<li><p><strong>find</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – find new macroserver if door does not exist</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Utils &#8212; NXSRecSelector 3.34.0 documentation</title>
+    <title>nxsrecconfig.Utils &#8212; NXSRecSelector 3.35.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.34</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.35</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -659,19 +659,22 @@
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MSUtils.getMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getMacroServer">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">find</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides macro server of given door</span>
 
 <span class="sd">        :param db: tango database</span>
 <span class="sd">        :type db: :class:`tango.Database`</span>
 <span class="sd">        :param door: given door</span>
 <span class="sd">        :type door: :obj:`str`</span>
+<span class="sd">        :param find: find new macroserver if door does not exist</span>
+<span class="sd">        :type find: :obj:`bool`</span>
 <span class="sd">        :returns: first MacroServer of the given door</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">servers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_device_exported_for_class</span><span class="p">(</span>
             <span class="s2">&quot;MacroServer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value_string</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">mss</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">sdoor</span> <span class="o">=</span> <span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="n">hostname</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sdoor</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">sdoor</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -683,11 +686,16 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mserver</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
             <span class="n">dp</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">mserver</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="s2">&quot;DoorList&quot;</span><span class="p">):</span>
+                <span class="n">mss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mserver</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="s2">&quot;DoorList&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dp</span><span class="o">.</span><span class="n">DoorList</span><span class="p">:</span>
                 <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dr</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">dr</span> <span class="ow">in</span> <span class="n">dp</span><span class="o">.</span><span class="n">DoorList</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">lst</span> <span class="ow">and</span> <span class="n">door</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
                     <span class="n">ms</span> <span class="o">=</span> <span class="n">mserver</span>
                     <span class="k">break</span>
+        <span class="k">if</span> <span class="n">find</span> <span class="ow">and</span> <span class="n">door</span> <span class="o">!=</span> <span class="s1">&#39;module&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ms</span> <span class="ow">and</span> <span class="n">mss</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="s2">&quot;DoorList&quot;</span><span class="p">):</span>
+                <span class="n">ms</span> <span class="o">=</span> <span class="n">mss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ms</span></div>
 
 <div class="viewcode-block" id="MSUtils.writeEnvAttr"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.writeEnvAttr">[docs]</a>    <span class="nd">@classmethod</span>
