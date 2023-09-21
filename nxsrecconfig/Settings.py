@@ -1321,7 +1321,7 @@ class Settings(object):
         :returns: list of available measurement groups
         :rtype: :obj:`list` <:obj:`str`>
         """
-        if self.mergeProfilesToMntGrps:
+        if not self.mergeProfilesToMntGrps:
             return self.__profileManager.availableMntGrps()
         else:
             avmgs = self.__profileManager.availableMntGrps() or []
