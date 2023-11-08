@@ -51,7 +51,7 @@ except Exception:
 # =================================================================
 
 
-class NXSConfigServer(tango.Device_4Impl):
+class NXSConfigServer(tango.LatestDeviceImpl):
 
     # -------- Add you global variables here --------------------------
 
@@ -60,7 +60,7 @@ class NXSConfigServer(tango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
 
         self.attr_value = ""
         NXSConfigServer.init_device(self)

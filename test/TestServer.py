@@ -60,7 +60,7 @@ else:
 # =================================================================
 
 
-class TestServer(tango.Device_4Impl):
+class TestServer(tango.LatestDeviceImpl):
 
     # -------- Add you global variables here --------------------------
 
@@ -69,7 +69,7 @@ class TestServer(tango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
 
         self.defaults = {}
         self.defaults["ScalarBoolean"] = [

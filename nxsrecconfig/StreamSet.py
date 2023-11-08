@@ -37,7 +37,7 @@ class StreamSet(object):
         """ streamset constractor
 
         :param streams: tango-like steamset class
-        :type streams: :class:`StreamSet` or :class:`tango.Device_4Impl`
+        :type streams: :class:`StreamSet` or :class:`tango.LatestDeviceImpl`
         """
 
         #: (:class:`tango.log4tango.TangoStream`) Tango fatal log stream

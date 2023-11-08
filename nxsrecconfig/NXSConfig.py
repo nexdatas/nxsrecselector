@@ -44,7 +44,7 @@ from .Settings import Settings as STG
 from .Utils import Utils
 
 
-class NXSRecSelector(tango.Device_4Impl):
+class NXSRecSelector(tango.LatestDeviceImpl):
 
     """ NXSRecSelector server interface
 
@@ -62,7 +62,7 @@ class NXSRecSelector(tango.Device_4Impl):
         :param name: device name
         :type name: :obj:`str`
         """
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
         self.debug_stream("In __init__()")
         #: (:class:`nxsrecconfig.Settings.Settings`) \
         #:     Recorder Settings

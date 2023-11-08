@@ -49,7 +49,7 @@ except Exception:
 # =================================================================
 
 
-class NXSDataWriter(tango.Device_4Impl):
+class NXSDataWriter(tango.LatestDeviceImpl):
 
     # --------- Add you global variables here --------------------------
 
@@ -58,7 +58,7 @@ class NXSDataWriter(tango.Device_4Impl):
     # ------------------------------------------------------------------
 
     def __init__(self, cl, name):
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
 
         self.attr_value = ""
         self.attr_AcqChannelList = []
