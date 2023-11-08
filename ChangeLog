@@ -1,3 +1,7 @@
+2023-11-09 Jan Kotanski <jankotan@gmail.com>
+	* change tango.Device_4Impl to tango.LatestDeviceImpl (#112)
+	* tagged as v3.36.0
+
 2023-09-05 Jan Kotanski <jankotan@gmail.com>
 	* set Door if the one from the current profile does not exist (#109)
 	* add MergeProfilesToMntGrps property (#109)

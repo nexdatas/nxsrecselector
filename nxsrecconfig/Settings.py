@@ -77,7 +77,7 @@ class Settings(object):
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
 
-        #: (:class:`StreamSet` or :class:`tango.Device_4Impl`) stream set
+        #: (:class:`StreamSet` or :class:`tango.LatestDeviceImpl`) stream set
         self._streams = StreamSet(weakref.ref(server) if server else None)
 
         #: (:obj:`str`) default NeXus path

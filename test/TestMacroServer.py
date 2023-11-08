@@ -70,7 +70,7 @@ def pickleloads(bytestr):
 # =================================================================
 
 
-class MacroServer(tango.Device_4Impl):
+class MacroServer(tango.LatestDeviceImpl):
 
     # -------- Add you global variables here --------------------------
 
@@ -79,7 +79,7 @@ class MacroServer(tango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
 
         self.attr_value = ""
         MacroServer.init_device(self)
@@ -265,7 +265,7 @@ class MacroServerClass(tango.DeviceClass):
 #   DevState.ON :  Server On
 # =================================================================
 
-class Door(tango.Device_4Impl):
+class Door(tango.LatestDeviceImpl):
 
     # -------- Add you global variables here --------------------------
 
@@ -274,7 +274,7 @@ class Door(tango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
 
         self.attr_value = ""
         Door.init_device(self)
