@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.35.0 documentation</title>
+    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.36.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.35</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.36</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -160,7 +160,7 @@
 <span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">Utils</span>
 
 
-<div class="viewcode-block" id="NXSRecSelector"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector">[docs]</a><span class="k">class</span> <span class="nc">NXSRecSelector</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">Device_4Impl</span><span class="p">):</span>
+<div class="viewcode-block" id="NXSRecSelector"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector">[docs]</a><span class="k">class</span> <span class="nc">NXSRecSelector</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">LatestDeviceImpl</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; NXSRecSelector server interface</span>
 
@@ -178,7 +178,7 @@
 <span class="sd">        :param name: device name</span>
 <span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tango</span><span class="o">.</span><span class="n">Device_4Impl</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">tango</span><span class="o">.</span><span class="n">LatestDeviceImpl</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In __init__()&quot;</span><span class="p">)</span>
         <span class="c1">#: (:class:`nxsrecconfig.Settings.Settings`) \</span>
         <span class="c1">#:     Recorder Settings</span>
