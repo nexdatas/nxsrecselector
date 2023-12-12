@@ -1,4 +1,8 @@
 2023-11-09 Jan Kotanski <jankotan@gmail.com>
+	* add support for dynamic init user data (#116)
+	* tagged as v3.37.0
+
+2023-11-09 Jan Kotanski <jankotan@gmail.com>
 	* change tango.Device_4Impl to tango.LatestDeviceImpl (#112)
 	* tagged as v3.36.0
 
