@@ -55,7 +55,8 @@ class Settings(object):
                  defaultnexuspath=None,
                  defaulttimezone=None, defaultmntgrp=None,
                  syncsnapshot=False, writepoolmotorpositions=False,
-                 defaultnexustype=None):
+                 defaultnexustype=None,
+                 defaultudatapath=None):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -71,6 +72,8 @@ class Settings(object):
         :type writepoolmotorpositions: :obj:`bool`
         :param defaultnexustype:  default dynamic component nexus type
         :type defaultnexustype: :obj:`str`
+        :param defaultudatapath:  default user data dynamic component path
+        :type defaultudatapath: :obj:`str`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -84,6 +87,11 @@ class Settings(object):
         self.defaultNeXusPath = defaultnexuspath or \
             "/$var.entryname#'scan'$var.serialno:NXentry/" \
             "NXinstrument/collection"
+
+        #: (:obj:`str`) default NeXus path
+        self.defaultUserDataPath = defaultudatapath or \
+            "/$var.entryname#'scan'$var.serialno:NXentry/" \
+            "user_data:NXdata"
 
         #: (:obj:`str`) default NeXus type
         self.defaultNeXusType = defaultnexustype or "NX_CHAR"
@@ -1343,7 +1351,8 @@ class Settings(object):
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(
-            nexusconfig_device, self.defaultNeXusPath, self.defaultNeXusType)
+            nexusconfig_device, self.defaultNeXusPath, self.defaultNeXusType,
+            self.defaultUserDataPath)
         if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
                 dcpcreator.setStepDSources(

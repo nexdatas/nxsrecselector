@@ -42,7 +42,9 @@ class DynamicComponent(object):
     def __init__(self, nexusconfig_device,
                  defaultpath="/$var.entryname#'scan'$var.serialno:NXentry/"
                  "NXinstrument/collection",
-                 defaulttype="NX_CHAR"):
+                 defaulttype="NX_CHAR",
+                 defaultuserpath="/$var.entryname#'scan'$var.serialno:NXentry/"
+                 "data:NXdata"):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server
@@ -90,6 +92,8 @@ class DynamicComponent(object):
         self.__ldefaultpath = defaultpath
         #: (:obj:`str`) standard dynamic component path
         self.__defaultpath = defaultpath
+        #: (:obj:`str`) standard user data dynamic component path
+        self.__defaultuserpath = defaultuserpath
         #: (:obj:`bool`) standard dynamic link flag
         self.__links = True
         #: (:obj:`bool`) standard dynamic link flag for INIT strategy
@@ -106,6 +110,7 @@ class DynamicComponent(object):
                        "int8": "NX_INT8", "uint64": "NX_UINT64",
                        "uint32": "NX_UINT32", "uint16": "NX_UINT16",
                        "uint8": "NX_UINT8", "uint": "NX_UINT64",
+                       "str": "NX_CHAR",
                        "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
 
     def __get_alias(self, name):
@@ -243,21 +248,27 @@ class DynamicComponent(object):
         :type definition: :class:`lxml.etree.Element`
         """
         for dd in self.__stepdsourcesDict:
+            defaultpath = self.__defaultpath
+            strategy = dd["strategy"] if "strategy" in dd else "STEP"
+            links = self.__links
+            if strategy == "INIT":
+                defaultpath = self.__defaultuserpath
+                links = self.__ilinks
             alias = self.__get_alias(Utils.tostr(dd["name"]))
             path, field = self.__getPathField(
                 self.__nexuspaths, self.__nexuslabels,
-                alias, self.__defaultpath)
+                alias, defaultpath)
             link = self.__getProp(
                 self.__nexuslinks, self.__nexuslabels,
-                alias, self.__links)
+                alias, links)
             (parent, nxdata) = self.__createGroupTree(
                 definition, path, link)
             created.append(alias)
             nxtype = self.__npTn[dd["dtype"]] \
                 if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
             self.__createField(
-                parent, field, nxtype, alias,
-                dd["name"], dd["shape"], dstype='CLIENT')
+                parent, field, nxtype, alias, dd["name"],
+                dd["shape"], strategy=strategy, dstype='CLIENT')
             if link:
                 self.__createLink(nxdata, path, field)
 
