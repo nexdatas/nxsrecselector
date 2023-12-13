@@ -268,14 +268,14 @@ class DynamicComponent(object):
             created.append(alias)
             nxtype = self.__npTn[dd["dtype"]] \
                 if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
-            field = self.__createField(
+            xmlfield = self.__createField(
                 parent, field, nxtype, alias, dd["name"],
                 dd["shape"], strategy=strategy, dstype='CLIENT')
             if "unit" in dd:
-                field.attrib["units"] = str(dd["unit"])
+                xmlfield.attrib["units"] = str(dd["unit"])
             for ky, vl in dd.items():
                 if ky not in special:
-                    field.attrib[ky] = str(vl)
+                    xmlfield.attrib[ky] = str(vl)
 
             if link:
                 self.__createLink(nxdata, path, field)
