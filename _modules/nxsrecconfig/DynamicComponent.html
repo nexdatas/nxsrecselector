@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 3.36.0 documentation</title>
+    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 3.38.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.36</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.38</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -158,7 +158,9 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">,</span>
                  <span class="n">defaultpath</span><span class="o">=</span><span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span>
                  <span class="s2">&quot;NXinstrument/collection&quot;</span><span class="p">,</span>
-                 <span class="n">defaulttype</span><span class="o">=</span><span class="s2">&quot;NX_CHAR&quot;</span><span class="p">):</span>
+                 <span class="n">defaulttype</span><span class="o">=</span><span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span>
+                 <span class="n">defaultuserpath</span><span class="o">=</span><span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span>
+                 <span class="s2">&quot;data:NXdata&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param nexusconfig_device: configserver configuration server</span>
@@ -206,6 +208,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span> <span class="o">=</span> <span class="n">defaultpath</span>
         <span class="c1">#: (:obj:`str`) standard dynamic component path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="n">defaultpath</span>
+        <span class="c1">#: (:obj:`str`) standard user data dynamic component path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultuserpath</span> <span class="o">=</span> <span class="n">defaultuserpath</span>
         <span class="c1">#: (:obj:`bool`) standard dynamic link flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__links</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) standard dynamic link flag for INIT strategy</span>
@@ -222,6 +226,7 @@
                        <span class="s2">&quot;int8&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_INT8&quot;</span><span class="p">,</span> <span class="s2">&quot;uint64&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT64&quot;</span><span class="p">,</span>
                        <span class="s2">&quot;uint32&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT32&quot;</span><span class="p">,</span> <span class="s2">&quot;uint16&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT16&quot;</span><span class="p">,</span>
                        <span class="s2">&quot;uint8&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT8&quot;</span><span class="p">,</span> <span class="s2">&quot;uint&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT64&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span>
                        <span class="s2">&quot;string&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_BOOLEAN&quot;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__get_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -358,22 +363,36 @@
 <span class="sd">        :param definition: definition node</span>
 <span class="sd">        :type definition: :class:`lxml.etree.Element`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">special</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;unit&quot;</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">]</span>
+
         <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">:</span>
+            <span class="n">defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span>
+            <span class="n">strategy</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;strategy&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;strategy&quot;</span> <span class="ow">in</span> <span class="n">dd</span> <span class="k">else</span> <span class="s2">&quot;STEP&quot;</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__links</span>
+            <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;INIT&quot;</span><span class="p">:</span>
+                <span class="n">defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultuserpath</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span>
             <span class="n">alias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_alias</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
             <span class="n">path</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getPathField</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__nexuspaths</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span>
-                <span class="n">alias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span><span class="p">)</span>
+                <span class="n">alias</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">)</span>
             <span class="n">link</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getProp</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslinks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span>
-                <span class="n">alias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__links</span><span class="p">)</span>
+                <span class="n">alias</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span>
             <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">nxdata</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createGroupTree</span><span class="p">(</span>
                 <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
             <span class="n">created</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
             <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="p">[</span><span class="n">dd</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]]</span> \
                 <span class="k">if</span> <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;NX_CHAR&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__createField</span><span class="p">(</span>
-                <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span>
-                <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">],</span> <span class="n">dstype</span><span class="o">=</span><span class="s1">&#39;CLIENT&#39;</span><span class="p">)</span>
+            <span class="n">xmlfield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createField</span><span class="p">(</span>
+                <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">],</span> <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="s1">&#39;CLIENT&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;unit&quot;</span> <span class="ow">in</span> <span class="n">dd</span><span class="p">:</span>
+                <span class="n">xmlfield</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">ky</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">dd</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">ky</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">special</span><span class="p">:</span>
+                    <span class="n">xmlfield</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="n">ky</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">link</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__createLink</span><span class="p">(</span><span class="n">nxdata</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 
@@ -610,6 +629,8 @@
 <span class="sd">        :type strategy: :obj:`str`</span>
 <span class="sd">        :param dstype: datasource type</span>
 <span class="sd">        :type dstyp: :obj:`str`</span>
+<span class="sd">        :returns: etree xml field element</span>
+<span class="sd">        :rtype dstyp: :class:`lxml.etree.Element`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
         <span class="n">parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -660,6 +681,7 @@
                 <span class="n">dm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
                 <span class="n">dim</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">dim</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">field</span>
 
 <div class="viewcode-block" id="DynamicComponent.remove"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; removes dynamic component</span>

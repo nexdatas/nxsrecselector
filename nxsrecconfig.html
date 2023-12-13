@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig package &#8212; NXSRecSelector 3.36.0 documentation</title>
+    <title>nxsrecconfig package &#8212; NXSRecSelector 3.38.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,7 +13,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to nxsrecconfig&#39;s documentation!" href="index.html" />
+    <link rel="prev" title="Welcome to nxsrecconfig’s documentation!" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.36</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.38</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -110,7 +110,7 @@
               
                 
   <li>
-    <a href="index.html" title="Previous Chapter: Welcome to nxsrecconfig's documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to nx...</span>
+    <a href="index.html" title="Previous Chapter: Welcome to nxsrecconfig’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to nx...</span>
     </a>
   </li>
               
@@ -638,7 +638,7 @@ of given component</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nexusconfig_device</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – configserver configuration server</p></li>
+<li><p><strong>nexusconfig_device</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – configserver configuration server</p></li>
 <li><p><strong>tree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag for output tree dictionary</p></li>
 <li><p><strong>pyevalfromscript</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – if evalulate PYEVAL datasources from script</p></li>
 </ul>
@@ -781,7 +781,7 @@ or None if not appended</p>
 <p>Dynamic Component</p>
 <dl class="py class">
 <dt id="nxsrecconfig.DynamicComponent.DynamicComponent">
-<em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.DynamicComponent.</code><code class="sig-name descname">DynamicComponent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nexusconfig_device</span></em>, <em class="sig-param"><span class="n">defaultpath</span><span class="o">=</span><span class="default_value">&quot;/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection&quot;</span></em>, <em class="sig-param"><span class="n">defaulttype</span><span class="o">=</span><span class="default_value">'NX_CHAR'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/DynamicComponent.html#DynamicComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.DynamicComponent.DynamicComponent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.DynamicComponent.</code><code class="sig-name descname">DynamicComponent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nexusconfig_device</span></em>, <em class="sig-param"><span class="n">defaultpath</span><span class="o">=</span><span class="default_value">&quot;/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection&quot;</span></em>, <em class="sig-param"><span class="n">defaulttype</span><span class="o">=</span><span class="default_value">'NX_CHAR'</span></em>, <em class="sig-param"><span class="n">defaultuserpath</span><span class="o">=</span><span class="default_value">&quot;/$var.entryname#'scan'$var.serialno:NXentry/data:NXdata&quot;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/DynamicComponent.html#DynamicComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.DynamicComponent.DynamicComponent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Creates dynamic component
 of given component</p>
@@ -789,7 +789,7 @@ of given component</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nexusconfig_device</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – configserver configuration server</p></li>
+<li><p><strong>nexusconfig_device</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – configserver configuration server</p></li>
 <li><p><strong>defaultpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – default dynamic component path</p></li>
 </ul>
 </dd>
@@ -913,7 +913,7 @@ of given component</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>door</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – door device name</p></li>
-<li><p><strong>configdevice</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – configuration server</p></li>
+<li><p><strong>configdevice</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – configuration server</p></li>
 <li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – pool channels</p></li>
 <li><p><strong>componentgroup</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> , <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>&gt;) – preselected component group</p></li>
 <li><p><strong>channelerrors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – list of deactivated component errors</p></li>
@@ -957,7 +957,7 @@ of given component</p>
 <dd class="field-even"><p>pool device proxies</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1084,7 +1084,7 @@ of given component</p>
 <dl class="py class">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector">
 <em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.NXSConfig.</code><code class="sig-name descname">NXSRecSelector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cl</span></em>, <em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/device.html#tango.LatestDeviceImpl" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.device_server.LatestDeviceImpl</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/device.html#tango.LatestDeviceImpl" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.device_server.LatestDeviceImpl</span></code></a></p>
 <p>NXSRecSelector server interface</p>
 <dl class="field-list simple">
 <dt class="field-odd">Brief</dt>
@@ -2516,7 +2516,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read AppendEntry attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2527,7 +2527,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read CanFailDataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2538,7 +2538,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read Components attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2549,7 +2549,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ConfigDevice attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2560,7 +2560,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ConfigVariables attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2571,7 +2571,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read DataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2582,7 +2582,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read DescriptionErrors attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2593,7 +2593,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read DeviceGroups attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2604,7 +2604,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read Door attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2615,7 +2615,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read LinkDataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2626,7 +2626,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read MacroServer attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2637,7 +2637,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read MntGrp attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2648,7 +2648,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ProfileConfiguration attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2659,7 +2659,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ProfileFile attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2670,7 +2670,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ScanDir attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2681,7 +2681,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ScanFile attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2692,7 +2692,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read ScanID attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2703,7 +2703,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read StepDataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2714,7 +2714,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read UserData attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2725,7 +2725,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read Version attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2736,7 +2736,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Read WriterDevice attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – read attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2753,7 +2753,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write AppendEntry attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2764,7 +2764,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write CanFailDataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2775,7 +2775,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ConfigDevice attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2786,7 +2786,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ConfigVariables attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2797,7 +2797,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write DeviceGroups attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2808,7 +2808,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write Door attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2819,7 +2819,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write LinkDataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2830,7 +2830,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write MntGrp attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2841,7 +2841,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ProfileConfiguration attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2852,7 +2852,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ProfileFile attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2863,7 +2863,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ScanDir attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2874,7 +2874,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ScanFile attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2885,7 +2885,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write ScanID attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2896,7 +2896,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write StepDataSources attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2907,7 +2907,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write UserData attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2918,7 +2918,7 @@ and update serialno if appendEntry selected</p>
 <dd><p>Write WriterDevice attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
+<dd class="field-odd"><p><strong>attr</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/attribute.html#tango.Attribute" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Attribute</span></code></a>) – written attribute</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2938,20 +2938,20 @@ and update serialno if appendEntry selected</p>
 <dl class="py attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.class_property_list">
 <code class="sig-name descname">class_property_list</code><em class="property"> = {}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.class_property_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt; ] ] &gt; ) Class Properties</p>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt; ] ] &gt; ) Class Properties</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list">
 <code class="sig-name descname">cmd_list</code><em class="property"> = {'AddStepDataSources': [[tango._tango.CmdArgType.DevVarStringArray, 'list of required datasources'], [tango._tango.CmdArgType.DevVarStringArray, 'list of datasources not found in components']], 'AdministratorDataNames': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'administrator data names']], 'AvailableComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'list of available component names']], 'AvailableDataSources': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'list of available DataSource names']], 'AvailableMntGrps': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'list of available mntgrp names']], 'AvailableProfiles': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'list of available selection names']], 'AvailableTimers': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'list of available timers']], 'ChannelProperties': [[tango._tango.CmdArgType.DevString, 'property type'], [tango._tango.CmdArgType.DevString, 'JSON dictionary with channel properties {channel:property}']], 'ComponentClientSources': [[tango._tango.CmdArgType.DevVarStringArray, 'list of component client datasources'], [tango._tango.CmdArgType.DevString, 'JSON with description of component CLIENT Datasources']], 'ComponentDataSources': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'profile component datasources']], 'ComponentDescription': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'JSON component description']], 'ComponentSources': [[tango._tango.CmdArgType.DevVarStringArray, 'list of components'], [tango._tango.CmdArgType.DevString, 'JSON with description of component Datasources']], 'CreateDataSources': [[tango._tango.CmdArgType.DevString, 'JSON dictionary with {``dsname``: ``tangosource``, ...}'], [tango._tango.CmdArgType.DevVoid, '']], 'CreateDynamicComponent': [[tango._tango.CmdArgType.DevVarStringArray, 'list of JSON strings with datasource parameters'], [tango._tango.CmdArgType.DevString, 'name of dynamic Component']], 'CreateWriterConfiguration': [[tango._tango.CmdArgType.DevVarStringArray, 'list of required components'], [tango._tango.CmdArgType.DevString, 'XML Settinges']], 'DataSourceDescription': [[tango._tango.CmdArgType.DevVarStringArray, 'list of required datasources'], [tango._tango.CmdArgType.DevVarStringArray, 'list of JSON with description of CLIENT Datasources']], 'DeleteAllProfiles': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'DeleteProfile': [[tango._tango.CmdArgType.DevString, 'mntgrp name'], [tango._tango.CmdArgType.DevVoid, '']], 'ExportEnvProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'FetchProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'FullDeviceNames': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'JSON Dictionary with full device names for  all aliases ']], 'ImportEnvProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'ImportMntGrp': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'IsMntGrpUpdated': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevBoolean, 'true if mntgrp changed']], 'LoadProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'MandatoryComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'component names']], 'MntGrpConfiguration': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'mntgrp configuration string']], 'MutedChannels': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'list of muted channels']], 'PoolElementNames': [[tango._tango.CmdArgType.DevString, 'pool list attribute name'], [tango._tango.CmdArgType.DevVarStringArray, 'list of available pool elements']], 'PreselectComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'PreselectedComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'component names']], 'PreselectedDataSources': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'datasources names']], 'RemoveDynamicComponent': [[tango._tango.CmdArgType.DevString, 'name of dynamic Component'], [tango._tango.CmdArgType.DevVoid, '']], 'ResetPreselectedComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'SaveProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'ScanEnvVariables': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'environment data']], 'SelectedComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'component names']], 'SelectedDataSources': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVarStringArray, 'profile datasources']], 'SetChannelProperties': [[tango._tango.CmdArgType.DevVarStringArray, 'a two element list with a property type and JSON value dictionary {channel:property}'], [tango._tango.CmdArgType.DevVoid, '']], 'SetScanEnvVariables': [[tango._tango.CmdArgType.DevString, 'environment data'], [tango._tango.CmdArgType.DevLong, 'scanID']], 'StoreProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'SwitchProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'UpdateConfigVariables': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevVoid, '']], 'UpdateMntGrp': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'configuration']], 'UpdateProfile': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'mntgrp configuration string']], 'VariableComponents': [[tango._tango.CmdArgType.DevVoid, ''], [tango._tango.CmdArgType.DevString, 'JSON Dictionary with all Components for   configuration variable']]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [[ <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>]] &gt;)
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [[ <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>]] &gt;)
 Command definitions</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list">
-<code class="sig-name descname">device_property_list</code><em class="property"> = {'AdminDataNames': [tango._tango.CmdArgType.DevVarStringArray, 'list of administrator data names', []], 'ClientRecordKeys': [tango._tango.CmdArgType.DevVarStringArray, 'list of record keys for CLIENT datasources', []], 'DefaultCanFailDataSources': [tango._tango.CmdArgType.DevVarStringArray, 'list of default datasources in the CanFail mode', []], 'DefaultMntGrp': [tango._tango.CmdArgType.DevString, 'default measurement group name', ['nxsmntgrp']], 'DefaultNeXusPath': [tango._tango.CmdArgType.DevString, 'default NeXus path', [&quot;/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection&quot;]], 'DefaultNeXusType': [tango._tango.CmdArgType.DevString, 'default dynamic component NeXus data type', ['NX_CHAR']], 'DefaultPreselectedComponents': [tango._tango.CmdArgType.DevVarStringArray, 'list of default preselected components', []], 'DefaultTimeZone': [tango._tango.CmdArgType.DevString, 'default Time Zone', ['Europe/Berlin']], 'MasterTimer': [tango._tango.CmdArgType.DevBoolean, 'set the master timer/monitor channel for older MG', [False]], 'MasterTimerFirst': [tango._tango.CmdArgType.DevBoolean, 'the master timer channel of MG with the index: 0', [True]], 'MergeProfilesToMntGrps': [tango._tango.CmdArgType.DevBoolean, 'merge profiles to available measurement groups', [False]], 'MutedChannelFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted channel filters', []], 'MutedPreScanAttrFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted attribute channel filters for PreScanSnapshot', []], 'NumberOfThreads': [tango._tango.CmdArgType.DevLong, 'maximal number of threads', [20]], 'PoolBlacklist': [tango._tango.CmdArgType.DevVarStringArray, 'blacklist of pools', []], 'ResetInvalidDoor': [tango._tango.CmdArgType.DevBoolean, 'reset Door when it is invalid', [True]], 'SyncSnapshot': [tango._tango.CmdArgType.DevBoolean, 'preselection merges the current ScanSnapshot', [False]], 'TangoSourceErrorStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango error states for tango datasources', ['OFF', 'INIT', 'INSERT', 'CLOSE', 'UNKNOWN', 'FAULT']], 'TangoSourceWarningStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango warning states for tango datasources', ['ALARM', 'DISABLE']], 'TimerFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of timer device name filters', []], 'WritePoolMotorPositions': [tango._tango.CmdArgType.DevBoolean, 'add dynamic components for all pool motor positions', [False]]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt; ] ] &gt; ) Device Properties</p>
+<code class="sig-name descname">device_property_list</code><em class="property"> = {'AdminDataNames': [tango._tango.CmdArgType.DevVarStringArray, 'list of administrator data names', []], 'ClientRecordKeys': [tango._tango.CmdArgType.DevVarStringArray, 'list of record keys for CLIENT datasources', []], 'DefaultCanFailDataSources': [tango._tango.CmdArgType.DevVarStringArray, 'list of default datasources in the CanFail mode', []], 'DefaultMntGrp': [tango._tango.CmdArgType.DevString, 'default measurement group name', ['nxsmntgrp']], 'DefaultNeXusPath': [tango._tango.CmdArgType.DevString, 'default NeXus path', [&quot;/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection&quot;]], 'DefaultNeXusType': [tango._tango.CmdArgType.DevString, 'default dynamic component NeXus data type', ['NX_CHAR']], 'DefaultPreselectedComponents': [tango._tango.CmdArgType.DevVarStringArray, 'list of default preselected components', []], 'DefaultTimeZone': [tango._tango.CmdArgType.DevString, 'default Time Zone', ['Europe/Berlin']], 'DefaultUserDataPath': [tango._tango.CmdArgType.DevString, 'default NeXus User Data path', [&quot;/$var.entryname#'scan'$var.serialno:NXentry/user_data:NXdata&quot;]], 'MasterTimer': [tango._tango.CmdArgType.DevBoolean, 'set the master timer/monitor channel for older MG', [False]], 'MasterTimerFirst': [tango._tango.CmdArgType.DevBoolean, 'the master timer channel of MG with the index: 0', [True]], 'MergeProfilesToMntGrps': [tango._tango.CmdArgType.DevBoolean, 'merge profiles to available measurement groups', [False]], 'MutedChannelFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted channel filters', []], 'MutedPreScanAttrFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of muted attribute channel filters for PreScanSnapshot', []], 'NumberOfThreads': [tango._tango.CmdArgType.DevLong, 'maximal number of threads', [20]], 'PoolBlacklist': [tango._tango.CmdArgType.DevVarStringArray, 'blacklist of pools', []], 'ResetInvalidDoor': [tango._tango.CmdArgType.DevBoolean, 'reset Door when it is invalid', [True]], 'SyncSnapshot': [tango._tango.CmdArgType.DevBoolean, 'preselection merges the current ScanSnapshot', [False]], 'TangoSourceErrorStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango error states for tango datasources', ['OFF', 'INIT', 'INSERT', 'CLOSE', 'UNKNOWN', 'FAULT']], 'TangoSourceWarningStates': [tango._tango.CmdArgType.DevVarStringArray, 'list of tango warning states for tango datasources', ['ALARM', 'DISABLE']], 'TimerFilters': [tango._tango.CmdArgType.DevVarStringArray, 'list of timer device name filters', []], 'WritePoolMotorPositions': [tango._tango.CmdArgType.DevBoolean, 'add dynamic components for all pool motor positions', [False]]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt; ] ] &gt; ) Device Properties</p>
 </dd></dl>
 
 </dd></dl>
@@ -3533,7 +3533,7 @@ It adds new channels to DataSourceSelection</p>
 <dd class="field-odd"><p>list of pool proxies</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3665,7 +3665,7 @@ It adds new channels to DataSourceSelection</p>
 <dd class="field-odd"><p>set config instance</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3695,7 +3695,7 @@ It adds new channels to DataSourceSelection</p>
 <p>NeXus Sardana Recorder Settings implementation</p>
 <dl class="py class">
 <dt id="nxsrecconfig.Settings.Settings">
-<em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.Settings.</code><code class="sig-name descname">Settings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">server</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">numberofthreads</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaultnexuspath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaulttimezone</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaultmntgrp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">syncsnapshot</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">defaultnexustype</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Settings.html#Settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Settings.Settings" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nxsrecconfig.Settings.</code><code class="sig-name descname">Settings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">server</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">numberofthreads</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaultnexuspath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaulttimezone</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaultmntgrp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">syncsnapshot</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">defaultnexustype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">defaultudatapath</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nxsrecconfig/Settings.html#Settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Settings.Settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>NeXus Sardana Recorder settings</p>
 <p>contructor</p>
@@ -3709,6 +3709,7 @@ It adds new channels to DataSourceSelection</p>
 <li><p><strong>writepoolmotorpositions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – add dynamic components
 for all pool motor positions</p></li>
 <li><p><strong>defaultnexustype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – default dynamic component nexus type</p></li>
+<li><p><strong>defaultudatapath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – default user data dynamic component path</p></li>
 </ul>
 </dd>
 </dl>
@@ -4037,6 +4038,12 @@ for all pool motor positions</p></li>
 <dt id="nxsrecconfig.Settings.Settings.defaultTimeZone">
 <code class="sig-name descname">defaultTimeZone</code><a class="headerlink" href="#nxsrecconfig.Settings.Settings.defaultTimeZone" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) default time zone</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nxsrecconfig.Settings.Settings.defaultUserDataPath">
+<code class="sig-name descname">defaultUserDataPath</code><a class="headerlink" href="#nxsrecconfig.Settings.Settings.defaultUserDataPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) default NeXus path</p>
 </dd></dl>
 
 <dl class="py method">
@@ -4569,7 +4576,7 @@ and updates serialno if appendEntry selected</p>
 <p>streamset constractor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>streams</strong> (<a class="reference internal" href="#nxsrecconfig.StreamSet.StreamSet" title="nxsrecconfig.StreamSet.StreamSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamSet</span></code></a> or <a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/device.html#tango.LatestDeviceImpl" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.LatestDeviceImpl</span></code></a>) – tango-like steamset class</p>
+<dd class="field-odd"><p><strong>streams</strong> (<a class="reference internal" href="#nxsrecconfig.StreamSet.StreamSet" title="nxsrecconfig.StreamSet.StreamSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamSet</span></code></a> or <a class="reference external" href="https://pytango.readthedocs.io/en/stable/server_api/device.html#tango.LatestDeviceImpl" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.LatestDeviceImpl</span></code></a>) – tango-like steamset class</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -4715,7 +4722,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>db</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/database.html#tango.Database" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Database</span></code></a>) – tango database</p></li>
+<li><p><strong>db</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/database.html#tango.Database" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.Database</span></code></a>) – tango database</p></li>
 <li><p><strong>door</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – given door</p></li>
 <li><p><strong>find</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – find new macroserver if door does not exist</p></li>
 </ul>
@@ -4813,7 +4820,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – device name filter list</p></li>
 </ul>
 </dd>
@@ -4853,7 +4860,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – fullnames if None returns all aliases</p></li>
 </ul>
 </dd>
@@ -4873,7 +4880,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>devices</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – alias names</p></li>
 </ul>
 </dd>
@@ -4893,7 +4900,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>devices</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – alias names</p></li>
 </ul>
 </dd>
@@ -4913,7 +4920,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>listattr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – pool attribute with list</p></li>
 <li><p><strong>typefilter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – pool attribute with list</p></li>
 </ul>
@@ -4934,7 +4941,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – alias names if None returns name for all aliases</p></li>
 </ul>
 </dd>
@@ -4954,7 +4961,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – mntgrp alias</p></li>
 </ul>
 </dd>
@@ -4973,7 +4980,7 @@ when log stream does not exist</p></li>
 <dd><p>find motor names</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p>
+<dd class="field-odd"><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>full name of the measurement group alias</p>
@@ -5014,7 +5021,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
+<li><p><strong>pools</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;) – list of pool devices</p></li>
 <li><p><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) – device name filter list</p></li>
 </ul>
 </dd>
@@ -5041,7 +5048,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>server</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – tango server name or package name</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>              or <a class="reference external" href="https://nexdatas.github.io/nxsconfigserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></code></a>) – tango server name or package name</p></li>
 <li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – command name</p></li>
 <li><p><strong>var</strong> ([ <cite>any</cite> ]) – command variable list</p></li>
 </ul>
@@ -5062,7 +5069,7 @@ when log stream does not exist</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>db</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>) – tango database</p></li>
+<li><p><strong>db</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>) – tango database</p></li>
 <li><p><strong>cname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – device class name</p></li>
 </ul>
 </dd>
@@ -5107,7 +5114,7 @@ when log stream does not exist</p></li>
 <dd class="field-even"><p>list of device DeviceProxies</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>&gt;</p>
 </dd>
 </dl>
 </dd></dl>
@@ -5141,7 +5148,7 @@ when log stream does not exist</p></li>
 <dd class="field-even"><p>DeviceProxy of device</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -5149,7 +5156,7 @@ when log stream does not exist</p></li>
 <dl class="py attribute">
 <dt id="nxsrecconfig.Utils.TangoUtils.tTnp">
 <code class="sig-name descname">tTnp</code><em class="property"> = {tango._tango.CmdArgType.DevBoolean: 'bool', tango._tango.CmdArgType.DevShort: 'int16', tango._tango.CmdArgType.DevLong: 'int32', tango._tango.CmdArgType.DevFloat: 'float32', tango._tango.CmdArgType.DevDouble: 'float64', tango._tango.CmdArgType.DevUShort: 'uint16', tango._tango.CmdArgType.DevULong: 'uint32', tango._tango.CmdArgType.DevString: 'string', tango._tango.CmdArgType.DevUChar: 'uint8', tango._tango.CmdArgType.DevLong64: 'int64', tango._tango.CmdArgType.DevULong64: 'uint64', tango._tango.CmdArgType.DevEncoded: 'encoded'}</em><a class="headerlink" href="#nxsrecconfig.Utils.TangoUtils.tTnp" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;)
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/other.html#tango.CmdArgType" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.CmdArgType</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;)
 map of Tango:Numpy types</p>
 </dd></dl>
 
@@ -5159,7 +5166,7 @@ map of Tango:Numpy types</p>
 <dd><p>waits for device proxy not running</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>proxy</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>) – device proxy</p>
+<dd class="field-odd"><p><strong>proxy</strong> (<a class="reference external" href="https://pytango.readthedocs.io/en/stable/client_api/device_proxy.html#tango.DeviceProxy" title="(in PyTango v9.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tango.DeviceProxy</span></code></a>) – device proxy</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>if proxy device ready</p>
