@@ -247,6 +247,8 @@ class DynamicComponent(object):
         :param definition: definition node
         :type definition: :class:`lxml.etree.Element`
         """
+        special = ["strategy", "dtype", "name", "unit", "shape"]
+
         for dd in self.__stepdsourcesDict:
             defaultpath = self.__defaultpath
             strategy = dd["strategy"] if "strategy" in dd else "STEP"
@@ -266,9 +268,15 @@ class DynamicComponent(object):
             created.append(alias)
             nxtype = self.__npTn[dd["dtype"]] \
                 if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
-            self.__createField(
+            field = self.__createField(
                 parent, field, nxtype, alias, dd["name"],
                 dd["shape"], strategy=strategy, dstype='CLIENT')
+            if "unit" in dd:
+                field.attrib["units"] = str(dd["unit"])
+            for ky, vl in dd.items():
+                if ky not in special:
+                    field.attrib[ky] = str(vl)
+
             if link:
                 self.__createLink(nxdata, path, field)
 
@@ -505,6 +513,8 @@ class DynamicComponent(object):
         :type strategy: :obj:`str`
         :param dstype: datasource type
         :type dstyp: :obj:`str`
+        :returns: etree xml field element
+        :rtype dstyp: :class:`lxml.etree.Element`
         """
         field = lxml.etree.Element("field")
         parent.append(field)
@@ -555,6 +565,7 @@ class DynamicComponent(object):
                 dm.append(dim)
                 dim.attrib["index"] = Utils.tostr(i + 1)
                 dim.attrib["value"] = Utils.tostr(shape[i])
+        return field
 
     def remove(self, name):
         """ removes dynamic component

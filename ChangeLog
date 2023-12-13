@@ -1,4 +1,8 @@
-2023-11-09 Jan Kotanski <jankotan@gmail.com>
+2023-11-13 Jan Kotanski <jankotan@gmail.com>
+	* add support for user data units and other attributes (#120)
+	* tagged as v3.38.0
+
+2023-11-12 Jan Kotanski <jankotan@gmail.com>
 	* add support for dynamic init user data (#116)
 	* tagged as v3.37.0
 
