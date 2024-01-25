@@ -44,7 +44,7 @@ class DynamicComponent(object):
                  "NXinstrument/collection",
                  defaulttype="NX_CHAR",
                  defaultuserpath="/$var.entryname#'scan'$var.serialno:NXentry/"
-                 "data:NXdata"):
+                 "user_data:NXparameters"):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server

@@ -1,3 +1,7 @@
+2024-01-25 Jan Kotanski <jankotan@gmail.com>
+	* change default user_data type to NXparameters (#123)
+	* tagged as v3.39.0
+
 2023-11-13 Jan Kotanski <jankotan@gmail.com>
 	* add support for user data units and other attributes (#120)
 	* tagged as v3.38.0

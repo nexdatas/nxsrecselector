@@ -111,7 +111,7 @@
     <deviceProperties name="DefaultUserDataPath" description="default NeXus User data path">
       <type xsi:type="pogoDsl:StringType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <DefaultPropValue>/scan$var.serialno:NXentry/user_data:NXdata</DefaultPropValue>
+      <DefaultPropValue>/scan$var.serialno:NXentry/user_data:NXparameters</DefaultPropValue>
     </deviceProperties>
     <commands name="AvailableComponents" description="Return a list of available component names" execMethod="available_components" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="">

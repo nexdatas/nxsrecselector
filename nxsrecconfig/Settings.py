@@ -91,7 +91,7 @@ class Settings(object):
         #: (:obj:`str`) default NeXus path
         self.defaultUserDataPath = defaultudatapath or \
             "/$var.entryname#'scan'$var.serialno:NXentry/" \
-            "user_data:NXdata"
+            "user_data:NXparameters"
 
         #: (:obj:`str`) default NeXus type
         self.defaultNeXusType = defaultnexustype or "NX_CHAR"
