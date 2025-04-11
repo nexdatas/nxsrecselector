@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.39.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.42.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
 
   </head><body>
@@ -35,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.39</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.42</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -162,7 +164,7 @@
 
 <div class="viewcode-block" id="NXSRecSelector"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector">[docs]</a><span class="k">class</span> <span class="nc">NXSRecSelector</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">LatestDeviceImpl</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; NXSRecSelector server interface</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; NXSRecSelector server interface</span>
 
 <span class="sd">    :brief: Tango Server for Nexus Sardana Recorder Settings.</span>
 <span class="sd">            Device States Description:</span>
@@ -171,7 +173,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  Device constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  Device constructor</span>
 
 <span class="sd">        :param cl: class name</span>
 <span class="sd">        :type cl: :obj:`str`</span>
@@ -191,7 +193,7 @@
         <span class="n">NXSRecSelector</span><span class="o">.</span><span class="n">init_device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NXSRecSelector.delete_device"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.delete_device">[docs]</a>    <span class="k">def</span> <span class="nf">delete_device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Device destructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Device destructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In delete_device()&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;stg&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="p">:</span>
@@ -200,7 +202,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">OFF</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.init_device"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.init_device">[docs]</a>    <span class="k">def</span> <span class="nf">init_device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Device initialization</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Device initialization</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In init_device()&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;stg&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="p">:</span>
@@ -245,7 +247,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ClientRecordKeys</span> <span class="ow">or</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.always_executed_hook"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.always_executed_hook">[docs]</a>    <span class="k">def</span> <span class="nf">always_executed_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Always excuted hook method</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Always excuted hook method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In always_excuted_hook()&quot;</span><span class="p">)</span></div>
 
@@ -255,12 +257,12 @@
 <span class="c1">#</span>
 <span class="c1"># ==================================================================</span>
 <div class="viewcode-block" id="NXSRecSelector.read_attr_hardware"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_attr_hardware">[docs]</a>    <span class="k">def</span> <span class="nf">read_attr_hardware</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read Attribute Hardware</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read Attribute Hardware</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In read_attr_hardware()&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_Components"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Components">[docs]</a>    <span class="k">def</span> <span class="nf">read_Components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read Components attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read Components attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -269,7 +271,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">components</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_DescriptionErrors"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_DescriptionErrors">[docs]</a>    <span class="k">def</span> <span class="nf">read_DescriptionErrors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read DescriptionErrors attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read DescriptionErrors attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -278,7 +280,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">descriptionErrors</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_Version"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Version">[docs]</a>    <span class="k">def</span> <span class="nf">read_Version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read Version attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read Version attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -287,7 +289,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">version</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_MacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_MacroServer">[docs]</a>    <span class="k">def</span> <span class="nf">read_MacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read MacroServer attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read MacroServer attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -296,7 +298,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">macroServer</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_Door"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Door">[docs]</a>    <span class="k">def</span> <span class="nf">read_Door</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read Door attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read Door attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -305,7 +307,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">door</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_Door"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_Door">[docs]</a>    <span class="k">def</span> <span class="nf">write_Door</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write Door attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write Door attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -314,7 +316,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">door</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_StepDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_StepDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">read_StepDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read StepDataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read StepDataSources attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -323,7 +325,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">stepdatasources</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_StepDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_StepDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">write_StepDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write StepDataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write StepDataSources attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -337,7 +339,7 @@
                 <span class="s2">&quot;To change the settings please close the server.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_StepDataSources_write_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StepDataSources_write_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_StepDataSources_write_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; StepDataSources attribute Write State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; StepDataSources attribute Write State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -347,7 +349,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_CanFailDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_CanFailDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">read_CanFailDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read CanFailDataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read CanFailDataSources attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -356,7 +358,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">canfaildatasources</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_CanFailDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_CanFailDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">write_CanFailDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write CanFailDataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write CanFailDataSources attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -370,7 +372,7 @@
                 <span class="s2">&quot;To change the settings please close the server.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_CanFailDataSources_write_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CanFailDataSources_write_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_CanFailDataSources_write_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; CanFailDataSources attribute Write State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; CanFailDataSources attribute Write State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -380,7 +382,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_LinkDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_LinkDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">read_LinkDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read LinkDataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read LinkDataSources attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -389,7 +391,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">linkdatasources</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_LinkDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_LinkDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">write_LinkDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write LinkDataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write LinkDataSources attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -403,7 +405,7 @@
                 <span class="s2">&quot;To change the settings please close the server.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_LinkDataSources_write_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LinkDataSources_write_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_LinkDataSources_write_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; LinkDataSources attribute Write State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; LinkDataSources attribute Write State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -413,7 +415,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ConfigDevice"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ConfigDevice">[docs]</a>    <span class="k">def</span> <span class="nf">read_ConfigDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ConfigDevice attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ConfigDevice attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -422,7 +424,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configDevice</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ConfigDevice"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ConfigDevice">[docs]</a>    <span class="k">def</span> <span class="nf">write_ConfigDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ConfigDevice attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ConfigDevice attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -431,7 +433,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configDevice</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_MntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_MntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">read_MntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read MntGrp attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read MntGrp attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -440,7 +442,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mntGrp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_MntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_MntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">write_MntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write MntGrp attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write MntGrp attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -449,7 +451,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mntGrp</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ScanDir"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanDir">[docs]</a>    <span class="k">def</span> <span class="nf">read_ScanDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ScanDir attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ScanDir attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -458,7 +460,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanDir</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ScanDir"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanDir">[docs]</a>    <span class="k">def</span> <span class="nf">write_ScanDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ScanDir attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ScanDir attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -467,7 +469,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanDir</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ScanFile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanFile">[docs]</a>    <span class="k">def</span> <span class="nf">read_ScanFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ScanFile attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ScanFile attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -476,7 +478,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanFile</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ScanFile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanFile">[docs]</a>    <span class="k">def</span> <span class="nf">write_ScanFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ScanFile attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ScanFile attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -485,7 +487,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanFile</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ScanID"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanID">[docs]</a>    <span class="k">def</span> <span class="nf">read_ScanID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ScanID attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ScanID attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -494,7 +496,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanID</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ScanID"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanID">[docs]</a>    <span class="k">def</span> <span class="nf">write_ScanID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ScanID attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ScanID attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -503,7 +505,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanID</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_WriterDevice"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_WriterDevice">[docs]</a>    <span class="k">def</span> <span class="nf">read_WriterDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read WriterDevice attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read WriterDevice attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -512,7 +514,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">writerDevice</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_WriterDevice"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_WriterDevice">[docs]</a>    <span class="k">def</span> <span class="nf">write_WriterDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write WriterDevice attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write WriterDevice attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -521,7 +523,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">writerDevice</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_DeviceGroups"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_DeviceGroups">[docs]</a>    <span class="k">def</span> <span class="nf">read_DeviceGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read DeviceGroups attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read DeviceGroups attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -530,7 +532,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">deviceGroups</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_DeviceGroups"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_DeviceGroups">[docs]</a>    <span class="k">def</span> <span class="nf">write_DeviceGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write DeviceGroups attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write DeviceGroups attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -539,7 +541,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">deviceGroups</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_UserData"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_UserData">[docs]</a>    <span class="k">def</span> <span class="nf">read_UserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read UserData attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read UserData attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -548,7 +550,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">userData</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_UserData"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_UserData">[docs]</a>    <span class="k">def</span> <span class="nf">write_UserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write UserData attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write UserData attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -557,7 +559,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">userData</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_DataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_DataSources">[docs]</a>    <span class="k">def</span> <span class="nf">read_DataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read DataSources attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read DataSources attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -566,7 +568,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">dataSources</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ProfileConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ProfileConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">read_ProfileConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ProfileConfiguration attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ProfileConfiguration attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -575,7 +577,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">profileConfiguration</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ProfileConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">write_ProfileConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ProfileConfiguration attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ProfileConfiguration attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -597,7 +599,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_AppendEntry"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_AppendEntry">[docs]</a>    <span class="k">def</span> <span class="nf">read_AppendEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read AppendEntry attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read AppendEntry attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -606,7 +608,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">appendEntry</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_AppendEntry"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_AppendEntry">[docs]</a>    <span class="k">def</span> <span class="nf">write_AppendEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write AppendEntry attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write AppendEntry attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -615,7 +617,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">appendEntry</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ConfigVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ConfigVariables">[docs]</a>    <span class="k">def</span> <span class="nf">read_ConfigVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ConfigVariables attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ConfigVariables attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -624,7 +626,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configVariables</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ConfigVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ConfigVariables">[docs]</a>    <span class="k">def</span> <span class="nf">write_ConfigVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ConfigVariables attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ConfigVariables attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -633,7 +635,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configVariables</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.read_ProfileFile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ProfileFile">[docs]</a>    <span class="k">def</span> <span class="nf">read_ProfileFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Read ProfileFile attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Read ProfileFile attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -642,7 +644,7 @@
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">profileFile</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.write_ProfileFile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileFile">[docs]</a>    <span class="k">def</span> <span class="nf">write_ProfileFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Write ProfileFile attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Write ProfileFile attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
 <span class="sd">        :type attr: :class:`tango.Attribute`</span>
@@ -657,7 +659,7 @@
     <span class="c1"># ==================================================================</span>
 
 <div class="viewcode-block" id="NXSRecSelector.LoadProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.LoadProfile">[docs]</a>    <span class="k">def</span> <span class="nf">LoadProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; LoadProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; LoadProfile command</span>
 
 <span class="sd">        :brief: Load server configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -681,7 +683,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_LoadProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LoadProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_LoadProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; LoadProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; LoadProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -691,7 +693,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.FetchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.FetchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">FetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; FetchProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; FetchProfile command</span>
 
 <span class="sd">        :brief: Fetch server configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -715,7 +717,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_FetchProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_FetchProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; FetchProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; FetchProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -725,7 +727,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.SaveProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SaveProfile">[docs]</a>    <span class="k">def</span> <span class="nf">SaveProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SaveProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SaveProfile command</span>
 
 <span class="sd">        :brief: Save server configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -739,7 +741,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_SaveProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SaveProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SaveProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SaveProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SaveProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -749,7 +751,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.StoreProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.StoreProfile">[docs]</a>    <span class="k">def</span> <span class="nf">StoreProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; StoreProfile command command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; StoreProfile command command</span>
 
 <span class="sd">        :brief: Store server configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -763,7 +765,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_StoreProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StoreProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_StoreProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; StoreProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; StoreProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -773,7 +775,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.PreselectComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectComponents">[docs]</a>    <span class="k">def</span> <span class="nf">PreselectComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PreselectComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PreselectComponents command</span>
 
 <span class="sd">        :brief: Check existing devices of pools</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -787,7 +789,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_PreselectComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PreselectComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PreselectComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PreselectComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -797,7 +799,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ResetPreselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ResetPreselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">ResetPreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  ResetPreselectedComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  ResetPreselectedComponents command</span>
 
 <span class="sd">        :brief: reset PreselectedComponents</span>
 <span class="sd">                to DefaultPreselectedComponents</span>
@@ -812,7 +814,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ResetPreselectedComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ResetPreselectedComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ResetPreselectedComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ResetPreselectedComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ResetPreselectedComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -822,7 +824,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.DeleteAllProfiles"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteAllProfiles">[docs]</a>    <span class="k">def</span> <span class="nf">DeleteAllProfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; DeleteAllProfiles command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; DeleteAllProfiles command</span>
 
 <span class="sd">        :brief: Delete all profiles from Configuration Server</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -836,7 +838,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_DeleteAllProfiles_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteAllProfiles_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_DeleteAllProfiles_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; DeleteAllProfiles command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; DeleteAllProfiles command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -846,7 +848,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.UpdateConfigVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateConfigVariables">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateConfigVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; UpdateConfigVariables command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; UpdateConfigVariables command</span>
 
 <span class="sd">       :brief: Send ConfigVariables into ConfigServer</span>
 <span class="sd">            and update serialno if appendEntry selected</span>
@@ -861,7 +863,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_UpdateConfigVariables_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateConfigVariables_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_UpdateConfigVariables_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; UpdateConfigVariables command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; UpdateConfigVariables command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -871,7 +873,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.IsMntGrpUpdated"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.IsMntGrpUpdated">[docs]</a>    <span class="k">def</span> <span class="nf">IsMntGrpUpdated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; IsMntGrpUpdated command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; IsMntGrpUpdated command</span>
 
 <span class="sd">        :returns: True if mntgrp was changed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -888,7 +890,7 @@
         <span class="k">return</span> <span class="n">conf</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_IsMntGrpUpdated_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_IsMntGrpUpdated_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; IsMntGrpUpdated command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; IsMntGrpUpdated command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -898,7 +900,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.MntGrpConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MntGrpConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">MntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; MntGrpConfiguration command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; MntGrpConfiguration command</span>
 
 <span class="sd">        :brief:  returns mntgrp configuration</span>
 
@@ -917,7 +919,7 @@
         <span class="k">return</span> <span class="n">conf</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_MntGrpConfiguration_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MntGrpConfiguration_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_MntGrpConfiguration_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; MntGrpConfiguration command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; MntGrpConfiguration command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -927,7 +929,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.UpdateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; UpdateProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; UpdateProfile command</span>
 
 <span class="sd">        :brief: Update mntgrp configuration</span>
 <span class="sd">        :returns: JSON string with mntgrp configuration info</span>
@@ -944,7 +946,7 @@
         <span class="k">return</span> <span class="n">conf</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_UpdateProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_UpdateProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; UpdateProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; UpdateProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -954,7 +956,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.UpdateMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; UpdateMntGrp command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; UpdateMntGrp command</span>
 
 <span class="sd">        :brief: Update mntgrp configuration</span>
 <span class="sd">        :returns: mntgrp configuration string</span>
@@ -971,7 +973,7 @@
         <span class="k">return</span> <span class="n">conf</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_UpdateMntGrp_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateMntGrp_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_UpdateMntGrp_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; UpdateMntGrp command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; UpdateMntGrp command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -981,7 +983,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.SwitchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SwitchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">SwitchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SwitchProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SwitchProfile command</span>
 
 <span class="sd">        :brief: Switch mntgrp configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -995,7 +997,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_SwitchProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SwitchProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SwitchProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SwitchProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SwitchProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1005,7 +1007,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ImportMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ImportMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">ImportMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ImportMntGrp command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ImportMntGrp command</span>
 
 <span class="sd">        :brief: Import active mntgrp configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1019,7 +1021,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ImportMntGrp_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ImportMntGrp_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ImportMntGrp command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ImportMntGrp command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1029,7 +1031,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ImportEnvProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ImportEnvProfile">[docs]</a>    <span class="k">def</span> <span class="nf">ImportEnvProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  ImportEnvProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  ImportEnvProfile command</span>
 
 <span class="sd">        :brief: Import all environment variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1053,7 +1055,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ImportEnv_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ImportEnv_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ImportMntGrp command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ImportMntGrp command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1063,7 +1065,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ExportEnvProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ExportEnvProfile">[docs]</a>    <span class="k">def</span> <span class="nf">ExportEnvProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ExportEnvProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ExportEnvProfile command</span>
 
 <span class="sd">        :brief: Export all environment variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1077,7 +1079,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ExportEnv_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExportEnv_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ExportEnv_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ExportMntGrp command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ExportMntGrp command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1087,7 +1089,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AvailableTimers"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableTimers">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableTimers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableTimers command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableTimers command</span>
 
 <span class="sd">        :brief: Returns a list of available component names</span>
 
@@ -1106,7 +1108,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableTimers_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableTimers_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableTimers_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableTimers command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableTimers command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1116,7 +1118,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.MutedChannels"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MutedChannels">[docs]</a>    <span class="k">def</span> <span class="nf">MutedChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  MutedChannels command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  MutedChannels command</span>
 
 <span class="sd">        :brief: Return a list of muted channel names</span>
 <span class="sd">        :returns: DevVarStringArray    list of muted channel names</span>
@@ -1134,7 +1136,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_MutedChannels_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MutedChannels_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_MutedChannels_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; MutedChannels command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; MutedChannels command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1144,7 +1146,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AvailableComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableComponents">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableComponents command</span>
 
 <span class="sd">        :brief: Return a list of available component names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available component names</span>
@@ -1163,7 +1165,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1173,7 +1175,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ComponentDescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentDescription">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentDescription command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentDescription command</span>
 
 <span class="sd">        :brief: Return a list of available component names</span>
 <span class="sd">        :returns: DevString   list of available component names</span>
@@ -1191,7 +1193,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentDescription_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDescription_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentDescription_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentDescription command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentDescription command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1201,7 +1203,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.SetScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">SetScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SetScanEnvVariables command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SetScanEnvVariables command</span>
 
 <span class="sd">        :brief: Store ScanDir, ScanFile and NeXusSelectorDevice</span>
 <span class="sd">                      in environment variables</span>
@@ -1222,7 +1224,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_SetScanEnvVariables_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetScanEnvVariables_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SetScanEnvVariables_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SetScanEnvVariables command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SetScanEnvVariables command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1232,7 +1234,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.FullDeviceNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.FullDeviceNames">[docs]</a>    <span class="k">def</span> <span class="nf">FullDeviceNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; FullDeviceNames command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; FullDeviceNames command</span>
 
 <span class="sd">        :brief: Return a JSON with full device names for all aliases</span>
 <span class="sd">        :returns: DevString JSON dictionary with full device names</span>
@@ -1250,7 +1252,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_FullDeviceNames_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_FullDeviceNames_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; FullDeviceNames command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; FullDeviceNames command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1260,7 +1262,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">ScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ScanEnvVariables command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ScanEnvVariables command</span>
 
 <span class="sd">        :brief: Fetch ScanDir, ScanFile, ScanID and NeXusSelectorDevice</span>
 <span class="sd">                      in environment variables</span>
@@ -1280,7 +1282,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ScanEnvVariables_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ScanEnvVariables_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ScanEnvVariables_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ScanEnvVariables command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ScanEnvVariables command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1290,7 +1292,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.VariableComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.VariableComponents">[docs]</a>    <span class="k">def</span> <span class="nf">VariableComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; VariableComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; VariableComponents command</span>
 
 <span class="sd">        :brief: Returns a list of available component names</span>
 <span class="sd">        :returns: DevString    list of available component names</span>
@@ -1308,7 +1310,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_VariableComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_VariableComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_VariableComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; VariableComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; VariableComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1318,7 +1320,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AvailableProfiles"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableProfiles">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableProfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableProfiles command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableProfiles command</span>
 
 <span class="sd">        :brief: Return a list of available selection names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available selection names</span>
@@ -1336,7 +1338,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableProfiles_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableProfiles_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableProfiles_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableProfiles command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableProfiles command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1346,7 +1348,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AvailableMntGrps"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableMntGrps">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableMntGrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableMntGrps command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableMntGrps command</span>
 
 <span class="sd">        :brief: Return a list of available mntgrp names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available mntgrp names</span>
@@ -1364,7 +1366,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableMntGrps_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableMntGrps_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableMntGrps_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableMntGrps command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableMntGrps command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1374,7 +1376,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AvailableDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableDataSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableDataSources command</span>
 
 <span class="sd">        :brief: Return a list of available DataSource names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available DataSource names</span>
@@ -1392,7 +1394,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AvailableDataSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AvailableDataSources command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1402,7 +1404,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.PoolElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PoolElementNames">[docs]</a>    <span class="k">def</span> <span class="nf">PoolElementNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PoolElementNames command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PoolElementNames command</span>
 
 <span class="sd">        :brief: Return a list of available pool channels</span>
 
@@ -1423,7 +1425,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_PoolElementNames_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PoolElementNames_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PoolElementNames_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PoolElementNames command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PoolElementNames command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1433,7 +1435,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ComponentDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentDataSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentDataSources command</span>
 
 <span class="sd">        :brief: Provide the component datasources</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
@@ -1451,7 +1453,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentDataSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentDataSources command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1461,7 +1463,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.SelectedDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">SelectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SelectedDataSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SelectedDataSources command</span>
 
 <span class="sd">        :brief: Provide the selected datasources</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
@@ -1479,14 +1481,14 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_SelectedDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SelectedDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SelectedDataSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SelectedDataSources command State Machine</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AdministratorDataNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AdministratorDataNames">[docs]</a>    <span class="k">def</span> <span class="nf">AdministratorDataNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AdministratorDataNames command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AdministratorDataNames command</span>
 
 <span class="sd">        :brief: Provide Administrator Data Names</span>
 <span class="sd">        :returns: DevVarStringArray    data record names</span>
@@ -1504,7 +1506,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_AdministratorDataNames_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AdministratorDataNames_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AdministratorDataNames_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AdministratorDataNames command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AdministratorDataNames command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1514,7 +1516,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.MandatoryComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MandatoryComponents">[docs]</a>    <span class="k">def</span> <span class="nf">MandatoryComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; MandatoryComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; MandatoryComponents command</span>
 
 <span class="sd">        :brief: Set the mandatory components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
@@ -1532,7 +1534,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_MandatoryComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MandatoryComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_MandatoryComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; MandatoryComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; MandatoryComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1542,7 +1544,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.SelectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">SelectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SelectedComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SelectedComponents command</span>
 
 <span class="sd">        :brief: Provide the selected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
@@ -1560,7 +1562,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_SelectedComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SelectedComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SelectedComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SelectedComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1570,7 +1572,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.PreselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">PreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PreselectedComponents command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PreselectedComponents command</span>
 
 <span class="sd">        :brief: Provide the preselected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
@@ -1588,7 +1590,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_PreselectedComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PreselectedComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PreselectedComponents command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PreselectedComponents command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1598,7 +1600,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.PreselectedDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectedDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">PreselectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PreselectedDataSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PreselectedDataSources command</span>
 
 <span class="sd">        :brief: Provide the preselected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
@@ -1616,7 +1618,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_PreselectedDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PreselectedDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; PreselectedDataSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; PreselectedDataSources command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1626,7 +1628,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.CreateDynamicComponent"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDynamicComponent">[docs]</a>    <span class="k">def</span> <span class="nf">CreateDynamicComponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; CreateDynamicComponent command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; CreateDynamicComponent command</span>
 
 <span class="sd">        :brief: Create dynamic component</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource parameters</span>
@@ -1646,7 +1648,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_CreateDynamicComponent_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDynamicComponent_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_CreateDynamicComponent_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; CreateDynamicComponent command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; CreateDynamicComponent command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1656,7 +1658,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.RemoveDynamicComponent"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.RemoveDynamicComponent">[docs]</a>    <span class="k">def</span> <span class="nf">RemoveDynamicComponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; RemoveDynamicComponent command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; RemoveDynamicComponent command</span>
 
 <span class="sd">        :brief: Delete the given dynamic component</span>
 <span class="sd">        :param argin:  DevString  dynamic component name</span>
@@ -1672,7 +1674,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_RemoveDynamicComponent_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_RemoveDynamicComponent_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_RemoveDynamicComponent_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; RemoveDynamicComponent command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; RemoveDynamicComponent command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1682,7 +1684,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.DeleteProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteProfile">[docs]</a>    <span class="k">def</span> <span class="nf">DeleteProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; DeleteProfile command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; DeleteProfile command</span>
 
 <span class="sd">        :brief: Delete the given mntgrp</span>
 <span class="sd">        :param argin:  DevString  measurement group name</span>
@@ -1698,7 +1700,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_DeleteProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_DeleteProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; DeleteProfile command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; DeleteProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1708,7 +1710,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ChannelProperties"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ChannelProperties">[docs]</a>    <span class="k">def</span> <span class="nf">ChannelProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ChannelProperties command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ChannelProperties command</span>
 
 <span class="sd">        :brief: Provide JSON dictionary with channel properties</span>
 <span class="sd">                      {channel:property}</span>
@@ -1730,7 +1732,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ChannelProperties_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ChannelProperties_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ChannelProperties_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ChannelProperties command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ChannelProperties command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1740,7 +1742,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.SetChannelProperties"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetChannelProperties">[docs]</a>    <span class="k">def</span> <span class="nf">SetChannelProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SetChannelProperties command SetChannelProperties</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SetChannelProperties command SetChannelProperties</span>
 
 <span class="sd">        :brief: Set Channel Properties of the given type</span>
 <span class="sd">        :param argin: DevVarStringArray two element list with a property type</span>
@@ -1760,7 +1762,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_SetChannelProperties_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetChannelProperties_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SetChannelProperties_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; SetChannelProperties command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SetChannelProperties command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1770,7 +1772,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ComponentClientSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentClientSources">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentClientSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentClientSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentClientSources command</span>
 
 <span class="sd">        :brief: Describe client datasources from components</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
@@ -1790,7 +1792,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentClientSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentClientSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentClientSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentClientSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentClientSources command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1800,7 +1802,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.ComponentSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentSources">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentSources command</span>
 
 <span class="sd">        :brief: Describe datasources from components</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
@@ -1820,7 +1822,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ComponentSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ComponentSources command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1830,7 +1832,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.DataSourceDescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DataSourceDescription">[docs]</a>    <span class="k">def</span> <span class="nf">DataSourceDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; DataSourceDescription command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; DataSourceDescription command</span>
 
 <span class="sd">        :brief: Provide datasource description</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource names</span>
@@ -1851,7 +1853,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.AddStepDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AddStepDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">AddStepDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; AddStepDataSources command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; AddStepDataSources command</span>
 
 <span class="sd">        :brief: switch datasources to step mode</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource names</span>
@@ -1872,7 +1874,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_DataSourceDescription_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DataSourceDescription_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_DataSourceDescription_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; DataSourceDescription command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; DataSourceDescription command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1882,7 +1884,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.CreateWriterConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateWriterConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">CreateWriterConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; CreateWriterConfiguration command</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; CreateWriterConfiguration command</span>
 
 <span class="sd">        :brief: Create configuration from the given components</span>
 
@@ -1903,7 +1905,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_CreateWriterConfiguration_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateWriterConfiguration_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_CreateWriterConfiguration_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; CreateWriterConfiguration command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; CreateWriterConfiguration command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1913,7 +1915,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.CreateDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">CreateDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; It creates new DataSources on the ConfigServer</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; It creates new DataSources on the ConfigServer</span>
 
 <span class="sd">        :param argin: JSON dictionary with {``dsname``: ``tangosource``, ...}</span>
 <span class="sd">        :type argin: :obj:`str`</span>
@@ -1930,7 +1932,7 @@
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="NXSRecSelector.is_CreateDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_CreateDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; CreateDataSources command State Machine</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; CreateDataSources command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -2407,7 +2409,7 @@
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; NXSRecSelectorclass Constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; NXSRecSelectorclass Constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tango</span><span class="o">.</span><span class="n">DeviceClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -2437,7 +2439,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>

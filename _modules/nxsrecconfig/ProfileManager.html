@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.41.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.42.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.41</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.42</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -708,6 +708,16 @@
             <span class="k">if</span> <span class="s2">&quot;value_ref_enabled&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">valuerefpattern</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;value_ref_pattern&quot;</span><span class="p">]</span> \
             <span class="k">if</span> <span class="s2">&quot;value_ref_pattern&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">conditioning</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;conditioning&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;conditioning&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">instrument</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;instrument&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;instrument&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="c1"># nexus_path = props[&quot;nexus_path&quot;] \</span>
+        <span class="c1">#     if &quot;nexus_path&quot; in props.keys() else {}</span>
+        <span class="n">normalization</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;normalization&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;normalization&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;output&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">tchannels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="s1">&#39;ExpChannelList&#39;</span><span class="p">,</span>
             <span class="p">[</span><span class="s1">&#39;CTExpChannel&#39;</span><span class="p">,</span> <span class="s1">&#39;OneDExpChannel&#39;</span><span class="p">,</span> <span class="s1">&#39;TwoDExpChannel&#39;</span><span class="p">]))</span>
@@ -729,6 +739,16 @@
                 <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">valuerefenabled</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">valuerefpattern</span><span class="p">[</span><span class="n">al</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">valuerefpattern</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">conditioning</span><span class="p">[</span><span class="n">al</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">conditioning</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="n">instrument</span><span class="p">[</span><span class="n">al</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">instrument</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="c1"># nexus_path[al]</span>
+                <span class="c1"># if al in nexus_path.keys() else u&#39;&#39;,</span>
+                <span class="n">normalization</span><span class="p">[</span><span class="n">al</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">normalization</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">output</span><span class="p">[</span><span class="n">al</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="ow">and</span> <span class="n">al</span> <span class="o">==</span> <span class="n">timer</span><span class="p">:</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="n">curindex</span>
@@ -771,6 +791,11 @@
         <span class="n">synchronization</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">valuerefenabled</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">valuerefpattern</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">conditioning</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">instrument</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># nexus_path = {}</span>
+        <span class="n">normalization</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__clearChannels</span><span class="p">(</span><span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">compdatasources</span><span class="p">)</span>
 
         <span class="c1"># fill in dsg, timers hel</span>
@@ -779,7 +804,10 @@
             <span class="n">avtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getTimers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span><span class="p">)</span>
             <span class="n">tangods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__readChannels</span><span class="p">(</span>
                 <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span> <span class="n">synchronization</span><span class="p">,</span> <span class="n">idch</span><span class="p">,</span>
-                <span class="n">valuerefenabled</span><span class="p">,</span> <span class="n">valuerefpattern</span><span class="p">)</span>
+                <span class="n">valuerefenabled</span><span class="p">,</span> <span class="n">valuerefpattern</span><span class="p">,</span> <span class="n">conditioning</span><span class="p">,</span> <span class="n">instrument</span><span class="p">,</span>
+                <span class="n">normalization</span><span class="p">,</span> <span class="n">output</span>
+                <span class="c1"># , nexus_path</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__readTangoChannels</span><span class="p">(</span>
                 <span class="n">conf</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span> <span class="n">synchronization</span><span class="p">)</span>
             <span class="n">otimers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderTimers</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">avtimers</span><span class="p">)</span>
@@ -789,6 +817,11 @@
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">synchronization</span>
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;value_ref_enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">valuerefenabled</span>
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;value_ref_pattern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">valuerefpattern</span>
+        <span class="n">props</span><span class="p">[</span><span class="s2">&quot;conditioning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conditioning</span>
+        <span class="n">props</span><span class="p">[</span><span class="s2">&quot;instrument&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">instrument</span>
+        <span class="c1"># props[&quot;nexus_path&quot;] = nexus_path</span>
+        <span class="n">props</span><span class="p">[</span><span class="s2">&quot;normalization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalization</span>
+        <span class="n">props</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
 
         <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">jdsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dsg</span><span class="p">)</span>
@@ -849,7 +882,11 @@
 
     <span class="k">def</span> <span class="nf">__readChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">synchronizer</span><span class="p">,</span>
                        <span class="n">synchronization</span><span class="p">,</span> <span class="n">idch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">valuerefenabled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">valuerefpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                       <span class="n">valuerefpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">conditioning</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">instrument</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">normalization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span>
+                       <span class="c1"># , nexus_path=u&#39;&#39;</span>
+                       <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; reads channels from mntgrp configutation</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
@@ -871,6 +908,14 @@
 <span class="sd">        :type valuerefenabled: :obj:`dict` &lt;:obj:`int`, :obj:`bool`&gt;</span>
 <span class="sd">        :param valuerefpattern: channel value ref pattern</span>
 <span class="sd">        :type valuerefpattern: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
+<span class="sd">        :param conditioning: channel conditioning</span>
+<span class="sd">        :type conditioning: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
+<span class="sd">        :param instrument: channel instrument</span>
+<span class="sd">        :type instrument: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
+<span class="sd">        :param normalization: channel normalization</span>
+<span class="sd">        :type normalization: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
+<span class="sd">        :param output: channel output</span>
+<span class="sd">        :type output: :obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;</span>
 <span class="sd">        :returns: tango datasources list with elements (name, label, source)</span>
 <span class="sd">        :rtype: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -915,6 +960,34 @@
                             <span class="c1">#  ch[&quot;value_ref_pattern&quot;])</span>
                             <span class="n">valuerefpattern</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> \
                                 <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;value_ref_pattern&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">conditioning</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                                <span class="s1">&#39;conditioning&#39;</span> <span class="ow">in</span> <span class="n">ch</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;conditioning&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;conditioning&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">u</span><span class="s2">&quot;&quot;</span><span class="p">:</span>
+                            <span class="n">conditioning</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;conditioning&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">instrument</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                                <span class="s1">&#39;instrument&#39;</span> <span class="ow">in</span> <span class="n">ch</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;instrument&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">instrument</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;instrument&quot;</span><span class="p">]</span>
+                        <span class="c1"># if nexus_path is not None and \</span>
+                        <span class="c1">#         &#39;nexus_path&#39; in ch and \</span>
+                        <span class="c1">#         ch[&quot;nexus_path&quot;] is not None:</span>
+                        <span class="c1">#     nexus_path[ch[&#39;name&#39;]] = \</span>
+                        <span class="c1">#         ch[&quot;nexus_path&quot;]</span>
+                        <span class="k">if</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                                <span class="s1">&#39;normalization&#39;</span> <span class="ow">in</span> <span class="n">ch</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;normalization&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                                <span class="ow">and</span> <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;normalization&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">normalization</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;normalization&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                                <span class="s1">&#39;output&#39;</span> <span class="ow">in</span> <span class="n">ch</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+                            <span class="n">output</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
                         <span class="k">if</span> <span class="s1">&#39;synchronizer&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span> \
                            <span class="ow">and</span> <span class="n">ctrl</span><span class="p">[</span><span class="s1">&#39;synchronizer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;software&#39;</span><span class="p">:</span>
                             <span class="n">synchronizer</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ctrl</span><span class="p">[</span><span class="s1">&#39;synchronizer&#39;</span><span class="p">]</span>
@@ -1438,7 +1511,12 @@
                     <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">synchronizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synchronization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">valuerefenabled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">valuerefpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                    <span class="n">valuerefpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">conditioning</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                    <span class="n">instrument</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">normalization</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="c1"># , nexus_path=u&#39;&#39;</span>
+                    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; adds device into configuration dictionary</span>
 
 <span class="sd">        :param device: device alias</span>
@@ -1463,6 +1541,14 @@
 <span class="sd">        :type valuerefenabled: :obj:`bool`</span>
 <span class="sd">        :param valuerefpattern: value ref pattern</span>
 <span class="sd">        :type valuerefpattern: :obj:`str`</span>
+<span class="sd">        :param conditioning: conditioning</span>
+<span class="sd">        :type conditioning: :obj:`str`</span>
+<span class="sd">        :param instrument: instrument</span>
+<span class="sd">        :type instrument: :obj:`str`</span>
+<span class="sd">        :param normalization: normalization</span>
+<span class="sd">        :type normalization: :obj:`str`</span>
+<span class="sd">        :param output: output</span>
+<span class="sd">        :type output: :obj:`str`</span>
 <span class="sd">        :returns: next device index</span>
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1484,7 +1570,12 @@
             <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addChannel</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span>
                                       <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span>
                                       <span class="n">valuerefenabled</span><span class="p">,</span>
-                                      <span class="n">valuerefpattern</span><span class="p">)</span>
+                                      <span class="n">valuerefpattern</span><span class="p">,</span>
+                                      <span class="n">conditioning</span><span class="p">,</span>
+                                      <span class="n">instrument</span><span class="p">,</span>
+                                      <span class="n">normalization</span><span class="p">,</span> <span class="n">output</span>
+                                      <span class="c1"># , nexus_path</span>
+                                      <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">)</span>
             <span class="n">sds</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">([</span><span class="n">device</span><span class="p">])</span>
@@ -1572,7 +1663,12 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__addChannel</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span>
-                     <span class="n">source</span><span class="p">,</span> <span class="n">valuerefenabled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">valuerefpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                     <span class="n">source</span><span class="p">,</span> <span class="n">valuerefenabled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">valuerefpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">conditioning</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                     <span class="n">instrument</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">normalization</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span>
+                     <span class="c1"># , nexus_path=u&#39;&#39;</span>
+                     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; adds channel into mngrp configuration dictionary</span>
 
 <span class="sd">        :param cnf: mntgrp configuration dictionary</span>
@@ -1593,6 +1689,14 @@
 <span class="sd">        :type valuerefenabled: :obj:`bool`</span>
 <span class="sd">        :param valuerefenabled: value rrf pattern</span>
 <span class="sd">        :type valuerefpattern: :obj:`str`</span>
+<span class="sd">        :param conditioning: conditioning</span>
+<span class="sd">        :type conditioning: :obj:`str`</span>
+<span class="sd">        :param instrument: instrument</span>
+<span class="sd">        :type instrument: :obj:`str`</span>
+<span class="sd">        :param normalization: normalization</span>
+<span class="sd">        :type normalization: :obj:`str`</span>
+<span class="sd">        :param output: output</span>
+<span class="sd">        :type output: :obj:`str`</span>
 <span class="sd">        :returns: next index</span>
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1609,19 +1713,19 @@
             <span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;_unit_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;0&#39;</span>
-            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;conditioning&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;conditioning&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conditioning</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;data_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;data_units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ut</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;enabled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;full_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
             <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;instrument&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;instrument&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">instrument</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;nexus_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span>
-            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;normalization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;normalization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalization</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
             <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shp</span>
 
             <span class="k">if</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dontdisplay</span><span class="p">:</span>
