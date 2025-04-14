@@ -539,7 +539,8 @@ class ProfileManager(object):
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
-                if self.__syncsnapshot or self.__writepoolmotorpositionsor \
+                if self.__syncsnapshot or \
+                        self.__writepoolmotorpositions or \
                         or self.writeallmotorpositions:
                     self.__addPreselectedComponents(
                         self.defaultPreselectedComponents)
