@@ -541,7 +541,7 @@ class ProfileManager(object):
                 self.importMntGrp()
                 if self.__syncsnapshot or \
                         self.__writepoolmotorpositions or \
-                        or self.writeallmotorpositions:
+                        self.writeallmotorpositions:
                     self.__addPreselectedComponents(
                         self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
