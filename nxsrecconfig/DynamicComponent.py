@@ -392,7 +392,7 @@ class DynamicComponent(object):
         self.__createNonSardanaNodes(created, avds, definition, 'STEP')
         self.__createNonSardanaNodes(created, avds, definition, 'INIT')
         self.__createNonSardanaNodes(created, avds, definition, 'STEP',
-                                     self.__extrasteptdsources, False)
+                                     self.__extrastepdsources, False)
         self.__createNonSardanaNodes(created, avds, definition, 'INIT',
                                      self.__extrainitdsources, False)
 
