@@ -316,7 +316,7 @@ class DynamicComponent(object):
         :param definition: definition node
         :type definition: :class:`lxml.etree.Element`
         """
-        if isinstance(dsources, list):
+        if not isinstance(dsources, list):
             dsources = self.__initdsources \
                 if strategy == 'INIT' else self.__stepdsources
         for ds in dsources:
