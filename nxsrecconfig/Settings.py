@@ -54,7 +54,9 @@ class Settings(object):
     def __init__(self, server=None, numberofthreads=None,
                  defaultnexuspath=None,
                  defaulttimezone=None, defaultmntgrp=None,
-                 syncsnapshot=False, writepoolmotorpositions=False,
+                 syncsnapshot=False,
+                 writepoolmotorpositions=False,
+                 writeallmotorpositions=False,
                  defaultnexustype=None,
                  defaultudatapath=None):
         """ contructor
@@ -111,8 +113,11 @@ class Settings(object):
         self.resetInvalidDoor = True
         #: (:obj:`bool`) merge profiles to available measurement groups
         self.mergeProfilesToMntGrps = False
-        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        #: (:obj:`bool`) add dynamic components for pool motor positions
+        #:               without any component
         self.writepoolmotorpositions = writepoolmotorpositions
+        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        self.writeallmotorpositions = writeallmotorpositions
         if PYTG_BUG_213:
             self._streams.error(
                 "Settings::Settings() - "
@@ -135,7 +140,8 @@ class Settings(object):
         self.__profileManager = ProfileManager(
             self.__selector,
             syncsnapshot=syncsnapshot,
-            writepoolmotorpositions=writepoolmotorpositions
+            writepoolmotorpositions=writepoolmotorpositions,
+            writeallmotorpositions=writeallmotorpositions
         )
 
         #: (:obj:`str`) configuration file
@@ -1365,6 +1371,13 @@ class Settings(object):
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
                 dcpcreator.setInitDSources(self.preselectedDataSources())
+        if self.__profileManager.writeallmotorpositions:
+            poolmotors = self.__profileManager.getPoolMotors()
+            stepdatasources = self.stepdatasources
+            steppoolmotors = set(stepdatasources) & set(poolmotors)
+            initpoolmotors = set(poolmotors) - set(steppoolmotors)
+            dcpcreator.setExtraStepDSources(list(steppoolmotors))
+            dcpcreator.setExtraInitDSources(list(initpoolmotors))
 
         # pools = self.__selector.getPools()
         # channelsources = PoolUtils.getChannelSources(self.__pools, aliases)

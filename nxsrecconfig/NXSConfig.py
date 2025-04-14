@@ -99,9 +99,12 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         defaultnexustype = self.DefaultNeXusType or None
         syncsnapshot = bool(self.SyncSnapshot)
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
+        writeallmotorpositions = bool(self.WriteAllMotorPositions)
         self.__stg = STG(self, numberofthreads, defaultpath,
                          defaultzone, defaultmntgrp, syncsnapshot,
-                         writepoolmotorpositions, defaultnexustype,
+                         writepoolmotorpositions,
+                         writeallmotorpositions,
+                         defaultnexustype,
                          defaultudatapath)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
@@ -1899,6 +1902,11 @@ class NXSRecSelectorClass(tango.DeviceClass):
          "preselection merges the current ScanSnapshot",
          [False]],
         'WritePoolMotorPositions':
+        [tango.DevBoolean,
+         "add dynamic components for pool motor positions "
+         "without any omponent",
+         [False]],
+        'WriteAllMotorPositions':
         [tango.DevBoolean,
          "add dynamic components for all pool motor positions",
          [False]],

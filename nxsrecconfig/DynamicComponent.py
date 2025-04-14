@@ -65,6 +65,10 @@ class DynamicComponent(object):
         self.__stepdsources = []
         #: (:obj:`list` <:obj:`str`>) init datasources
         self.__initdsources = []
+        #: (:obj:`list` <:obj:`str`>) step datasources
+        self.__extrastepdsources = []
+        #: (:obj:`list` <:obj:`str`>) init datasources
+        self.__extrainitdsources = []
         #: (:obj:`str`) default dynamic component name
         self.__defaultCP = "__dynamic_component__"
         #: (:obj:`str`) dynamic component name
@@ -161,6 +165,16 @@ class DynamicComponent(object):
         if not isinstance(self.__stepdsources, list):
             self.__stepdsources = []
 
+    def setExtraStepDSources(self, dsources):
+        """ sets extra step datasources without links
+
+        :param dsources: list of step datasources
+        :type dsources: :obj:`list` <:obj:`str`>
+        """
+        self.__extrastepdsources = list(dsources)
+        if not isinstance(self.__extrastepdsources, list):
+            self.__extrastepdsources = []
+
     #
     def setInitDSources(self, dsources):
         """ sets init datasources
@@ -171,6 +185,16 @@ class DynamicComponent(object):
         self.__initdsources = list(dsources)
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
+
+    def setExtraInitDSources(self, dsources):
+        """ sets extra init datasources without links
+
+        :param dsources: list of init datasources
+        :type dsources: :obj:`list` <:obj:`str`>
+        """
+        self.__extrainitdsources = list(dsources)
+        if not isinstance(self.__extrainitdsources, list):
+            self.__extrainitdsources = []
 
     #
     def setLabelParams(self, labels, paths, links, types, shapes):
@@ -281,7 +305,8 @@ class DynamicComponent(object):
                 self.__createLink(nxdata, path, field)
 
     def __createNonSardanaNodes(self, created, avds, definition,
-                                strategy="STEP"):
+                                strategy="STEP", dsources=None,
+                                defaultlink=None):
         """ creates XML nodes for non sardana devices
 
         :param created: list of created devices
@@ -291,18 +316,22 @@ class DynamicComponent(object):
         :param definition: definition node
         :type definition: :class:`lxml.etree.Element`
         """
-        dsources = self.__initdsources \
-            if strategy == 'INIT' else self.__stepdsources
+        if isinstance(dsources, list):
+            dsources = self.__initdsources \
+                if strategy == 'INIT' else self.__stepdsources
         for ds in dsources:
             if ds not in created:
                 path, field = self.__getPathField(
                     self.__nexuspaths, self.__nexuslabels,
                     ds, self.__defaultpath)
 
-                link = self.__getProp(
-                    self.__nexuslinks, self.__nexuslabels, ds,
-                    self.__ilinks if strategy == 'INIT'
-                    else self.__links)
+                if defaultlink is None:
+                    link = self.__getProp(
+                        self.__nexuslinks, self.__nexuslabels, ds,
+                        self.__ilinks if strategy == 'INIT'
+                        else self.__links)
+                else:
+                    link = defaultlink
                 (parent, nxdata) = self.__createGroupTree(
                     definition, path, link)
                 created.append(ds)
@@ -362,6 +391,10 @@ class DynamicComponent(object):
         self.__createSardanaNodes(created, definition)
         self.__createNonSardanaNodes(created, avds, definition, 'STEP')
         self.__createNonSardanaNodes(created, avds, definition, 'INIT')
+        self.__createNonSardanaNodes(created, avds, definition, 'STEP',
+                                     self.__extrasteptdsources, False)
+        self.__createNonSardanaNodes(created, avds, definition, 'INIT',
+                                     self.__extrainitdsources, False)
 
         if sys.version_info > (3,):
             xmls = Utils.tostr(

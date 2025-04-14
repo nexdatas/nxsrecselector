@@ -52,7 +52,8 @@ class ProfileManager(object):
     """  Manages Measurement Group and Profile from Selector"""
 
     def __init__(self, selector, syncsnapshot=False,
-                 writepoolmotorpositions=False):
+                 writepoolmotorpositions=False,
+                 writeallmotorpositions=False):
         """ constructor
 
         :param selector: selector object
@@ -60,8 +61,12 @@ class ProfileManager(object):
         :param syncsnapshot: preselection merges current ScanSnapshot
         :type syncsnapshot: :obj:`bool`
         :param writepoolmotorpositions: add dynamic components
-                                        for all pool motor positions
+                                        for pool motor positions
+                                        without any component
         :type writepoolmotorpositions: :obj:`bool`
+        :param writeallmotorpositions: add dynamic components
+                                        for all pool motor positions
+        :type writeallmotorpositions: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -99,6 +104,9 @@ class ProfileManager(object):
 
         #: (:obj:`bool`) add dynamic components for all pool motor positions
         self.__writepoolmotorpositions = writepoolmotorpositions
+
+        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        self.writeallmotorpositions = writeallmotorpositions
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -470,7 +478,7 @@ class ProfileManager(object):
                 'PreScanSnapshot', self.__macroServerName)
             tangods = [[ds[1], ds[1], ds[0]] for ds in snapshot]
         poolds = []
-        if self.__writepoolmotorpositions:
+        if self.__writepoolmotorpositions or self.writeallmotorpositions:
             poolds = self.getPoolMotors()
             if poolds:
                 tangods.extend(poolds)
@@ -531,13 +539,15 @@ class ProfileManager(object):
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
-                if self.__syncsnapshot or self.__writepoolmotorpositions:
+                if self.__syncsnapshot or self.__writepoolmotorpositionsor \
+                        or self.writeallmotorpositions:
                     self.__addPreselectedComponents(
                         self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
-        elif self.__syncsnapshot or self.__writepoolmotorpositions:
+        elif self.__syncsnapshot or self.__writepoolmotorpositions \
+                or self.writeallmotorpositions:
             changed = self.__addPreselectedComponents(
                 self.defaultPreselectedComponents)
             if changed:
