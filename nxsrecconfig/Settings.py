@@ -1150,6 +1150,9 @@ class Settings(object):
         :rtype: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
+        if self.__profileManager.writeallmotorpositions:
+            poolmotors = self.__profileManager.getPoolMotors()
+            nexusconfig_device.extralinkdatasources = json.dumps(poolmotors)
         if cps:
             cp = cps
         else:
@@ -1165,6 +1168,7 @@ class Settings(object):
                 raise
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
+        nexusconfig_device.extralinkdatasources = "[]"
 
         return Utils.tostr(nexusconfig_device.xmlstring)
 
@@ -1371,13 +1375,6 @@ class Settings(object):
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
                 dcpcreator.setInitDSources(self.preselectedDataSources())
-        if self.__profileManager.writeallmotorpositions:
-            poolmotors = self.__profileManager.getPoolMotors()
-            stepdatasources = self.stepdatasources
-            steppoolmotors = set(stepdatasources) & set(poolmotors)
-            initpoolmotors = set(poolmotors) - set(steppoolmotors)
-            dcpcreator.setExtraStepDSources(list(steppoolmotors))
-            dcpcreator.setExtraInitDSources(list(initpoolmotors))
 
         # pools = self.__selector.getPools()
         # channelsources = PoolUtils.getChannelSources(self.__pools, aliases)
