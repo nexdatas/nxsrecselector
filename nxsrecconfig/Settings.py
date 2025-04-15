@@ -1153,6 +1153,8 @@ class Settings(object):
         if self.__profileManager.writeallmotorpositions:
             poolmotors = self.__profileManager.getPoolMotors()
             nexusconfig_device.extralinkdatasources = json.dumps(poolmotors)
+        else:
+            nexusconfig_device.extralinkdatasources = "[]"
         if cps:
             cp = cps
         else:
