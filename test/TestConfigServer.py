@@ -188,13 +188,13 @@ class NXSConfigServer(tango.LatestDeviceImpl):
     #    Read LinkDataSources attribute
     # -----------------------------------------------------------------
     def read_ExtraLinkDataSources(self, attr):
-        attr.set_value(self.attr_LinkDataSources)
+        attr.set_value(self.attr_ExtraLinkDataSources)
 
     # -----------------------------------------------------------------
     #    Write LinkDataSources attribute
     # -----------------------------------------------------------------
     def write_ExtraLinkDataSources(self, attr):
-        self.attr_LinkDataSources = attr.get_write_value()
+        self.attr_ExtraLinkDataSources = attr.get_write_value()
 
     # -----------------------------------------------------------------
     def read_Variables(self, attr):
