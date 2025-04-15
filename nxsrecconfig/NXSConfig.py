@@ -299,6 +299,39 @@ class NXSRecSelector(tango.LatestDeviceImpl):
             return False
         return True
 
+    def read_ExtraLinkDataSources(self, attr):
+        """ Read ExtraLinkDataSources attribute
+
+        :param attr: read attribute
+        :type attr: :class:`tango.Attribute`
+        """
+        self.debug_stream("In read_ExtraLinkDataSources()")
+        attr.set_value(self.__stg.extralinkdatasources or "")
+
+    def write_ExtraLinkDataSources(self, attr):
+        """ Write ExtraLinkDataSources attribute
+
+        :param attr: written attribute
+        :type attr: :class:`tango.Attribute`
+        """
+        self.debug_stream("In write_ExtraLinkDataSources()")
+        if self.is_ExtraLinkDataSources_write_allowed():
+            self.__stg.extralinkdatasources = attr.get_write_value() or ""
+        else:
+            self.warn_stream("To change the settings please close the server.")
+            raise Exception(
+                "To change the settings please close the server.")
+
+    def is_ExtraLinkDataSources_write_allowed(self):
+        """ LinkDataSources attribute Write State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [tango.DevState.RUNNING]:
+            return False
+        return True
+
     def read_ConfigDevice(self, attr):
         """ Read ConfigDevice attribute
 
@@ -2149,6 +2182,17 @@ class NXSRecSelectorClass(tango.DeviceClass):
                  'label': "list of datasources to which a link will be added",
                  'description': "list of datasources to which "
                  "a link will be added",
+                 'Display level': tango.DispLevel.EXPERT,
+            }],
+        'ExtraLinkDataSources':
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
+             {
+                 'label': "list of datasources to which a extra "
+                 "link will be added",
+                 'description': "list of datasources to which "
+                 "an extra link will be added",
                  'Display level': tango.DispLevel.EXPERT,
             }],
         'DescriptionErrors':

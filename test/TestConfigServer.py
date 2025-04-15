@@ -85,6 +85,7 @@ class NXSConfigServer(tango.LatestDeviceImpl):
         self.attr_STEPDataSources = ""
         self.attr_CanFailDataSources = ""
         self.attr_LinkDataSources = ""
+        self.attr_ExtraLinkDataSources = ""
         self.attr_Variables = "{}"
 
         self.cmd = {}
@@ -181,6 +182,18 @@ class NXSConfigServer(tango.LatestDeviceImpl):
     #    Write LinkDataSources attribute
     # -----------------------------------------------------------------
     def write_LinkDataSources(self, attr):
+        self.attr_LinkDataSources = attr.get_write_value()
+
+    # -----------------------------------------------------------------
+    #    Read LinkDataSources attribute
+    # -----------------------------------------------------------------
+    def read_ExtraLinkDataSources(self, attr):
+        attr.set_value(self.attr_LinkDataSources)
+
+    # -----------------------------------------------------------------
+    #    Write LinkDataSources attribute
+    # -----------------------------------------------------------------
+    def write_ExtraLinkDataSources(self, attr):
         self.attr_LinkDataSources = attr.get_write_value()
 
     # -----------------------------------------------------------------
@@ -675,9 +688,18 @@ class NXSConfigServerClass(tango.DeviceClass):
               tango.SCALAR,
               tango.READ_WRITE],
              {
-                 'label': "datasources to be switched into Link mode",
+                 'label': "datasources for which nxdata links are created",
                  'description': "datasources to be switched "
                  "into Link mode during creating configuration process",
+            }],
+        'ExtraLinkDataSources':
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
+             {
+                 'label': "datasources for which extra links are created",
+                 'description': "datasources to be switched "
+                 "into extra Link mode during creating configuration process",
             }],
         'Version':
             [[tango.DevString,
