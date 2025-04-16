@@ -1,4 +1,9 @@
-2025-14-06 Jan Kotanski <jankotan@gmail.com>
+2025-04-15 Jan Kotanski <jankotan@gmail.com>
+	* add WriteAllMotorPositions property (#145)
+	* requires nxsconfigserver v2.17.0
+	* tagged as v3.43.0
+
+2025-04-06 Jan Kotanski <jankotan@gmail.com>
 	* persist conditioning, instrument, normalization and output (#139)
 	* tagged as v3.42.0
 

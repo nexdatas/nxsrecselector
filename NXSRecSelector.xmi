@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://tango.org/pogo/PogoDsl">
-  <classes name="NXSRecSelector" pogoRevision="9.7">
-    <description description="Tango server with Sardana Recorder settings&#xA;&#xA;Source code: https://github.com/nexdatas/nxsrecselector&#xA;Web page: https://nexdatas.github.io/nxsrecselector&#xA;NexDaTaS Web page: https://nexdatas.github.io&#xA;" title="Selector Server for NeXus Sardana Recorder" sourcePath="/home/jkotan/ndts/nexdatas.recselector" language="Python" filestogenerate="XMI   file,Protected Regions,html Pages" license="GPL" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false" descriptionHtmlExists="false">
+  <classes name="NXSRecSelector" pogoRevision="9.8">
+    <description description="Tango server with Sardana Recorder settings&#xA;&#xA;Source code: https://github.com/nexdatas/nxsrecselector&#xA;Web page: https://nexdatas.github.io/nxsrecselector&#xA;NexDaTaS Web page: https://nexdatas.github.io&#xA;" title="Selector Server for NeXus Sardana Recorder" sourcePath="/home/jkotan/ndts/nxsrecselector" language="Python" filestogenerate="XMI   file,Protected Regions,html Pages" license="GPL" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false" descriptionHtmlExists="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at desy.de - jan.kotanski" author="jan.kotanski" emailDomain="desy.de" classFamily="Acquisition" siteSpecific="" platform="All Platforms" bus="Not Applicable" manufacturer="DESY" reference=""/>
     </description>
@@ -63,7 +63,12 @@
       <type xsi:type="pogoDsl:StringVectorType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </deviceProperties>
-    <deviceProperties name="WritePoolMotorPositions" description="add dynamic components for all pool motor positions">
+    <deviceProperties name="WritePoolMotorPositions" description="add dynamic components for pool motor positions without any component">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>False</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="WriteAllMotorPositions" description="add dynamic components for all pool motor positions">
       <type xsi:type="pogoDsl:BooleanType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>False</DefaultPropValue>
@@ -587,6 +592,22 @@
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="list of datasources to be switched into step mode" label="list of datasources to be switch into step mode" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="LinkDataSources" attType="Scalar" rwType="READ_WRITE" displayLevel="EXPERT" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="false" libCheckCriteria="false"/>
+      <archiveEvent fire="false" libCheckCriteria="false"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="list of datasources to which an NXdata link is created" label="list of datasources to which an NXdata link is created" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="ExtraLinkDataSources" attType="Scalar" rwType="READ_WRITE" displayLevel="EXPERT" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="false" libCheckCriteria="false"/>
+      <archiveEvent fire="false" libCheckCriteria="false"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="list of datasources to which an extra link is created" label="list of datasources to which an extra link is created" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="Version" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:StringType"/>

@@ -54,7 +54,9 @@ class Settings(object):
     def __init__(self, server=None, numberofthreads=None,
                  defaultnexuspath=None,
                  defaulttimezone=None, defaultmntgrp=None,
-                 syncsnapshot=False, writepoolmotorpositions=False,
+                 syncsnapshot=False,
+                 writepoolmotorpositions=False,
+                 writeallmotorpositions=False,
                  defaultnexustype=None,
                  defaultudatapath=None):
         """ contructor
@@ -111,8 +113,11 @@ class Settings(object):
         self.resetInvalidDoor = True
         #: (:obj:`bool`) merge profiles to available measurement groups
         self.mergeProfilesToMntGrps = False
-        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        #: (:obj:`bool`) add dynamic components for pool motor positions
+        #:               without any component
         self.writepoolmotorpositions = writepoolmotorpositions
+        #: (:obj:`bool`) add dynamic components for all pool motor positions
+        self.writeallmotorpositions = writeallmotorpositions
         if PYTG_BUG_213:
             self._streams.error(
                 "Settings::Settings() - "
@@ -135,7 +140,8 @@ class Settings(object):
         self.__profileManager = ProfileManager(
             self.__selector,
             syncsnapshot=syncsnapshot,
-            writepoolmotorpositions=writepoolmotorpositions
+            writepoolmotorpositions=writepoolmotorpositions,
+            writeallmotorpositions=writeallmotorpositions
         )
 
         #: (:obj:`str`) configuration file
@@ -1144,6 +1150,12 @@ class Settings(object):
         :rtype: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
+        if self.__profileManager.writeallmotorpositions:
+            poolmotors = self.__profileManager.getPoolMotors()
+            nexusconfig_device.extralinkdatasources = json.dumps(
+                [mt[0] for mt in poolmotors])
+        else:
+            nexusconfig_device.extralinkdatasources = "[]"
         if cps:
             cp = cps
         else:
@@ -1159,6 +1171,7 @@ class Settings(object):
                 raise
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
+        nexusconfig_device.extralinkdatasources = "[]"
 
         return Utils.tostr(nexusconfig_device.xmlstring)
 

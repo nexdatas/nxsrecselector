@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "NXSRECCONFIG" "1" "Feb 13, 2025" "3.42" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "Apr 15, 2025" "3.43" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .sp
@@ -2990,7 +2990,7 @@ Command definitions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B device_property_list  =  {\(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultCanFailDataSources\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default datasources in the CanFail mode\(aq, []], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection\(dq]], \(aqDefaultNeXusType\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault dynamic component NeXus data type\(aq, [\(aqNX_CHAR\(aq]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultUserDataPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus User Data path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/user_data:NXparameters\(dq]], \(aqMasterTimer\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqset the master timer/monitor channel for older MG\(aq, [False]], \(aqMasterTimerFirst\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqthe master timer channel of MG with the index: 0\(aq, [True]], \(aqMergeProfilesToMntGrps\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqmerge profiles to available measurement groups\(aq, [False]], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqMutedPreScanAttrFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted attribute channel filters for PreScanSnapshot\(aq, []], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqResetInvalidDoor\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqreset Door when it is invalid\(aq, [True]], \(aqSyncSnapshot\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqpreselection merges the current ScanSnapshot\(aq, [False]], \(aqTangoSourceErrorStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango error states for tango datasources\(aq, [\(aqOFF\(aq, \(aqINIT\(aq, \(aqINSERT\(aq, \(aqCLOSE\(aq, \(aqUNKNOWN\(aq, \(aqFAULT\(aq]], \(aqTangoSourceWarningStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango warning states for tango datasources\(aq, [\(aqALARM\(aq, \(aqDISABLE\(aq]], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqWritePoolMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for all pool motor positions\(aq, [False]]}
+.B device_property_list  =  {\(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultCanFailDataSources\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default datasources in the CanFail mode\(aq, []], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection\(dq]], \(aqDefaultNeXusType\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault dynamic component NeXus data type\(aq, [\(aqNX_CHAR\(aq]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultUserDataPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus User Data path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/user_data:NXparameters\(dq]], \(aqMasterTimer\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqset the master timer/monitor channel for older MG\(aq, [False]], \(aqMasterTimerFirst\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqthe master timer channel of MG with the index: 0\(aq, [True]], \(aqMergeProfilesToMntGrps\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqmerge profiles to available measurement groups\(aq, [False]], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqMutedPreScanAttrFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted attribute channel filters for PreScanSnapshot\(aq, []], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqResetInvalidDoor\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqreset Door when it is invalid\(aq, [True]], \(aqSyncSnapshot\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqpreselection merges the current ScanSnapshot\(aq, [False]], \(aqTangoSourceErrorStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango error states for tango datasources\(aq, [\(aqOFF\(aq, \(aqINIT\(aq, \(aqINSERT\(aq, \(aqCLOSE\(aq, \(aqUNKNOWN\(aq, \(aqFAULT\(aq]], \(aqTangoSourceWarningStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango warning states for tango datasources\(aq, [\(aqALARM\(aq, \(aqDISABLE\(aq]], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqWriteAllMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for all pool motor positions\(aq, [False]], \(aqWritePoolMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for pool motor positions without any omponent\(aq, [False]]}
 (\fI\%dict\fP <\fI\%str\fP, [ \fI\%str\fP, \fI\%tango.CmdArgType\fP, [ \fI\%list\fP <\fI\%int\fP> ] ] > ) Device Properties
 .UNINDENT
 .UNINDENT
@@ -3009,7 +3009,7 @@ ProfileManager
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class  nxsrecconfig.ProfileManager.ProfileManager(selector, syncsnapshot=False, writepoolmotorpositions=False)
+.B class  nxsrecconfig.ProfileManager.ProfileManager(selector, syncsnapshot=False, writepoolmotorpositions=False, writeallmotorpositions=False)
 Bases: \fI\%object\fP
 .sp
 Manages Measurement Group and Profile from Selector
@@ -3025,6 +3025,10 @@ constructor
 \fBsyncsnapshot\fP (\fI\%bool\fP) \-\- preselection merges current ScanSnapshot
 .IP \(bu 2
 \fBwritepoolmotorpositions\fP (\fI\%bool\fP) \-\- add dynamic components
+for pool motor positions
+without any component
+.IP \(bu 2
+\fBwriteallmotorpositions\fP (\fI\%bool\fP) \-\- add dynamic components
 for all pool motor positions
 .UNINDENT
 .UNINDENT
@@ -3265,6 +3269,11 @@ json dictionary with mntgrp configuration information
 .B Return type
 \fI\%str\fP
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B writeallmotorpositions
+(\fI\%bool\fP) add dynamic components for all pool motor positions
 .UNINDENT
 .UNINDENT
 .SS nxsrecconfig.Release module
@@ -3701,7 +3710,7 @@ saves configuration
 NeXus Sardana Recorder Settings implementation
 .INDENT 0.0
 .TP
-.B class  nxsrecconfig.Settings.Settings(server=None, numberofthreads=None, defaultnexuspath=None, defaulttimezone=None, defaultmntgrp=None, syncsnapshot=False, writepoolmotorpositions=False, defaultnexustype=None, defaultudatapath=None)
+.B class  nxsrecconfig.Settings.Settings(server=None, numberofthreads=None, defaultnexuspath=None, defaulttimezone=None, defaultmntgrp=None, syncsnapshot=False, writepoolmotorpositions=False, writeallmotorpositions=False, defaultnexustype=None, defaultudatapath=None)
 Bases: \fI\%object\fP
 .sp
 NeXus Sardana Recorder settings
@@ -4479,8 +4488,14 @@ json dictionary with components for all variables
 .UNINDENT
 .INDENT 7.0
 .TP
-.B writepoolmotorpositions
+.B writeallmotorpositions
 (\fI\%bool\fP) add dynamic components for all pool motor positions
+.UNINDENT
+.INDENT 7.0
+.TP
+.B writepoolmotorpositions
+(\fI\%bool\fP) add dynamic components for pool motor positions
+without any component
 .UNINDENT
 .INDENT 7.0
 .TP
