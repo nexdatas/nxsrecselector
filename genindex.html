@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; NXSRecSelector 3.42.0 documentation</title>
+    <title>Index &#8212; NXSRecSelector 3.43.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.42</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.43</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -575,14 +575,16 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExportEnv_allowed">is_ExportEnv_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExtraLinkDataSources_write_allowed">is_ExtraLinkDataSources_write_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed">is_FetchProfile_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed">is_FullDeviceNames_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed">is_ImportEnv_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed">is_ImportEnv_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed">is_ImportMntGrp_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed">is_IsMntGrpUpdated_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -1020,6 +1022,8 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Door">read_Door() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ExtraLinkDataSources">read_ExtraLinkDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_LinkDataSources">read_LinkDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_MacroServer">read_MacroServer() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -1308,14 +1312,16 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_Door">write_Door() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ExtraLinkDataSources">write_ExtraLinkDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_LinkDataSources">write_LinkDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_MntGrp">write_MntGrp() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileConfiguration">write_ProfileConfiguration() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileFile">write_ProfileFile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanDir">write_ScanDir() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -1330,6 +1336,12 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_WriterDevice">write_WriterDevice() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.writeallmotorpositions">writeallmotorpositions (nxsrecconfig.ProfileManager.ProfileManager attribute)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writeallmotorpositions">(nxsrecconfig.Settings.Settings attribute)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.writeEnvAttr">writeEnvAttr() (nxsrecconfig.Utils.MSUtils class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writepoolmotorpositions">writepoolmotorpositions (nxsrecconfig.Settings.Settings attribute)</a>

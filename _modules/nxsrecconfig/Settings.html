@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.40.1 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 3.43.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.40</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.43</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -172,7 +172,9 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaultnexuspath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaulttimezone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">defaultmntgrp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">defaultnexustype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaultudatapath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; contructor</span>
@@ -229,8 +231,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">resetInvalidDoor</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) merge profiles to available measurement groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mergeProfilesToMntGrps</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
+        <span class="c1">#: (:obj:`bool`) add dynamic components for pool motor positions</span>
+        <span class="c1">#:               without any component</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writepoolmotorpositions</span> <span class="o">=</span> <span class="n">writepoolmotorpositions</span>
+        <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span> <span class="o">=</span> <span class="n">writeallmotorpositions</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                 <span class="s2">&quot;Settings::Settings() - &quot;</span>
@@ -253,7 +258,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span> <span class="o">=</span> <span class="n">ProfileManager</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">,</span>
             <span class="n">syncsnapshot</span><span class="o">=</span><span class="n">syncsnapshot</span><span class="p">,</span>
-            <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="n">writepoolmotorpositions</span>
+            <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="n">writepoolmotorpositions</span><span class="p">,</span>
+            <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="n">writeallmotorpositions</span>
         <span class="p">)</span>
 
         <span class="c1">#: (:obj:`str`) configuration file</span>
@@ -1262,6 +1268,12 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">:</span>
+            <span class="n">poolmotors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">getPoolMotors</span><span class="p">()</span>
+            <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">mt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mt</span> <span class="ow">in</span> <span class="n">poolmotors</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
         <span class="k">if</span> <span class="n">cps</span><span class="p">:</span>
             <span class="n">cp</span> <span class="o">=</span> <span class="n">cps</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1277,6 +1289,7 @@
                 <span class="k">raise</span>
         <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">stepdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
         <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">linkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+        <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
 
         <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span><span class="p">)</span></div>
 

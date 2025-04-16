@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.42.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.43.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.42</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.43</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -170,7 +170,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  Manages Measurement Group and Profile from Selector&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param selector: selector object</span>
@@ -178,8 +179,12 @@
 <span class="sd">        :param syncsnapshot: preselection merges current ScanSnapshot</span>
 <span class="sd">        :type syncsnapshot: :obj:`bool`</span>
 <span class="sd">        :param writepoolmotorpositions: add dynamic components</span>
-<span class="sd">                                        for all pool motor positions</span>
+<span class="sd">                                        for pool motor positions</span>
+<span class="sd">                                        without any component</span>
 <span class="sd">        :type writepoolmotorpositions: :obj:`bool`</span>
+<span class="sd">        :param writeallmotorpositions: add dynamic components</span>
+<span class="sd">                                        for all pool motor positions</span>
+<span class="sd">        :type writeallmotorpositions: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.Selector.Selector`) configuration selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">selector</span>
@@ -217,6 +222,9 @@
 
         <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span> <span class="o">=</span> <span class="n">writepoolmotorpositions</span>
+
+        <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span> <span class="o">=</span> <span class="n">writeallmotorpositions</span>
 
     <span class="k">def</span> <span class="nf">__updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updatas MacroServer name</span>
@@ -588,7 +596,7 @@
                 <span class="s1">&#39;PreScanSnapshot&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
             <span class="n">tangods</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">snapshot</span><span class="p">]</span>
         <span class="n">poolds</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">:</span>
             <span class="n">poolds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPoolMotors</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">poolds</span><span class="p">:</span>
                 <span class="n">tangods</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">poolds</span><span class="p">)</span>
@@ -649,13 +657,16 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">avmg</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">deselect</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">importMntGrp</span><span class="p">()</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__addPreselectedComponents</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">resetPreselectedComponents</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span> \
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">:</span>
             <span class="n">changed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addPreselectedComponents</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
