@@ -1,3 +1,7 @@
+2025-04-23 Jan Kotanski <jankotan@gmail.com>
+	* fix ExtraLinkDataSources attribute implementation (#149)
+	* tagged as v3.43.1
+
 2025-04-15 Jan Kotanski <jankotan@gmail.com>
 	* add WriteAllMotorPositions property (#145)
 	* requires nxsconfigserver v2.17.0
