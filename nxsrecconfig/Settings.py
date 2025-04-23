@@ -721,6 +721,32 @@ class Settings(object):
         __setLinkDatSources,
         doc='link datasource list')
 
+    def __getExtraLinkDatSources(self):
+        """ get method for extra link dataSource attribute
+
+        :returns: names of extra link dataSources
+        :rtype: :obj:`str`
+        """
+        inst = self.__selector.setConfigInstance()
+        if inst.extralinkdatasources:
+            return inst.extralinkdatasources
+        else:
+            return "[]"
+
+    def __setExtraLinkDatSources(self, names):
+        """ set method for dataSourceGroup attribute
+        :param names: names of extra link dataSources
+        :type names: :obj:`str`
+        """
+        inst = self.__selector.setConfigInstance()
+        inst.extralinkdatasources = names
+
+    #: (:obj:`str`) the json data string
+    extralinkdatasources = property(
+        __getExtraLinkDatSources,
+        __setExtraLinkDatSources,
+        doc='link datasource list')
+
     def __getCanFailDatSources(self):
         """ get method for dataSourceGroup attribute
 
