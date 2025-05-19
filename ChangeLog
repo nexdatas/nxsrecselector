@@ -1,3 +1,8 @@
+2025-05-20 Jan Kotanski <jankotan@gmail.com>
+	* drop support for python2 (#152)
+	* add support for numpy 2, python 3.13 (#152)
+	* tagged as v4.0.0
+
 2025-04-23 Jan Kotanski <jankotan@gmail.com>
 	* fix ExtraLinkDataSources attribute implementation (#149)
 	* tagged as v3.43.1
