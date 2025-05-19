@@ -44,6 +44,10 @@ class ConverterXtoY(object):
                 selection[new] = selection.pop(old)
 
 
+class Converter3to4(ConverterXtoY):
+    pass
+
+
 class Converter2to3(ConverterXtoY):
 
     """ Selection converter from version 2 to 3
@@ -91,6 +95,10 @@ class Converter2to3(ConverterXtoY):
                 selection["DataSourcePreselection"])
         if 'MntGrpConfiguration' not in selection.keys():
             selection['MntGrpConfiguration'] = ''
+
+
+class Converter4to3(ConverterXtoY):
+    pass
 
 
 class Converter3to2(ConverterXtoY):
@@ -263,13 +271,11 @@ class Converter(object):
         self.minorversion = int(sver[1])
         #: (:obj:`int`) patch selection version
         self.patchversion = int(sver[2])
-        if self.majorversion == 4:
-            self.majorversion = 3
 
         #: (:obj:`list` <:class:`ConverterXtoY`>) converter up sequence
-        self.up = [Converter1to2(), Converter2to3()]
+        self.up = [Converter1to2(), Converter2to3(), Converter3to4()]
         #: (:obj:`list` <:class:`ConverterXtoY`>) converter down sequence
-        self.down = [Converter2to1(), Converter3to2()]
+        self.down = [Converter2to1(), Converter3to2(), Converter4to3()]
 
     def allkeys(self, selection):
         """
@@ -325,6 +331,4 @@ class Converter(object):
             major = int(sver[0])
             minor = int(sver[1])
             patch = int(sver[2])
-            if major == 4:
-                major = 3
         return major, minor, patch

@@ -4532,10 +4532,8 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
 
         self.compareToDump(
             rs,
-            ["ComponentPreselection", "PreselectingDataSources", "Timer",
-             "Version"])
+            ["ComponentPreselection", "PreselectingDataSources", "Timer"])
         self.assertEqual(self.value(rs, "Timer"), '[]')
-        self.assertTrue(self.value(rs, "Version") in ['3.0.0', "4.0.0"])
         self.assertEqual(self.value(rs, "PreselectingDataSources"), '[]')
 
     # resetPreselectedComponents test
