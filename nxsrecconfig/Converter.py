@@ -263,6 +263,8 @@ class Converter(object):
         self.minorversion = int(sver[1])
         #: (:obj:`int`) patch selection version
         self.patchversion = int(sver[2])
+        if self.majorversion == 4:
+            self.majorversion = 3
 
         #: (:obj:`list` <:class:`ConverterXtoY`>) converter up sequence
         self.up = [Converter1to2(), Converter2to3()]
@@ -323,4 +325,6 @@ class Converter(object):
             major = int(sver[0])
             minor = int(sver[1])
             patch = int(sver[2])
+            if major == 4:
+                major = 3
         return major, minor, patch
