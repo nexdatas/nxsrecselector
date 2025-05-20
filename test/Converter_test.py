@@ -29,7 +29,8 @@ import time
 
 from nxsrecconfig.Converter import (
     Converter, Converter1to2, Converter2to1,
-    Converter2to3, Converter3to2)
+    Converter2to3, Converter3to2,
+    Converter3to4, Converter4to3)
 
 import logging
 logger = logging.getLogger()
@@ -161,10 +162,12 @@ class ConverterTest(unittest.TestCase):
             self.assertEqual(cv.majorversion, ar[0])
             self.assertEqual(cv.minorversion, ar[1])
             self.assertEqual(cv.patchversion, ar[2])
-            self.assertEqual(len(cv.down), 2)
-            self.assertEqual(len(cv.up), 2)
+            self.assertEqual(len(cv.down), 3)
+            self.assertEqual(len(cv.up), 3)
             self.assertTrue(isinstance(cv.up[0], Converter1to2))
             self.assertTrue(isinstance(cv.up[1], Converter2to3))
+            self.assertTrue(isinstance(cv.up[2], Converter3to4))
+            self.assertTrue(isinstance(cv.down[2], Converter4to3))
             self.assertTrue(isinstance(cv.down[1], Converter3to2))
             self.assertTrue(isinstance(cv.down[0], Converter2to1))
 
