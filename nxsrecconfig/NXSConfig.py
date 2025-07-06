@@ -78,8 +78,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         """ Device destructor
         """
         self.debug_stream("In delete_device()")
-        if hasattr(self, 'stg') and self.__stg:
-            del self.__stg
+        if self.__stg:
             self.__stg = None
         self.set_state(tango.DevState.OFF)
 
@@ -87,8 +86,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         """ Device initialization
         """
         self.debug_stream("In init_device()")
-        if hasattr(self, 'stg') and self.__stg:
-            del self.__stg
+        if self.__stg:
             self.__stg = None
         self.get_device_properties(self.get_device_class())
         numberofthreads = self.NumberOfThreads or None
