@@ -1,3 +1,7 @@
+2025-07-07 Jan Kotanski <jankotan@gmail.com>
+	* clear device disctructor (#156)
+	* tagged as v4.0.1
+
 2025-05-20 Jan Kotanski <jankotan@gmail.com>
 	* drop support for python2 (#152)
 	* add support for numpy 2, python 3.13 (#152)
