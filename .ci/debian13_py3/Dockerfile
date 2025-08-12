@@ -1,8 +1,8 @@
-FROM debian:bookworm
+FROM debian:trixie
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bookworm main" > /etc/apt/sources.list.d/debiande.list'
+RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian trixie main" > /etc/apt/sources.list.d/debiande.list'
 
 # add the HDRI repository
 RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
@@ -10,8 +10,8 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl gnupg2 procps curl apt-transport-https gnupg2 ca-certificates wget
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-# RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bookworm main" -y
-RUN cd /etc/apt/sources.list.d && wget http://repos.pni-hdri.de/bookworm-pni-hdri.list
+# RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian trixie main" -y
+RUN cd /etc/apt/sources.list.d && wget http://repos.pni-hdri.de/trixie-pni-hdri.list
 
 
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
