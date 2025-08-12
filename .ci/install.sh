@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # workaround for a bug in debian9, i.e. starting mysql hangs
-if [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu25.04" ]; then
+if [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "debian13" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu25.04" ]; then
     docker exec --user root ndts service mariadb restart
 else
     docker exec --user root ndts service mysql stop
@@ -51,7 +51,7 @@ if [ "$2" = "2" ]; then
     echo "install pytango and nxsconfigserver-db"
     docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get install -y   python-pytango  nxsconfigserver-db ; sleep 10'
 else
-    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu22.04" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] ; then
+    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu22.04" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "debian13" ] ; then
 	echo "install pytango"
 	docker exec --user root ndts /bin/bash -c 'apt-get -qq update; apt-get install -y   python3-tango'
 	echo "install nxsconfigserver-db"
