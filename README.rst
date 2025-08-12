@@ -58,7 +58,7 @@ Extract the sources and run
 Debian packages
 ^^^^^^^^^^^^^^^
 
-Debian bookworm, bullseye and buster or ubuntu oracular, noble, jammy packages can be found in the HDRI repository.
+Debian trixie, bookworm, bullseye or ubuntu plucky, noble, jammy packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
@@ -72,7 +72,7 @@ and then download the corresponding source list
 .. code-block:: console
 
 	  $ cd /etc/apt/sources.list.d
-	  $ wget http://repos.pni-hdri.de/bookworm-pni-hdri.list
+	  $ wget http://repos.pni-hdri.de/trixie-pni-hdri.list
 
 Finally, install module
 
