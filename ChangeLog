@@ -1,3 +1,7 @@
+2025-09-04 Jan Kotanski <jankotan@gmail.com>
+	* reduce waiting time in CheckerThread (#160)
+	* tagged as v4.1.0
+
 2025-07-07 Jan Kotanski <jankotan@gmail.com>
 	* clear device disctructor (#155)
 	* tagged as v4.0.1

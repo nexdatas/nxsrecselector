@@ -146,7 +146,7 @@ class CheckerThread(threading.Thread):
                 # read real value (not polled)
                 dp.set_source(tango.DevSource.DEV)
                 # wait when DeviceProxy is ready
-                TangoUtils.wait(dp, state=None)
+                TangoUtils.wait(dp, state=None, counter=2)
                 dp.set_timeout_millis(10000)
                 state = dp.state()
                 if str(state) in self.tangoSourceErrorStates:
