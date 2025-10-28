@@ -48,5 +48,7 @@ jobs:
           TEST: ${{ matrix.test }}
         run: .ci/run.sh ${TEST} 3
       - name: Stop the docker
-        run: docker container stop ndts
+        run: |
+             docker exec  --user root ndts  /bin/bash -c "chown -R 1001 /home/tango "
+             docker container stop ndts
 
