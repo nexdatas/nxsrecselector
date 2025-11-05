@@ -551,7 +551,13 @@ class Settings(object):
         :param name: name of configuration
         :type name: :obj:`str`
         """
-        self.__selector.set(json.loads(jconf))
+        dct = json.loads(jconf)
+        udata = dct.get("UserData", {})
+        if self.globalUserData:
+            jname = Utils.stringToDictJson(udata)
+            self.__guserdata = jname
+
+        self.__selector.set(dct)
         self.storeProfile()
 
     def __getProfileConfiguration(self):
@@ -560,6 +566,12 @@ class Settings(object):
         :returns: configuration
         :rtype: :obj:`str`
         """
+        if self.globalUserData and self.__guserdata is not None:
+            if self.__selector["UserData"] != self.__guserdata:
+                self.__selector["UserData"] = self.__guserdata
+                self.storeProfile()
+        else:
+            self.__guserdata = self.__selector["UserData"]
         return json.dumps(self.__selector.get())
 
     #: (:obj:`str`) the json data string
