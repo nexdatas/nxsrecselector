@@ -58,7 +58,8 @@ class Settings(object):
                  writepoolmotorpositions=False,
                  writeallmotorpositions=False,
                  defaultnexustype=None,
-                 defaultudatapath=None):
+                 defaultudatapath=None,
+                 globaluserdata=False):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -76,6 +77,8 @@ class Settings(object):
         :type defaultnexustype: :obj:`str`
         :param defaultudatapath:  default user data dynamic component path
         :type defaultudatapath: :obj:`str`
+        :param globaluserdata: global user data flag
+        :type globaluserdata: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -109,6 +112,10 @@ class Settings(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.syncSnapshot = syncsnapshot
+        #: (:obj:`bool`) global user data flag
+        self.globalUserData = globaluserdata
+        #: (:obj:`str`) global user data json dict
+        self.__guserdata = None
         #: (:obj:`bool`) reset Door when it is invalid
         self.resetInvalidDoor = True
         #: (:obj:`bool`) merge profiles to available measurement groups
@@ -590,7 +597,13 @@ class Settings(object):
         :returns: userData json dictionary
         :rtype: :obj:`str`
         """
-        return self.__selector["UserData"]
+        if self.globalUserData and self.__guserdata is not None:
+            if self.__selector["UserData"] != self.__guserdata:
+                self.__selector["UserData"] = self.__guserdata
+                self.storeProfile()
+        else:
+            self.__guserdata = self.__selector["UserData"]
+        return self.__guserdata
 
     def __setUserData(self, udata):
         """
@@ -600,6 +613,8 @@ class Settings(object):
         :type udata: :obj:`str`
         """
         jname = Utils.stringToDictJson(udata)
+        if self.globalUserData:
+            self.__guserdata = jname
         if self.__selector["UserData"] != jname:
             self.__selector["UserData"] = jname
             self.storeProfile()
