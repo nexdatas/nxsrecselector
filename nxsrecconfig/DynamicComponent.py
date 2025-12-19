@@ -325,6 +325,13 @@ class DynamicComponent(object):
                         shape, nxtype = self.__shapeFromTango(dss[0])
                         if not nxtype:
                             nxtype = self.__defaulttype
+                else:
+                    try:
+                        shape, dt, _ = TangoUtils.getShapeTypeUnit(ds)
+                        nxtype = self.__npTn[dt] \
+                            if dt in self.__npTn.keys() else nxtype
+                    except Exception:
+                        pass
 
                 nxtype = self.__getProp(
                     self.__nexustypes, self.__nexuslabels, ds, nxtype)
