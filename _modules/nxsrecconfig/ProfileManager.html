@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 3.43.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 4.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.43</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -507,7 +507,7 @@
             <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">toActive</span> <span class="ow">or</span> <span class="n">amntgrp</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amntgrp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">(</span><span class="n">sync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">jconf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">jconf</span><span class="p">):</span>
@@ -648,8 +648,11 @@
             <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">changed</span>
 
-<div class="viewcode-block" id="ProfileManager.fetchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">fetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager.fetchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">fetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; fetches the profile configuration</span>
+
+<span class="sd">        :param sync: sync snapshot or motor positions</span>
+<span class="sd">        :type sync: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">fetchSelection</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -665,8 +668,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">resetPreselectedComponents</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span> \
-                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">sync</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span>
+                       <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span>
+                       <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">):</span>
             <span class="n">changed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addPreselectedComponents</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>

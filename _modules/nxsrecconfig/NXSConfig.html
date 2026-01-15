@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 3.43.0 documentation</title>
+    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 4.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.43</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -196,8 +196,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Device destructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In delete_device()&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;stg&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">OFF</span><span class="p">)</span></div>
 
@@ -205,8 +204,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Device initialization</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In init_device()&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;stg&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_device_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_device_class</span><span class="p">())</span>
         <span class="n">numberofthreads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberOfThreads</span> <span class="ow">or</span> <span class="kc">None</span>
@@ -216,6 +214,7 @@
         <span class="n">defaultmntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultMntGrp</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">defaultnexustype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultNeXusType</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">syncsnapshot</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SyncSnapshot</span><span class="p">)</span>
+        <span class="n">globaluserdata</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GlobalUserData</span><span class="p">)</span>
         <span class="n">writepoolmotorpositions</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WritePoolMotorPositions</span><span class="p">)</span>
         <span class="n">writeallmotorpositions</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WriteAllMotorPositions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="n">STG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">,</span>
@@ -223,7 +222,7 @@
                          <span class="n">writepoolmotorpositions</span><span class="p">,</span>
                          <span class="n">writeallmotorpositions</span><span class="p">,</span>
                          <span class="n">defaultnexustype</span><span class="p">,</span>
-                         <span class="n">defaultudatapath</span><span class="p">)</span>
+                         <span class="n">defaultudatapath</span><span class="p">,</span> <span class="n">globaluserdata</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PoolBlacklist</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimerFilters</span> <span class="ow">or</span> <span class="p">[</span>
@@ -754,6 +753,41 @@
 
 <div class="viewcode-block" id="NXSRecSelector.is_FetchProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_FetchProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; FetchProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="NXSRecSelector.SyncProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SyncProfile">[docs]</a>    <span class="k">def</span> <span class="nf">SyncProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SyncProfile command</span>
+
+<span class="sd">        :brief: Fetch server configuration and syncronize snapshot</span>
+<span class="sd">                or motor positions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s2">&quot;In SyncProfile()&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">syncProfile</span><span class="p">()</span>
+
+            <span class="c1"># updating memorized attributes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dp</span> <span class="ow">or</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span>
+                <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">()))</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__toupdate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dp</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__dp</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span>
+                            <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">var</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NXSRecSelector.is_SyncProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SyncProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SyncProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; SyncProfile command State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -2052,6 +2086,10 @@
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
          <span class="s2">&quot;preselection merges the current ScanSnapshot&quot;</span><span class="p">,</span>
          <span class="p">[</span><span class="kc">False</span><span class="p">]],</span>
+        <span class="s1">&#39;GlobalUserData&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
+         <span class="s2">&quot;use global user data dictionary&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="kc">False</span><span class="p">]],</span>
         <span class="s1">&#39;WritePoolMotorPositions&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
          <span class="s2">&quot;add dynamic components for pool motor positions &quot;</span>
@@ -2109,6 +2147,9 @@
             <span class="p">[[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]],</span>
         <span class="s1">&#39;FetchProfile&#39;</span><span class="p">:</span>
+            <span class="p">[[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">],</span>
+             <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]],</span>
+        <span class="s1">&#39;SyncProfile&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]],</span>
         <span class="s1">&#39;StoreProfile&#39;</span><span class="p">:</span>

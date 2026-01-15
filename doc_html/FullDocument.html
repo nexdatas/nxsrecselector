@@ -61,6 +61,7 @@
 				<li> <a href="FullDocument.html#cmdVariableComponents"> VariableComponents </a>
 				<li> <a href="FullDocument.html#cmdComponentSources"> ComponentSources </a>
 				<li> <a href="FullDocument.html#cmdCreateDataSources"> CreateDataSources </a>
+				<li> <a href="FullDocument.html#cmdSyncProfile"> SyncProfile </a>
 			</ul>
 			<li> <a href="FullDocument.html#attributes">   Attributes   </a>
 			<ul>
@@ -223,6 +224,12 @@
 	<tr>
 		<td> SyncSnapshot </td>
 		<td> preselection merges the current ScanSnapshot </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> GlobalUserData </td>
+		<td> use global user data flag </td>
 		<td> boolean </td>
 		<td> False <br> </td>
 	</tr>
@@ -648,6 +655,13 @@
 		<td> DEV_VOID </td>
 		<td> OPERATOR </td>
 		<td> It creates new DataSources on the ConfigServer </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSyncProfile.html"> SyncProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Fetch server configuration and sync snapshot and motor positions </td>
 	</tr>
 </table>
 <br><br><hr>
@@ -2950,6 +2964,55 @@
 	<tr>
 		<td> Command allowed for </td>
 		<td> All states </td>
+		<td> .. </td>
+	</tr>
+</table>
+<br><br><hr>
+<a name="cmdSyncProfile"> </a>
+<br><br><br>
+<font size="+1"><u><b> Command SyncProfile : </b></u></font>
+<ul>
+	Fetch server configuration and sync snapshot and motor positions
+</ul>
+<br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=0> <font size=+1> <center><b> SyncProfile Definition </b></font></center></td>
+	</tr>
+	<tr>
+		<td> Input Argument </td>
+		<td> Tango::DEV_VOID </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td> Output Argument </td>
+		<td> Tango::DEV_VOID </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td> DisplayLevel </td>
+		<td> OPERATOR </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Inherited </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Abstract </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Polling Period </td>
+		<td> Not polled </td>
+		<td> .. </td>
+	</tr>
+<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td><Td><Hr></Td></Tr>
+	<tr>
+		<td> Command NOT allowed for </td>
+		<td> <font size="-1">  <li> RUNNING </li> </font> </td>
 		<td> .. </td>
 	</tr>
 </table>

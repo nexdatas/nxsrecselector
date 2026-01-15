@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 3.39.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 4.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
 
   </head><body>
@@ -35,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.39</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -152,7 +154,7 @@
 
 <div class="viewcode-block" id="DynamicComponent"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent">[docs]</a><span class="k">class</span> <span class="nc">DynamicComponent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; Creates dynamic component</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Creates dynamic component</span>
 <span class="sd">        of given component &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">,</span>
@@ -161,7 +163,7 @@
                  <span class="n">defaulttype</span><span class="o">=</span><span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span>
                  <span class="n">defaultuserpath</span><span class="o">=</span><span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span>
                  <span class="s2">&quot;user_data:NXparameters&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param nexusconfig_device: configserver configuration server</span>
 <span class="sd">        :type  nexusconfig_device: :obj:`tango.DeviceProxy` \</span>
@@ -230,7 +232,7 @@
                        <span class="s2">&quot;string&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_BOOLEAN&quot;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__get_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides a device alias</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides a device alias</span>
 
 <span class="sd">        :param name: device name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -250,7 +252,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="o">.</span><span class="n">get_alias</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DynamicComponent.setStepDictDSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDictDSources">[docs]</a>    <span class="k">def</span> <span class="nf">setStepDictDSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dctlist</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets user datasources with type and shape</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets user datasources with type and shape</span>
 
 <span class="sd">        :param dctlist: json list of parameter dictionaries</span>
 <span class="sd">               [{&quot;name&quot;: &lt;dsname&gt;, &quot;dtype&quot;: &lt;num_type&gt;, &quot;shape&quot;:&lt;list&gt;}, ...]</span>
@@ -268,7 +270,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="DynamicComponent.setStepDSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDSources">[docs]</a>    <span class="k">def</span> <span class="nf">setStepDSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsources</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets step datasources</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets step datasources</span>
 
 <span class="sd">        :param dsources: list of step datasources</span>
 <span class="sd">        :type dsources: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -279,7 +281,7 @@
 
     <span class="c1">#</span>
 <div class="viewcode-block" id="DynamicComponent.setInitDSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setInitDSources">[docs]</a>    <span class="k">def</span> <span class="nf">setInitDSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsources</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets init datasources</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets init datasources</span>
 
 <span class="sd">        :param dsources: list of init datasources</span>
 <span class="sd">        :type dsources: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -290,7 +292,7 @@
 
     <span class="c1">#</span>
 <div class="viewcode-block" id="DynamicComponent.setLabelParams"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setLabelParams">[docs]</a>    <span class="k">def</span> <span class="nf">setLabelParams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">links</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">shapes</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets label parameters for specific dynamic components</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets label parameters for specific dynamic components</span>
 
 <span class="sd">        :param labels: label dictionaries</span>
 <span class="sd">        :type labels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
@@ -321,7 +323,7 @@
 
 <div class="viewcode-block" id="DynamicComponent.setDefaultLinkPath"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setDefaultLinkPath">[docs]</a>    <span class="k">def</span> <span class="nf">setDefaultLinkPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dynamicLinks</span><span class="p">,</span> <span class="n">dynamicPath</span><span class="p">,</span>
                            <span class="n">dynamicInitLinks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets default nexus path and link flag for dynamic components</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets default nexus path and link flag for dynamic components</span>
 
 <span class="sd">        :brief: if dynamicPath is None or &quot;&quot; it is reset to default one</span>
 <span class="sd">        :param dynamicPath: nexus default path</span>
@@ -338,7 +340,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span></div>
 
     <span class="k">def</span> <span class="nf">__shapeFromTango</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provices datasource shape and NeXus type from Tango device</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provices datasource shape and NeXus type from Tango device</span>
 
 <span class="sd">        :param ds: datasource name</span>
 <span class="sd">        :type ds: :obj:`str`</span>
@@ -356,7 +358,7 @@
         <span class="k">return</span> <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span>
 
     <span class="k">def</span> <span class="nf">__createSardanaNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">definition</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates XML nodes for sardana devices</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates XML nodes for sardana devices</span>
 
 <span class="sd">        :param created: list of created devices</span>
 <span class="sd">        :type created: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -398,7 +400,7 @@
 
     <span class="k">def</span> <span class="nf">__createNonSardanaNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span>
                                 <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;STEP&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates XML nodes for non sardana devices</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates XML nodes for non sardana devices</span>
 
 <span class="sd">        :param created: list of created devices</span>
 <span class="sd">        :type created: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -441,6 +443,13 @@
                         <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shapeFromTango</span><span class="p">(</span><span class="n">dss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">nxtype</span><span class="p">:</span>
                             <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttype</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">shape</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getShapeTypeUnit</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+                        <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="p">[</span><span class="n">dt</span><span class="p">]</span> \
+                            <span class="k">if</span> <span class="n">dt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="n">nxtype</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">pass</span>
 
                 <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getProp</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__nexustypes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">)</span>
@@ -458,7 +467,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__createLink</span><span class="p">(</span><span class="n">nxdata</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DynamicComponent.create"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates dynamic component</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates dynamic component</span>
 
 <span class="sd">        :returns: dynanic component name</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -503,7 +512,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__getProp</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nexusprop</span><span class="p">,</span> <span class="n">nexuslabels</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; gets the property value for the given datasource</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; gets the property value for the given datasource</span>
 
 <span class="sd">        :param nexusprop: nexus property dictionary</span>
 <span class="sd">        :type nexusprop: :obj:`dict` &lt;:obj:`str` , :`any`&gt;</span>
@@ -521,7 +530,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__getPathField</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nexuspaths</span><span class="p">,</span> <span class="n">nexuslabels</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; gets the Nexus path and for the given datasource</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; gets the Nexus path and for the given datasource</span>
 
 <span class="sd">        :param nexuspaths: nexus property path dictionary</span>
 <span class="sd">        :type nexuspaths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
@@ -553,7 +562,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__createLink</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates XML node for nexus link</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates XML node for nexus link</span>
 
 <span class="sd">        :param root: root node</span>
 <span class="sd">        :type root: :class:`lxml.etree.Element`</span>
@@ -572,7 +581,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__findDataSource</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; finds datasource details:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; finds datasource details:</span>
 <span class="sd">        (attribute name, device name, host, port) tuple</span>
 
 <span class="sd">        :param name: datasource name</span>
@@ -609,7 +618,7 @@
     <span class="k">def</span> <span class="nf">__createField</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">sname</span><span class="p">,</span>
                       <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dsnode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;STEP&#39;</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates XML node for NeXus field</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates XML node for NeXus field</span>
 
 <span class="sd">        :param parent: parent node</span>
 <span class="sd">        :type parent: :class:`lxml.etree.Element`</span>
@@ -684,7 +693,7 @@
         <span class="k">return</span> <span class="n">field</span>
 
 <div class="viewcode-block" id="DynamicComponent.remove"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; removes dynamic component</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; removes dynamic component</span>
 
 <span class="sd">        :param name: dynamic component name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -700,7 +709,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__createGroupTree</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates group tree</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates group tree</span>
 
 <span class="sd">        :param definition: definition node</span>
 <span class="sd">        :type definition: :class:`lxml.etree.Element`</span>
@@ -754,7 +763,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>

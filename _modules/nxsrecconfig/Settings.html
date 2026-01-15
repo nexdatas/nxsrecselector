@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 4.0.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 4.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -176,7 +176,8 @@
                  <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">defaultnexustype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">defaultudatapath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">defaultudatapath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">globaluserdata</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; contructor</span>
 
 <span class="sd">        :param server: NXSRecSelector server</span>
@@ -194,6 +195,8 @@
 <span class="sd">        :type defaultnexustype: :obj:`str`</span>
 <span class="sd">        :param defaultudatapath:  default user data dynamic component path</span>
 <span class="sd">        :type defaultudatapath: :obj:`str`</span>
+<span class="sd">        :param globaluserdata: global user data flag</span>
+<span class="sd">        :type globaluserdata: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
@@ -227,6 +230,10 @@
 
         <span class="c1">#: (:obj:`bool`) preselection merges current ScanSnapshot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syncSnapshot</span> <span class="o">=</span> <span class="n">syncsnapshot</span>
+        <span class="c1">#: (:obj:`bool`) global user data flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">globalUserData</span> <span class="o">=</span> <span class="n">globaluserdata</span>
+        <span class="c1">#: (:obj:`str`) global user data json dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`bool`) reset Door when it is invalid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resetInvalidDoor</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) merge profiles to available measurement groups</span>
@@ -297,7 +304,7 @@
                 <span class="n">avsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableProfiles</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">avsel</span> <span class="ow">and</span> <span class="n">avsel</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">avsel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">syncProfile</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">sys</span>
             <span class="kn">import</span> <span class="nn">traceback</span>
@@ -662,7 +669,13 @@
 <span class="sd">        :param name: name of configuration</span>
 <span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jconf</span><span class="p">))</span>
+        <span class="n">dct</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jconf</span><span class="p">)</span>
+        <span class="n">udata</span> <span class="o">=</span> <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;UserData&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">globalUserData</span><span class="p">:</span>
+            <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">udata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="o">=</span> <span class="n">jname</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__getProfileConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -671,6 +684,12 @@
 <span class="sd">        :returns: configuration</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">globalUserData</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
 
     <span class="c1">#: (:obj:`str`) the json data string</span>
@@ -708,7 +727,13 @@
 <span class="sd">        :returns: userData json dictionary</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">globalUserData</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span>
 
     <span class="k">def</span> <span class="nf">__setUserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">udata</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -718,6 +743,8 @@
 <span class="sd">        :type udata: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">udata</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">globalUserData</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__guserdata</span> <span class="o">=</span> <span class="n">jname</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jname</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jname</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
@@ -1242,6 +1269,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; fetch configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Settings.syncProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.syncProfile">[docs]</a>    <span class="k">def</span> <span class="nf">syncProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; fetch configuration</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">(</span><span class="n">sync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Settings.loadProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.loadProfile">[docs]</a>    <span class="k">def</span> <span class="nf">loadProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; loads configuration</span>
