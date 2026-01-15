@@ -550,8 +550,9 @@ class ProfileManager(object):
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
-        elif self.__syncsnapshot or self.__writepoolmotorpositions \
-                or self.writeallmotorpositions:
+        elif sync and (self.__syncsnapshot
+                       or self.__writepoolmotorpositions
+                       or self.writeallmotorpositions):
             changed = self.__addPreselectedComponents(
                 self.defaultPreselectedComponents)
             if changed:
