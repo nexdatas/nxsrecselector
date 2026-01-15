@@ -389,7 +389,7 @@ class ProfileManager(object):
             amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
                 self.__selector["MntGrp"] = amntgrp
-        self.fetchProfile()
+        self.fetchProfile(sync=True)
         jconf = self.mntGrpConfiguration()
         self.__updateConfigServer()
         if self.__setFromMntGrpConf(jconf):
@@ -530,8 +530,11 @@ class ProfileManager(object):
             changed = True
         return changed
 
-    def fetchProfile(self):
+    def fetchProfile(self, sync=False):
         """ fetches the profile configuration
+
+        :param sync: sync snapshot or motor positions
+        :type sync: :obj:`bool`
         """
         self.__updateConfigServer()
         if self.__selector.fetchSelection() is False:

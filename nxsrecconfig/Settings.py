@@ -186,7 +186,7 @@ class Settings(object):
                 avsel = self.availableProfiles()
                 if avsel and avsel[0]:
                     self.__selector["MntGrp"] = avsel[0]
-            self.fetchProfile()
+            self.syncProfile()
         except Exception:
             import sys
             import traceback
@@ -1151,6 +1151,11 @@ class Settings(object):
         """ fetch configuration
         """
         self.__profileManager.fetchProfile()
+
+    def syncProfile(self):
+        """ fetch configuration
+        """
+        self.__profileManager.fetchProfile(sync=True)
 
     def loadProfile(self):
         """ loads configuration
