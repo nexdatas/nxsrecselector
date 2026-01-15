@@ -643,6 +643,41 @@ class NXSRecSelector(tango.LatestDeviceImpl):
             return False
         return True
 
+    def SyncProfile(self):
+        """ SyncProfile command
+
+        :brief: Fetch server configuration and syncronize snapshot
+                or motor positions
+        """
+        self.debug_stream("In SyncProfile()")
+        try:
+            self.set_state(tango.DevState.RUNNING)
+            self.__stg.syncProfile()
+
+            # updating memorized attributes
+            self.__dp = self.__dp or tango.DeviceProxy(
+                Utils.tostr(self.get_name()))
+            for var in self.__toupdate:
+                if var in self.__stg.names():
+                    if hasattr(self.__dp, var):
+                        self.__dp.write_attribute(
+                            Utils.tostr(var), self.__stg.value(var))
+
+            self.set_state(tango.DevState.ON)
+        finally:
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
+
+    def is_SyncProfile_allowed(self):
+        """ SyncProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [tango.DevState.RUNNING]:
+            return False
+        return True
+
     def SaveProfile(self):
         """ SaveProfile command
 
@@ -1994,6 +2029,9 @@ class NXSRecSelectorClass(tango.DeviceClass):
             [[tango.DevVoid, ""],
              [tango.DevVoid, ""]],
         'FetchProfile':
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
+        'SyncProfile':
             [[tango.DevVoid, ""],
              [tango.DevVoid, ""]],
         'StoreProfile':
