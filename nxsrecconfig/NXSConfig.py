@@ -646,7 +646,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
     def SyncProfile(self):
         """ SyncProfile command
 
-        :brief: Fetch server configuration and syncronize snapshot or motor positions
+        :brief: Fetch server configuration and syncronize snapshot
+                or motor positions
         """
         self.debug_stream("In SyncProfile()")
         try:
