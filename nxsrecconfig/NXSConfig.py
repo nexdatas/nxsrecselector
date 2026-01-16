@@ -96,6 +96,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         defaultmntgrp = self.DefaultMntGrp or None
         defaultnexustype = self.DefaultNeXusType or None
         syncsnapshot = bool(self.SyncSnapshot)
+        cacheconfiguration = bool(self.CacheConfiguration)
         globaluserdata = bool(self.GlobalUserData)
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         writeallmotorpositions = bool(self.WriteAllMotorPositions)
@@ -104,7 +105,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
                          writepoolmotorpositions,
                          writeallmotorpositions,
                          defaultnexustype,
-                         defaultudatapath, globaluserdata)
+                         defaultudatapath, globaluserdata,
+                         cacheconfiguration)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -171,6 +173,15 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         """
         self.debug_stream("In read_Version()")
         attr.set_value(self.__stg.version)
+
+    def read_CacheComponent(self, attr):
+        """ Read CacheComponent attribute
+
+        :param attr: read attribute
+        :type attr: :class:`tango.Attribute`
+        """
+        self.debug_stream("In read_CacheComponent()")
+        attr.set_value(self.__stg.cacheComponent)
 
     def read_MacroServer(self, attr):
         """ Read MacroServer attribute
@@ -1968,6 +1979,11 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevBoolean,
          "preselection merges the current ScanSnapshot",
          [False]],
+        'CacheConfiguration':
+        [tango.DevBoolean,
+         "cache writer configuration in configuration server "
+         "as \n__configuration_<profile_name>__ components",
+         [False]],
         'GlobalUserData':
         [tango.DevBoolean,
          "use global user data dictionary",
@@ -2252,6 +2268,14 @@ class NXSRecSelectorClass(tango.DeviceClass):
                  'label': "Version",
                  'description': "server version",
             }],
+        'CacheComponent':
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
+             {
+                 'label': "CacheComponent",
+                 'description': "current cache compoent name",
+             }],
         'MacroServer':
             [[tango.DevString,
               tango.SCALAR,

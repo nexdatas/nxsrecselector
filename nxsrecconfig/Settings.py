@@ -59,7 +59,8 @@ class Settings(object):
                  writeallmotorpositions=False,
                  defaultnexustype=None,
                  defaultudatapath=None,
-                 globaluserdata=False):
+                 globaluserdata=False,
+                 cacheconfiguration=False):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -79,6 +80,8 @@ class Settings(object):
         :type defaultudatapath: :obj:`str`
         :param globaluserdata: global user data flag
         :type globaluserdata: :obj:`bool`
+        :param cacheconfiguration: cache writer configuration in configServer
+        :type cacheconfiguration: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -112,6 +115,10 @@ class Settings(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.syncSnapshot = syncsnapshot
+        #: (:obj:`bool`) cache writer configuration in configServer
+        self.cacheConfiguration = cacheconfiguration
+        #: (:obj:`list` <:obj:`str`>) cached component names
+        self.__cached = []
         #: (:obj:`bool`) global user data flag
         self.globalUserData = globaluserdata
         #: (:obj:`str`) global user data json dict
@@ -232,6 +239,25 @@ class Settings(object):
     version = property(
         __version,
         doc='server version')
+
+    def __cachecomponent(self):
+        """ provides server version
+
+        :returns: server version
+        :rtype: :obj:`str`
+        """
+        cp = ""
+        if self.cacheConfiguration:
+            mg = self.__getMntGrp()
+            cpnm = "__configuration_%s__" % mg
+            if cpnm in self.__cached and cpnm in self.availableComponents():
+                cp = cpnm
+        return cp
+
+    #: (:obj:`str`) server version
+    cacheComponent = property(
+        __cachecomponent,
+        doc='cache compoent name')
 
 # read-only variables
 
@@ -1230,8 +1256,18 @@ class Settings(object):
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
         nexusconfig_device.extralinkdatasources = "[]"
-
-        return Utils.tostr(nexusconfig_device.xmlstring)
+        xml = Utils.tostr(nexusconfig_device.xmlstring)
+        if self.cacheConfiguration:
+            mg = self.__getMntGrp()
+            if mg:
+                mxml = Utils.tostr(nexusconfig_device.mergedxml)
+                if mxml:
+                    nexusconfig_device.xmlstring = mxml
+                    cpnm = "__configuration_%s__" % mg
+                    nexusconfig_device.storeComponent(cpnm)
+                    self.__cached.append(cpnm)
+                    nexusconfig_device.xmlstring = xml
+        return xml
 
     def updateConfigVariables(self):
         """  sends ConfigVariables into ConfigServer
