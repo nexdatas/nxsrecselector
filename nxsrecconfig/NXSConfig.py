@@ -174,6 +174,15 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         self.debug_stream("In read_Version()")
         attr.set_value(self.__stg.version)
 
+    def read_CacheComponent(self, attr):
+        """ Read CacheComponent attribute
+
+        :param attr: read attribute
+        :type attr: :class:`tango.Attribute`
+        """
+        self.debug_stream("In read_CacheComponent()")
+        attr.set_value(self.__stg.cacheComponent)
+
     def read_MacroServer(self, attr):
         """ Read MacroServer attribute
 
@@ -2259,6 +2268,14 @@ class NXSRecSelectorClass(tango.DeviceClass):
                  'label': "Version",
                  'description': "server version",
             }],
+        'CacheComponent':
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
+             {
+                 'label': "CacheComponent",
+                 'description': "current cache compoent name",
+             }],
         'MacroServer':
             [[tango.DevString,
               tango.SCALAR,

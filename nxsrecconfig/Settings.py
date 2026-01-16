@@ -117,6 +117,8 @@ class Settings(object):
         self.syncSnapshot = syncsnapshot
         #: (:obj:`bool`) cache writer configuration in configServer
         self.cacheConfiguration = cacheconfiguration
+        #: (:obj:`list` <:obj:`str`>) cached component names
+        self.__cached = []
         #: (:obj:`bool`) global user data flag
         self.globalUserData = globaluserdata
         #: (:obj:`str`) global user data json dict
@@ -237,6 +239,25 @@ class Settings(object):
     version = property(
         __version,
         doc='server version')
+
+    def __cachecomponent(self):
+        """ provides server version
+
+        :returns: server version
+        :rtype: :obj:`str`
+        """
+        cp = ""
+        if self.cacheConfiguration:
+            mg = self.__getMntGrp()
+            cpnm = "__configuration_%s__" % mg
+            if cpnm in self.__cached and cpnm in self.availableComponents():
+                cp = cpnm
+        return cp
+
+    #: (:obj:`str`) server version
+    cacheComponent = property(
+        __cachecomponent,
+        doc='cache compoent name')
 
 # read-only variables
 
@@ -1242,8 +1263,9 @@ class Settings(object):
                 mxml = Utils.tostr(nexusconfig_device.mergedxml)
                 if mxml:
                     nexusconfig_device.xmlstring = mxml
-                    nexusconfig_device.storeComponent(
-                        "__configuration_%s__" % mg)
+                    cpnm = "__configuration_%s__" % mg
+                    nexusconfig_device.storeComponent(cpnm)
+                    self.__cached.append(cpnm)
                     nexusconfig_device.xmlstring = xml
         return xml
 
