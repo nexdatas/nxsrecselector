@@ -96,6 +96,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         defaultmntgrp = self.DefaultMntGrp or None
         defaultnexustype = self.DefaultNeXusType or None
         syncsnapshot = bool(self.SyncSnapshot)
+        cacheconfiguration = bool(self.CacheConfiguration)
         globaluserdata = bool(self.GlobalUserData)
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         writeallmotorpositions = bool(self.WriteAllMotorPositions)
@@ -104,7 +105,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
                          writepoolmotorpositions,
                          writeallmotorpositions,
                          defaultnexustype,
-                         defaultudatapath, globaluserdata)
+                         defaultudatapath, globaluserdata,
+                         cacheconfiguration)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1967,6 +1969,11 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'SyncSnapshot':
         [tango.DevBoolean,
          "preselection merges the current ScanSnapshot",
+         [False]],
+        'CacheConfiguration':
+        [tango.DevBoolean,
+         "cache writer configuration in configuration server "
+         "as \n__configuration_<profile_name>__ components",
          [False]],
         'GlobalUserData':
         [tango.DevBoolean,

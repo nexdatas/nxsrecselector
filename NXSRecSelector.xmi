@@ -123,6 +123,11 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>/scan$var.serialno:NXentry/user_data:NXparameters</DefaultPropValue>
     </deviceProperties>
+    <deviceProperties name="CacheConfiguration" description="cache writer configuration in configuration server as &#xA;__configuration_&lt;profile_name>__ components">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>False</DefaultPropValue>
+    </deviceProperties>
     <commands name="AvailableComponents" description="Return a list of available component names" execMethod="available_components" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
