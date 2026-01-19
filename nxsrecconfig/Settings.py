@@ -1269,7 +1269,7 @@ class Settings(object):
                     nexusconfig_device.xmlstring = xml
         return xml
 
-    def createCache(self, cps):
+    def cacheWriterConfiguration(self, cps):
         """ create cache and clean stepdatasources and linkdatasources
 
         :param cps: component names
