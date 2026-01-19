@@ -1260,7 +1260,51 @@ class Settings(object):
         if self.cacheConfiguration:
             mg = self.__getMntGrp()
             if mg:
-                mxml = Utils.tostr(nexusconfig_device.mergedxml)
+                mxml = Utils.tostr(nexusconfig_device.xmlcache)
+                if mxml:
+                    nexusconfig_device.xmlstring = mxml
+                    cpnm = "__configuration_%s__" % mg
+                    nexusconfig_device.storeComponent(cpnm)
+                    self.__cached.append(cpnm)
+                    nexusconfig_device.xmlstring = xml
+        return xml
+
+    def createCacheConfiguration(self, cps):
+        """ create configuration and clean stepdatasources and linkdatasources
+
+        :param cps: component names
+        :type cps: :obj:`list` <:obj:`str`>
+        :returns: JSON string with description of client datasources
+        :rtype: :obj:`str`
+        """
+        nexusconfig_device = self.__selector.setConfigInstance()
+        if self.__profileManager.writeallmotorpositions:
+            poolmotors = self.__profileManager.getPoolMotors()
+            nexusconfig_device.extralinkdatasources = json.dumps(
+                [mt[0] for mt in poolmotors])
+        else:
+            nexusconfig_device.extralinkdatasources = "[]"
+        if cps:
+            cp = cps
+        else:
+            cp = self.components
+        try:
+            TangoUtils.command(
+                nexusconfig_device, "createCache", cp)
+        except tango.CommunicationFailed as cf:
+            if len(cf.args) >= 2 and \
+               cf.args[1].reason == "API_DeviceTimedOut":
+                TangoUtils.wait(nexusconfig_device)
+            else:
+                raise
+        nexusconfig_device.stepdatasources = "[]"
+        nexusconfig_device.linkdatasources = "[]"
+        nexusconfig_device.extralinkdatasources = "[]"
+        xml = Utils.tostr(nexusconfig_device.xmlstring)
+        if self.cacheConfiguration:
+            mg = self.__getMntGrp()
+            if mg:
+                mxml = Utils.tostr(nexusconfig_device.xmlcache)
                 if mxml:
                     nexusconfig_device.xmlstring = mxml
                     cpnm = "__configuration_%s__" % mg
