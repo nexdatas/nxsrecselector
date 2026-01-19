@@ -1877,8 +1877,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
             return False
         return True
 
-    def CreateCacheConfiguration(self, argin):
-        """ CreateCacheConfiguration command
+    def CreateCache(self, argin):
+        """ CreateCache command
 
         :brief: Create configuration from the given components
 
@@ -1887,10 +1887,10 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         :returns: DevVarString         XML configuration string
         :rtype: :obj:`str`
         """
-        self.debug_stream("In CreateCacheConfiguration()")
+        self.debug_stream("In CreateCache()")
         try:
             self.set_state(tango.DevState.RUNNING)
-            argout = self.__stg.createCacheConfiguration(argin)
+            argout = self.__stg.createCache(argin)
             self.set_state(tango.DevState.ON)
         finally:
             if self.get_state() == tango.DevState.RUNNING:
@@ -1898,8 +1898,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
 
         return argout
 
-    def is_CreateCacheConfiguration_allowed(self):
-        """ CreateCacheConfiguration command State Machine
+    def is_CreateCache_allowed(self):
+        """ CreateCache command State Machine
 
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
@@ -2219,7 +2219,7 @@ class NXSRecSelectorClass(tango.DeviceClass):
             [[tango.DevVarStringArray, "list of required components"],
              [tango.DevString,
               "XML Settings"]],
-        'CreateCacheConfiguration':
+        'CreateCache':
             [[tango.DevVarStringArray, "list of required components"],
              [tango.DevString,
               "XML Cache"]],

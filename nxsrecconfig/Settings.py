@@ -1269,8 +1269,8 @@ class Settings(object):
                     nexusconfig_device.xmlstring = xml
         return xml
 
-    def createCacheConfiguration(self, cps):
-        """ create configuration and clean stepdatasources and linkdatasources
+    def createCache(self, cps):
+        """ create cache and clean stepdatasources and linkdatasources
 
         :param cps: component names
         :type cps: :obj:`list` <:obj:`str`>

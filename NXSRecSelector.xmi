@@ -605,7 +605,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <excludedStates>RUNNING</excludedStates>
     </commands>
-    <commands name="CreateCacheConfiguration" description="Create cache configuration from the given components" execMethod="create_cache_configuration" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="CreateCache" description="Create cache configuration from the given components" execMethod="create_cache_configuration" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="list of required components">
         <type xsi:type="pogoDsl:StringArrayType"/>
       </argin>
