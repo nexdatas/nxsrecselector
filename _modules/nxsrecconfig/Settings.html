@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 4.3.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 4.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.3</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.4</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -177,7 +177,8 @@
                  <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">defaultnexustype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaultudatapath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">globaluserdata</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">globaluserdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">cacheconfiguration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; contructor</span>
 
 <span class="sd">        :param server: NXSRecSelector server</span>
@@ -197,6 +198,8 @@
 <span class="sd">        :type defaultudatapath: :obj:`str`</span>
 <span class="sd">        :param globaluserdata: global user data flag</span>
 <span class="sd">        :type globaluserdata: :obj:`bool`</span>
+<span class="sd">        :param cacheconfiguration: cache writer configuration in configServer</span>
+<span class="sd">        :type cacheconfiguration: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
@@ -230,6 +233,10 @@
 
         <span class="c1">#: (:obj:`bool`) preselection merges current ScanSnapshot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syncSnapshot</span> <span class="o">=</span> <span class="n">syncsnapshot</span>
+        <span class="c1">#: (:obj:`bool`) cache writer configuration in configServer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cacheConfiguration</span> <span class="o">=</span> <span class="n">cacheconfiguration</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) cached component names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cached</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1">#: (:obj:`bool`) global user data flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">globalUserData</span> <span class="o">=</span> <span class="n">globaluserdata</span>
         <span class="c1">#: (:obj:`str`) global user data json dict</span>
@@ -350,6 +357,25 @@
     <span class="n">version</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__version</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;server version&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__cachecomponent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides server version</span>
+
+<span class="sd">        :returns: server version</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cacheConfiguration</span><span class="p">:</span>
+            <span class="n">mg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getMntGrp</span><span class="p">()</span>
+            <span class="n">cpnm</span> <span class="o">=</span> <span class="s2">&quot;__configuration_</span><span class="si">%s</span><span class="s2">__&quot;</span> <span class="o">%</span> <span class="n">mg</span>
+            <span class="k">if</span> <span class="n">cpnm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cached</span> <span class="ow">and</span> <span class="n">cpnm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableComponents</span><span class="p">():</span>
+                <span class="n">cp</span> <span class="o">=</span> <span class="n">cpnm</span>
+        <span class="k">return</span> <span class="n">cp</span>
+
+    <span class="c1">#: (:obj:`str`) server version</span>
+    <span class="n">cacheComponent</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">__cachecomponent</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;cache compoent name&#39;</span><span class="p">)</span>
 
 <span class="c1"># read-only variables</span>
 
@@ -1348,8 +1374,62 @@
         <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">stepdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
         <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">linkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
         <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+        <span class="n">xml</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cacheConfiguration</span><span class="p">:</span>
+            <span class="n">mg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getMntGrp</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mg</span><span class="p">:</span>
+                <span class="n">mxml</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlcache</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">mxml</span><span class="p">:</span>
+                    <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="n">mxml</span>
+                    <span class="n">cpnm</span> <span class="o">=</span> <span class="s2">&quot;__configuration_</span><span class="si">%s</span><span class="s2">__&quot;</span> <span class="o">%</span> <span class="n">mg</span>
+                    <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">storeComponent</span><span class="p">(</span><span class="n">cpnm</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__cached</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpnm</span><span class="p">)</span>
+                    <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="n">xml</span>
+        <span class="k">return</span> <span class="n">xml</span></div>
 
-        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Settings.cacheWriterConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheWriterConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">cacheWriterConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cps</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; create cache and clean stepdatasources and linkdatasources</span>
+
+<span class="sd">        :param cps: component names</span>
+<span class="sd">        :type cps: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :returns: JSON string with description of client datasources</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">:</span>
+            <span class="n">poolmotors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">getPoolMotors</span><span class="p">()</span>
+            <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">mt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mt</span> <span class="ow">in</span> <span class="n">poolmotors</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+        <span class="k">if</span> <span class="n">cps</span><span class="p">:</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="n">cps</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+                <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="s2">&quot;createCache&quot;</span><span class="p">,</span> <span class="n">cp</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">CommunicationFailed</span> <span class="k">as</span> <span class="n">cf</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> \
+               <span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s2">&quot;API_DeviceTimedOut&quot;</span><span class="p">:</span>
+                <span class="n">TangoUtils</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+        <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">stepdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+        <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">linkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+        <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">extralinkdatasources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+        <span class="n">xml</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cacheConfiguration</span><span class="p">:</span>
+            <span class="n">mg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getMntGrp</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mg</span><span class="p">:</span>
+                <span class="n">mxml</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlcache</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">mxml</span><span class="p">:</span>
+                    <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="n">mxml</span>
+                    <span class="n">cpnm</span> <span class="o">=</span> <span class="s2">&quot;__configuration_</span><span class="si">%s</span><span class="s2">__&quot;</span> <span class="o">%</span> <span class="n">mg</span>
+                    <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">storeComponent</span><span class="p">(</span><span class="n">cpnm</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__cached</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpnm</span><span class="p">)</span>
+                    <span class="n">nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="n">xml</span>
+        <span class="k">return</span> <span class="n">xml</span></div>
 
 <div class="viewcode-block" id="Settings.updateConfigVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateConfigVariables">[docs]</a>    <span class="k">def</span> <span class="nf">updateConfigVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;  sends ConfigVariables into ConfigServer</span>
