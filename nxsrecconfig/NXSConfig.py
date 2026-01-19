@@ -96,6 +96,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         defaultmntgrp = self.DefaultMntGrp or None
         defaultnexustype = self.DefaultNeXusType or None
         syncsnapshot = bool(self.SyncSnapshot)
+        cacheconfiguration = bool(self.CacheConfiguration)
         globaluserdata = bool(self.GlobalUserData)
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         writeallmotorpositions = bool(self.WriteAllMotorPositions)
@@ -104,7 +105,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
                          writepoolmotorpositions,
                          writeallmotorpositions,
                          defaultnexustype,
-                         defaultudatapath, globaluserdata)
+                         defaultudatapath, globaluserdata,
+                         cacheconfiguration)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -171,6 +173,15 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         """
         self.debug_stream("In read_Version()")
         attr.set_value(self.__stg.version)
+
+    def read_CacheComponent(self, attr):
+        """ Read CacheComponent attribute
+
+        :param attr: read attribute
+        :type attr: :class:`tango.Attribute`
+        """
+        self.debug_stream("In read_CacheComponent()")
+        attr.set_value(self.__stg.cacheComponent)
 
     def read_MacroServer(self, attr):
         """ Read MacroServer attribute
@@ -1866,6 +1877,37 @@ class NXSRecSelector(tango.LatestDeviceImpl):
             return False
         return True
 
+    def CreateCacheConfiguration(self, argin):
+        """ CreateCacheConfiguration command
+
+        :brief: Create configuration from the given components
+
+        :param argin:  DevVarStringArray    list of component names
+        :type argin: :obj:`list` <:obj:`str`>
+        :returns: DevVarString         XML configuration string
+        :rtype: :obj:`str`
+        """
+        self.debug_stream("In CreateCacheConfiguration()")
+        try:
+            self.set_state(tango.DevState.RUNNING)
+            argout = self.__stg.createCacheConfiguration(argin)
+            self.set_state(tango.DevState.ON)
+        finally:
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
+
+        return argout
+
+    def is_CreateCacheConfiguration_allowed(self):
+        """ CreateCacheConfiguration command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [tango.DevState.RUNNING]:
+            return False
+        return True
+
     def CreateDataSources(self, argin):
         """ It creates new DataSources on the ConfigServer
 
@@ -1967,6 +2009,11 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'SyncSnapshot':
         [tango.DevBoolean,
          "preselection merges the current ScanSnapshot",
+         [False]],
+        'CacheConfiguration':
+        [tango.DevBoolean,
+         "cache writer configuration in configuration server "
+         "as \n__configuration_<profile_name>__ components",
          [False]],
         'GlobalUserData':
         [tango.DevBoolean,
@@ -2171,7 +2218,11 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'CreateWriterConfiguration':
             [[tango.DevVarStringArray, "list of required components"],
              [tango.DevString,
-              "XML Settinges"]],
+              "XML Settings"]],
+        'CreateCacheConfiguration':
+            [[tango.DevVarStringArray, "list of required components"],
+             [tango.DevString,
+              "XML Cache"]],
         'RemoveDynamicComponent':
             [[tango.DevString, "name of dynamic Component"],
              [tango.DevVoid, ""]],
@@ -2252,6 +2303,14 @@ class NXSRecSelectorClass(tango.DeviceClass):
                  'label': "Version",
                  'description': "server version",
             }],
+        'CacheComponent':
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
+             {
+                 'label': "CacheComponent",
+                 'description': "current cache compoent name",
+             }],
         'MacroServer':
             [[tango.DevString,
               tango.SCALAR,
