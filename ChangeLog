@@ -1,6 +1,7 @@
 2026-01-16 Jan Kotanski <jankotan@gmail.com>
 	* add CacheConfiguration property (#174)
 	* add CacheComponent attribute (#174)
+	* add CmdCreateCacheConfiguration command (#177)
 	* tagged as v4.4.0
 
 2026-01-15 Jan Kotanski <jankotan@gmail.com>
