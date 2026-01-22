@@ -1202,6 +1202,11 @@ class Settings(object):
         """
         self.__profileManager.fetchProfile(sync=True)
 
+    def clearCache(self):
+        """ clear Cache
+        """
+        self.__cached = {}
+
     def loadProfile(self):
         """ loads configuration
         """

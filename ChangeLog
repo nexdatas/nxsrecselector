@@ -1,6 +1,7 @@
 2026-01-22 Jan Kotanski <jankotan@gmail.com>
 	* cache selected datasources (#179)
-	* tagged as v4.4.1
+	* add ClearCache command (#179)
+	* tagged as v4.5.0
 
 2026-01-16 Jan Kotanski <jankotan@gmail.com>
 	* add CacheConfiguration property (#174)

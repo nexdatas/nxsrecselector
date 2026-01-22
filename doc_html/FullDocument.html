@@ -63,6 +63,7 @@
 				<li> <a href="FullDocument.html#cmdCreateDataSources"> CreateDataSources </a>
 				<li> <a href="FullDocument.html#cmdSyncProfile"> SyncProfile </a>
 				<li> <a href="FullDocument.html#cmdCacheWriterConfiguration"> CacheWriterConfiguration </a>
+				<li> <a href="FullDocument.html#cmdClearCache"> ClearCache </a>
 			</ul>
 			<li> <a href="FullDocument.html#attributes">   Attributes   </a>
 			<ul>
@@ -677,7 +678,14 @@
 		<td> DEVVAR_STRINGARRAY </td>
 		<td> DEV_VOID </td>
 		<td> OPERATOR </td>
-		<td> Create cache configuration from the given components </td>
+		<td> Cache configuration from the given components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdClearCache.html"> ClearCache </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Clear configuration cache </td>
 	</tr>
 </table>
 <br><br><hr>
@@ -3037,7 +3045,7 @@
 <br><br><br>
 <font size="+1"><u><b> Command CacheWriterConfiguration : </b></u></font>
 <ul>
-	Create cache configuration from the given components
+	Cache configuration from the given components
 </ul>
 <br><br><br>
 <Table Border=2 Cellpadding=3 CELLSPACING=0>
@@ -3048,6 +3056,55 @@
 		<td> Input Argument </td>
 		<td> Tango::DEVVAR_STRINGARRAY </td>
 		<td> list of required components </td>
+	</tr>
+	<tr>
+		<td> Output Argument </td>
+		<td> Tango::DEV_VOID </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td> DisplayLevel </td>
+		<td> OPERATOR </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Inherited </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Abstract </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Polling Period </td>
+		<td> Not polled </td>
+		<td> .. </td>
+	</tr>
+<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td><Td><Hr></Td></Tr>
+	<tr>
+		<td> Command NOT allowed for </td>
+		<td> <font size="-1">  <li> RUNNING </li> </font> </td>
+		<td> .. </td>
+	</tr>
+</table>
+<br><br><hr>
+<a name="cmdClearCache"> </a>
+<br><br><br>
+<font size="+1"><u><b> Command ClearCache : </b></u></font>
+<ul>
+	Clear configuration cache
+</ul>
+<br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=0> <font size=+1> <center><b> ClearCache Definition </b></font></center></td>
+	</tr>
+	<tr>
+		<td> Input Argument </td>
+		<td> Tango::DEV_VOID </td>
+		<td>  </td>
 	</tr>
 	<tr>
 		<td> Output Argument </td>

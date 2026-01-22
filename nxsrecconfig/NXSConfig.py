@@ -689,6 +689,31 @@ class NXSRecSelector(tango.LatestDeviceImpl):
             return False
         return True
 
+    def ClearCache(self):
+        """ ClearCache command
+
+        :brief: Fetch server configuration and syncronize snapshot
+                or motor positions
+        """
+        self.debug_stream("In ClearCache()")
+        try:
+            self.set_state(tango.DevState.RUNNING)
+            self.__stg.clearCache()
+            self.set_state(tango.DevState.ON)
+        finally:
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
+
+    def is_ClearCache_allowed(self):
+        """ ClearCache command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [tango.DevState.RUNNING]:
+            return False
+        return True
+
     def SaveProfile(self):
         """ SaveProfile command
 
@@ -2079,6 +2104,9 @@ class NXSRecSelectorClass(tango.DeviceClass):
             [[tango.DevVoid, ""],
              [tango.DevVoid, ""]],
         'SyncProfile':
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
+        'CrearCache':
             [[tango.DevVoid, ""],
              [tango.DevVoid, ""]],
         'StoreProfile':
