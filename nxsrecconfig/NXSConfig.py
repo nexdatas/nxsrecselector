@@ -2106,7 +2106,7 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'SyncProfile':
             [[tango.DevVoid, ""],
              [tango.DevVoid, ""]],
-        'CrearCache':
+        'ClearCache':
             [[tango.DevVoid, ""],
              [tango.DevVoid, ""]],
         'StoreProfile':
