@@ -117,8 +117,8 @@ class Settings(object):
         self.syncSnapshot = syncsnapshot
         #: (:obj:`bool`) cache writer configuration in configServer
         self.cacheConfiguration = cacheconfiguration
-        #: (:obj:`list` <:obj:`str`>) cached component names
-        self.__cached = []
+        #: (:obj:`dict` <:obj:`str`, `any`>) cached component names
+        self.__cached = {}
         #: (:obj:`bool`) global user data flag
         self.globalUserData = globaluserdata
         #: (:obj:`str`) global user data json dict
@@ -240,17 +240,27 @@ class Settings(object):
         __version,
         doc='server version')
 
-    def __cachecomponent(self):
-        """ provides server version
+    def __cachecpname(self, mg=None):
+        """ provides cache component name
 
-        :returns: server version
+        :returns: provides cache component name
+        :rtype: :obj:`str`
+        """
+        if mg is None:
+            mg = self.__getMntGrp()
+        return "__configuration_%s__" % mg
+
+    def __cachecomponent(self):
+        """ provides cache component name if available
+
+        :returns: provides cache component name if available
         :rtype: :obj:`str`
         """
         cp = ""
         if self.cacheConfiguration:
-            mg = self.__getMntGrp()
-            cpnm = "__configuration_%s__" % mg
-            if cpnm in self.__cached and cpnm in self.availableComponents():
+            cpnm = self.__cachecpname()
+            if cpnm in self.__cached.keys() \
+                    and cpnm in self.availableComponents():
                 cp = cpnm
         return cp
 
@@ -317,7 +327,16 @@ class Settings(object):
 
         :returns: list of available selected datasources
         """
-        return self.__profileManager.dataSources()
+        cpnm = self.__cachecpname()
+        sdss = None
+        if cpnm in self.__cached.keys():
+            sdss = self.__cached[cpnm]
+            if sdss is None:
+                sdss = self.__profileManager.dataSources()
+                self.__cached[cpnm] = sdss
+            return sdss
+        else:
+            return self.__profileManager.dataSources()
 
     def preselectedDataSources(self):
         """ provides preselected datasources
@@ -1183,6 +1202,11 @@ class Settings(object):
         """
         self.__profileManager.fetchProfile(sync=True)
 
+    def clearCache(self):
+        """ clear Cache
+        """
+        self.__cached = {}
+
     def loadProfile(self):
         """ loads configuration
         """
@@ -1240,8 +1264,11 @@ class Settings(object):
                 [mt[0] for mt in poolmotors])
         else:
             nexusconfig_device.extralinkdatasources = "[]"
+
+        empty = True
         if cps:
             cp = cps
+            empty = False
         else:
             cp = self.components
         try:
@@ -1263,9 +1290,10 @@ class Settings(object):
                 mxml = Utils.tostr(nexusconfig_device.xmlcache)
                 if mxml:
                     nexusconfig_device.xmlstring = mxml
-                    cpnm = "__configuration_%s__" % mg
+                    cpnm = self.__cachecpname(mg)
                     nexusconfig_device.storeComponent(cpnm)
-                    self.__cached.append(cpnm)
+                    if empty or cpnm not in self.__cached.keys():
+                        self.__cached[cpnm] = None
                     nexusconfig_device.xmlstring = xml
         return xml
 
@@ -1307,9 +1335,9 @@ class Settings(object):
                 mxml = Utils.tostr(nexusconfig_device.xmlcache)
                 if mxml:
                     nexusconfig_device.xmlstring = mxml
-                    cpnm = "__configuration_%s__" % mg
+                    cpnm = self.__cachecpname(mg)
                     nexusconfig_device.storeComponent(cpnm)
-                    self.__cached.append(cpnm)
+                    self.__cached[cpnm] = None
                     nexusconfig_device.xmlstring = xml
         return xml
 
