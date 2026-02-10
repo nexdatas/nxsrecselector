@@ -135,7 +135,7 @@ class TestMeasurementGroupSetUp(object):
                     stdout=subprocess.PIPE, shell=True) as proc:
                 pipe = proc.stdout
 
-                res = str(pipe.read(), "utf8").split("\n")
+                res = str(pipe.read(), "utf-8").split("\n")
 
                 for r in res:
                     sr = r.split()

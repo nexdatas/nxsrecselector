@@ -79,7 +79,7 @@ class Utils(object):
         else:
             if sys.version_info > (3,) and \
                (isinstance(text, bytes) or isinstance(text, unicode)):
-                return str(text, "utf8")
+                return str(text, "utf-8")
             else:
                 return str(text)
 
@@ -606,12 +606,12 @@ class MSUtils(object):
                     if isinstance(vl, dict):
                         nvl = {}
                         for ky, it in vl.items():
-                            nvl[bytes(ky, "utf8")
+                            nvl[bytes(ky, "utf-8")
                                 if isinstance(ky, unicode) else ky] = it
-                        newvalue[bytes(key, "utf8")
+                        newvalue[bytes(key, "utf-8")
                                  if isinstance(key, unicode) else key] = nvl
                     else:
-                        newvalue[bytes(key, "utf8")
+                        newvalue[bytes(key, "utf-8")
                                  if isinstance(key, unicode) else key] = vl
             else:
                 newvalue = value
