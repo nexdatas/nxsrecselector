@@ -1815,7 +1815,8 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         # cps = {
         #     "shapetype":
-        #         '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n%s'
+        #         '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
+        #         '<definition>\n%s'
         #     '</group>\n</group>\n%s</group>\n</definition>\n',
         # }
 
