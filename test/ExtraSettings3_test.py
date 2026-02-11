@@ -4513,7 +4513,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
 
         cps = {"empty":
-               '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition/>\n'}
+               '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition/>\n'}
         dname = "__dynamic_component__"
 
         cpname = rs.createDynamicComponent([])
@@ -4576,10 +4576,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cps = {
             "empty":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition/>\n',
             "one":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry"'
             ' name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4601,7 +4601,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "two":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4641,7 +4641,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "three":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4699,7 +4699,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "type":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4720,7 +4720,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
-            "shape": '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            "shape": '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4745,7 +4745,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "shapetype":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4802,7 +4802,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cps = {
             "type":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4846,7 +4846,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cps = {
             "shape":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -4907,7 +4907,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
 
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5078,7 +5078,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -5092,7 +5092,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
@@ -5341,7 +5341,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         #     '</group>\n</group>\n%s</group>\n</definition>\n',
         # }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -5448,10 +5448,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         # cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "empty":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition/>\n',
             "one":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5472,7 +5472,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "two":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5510,7 +5510,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "three":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5595,10 +5595,10 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "empty":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition/>\n',
             "one":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5619,7 +5619,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "two":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5657,7 +5657,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '  </group>\n'
             '</definition>\n',
             "three":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5745,7 +5745,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         # cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5790,7 +5790,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         # cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5832,7 +5832,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5890,7 +5890,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -5942,7 +5942,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shape":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -6012,7 +6012,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shape":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -6078,7 +6078,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -6280,7 +6280,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -6487,7 +6487,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -6582,7 +6582,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         # cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -6680,7 +6680,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         # cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -6778,7 +6778,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -6868,7 +6868,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -7051,7 +7051,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -7234,7 +7234,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -7418,7 +7418,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -7598,7 +7598,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -7612,7 +7612,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
@@ -7838,7 +7838,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -7852,7 +7852,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
@@ -8078,7 +8078,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -8092,7 +8092,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
@@ -8320,7 +8320,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -8334,7 +8334,7 @@ class ExtraSettings3Test(Settings3_test.Settings3Test):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'

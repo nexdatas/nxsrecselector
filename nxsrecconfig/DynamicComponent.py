@@ -378,13 +378,13 @@ class DynamicComponent(object):
         else:
             xmls = Utils.tostr(
                 lxml.etree.tostring(
-                    definition, encoding='utf8',
+                    definition, encoding='utf-8',
                     method='xml', pretty_print=True))
         if xmls.startswith("<?xml"):
             self.__nexusconfig_device.xmlstring = xmls
         else:
             self.__nexusconfig_device.xmlstring = \
-                "<?xml version='1.0' encoding='utf8'?>\n" + xmls
+                "<?xml version='1.0' encoding='utf-8'?>\n" + xmls
 
         TangoUtils.command(self.__nexusconfig_device, "storeComponent",
                            Utils.tostr(self.__dynamicCP))

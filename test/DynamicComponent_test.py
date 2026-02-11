@@ -1047,7 +1047,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {"empty":
-               '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition/>\n'}
+               '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition/>\n'}
         dname = "__dynamic_component__"
         dc = DynamicComponent(None)
         dc = DynamicComponent(self._cf.dp)
@@ -1104,10 +1104,10 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "empty":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition/>\n',
             "one":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry"'
             ' name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1129,7 +1129,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "two":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1169,7 +1169,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "three":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1227,7 +1227,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "type":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1248,7 +1248,7 @@ class DynamicComponentTest(unittest.TestCase):
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
-            "shape": '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            "shape": '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1273,7 +1273,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "shapetype":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1324,7 +1324,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1361,7 +1361,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shape":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1412,7 +1412,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1572,7 +1572,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -1586,7 +1586,7 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
@@ -1815,11 +1815,12 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         # cps = {
         #     "shapetype":
-        #         '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n%s'
+        #         '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
+        #         '<definition>\n%s'
         #     '</group>\n</group>\n%s</group>\n</definition>\n',
         # }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -1923,10 +1924,10 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "empty":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition/>\n',
             "one":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1947,7 +1948,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "two":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -1985,7 +1986,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "three":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2063,10 +2064,10 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "empty":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition/>\n',
             "one":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2087,7 +2088,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "two":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2125,7 +2126,7 @@ class DynamicComponentTest(unittest.TestCase):
             '  </group>\n'
             '</definition>\n',
             "three":
-            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2204,7 +2205,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2242,7 +2243,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2276,7 +2277,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2315,7 +2316,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2350,7 +2351,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shape":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2403,7 +2404,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shape":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2452,7 +2453,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2636,7 +2637,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group type="NXentry" '
             'name="$var.entryname#\'scan\'$var.serialno">\n'
@@ -2817,7 +2818,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -2887,7 +2888,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -2978,7 +2979,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -3070,7 +3071,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -3136,7 +3137,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -3297,7 +3298,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '  <group type="NXentry" ' \
                   'name="$var.entryname#\'scan\'$var.serialno">\n' \
@@ -3459,7 +3460,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -3473,7 +3474,7 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
@@ -3683,7 +3684,7 @@ class DynamicComponentTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
-                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+                '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n'
             '<definition>\n'
             '  <group '
             'type="NXentry" '
@@ -3697,7 +3698,7 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
         }
 
-        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
