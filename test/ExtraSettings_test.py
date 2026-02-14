@@ -131,6 +131,7 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
 
     def __init__(self, methodName):
         Settings_test.SettingsTest.__init__(self, methodName)
+        self.maxDiff = None
 
     # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_timers(self):
@@ -4531,7 +4532,6 @@ class ExtraSettingsTest(Settings_test.SettingsTest):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'instrument:'
             'instrument:'
             'NXinstrument/collection/onename" name="onename"/>\n'
             '    </group>\n'
