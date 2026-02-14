@@ -4495,7 +4495,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/onename" name="onename"/>\n'
+            'instrument:NXinstrument/collection/onename" name="onename"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4517,7 +4517,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            'instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -4535,7 +4535,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            'instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4557,7 +4557,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            'instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -4575,7 +4575,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            'instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -4593,7 +4593,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds3" name="ds3"/>\n'
+            'instrument:NXinstrument/collection/ds3" name="ds3"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4615,7 +4615,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            'instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4639,7 +4639,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            'instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4665,7 +4665,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds3" name="ds3"/>\n'
+            'instrument:NXinstrument/collection/ds3" name="ds3"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4718,7 +4718,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            'instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4762,7 +4762,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    <group type="NXdata" name="data">\n'
             '      <link '
             'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
-            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            'instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -4827,7 +4827,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
         link = '    <group type="NXdata" name="data">\n' \
                '      <link ' \
                'target="/$var.entryname#\'scan\'$var.serialno:' \
-               'NXentry/NXinstrument/collection/%s" name="%s"/>\n' \
+               'NXentry/instrument:NXinstrument/collection/%s" name="%s"/>\n' \
                '    </group>\n'
 
         dimbg = '          <dimensions rank="%s">\n'
@@ -5366,7 +5366,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/one" name="one"/>\n'
+            'NXentry/instrument:NXinstrument/collection/one" name="one"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5387,7 +5387,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d1" name="d1"/>\n'
+            'NXentry/instrument:NXinstrument/collection/d1" name="d1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -5404,7 +5404,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d2" name="d2"/>\n'
+            'NXentry/instrument:NXinstrument/collection/d2" name="d2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5425,7 +5425,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -5442,7 +5442,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2" name="ds2"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -5459,7 +5459,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds3" name="ds3"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds3" name="ds3"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n'
@@ -5513,7 +5513,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/one" name="one"/>\n'
+            'NXentry/instrument:NXinstrument/collection/one" name="one"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5534,7 +5534,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d1" name="d1"/>\n'
+            'NXentry/instrument:NXinstrument/collection/d1" name="d1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -5551,7 +5551,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d2" name="d2"/>\n'
+            'NXentry/instrument:NXinstrument/collection/d2" name="d2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5572,7 +5572,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -5589,7 +5589,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2" name="ds2"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '  <group type="NXentry" '
@@ -5606,7 +5606,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds3" name="ds3"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds3" name="ds3"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n'
@@ -5660,7 +5660,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5747,7 +5747,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds1" name="ds1"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5857,7 +5857,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
             '    </group>\n'
             '    <group type="NXdata" name="data">\n'
             '      <link target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2" name="ds2"/>\n'
+            'NXentry/instrument:NXinstrument/collection/ds2" name="ds2"/>\n'
             '    </group>\n'
             '  </group>\n'
             '</definition>\n',
@@ -5998,7 +5998,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
         link = '    <group type="NXdata" name="data">\n' \
                '      <link ' \
                'target="/$var.entryname#\'scan\'$var.serialno:' \
-               'NXentry/NXinstrument/collection/%s" name="%s"/>\n' \
+               'NXentry/instrument:NXinstrument/collection/%s" name="%s"/>\n' \
                '    </group>\n'
 
         dimbg = '          <dimensions rank="%s">\n'
@@ -6200,7 +6200,7 @@ class ExtraSettings2Test(Settings2_test.Settings2Test):
         link = '    <group type="NXdata" name="data">\n' \
                '      <link ' \
                'target="/$var.entryname#\'scan\'$var.serialno:' \
-               'NXentry/NXinstrument/collection/%s" name="%s"/>\n' \
+               'NXentry/instrument:NXinstrument/collection/%s" name="%s"/>\n' \
                '    </group>\n'
 
         dimbg = '          <dimensions rank="%s">\n'

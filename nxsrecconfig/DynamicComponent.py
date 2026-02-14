@@ -41,7 +41,7 @@ class DynamicComponent(object):
 
     def __init__(self, nexusconfig_device,
                  defaultpath="/$var.entryname#'scan'$var.serialno:NXentry/"
-                 "NXinstrument/collection",
+                 "instrument:NXinstrument/collection",
                  defaulttype="NX_CHAR",
                  defaultuserpath="/$var.entryname#'scan'$var.serialno:NXentry/"
                  "user_data:NXparameters"):

@@ -1985,7 +1985,7 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevString,
          "default NeXus path",
          ["/$var.entryname#'scan'$var.serialno:NXentry/"
-          "NXinstrument/collection"]],
+          "instrument:NXinstrument/collection"]],
         'DefaultUserDataPath':
         [tango.DevString,
          "default NeXus User Data path",
