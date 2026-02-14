@@ -162,7 +162,8 @@ class ProfileManagerTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/' \
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/' \
+            'instrument:NXinstrument/' \
             'collection'
 
         # selection version

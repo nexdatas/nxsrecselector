@@ -171,7 +171,8 @@ class SettingsTest(unittest.TestCase):
         self._defaultmntgrp = 'nxsmntgrp'
         # default path
         self._defaultpath = \
-            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument' \
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/' \
+            'instrument:NXinstrument' \
             '/collection'
 
         self._npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",

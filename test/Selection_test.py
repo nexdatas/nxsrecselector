@@ -82,7 +82,8 @@ class SelectionTest(unittest.TestCase):
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
             ("DefaultDynamicPath",
-             '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/'
+             '/$var.entryname#\'scan\'$var.serialno:NXentry/'
+             'instrument:NXinstrument/'
              'collection'),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),

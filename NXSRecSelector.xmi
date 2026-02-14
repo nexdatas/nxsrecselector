@@ -33,7 +33,7 @@
     <deviceProperties name="DefaultNeXusPath" description="default NeXus path">
       <type xsi:type="pogoDsl:StringType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <DefaultPropValue>/scan$var.serialno:NXentry/NXinstrument/collection</DefaultPropValue>
+      <DefaultPropValue>/scan$var.serialno:NXentry/instrument:NXinstrument/collection</DefaultPropValue>
     </deviceProperties>
     <deviceProperties name="DefaultTimeZone" description="default time zone">
       <type xsi:type="pogoDsl:StringType"/>

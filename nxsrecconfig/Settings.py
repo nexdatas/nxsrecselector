@@ -94,7 +94,7 @@ class Settings(object):
         #: (:obj:`str`) default NeXus path
         self.defaultNeXusPath = defaultnexuspath or \
             "/$var.entryname#'scan'$var.serialno:NXentry/" \
-            "NXinstrument/collection"
+            "instrument:NXinstrument/collection"
 
         #: (:obj:`str`) default NeXus path
         self.defaultUserDataPath = defaultudatapath or \
