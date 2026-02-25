@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Selection &#8212; NXSRecSelector 3.39.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>nxsrecconfig.Selection &#8212; NXSRecSelector 4.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
 
   </head><body>
@@ -35,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.39</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.7</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -140,7 +142,7 @@
 
 <div class="viewcode-block" id="Selection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection">[docs]</a><span class="k">class</span> <span class="nc">Selection</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; Selection Dictionary which contains the following records:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Selection Dictionary which contains the following records:</span>
 <span class="sd">    {</span>
 <span class="sd">    &quot;Timer&quot;:  &#39;[]&#39;,</span>
 <span class="sd">    &quot;OrderedChannels&quot;:  &#39;[]&#39;,</span>
@@ -159,7 +161,8 @@
 <span class="sd">    &quot;DynamicComponents&quot;:  True,</span>
 <span class="sd">    &quot;DefaultDynamicLinks&quot;:  True,</span>
 <span class="sd">    &quot;DefaultDynamicPath&quot;:  \</span>
-<span class="sd">    &#39;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/NXinstrument/collection&#39;,</span>
+<span class="sd">    &#39;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry&#39; \</span>
+<span class="sd">    &#39;/instrument:NXinstrument/collection&#39;,</span>
 <span class="sd">    &quot;TimeZone&quot;:  self.__defaultzone,</span>
 <span class="sd">    &quot;ConfigDevice&quot;:  &#39;&#39;,</span>
 <span class="sd">    &quot;WriterDevice&quot;:  &#39;&#39;,</span>
@@ -172,7 +175,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param args: dictionary args</span>
 <span class="sd">        :type args: :obj:`list` &lt;`any`&gt;</span>
@@ -194,7 +197,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Selection.reset"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; resets dictionary to default value</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets dictionary to default value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="c1"># timer</span>
@@ -232,7 +235,7 @@
         <span class="c1"># path for dynamic components</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DefaultDynamicPath&quot;</span><span class="p">]</span> <span class="o">=</span> \
             <span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry&quot;</span> \
-            <span class="s2">&quot;/NXinstrument/collection&quot;</span>
+            <span class="s2">&quot;/instrument:NXinstrument/collection&quot;</span>
         <span class="c1"># timezone</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;TimeZone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span>
         <span class="c1"># Configuration Server device name</span>
@@ -249,7 +252,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrpConfiguration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
 <div class="viewcode-block" id="Selection.deselect"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.deselect">[docs]</a>    <span class="k">def</span> <span class="nf">deselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; deselects components and datasources</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; deselects components and datasources</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">])</span>
         <span class="n">ads</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
@@ -263,7 +266,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;UnplottedComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span></div>
 
 <div class="viewcode-block" id="Selection.updatePreselectingDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updatePreselectingDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">updatePreselectingDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update method for Preselected DataSources</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for Preselected DataSources</span>
 
 <span class="sd">        :brief: appends new datasources to Preselected DataSources</span>
 <span class="sd">        :param datasources: list of datasources</span>
@@ -274,7 +277,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;PreselectingDataSources&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">adsg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Selection.updateOrderedChannels"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateOrderedChannels">[docs]</a>    <span class="k">def</span> <span class="nf">updateOrderedChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channels</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update method for orderedChannels attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for orderedChannels attribute</span>
 
 <span class="sd">        :brief: sets pool channels in order defined by OrderedChannels</span>
 <span class="sd">        :param channels: pool channels</span>
@@ -287,7 +290,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ordchannels</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Selection.updateChannelProperties"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateChannelProperties">[docs]</a>    <span class="k">def</span> <span class="nf">updateChannelProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devicecontrollers</span><span class="p">,</span> <span class="n">triggergate</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update method for orderedChannels attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for orderedChannels attribute</span>
 
 <span class="sd">        :brief: sets pool channels in order defined by OrderedChannels</span>
 <span class="sd">        :param devicecontrollers: device controller dictionary</span>
@@ -303,7 +306,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Selection.updateComponentSelection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateComponentSelection">[docs]</a>    <span class="k">def</span> <span class="nf">updateComponentSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update method for componentGroup attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for componentGroup attribute</span>
 
 <span class="sd">        :brief: It removes datasource components from component group</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -315,7 +318,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cpg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Selection.updateDataSourceSelection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateDataSourceSelection">[docs]</a>    <span class="k">def</span> <span class="nf">updateDataSourceSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update method for dataSourceGroup attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for dataSourceGroup attribute</span>
 
 <span class="sd">        :brief: It removes datasources from DataSourceSelection if they are</span>
 <span class="sd">                neither in poolchannels nor in avaiblable datasources</span>
@@ -336,7 +339,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dsg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Selection.resetMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">resetMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reset method for mntGrp attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reset method for mntGrp attribute</span>
 
 <span class="sd">        :brief: If MntGrp not defined set it to default value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -344,7 +347,7 @@
             <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultmntgrp</span></div>
 
 <div class="viewcode-block" id="Selection.resetTimeZone"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetTimeZone">[docs]</a>    <span class="k">def</span> <span class="nf">resetTimeZone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reset method for timeZone attribute</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reset method for timeZone attribute</span>
 
 <span class="sd">        :brief: If TimeZone not defined set it to default value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -352,7 +355,7 @@
             <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;TimeZone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span></div>
 
 <div class="viewcode-block" id="Selection.resetPreselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetPreselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">resetPreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; resets Preselected Components with given components and set them</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets Preselected Components with given components and set them</span>
 <span class="sd">        to not active</span>
 <span class="sd">        :param components: list of components to be set</span>
 <span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -377,7 +380,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>
