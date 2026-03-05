@@ -53,7 +53,7 @@ class ProfileManager(object):
 
     def __init__(self, selector, syncsnapshot=False,
                  writepoolmotorpositions=False,
-                 writeallmotorpositions=False):
+                 writeallmotorpositions=False, syncmntgrp=False):
         """ constructor
 
         :param selector: selector object
@@ -67,6 +67,8 @@ class ProfileManager(object):
         :param writeallmotorpositions: add dynamic components
                                         for all pool motor positions
         :type writeallmotorpositions: :obj:`bool`
+        :param syncmntgrp: selection merges current Measurement Group
+        :type syncmntgrp: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -101,6 +103,9 @@ class ProfileManager(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.__syncsnapshot = syncsnapshot
+
+        #: (:obj:`bool`) selection merges current Measurement Group
+        self.__syncmntgrp = syncmntgrp
 
         #: (:obj:`bool`) add dynamic components for all pool motor positions
         self.__writepoolmotorpositions = writepoolmotorpositions
@@ -760,6 +765,14 @@ class ProfileManager(object):
         :param componentdatasources: component datasources
         :type componentdatasources: :obj:`list` <:obj:`int`>
         """
+        if self.__syncmntgrp:
+            channels = list(dsg.keys())
+            for ch in channels:
+                dsg[ch] = False
+                if ch in hel:
+                    hel.remove(ch)
+            return
+
         if compdatasources is None:
             compdatasources = self.componentDataSources()
         describer = Describer(self.__configServer, True)

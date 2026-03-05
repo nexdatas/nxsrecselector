@@ -1,6 +1,10 @@
+2026-03-05 Jan Kotanski <jankotan@gmail.com>
+	* add SyncMntGrp property (#181)
+	* tagged as v4.8.0
+
 2026-02-14 Jan Kotanski <jankotan@gmail.com>
 	* set instrument name explicitly (#186)
-	* tagged as v4.6.0
+	* tagged as v4.7.0
 
 2026-02-10 Jan Kotanski <jankotan@gmail.com>
 	* add support for utf-8 (#182)
