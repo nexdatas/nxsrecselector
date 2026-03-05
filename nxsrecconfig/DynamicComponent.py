@@ -56,6 +56,7 @@ class DynamicComponent(object):
         #: (:class:`tango.DeviceProxy` \
         #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
         #:    configuration server
+        print("DEF PATH", defaultpath)
         self.__nexusconfig_device = nexusconfig_device
 
         #: (:obj:`list` <:obj:`dict` <:obj:`str` , `any`> >) \
@@ -89,9 +90,11 @@ class DynamicComponent(object):
         self.__db = tango.Database()
 
         #: (:obj:`str`) default dynamic component path
-        self.__ldefaultpath = defaultpath
+        self.__ldefaultpath = str(defaultpath)
+        print("LDEFAYKT1", self.__ldefaultpath)
         #: (:obj:`str`) standard dynamic component path
-        self.__defaultpath = defaultpath
+        self.__defaultpath = str(defaultpath)
+        print("DEFAYKT1", self.__defaultpath)
         #: (:obj:`str`) standard user data dynamic component path
         self.__defaultuserpath = defaultuserpath
         #: (:obj:`bool`) standard dynamic link flag
@@ -220,6 +223,7 @@ class DynamicComponent(object):
         self.__defaultpath = dynamicPath
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath
+            print("SET DEFAYKT1", self.__defaultpath)
 
     def __shapeFromTango(self, ds):
         """ provices datasource shape and NeXus type from Tango device
@@ -249,17 +253,23 @@ class DynamicComponent(object):
         """
         special = ["strategy", "dtype", "name", "unit", "shape"]
 
+        print("CREATE DEFAULT", self.__defaultpath)
         for dd in self.__stepdsourcesDict:
             defaultpath = self.__defaultpath
+            print("DEFAULT", defaultpath)
             strategy = dd["strategy"] if "strategy" in dd else "STEP"
             links = self.__links
             if strategy == "INIT":
                 defaultpath = self.__defaultuserpath
                 links = self.__ilinks
             alias = self.__get_alias(Utils.tostr(dd["name"]))
+            print("PATH0", self.__nexuspaths, self.__nexuslabels,
+                  alias, defaultpath)
             path, field = self.__getPathField(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, defaultpath)
+            print("PATH", self.__nexuspaths, self.__nexuslabels,
+                  alias, defaultpath, path)
             link = self.__getProp(
                 self.__nexuslinks, self.__nexuslabels,
                 alias, links)
@@ -271,6 +281,7 @@ class DynamicComponent(object):
             xmlfield = self.__createField(
                 parent, field, nxtype, alias, dd["name"],
                 dd["shape"], strategy=strategy, dstype='CLIENT')
+            print("GROUP", dd["name"], xmlfield)
             if "unit" in dd:
                 xmlfield.attrib["units"] = str(dd["unit"])
             for ky, vl in dd.items():
@@ -354,6 +365,7 @@ class DynamicComponent(object):
         :returns: dynanic component name
         :rtype: :obj:`str`
         """
+        print("CREATE 0", self.__defaultpath)
         cps = TangoUtils.command(self.__nexusconfig_device,
                                  "availableComponents")
         name = self.__defaultCP
@@ -385,10 +397,9 @@ class DynamicComponent(object):
         else:
             self.__nexusconfig_device.xmlstring = \
                 "<?xml version='1.0' encoding='utf-8'?>\n" + xmls
-
         TangoUtils.command(self.__nexusconfig_device, "storeComponent",
                            Utils.tostr(self.__dynamicCP))
-#        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
+        print("Dynamic Component:\n%s" % xmls)
 
         return self.__dynamicCP
 
@@ -460,6 +471,7 @@ class DynamicComponent(object):
             entry.append(link)
             link.attrib["target"] = "%s/%s" % (path, name)
             link.attrib["name"] = name
+            print("CREATE LINK", name, path)
 
     @classmethod
     def __findDataSource(cls, name):
