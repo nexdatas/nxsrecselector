@@ -768,7 +768,7 @@ class PoolUtils(object):
         return argout
 
     @classmethod
-    def getMotorPositionAttributes(cls, pools):
+    def getMotorPositionAttributes(cls, pools, filters=None):
         """ find motor names
 
         :param pools: list of pool devices
@@ -782,6 +782,8 @@ class PoolUtils(object):
         for pool in pools:
             if pool.MotorList:
                 lst += pool.MotorList
+        if not filters or not hasattr(filters, '__iter__'):
+            filters = []
         argout = []
         for elm in lst:
             chan = json.loads(elm)
@@ -789,6 +791,13 @@ class PoolUtils(object):
                 name = chan['name']
                 fname = chan['full_name']
                 if name and fname:
+                    found = False
+                    for df in filters:
+                        found = fnmatch.filter([name], df)
+                        if found:
+                            break
+                    if found:
+                        continue
                     if fname.startswith("tango://"):
                         fname = fname[8:]
                     if not fname.lower().endswith("/position"):

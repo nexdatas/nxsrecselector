@@ -119,6 +119,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         self.__stg.mutedChannelFilters = self.MutedChannelFilters \
             or ["*tip551*"]
         self.__stg.mutedPreScanAttrFilters = self.MutedPreScanAttrFilters or []
+        self.__stg.mutedMotorFilters = self.MutedMotorFilters or []
         self.__stg.adminDataNames = self.AdminDataNames or []
         self.__stg.defaultPreselectedComponents = \
             self.DefaultPreselectedComponents or []
@@ -2015,6 +2016,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
         'MutedChannelFilters':
         [tango.DevVarStringArray,
          "list of muted channel filters",
+         []],
+        'MutedMotorFilters':
+        [tango.DevVarStringArray,
+         "list of muted motor filters",
          []],
         'MutedPreScanAttrFilters':
         [tango.DevVarStringArray,

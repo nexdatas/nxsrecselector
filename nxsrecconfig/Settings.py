@@ -510,6 +510,28 @@ class Settings(object):
         __setMutedPreScanAttrFilters,
         doc='muted prescan attribute filters')
 
+    def __getMutedMotorFilters(self):
+        """ get method for  MutedMotorFilters attribute
+
+        :returns: list of timer filters
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__profileManager.mutedMotorFilters
+
+    def __setMutedMotorFilters(self, filters):
+        """ set method for MutedMotorFilters attribute
+
+        :param filters: list of filters
+        :type filters: :obj:`list` <:obj:`str`>
+        """
+        self.__profileManager.mutedMotorFilters = filters
+
+    #: (:obj:`list` <:obj:`str`>) muted motor filters
+    mutedMotorFilters = property(
+        __getMutedMotorFilters,
+        __setMutedMotorFilters,
+        doc='muted motor filters')
+
     def __getMasterTimerFirst(self):
         """ get method for masterTimerFirst attribute
 
