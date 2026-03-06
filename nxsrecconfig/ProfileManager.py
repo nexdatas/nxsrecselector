@@ -94,6 +94,9 @@ class ProfileManager(object):
         #:  (:obj:`list` <:obj:`str`>) muted PreScan attribute filters
         self.mutedPreScanAttrFilters = []
 
+        #:  (:obj:`list` <:obj:`str`>) muted motor filters
+        self.mutedMotorFilters = []
+
         #: (:obj:`bool` ) master timer/monitor with the first index
         self.masterTimerFirst = True
         #: (:obj:`bool` ) set master timer/monitor like for older MGs
@@ -176,7 +179,8 @@ class ProfileManager(object):
         amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         fpool = self.__getActivePool(amntgrp)
         if fpool:
-            motors = PoolUtils.getMotorPositionAttributes([fpool])
+            motors = PoolUtils.getMotorPositionAttributes(
+                [fpool], self.mutedMotorFilters)
         motors = motors if motors else []
         return motors
 

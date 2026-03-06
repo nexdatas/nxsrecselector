@@ -1,5 +1,6 @@
 2026-03-05 Jan Kotanski <jankotan@gmail.com>
 	* add SyncMntGrp property (#181)
+	* add MutedMotorFilters property (#190)
 	* tagged as v4.8.0
 
 2026-02-14 Jan Kotanski <jankotan@gmail.com>
