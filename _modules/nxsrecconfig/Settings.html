@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 4.7.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; NXSRecSelector 4.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -178,7 +178,8 @@
                  <span class="n">defaultnexustype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">defaultudatapath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">globaluserdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">cacheconfiguration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">cacheconfiguration</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">syncmntgrp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; contructor</span>
 
 <span class="sd">        :param server: NXSRecSelector server</span>
@@ -200,6 +201,8 @@
 <span class="sd">        :type globaluserdata: :obj:`bool`</span>
 <span class="sd">        :param cacheconfiguration: cache writer configuration in configServer</span>
 <span class="sd">        :type cacheconfiguration: :obj:`bool`</span>
+<span class="sd">        :param syncmntgrp: selection merges current Measurement Group</span>
+<span class="sd">        :type syncmntgrp: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
@@ -233,6 +236,8 @@
 
         <span class="c1">#: (:obj:`bool`) preselection merges current ScanSnapshot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syncSnapshot</span> <span class="o">=</span> <span class="n">syncsnapshot</span>
+        <span class="c1">#: (:obj:`bool`) selection merges current Measurement Group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">syncMntGrp</span> <span class="o">=</span> <span class="n">syncmntgrp</span>
         <span class="c1">#: (:obj:`bool`) cache writer configuration in configServer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cacheConfiguration</span> <span class="o">=</span> <span class="n">cacheconfiguration</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) cached component names</span>
@@ -273,7 +278,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">,</span>
             <span class="n">syncsnapshot</span><span class="o">=</span><span class="n">syncsnapshot</span><span class="p">,</span>
             <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="n">writepoolmotorpositions</span><span class="p">,</span>
-            <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="n">writeallmotorpositions</span>
+            <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="n">writeallmotorpositions</span><span class="p">,</span>
+            <span class="n">syncmntgrp</span><span class="o">=</span><span class="n">syncmntgrp</span>
         <span class="p">)</span>
 
         <span class="c1">#: (:obj:`str`) configuration file</span>
@@ -621,6 +627,28 @@
         <span class="n">__getMutedPreScanAttrFilters</span><span class="p">,</span>
         <span class="n">__setMutedPreScanAttrFilters</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;muted prescan attribute filters&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getMutedMotorFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get method for  MutedMotorFilters attribute</span>
+
+<span class="sd">        :returns: list of timer filters</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">mutedMotorFilters</span>
+
+    <span class="k">def</span> <span class="nf">__setMutedMotorFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set method for MutedMotorFilters attribute</span>
+
+<span class="sd">        :param filters: list of filters</span>
+<span class="sd">        :type filters: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">mutedMotorFilters</span> <span class="o">=</span> <span class="n">filters</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) muted motor filters</span>
+    <span class="n">mutedMotorFilters</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">__getMutedMotorFilters</span><span class="p">,</span>
+        <span class="n">__setMutedMotorFilters</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;muted motor filters&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getMasterTimerFirst</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; get method for masterTimerFirst attribute</span>

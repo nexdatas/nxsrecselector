@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 4.7.0 documentation</title>
+    <title>nxsrecconfig.NXSConfig &#8212; NXSRecSelector 4.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -214,6 +214,7 @@
         <span class="n">defaultmntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultMntGrp</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">defaultnexustype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultNeXusType</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">syncsnapshot</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SyncSnapshot</span><span class="p">)</span>
+        <span class="n">syncmntgrp</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SyncMntGrp</span><span class="p">)</span>
         <span class="n">cacheconfiguration</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CacheConfiguration</span><span class="p">)</span>
         <span class="n">globaluserdata</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GlobalUserData</span><span class="p">)</span>
         <span class="n">writepoolmotorpositions</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WritePoolMotorPositions</span><span class="p">)</span>
@@ -224,7 +225,7 @@
                          <span class="n">writeallmotorpositions</span><span class="p">,</span>
                          <span class="n">defaultnexustype</span><span class="p">,</span>
                          <span class="n">defaultudatapath</span><span class="p">,</span> <span class="n">globaluserdata</span><span class="p">,</span>
-                         <span class="n">cacheconfiguration</span><span class="p">)</span>
+                         <span class="n">cacheconfiguration</span><span class="p">,</span> <span class="n">syncmntgrp</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PoolBlacklist</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimerFilters</span> <span class="ow">or</span> <span class="p">[</span>
@@ -236,6 +237,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mutedChannelFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MutedChannelFilters</span> \
             <span class="ow">or</span> <span class="p">[</span><span class="s2">&quot;*tip551*&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mutedPreScanAttrFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MutedPreScanAttrFilters</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mutedMotorFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MutedMotorFilters</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">adminDataNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdminDataNames</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">DefaultPreselectedComponents</span> <span class="ow">or</span> <span class="p">[]</span>
@@ -2133,6 +2135,10 @@
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
          <span class="s2">&quot;list of muted channel filters&quot;</span><span class="p">,</span>
          <span class="p">[]],</span>
+        <span class="s1">&#39;MutedMotorFilters&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
+         <span class="s2">&quot;list of muted motor filters&quot;</span><span class="p">,</span>
+         <span class="p">[]],</span>
         <span class="s1">&#39;MutedPreScanAttrFilters&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
          <span class="s2">&quot;list of muted attribute channel filters for PreScanSnapshot&quot;</span><span class="p">,</span>
@@ -2152,6 +2158,10 @@
         <span class="s1">&#39;SyncSnapshot&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
          <span class="s2">&quot;preselection merges the current ScanSnapshot&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="kc">False</span><span class="p">]],</span>
+        <span class="s1">&#39;SyncMntGrp&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
+         <span class="s2">&quot;selection merges the current Measurement Group&quot;</span><span class="p">,</span>
          <span class="p">[</span><span class="kc">False</span><span class="p">]],</span>
         <span class="s1">&#39;CacheConfiguration&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span>
