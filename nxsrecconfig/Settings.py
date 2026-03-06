@@ -60,7 +60,8 @@ class Settings(object):
                  defaultnexustype=None,
                  defaultudatapath=None,
                  globaluserdata=False,
-                 cacheconfiguration=False):
+                 cacheconfiguration=False,
+                 syncmntgrp=False):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -82,6 +83,8 @@ class Settings(object):
         :type globaluserdata: :obj:`bool`
         :param cacheconfiguration: cache writer configuration in configServer
         :type cacheconfiguration: :obj:`bool`
+        :param syncmntgrp: selection merges current Measurement Group
+        :type syncmntgrp: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -115,6 +118,8 @@ class Settings(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.syncSnapshot = syncsnapshot
+        #: (:obj:`bool`) selection merges current Measurement Group
+        self.syncMntGrp = syncmntgrp
         #: (:obj:`bool`) cache writer configuration in configServer
         self.cacheConfiguration = cacheconfiguration
         #: (:obj:`dict` <:obj:`str`, `any`>) cached component names
@@ -155,7 +160,8 @@ class Settings(object):
             self.__selector,
             syncsnapshot=syncsnapshot,
             writepoolmotorpositions=writepoolmotorpositions,
-            writeallmotorpositions=writeallmotorpositions
+            writeallmotorpositions=writeallmotorpositions,
+            syncmntgrp=syncmntgrp
         )
 
         #: (:obj:`str`) configuration file
