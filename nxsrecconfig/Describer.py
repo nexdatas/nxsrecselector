@@ -547,6 +547,8 @@ class Describer(object):
                 root = et.fromstring(cpxml,
                                      parser=XMLParser(collect_ids=False))
             parents = root.findall(".//field")
+            parents.extend(root.findall(".//vds"))
+            parents.extend(root.findall(".//map"))
             attrs = root.findall(".//attribute")
             dims = root.findall(".//dim")
             parents.extend(attrs if attrs else [])
