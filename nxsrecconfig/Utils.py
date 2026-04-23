@@ -698,26 +698,35 @@ class PoolUtils(object):
         return elements
 
     @classmethod
-    def getFullDeviceNames(cls, pools, names=None):
+    def getFullDeviceNames(cls, pools, names=None, listattr="AcqChannelList",
+                           lastsubterm=-1):
         """ find device names from aliases
 
         :param pools: list of pool devices
         :type pools: :obj:`list` <:class:`tango.DeviceProxy`>
         :param names: alias names if None returns name for all aliases
         :type names: :obj:`list` <:obj:`str`>
+        :param listattr: pool attribute with list
+        :type listattr: :obj:`str`
+        :param lastsubterm: last subterm of full_name separated by '/'
+                            e.g. -1 or None
+        :type lastsubterm: :obj:`int`
         :returns: full device name
         :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
         lst = []
         for pool in pools:
-            if pool.AcqChannelList:
-                lst += pool.AcqChannelList
+            if hasattr(pool, listattr):
+                ellist = getattr(pool, listattr)
+                if ellist:
+                    lst += ellist
         argout = {}
         for elm in lst:
-            chan = json.loads(elm)
-            if names is None or chan['name'] in names:
-                arr = chan['full_name'].split("/")
-                argout[chan['name']] = "/".join(arr[0:-1])
+            if elm:
+                chan = json.loads(elm)
+                if names is None or chan['name'] in names:
+                    arr = chan['full_name'].split("/")
+                    argout[chan['name']] = "/".join(arr[0:lastsubterm])
         return argout
 
     @classmethod
