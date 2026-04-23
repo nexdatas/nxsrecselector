@@ -61,7 +61,9 @@ class Settings(object):
                  defaultudatapath=None,
                  globaluserdata=False,
                  cacheconfiguration=False,
-                 syncmntgrp=False):
+                 syncmntgrp=False,
+                 checkdescription=True
+                 ):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -85,6 +87,8 @@ class Settings(object):
         :type cacheconfiguration: :obj:`bool`
         :param syncmntgrp: selection merges current Measurement Group
         :type syncmntgrp: :obj:`bool`
+        :param checkdescription: apply checks for preselected components
+        :type checkdescription: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -161,7 +165,8 @@ class Settings(object):
             syncsnapshot=syncsnapshot,
             writepoolmotorpositions=writepoolmotorpositions,
             writeallmotorpositions=writeallmotorpositions,
-            syncmntgrp=syncmntgrp
+            syncmntgrp=syncmntgrp,
+            checkdescription=checkdescription
         )
 
         #: (:obj:`str`) configuration file
@@ -1400,7 +1405,8 @@ class Settings(object):
     def preselectComponents(self):
         """ checks existing controllers of pools
         """
-        self.__selector.preselect()
+        if self.__profileManager.checkdescription:
+            self.__selector.preselect()
         gc.collect()
 
     def resetPreselectedComponents(self):

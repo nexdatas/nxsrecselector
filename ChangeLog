@@ -1,5 +1,6 @@
 2026-04-23 Jan Kotanski <jankotan@gmail.com>
-	* change __triggergatelist__  to __triggergatedict__ property (#197)
+	* add CheckDescription tango property (#199)
+	* change __triggergatelist__  to __triggergatedict__ channel property (#197)
 	* tagged as v4.10.0
 
 2026-04-16 Jan Kotanski <jankotan@gmail.com>
