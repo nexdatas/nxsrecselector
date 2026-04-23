@@ -53,7 +53,8 @@ class ProfileManager(object):
 
     def __init__(self, selector, syncsnapshot=False,
                  writepoolmotorpositions=False,
-                 writeallmotorpositions=False, syncmntgrp=False):
+                 writeallmotorpositions=False, syncmntgrp=False,
+                 checkdescription=True):
         """ constructor
 
         :param selector: selector object
@@ -69,6 +70,8 @@ class ProfileManager(object):
         :type writeallmotorpositions: :obj:`bool`
         :param syncmntgrp: selection merges current Measurement Group
         :type syncmntgrp: :obj:`bool`
+        :param checkdescription: apply checks for preselected components
+        :type checkdescription: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -115,6 +118,9 @@ class ProfileManager(object):
 
         #: (:obj:`bool`) add dynamic components for all pool motor positions
         self.writeallmotorpositions = writeallmotorpositions
+
+        #: (:obj:`bool`) apply checks for preselected components
+        self.checkdescription = checkdescription
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -558,14 +564,16 @@ class ProfileManager(object):
                         self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
-                self.__selector.preselect()
+                if self.checkdescription:
+                    self.__selector.preselect()
         elif sync and (self.__syncsnapshot
                        or self.__writepoolmotorpositions
                        or self.writeallmotorpositions):
             changed = self.__addPreselectedComponents(
                 self.defaultPreselectedComponents)
             if changed:
-                self.__selector.preselect()
+                if self.checkdescription:
+                    self.__selector.preselect()
 
     def __createMntGrpConf(self, datasources,
                            componentdatasources, description):

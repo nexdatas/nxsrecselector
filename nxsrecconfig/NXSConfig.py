@@ -99,6 +99,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         syncmntgrp = bool(self.SyncMntGrp)
         cacheconfiguration = bool(self.CacheConfiguration)
         globaluserdata = bool(self.GlobalUserData)
+        checkdescription = bool(self.CheckDescription)
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         writeallmotorpositions = bool(self.WriteAllMotorPositions)
         self.__stg = STG(self, numberofthreads, defaultpath,
@@ -107,7 +108,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
                          writeallmotorpositions,
                          defaultnexustype,
                          defaultudatapath, globaluserdata,
-                         cacheconfiguration, syncmntgrp)
+                         cacheconfiguration, syncmntgrp,
+                         checkdescription)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -2054,6 +2056,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevBoolean,
          "use global user data dictionary",
          [False]],
+        'CheckDescription':
+        [tango.DevBoolean,
+         "apply checks for preselected components",
+         [True]],
         'WritePoolMotorPositions':
         [tango.DevBoolean,
          "add dynamic components for pool motor positions "
