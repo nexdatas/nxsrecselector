@@ -1,3 +1,7 @@
+2026-04-23 Jan Kotanski <jankotan@gmail.com>
+	* change __triggergatelist__  to __triggergatedict__ property (#197)
+	* tagged as v4.10.0
+
 2026-04-16 Jan Kotanski <jankotan@gmail.com>
 	* search for datasources also in vds and maps (#194)
 	* tagged as v4.9.0

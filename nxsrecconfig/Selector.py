@@ -245,8 +245,10 @@ class Selector(object):
         """
         pools = self.getPools()
         try:
-            triggergate = PoolUtils.getElementNames(
-                pools, 'TriggerGateList')
+            # triggergate = PoolUtils.getElementNames(
+            #     pools, 'TriggerGateList')
+            triggergate = PoolUtils.getFullDeviceNames(
+                pools, None, 'TriggerGateList', None)
         except Exception:
             triggergate = []
         self.__selection.updateChannelProperties(

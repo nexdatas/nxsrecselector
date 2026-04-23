@@ -608,6 +608,8 @@ class ProfileManager(object):
         props = json.loads(self.__selector["ChannelProperties"])
         synchronizer = props["synchronizer"] \
             if "synchronizer" in props.keys() else {}
+        triggergatefname = props["__triggergatedict__"] \
+            if "__triggergatedict__" in props.keys() else {}
         synchronization = props["synchronization"] \
             if "synchronization" in props.keys() else {}
         valuerefenabled = props["value_ref_enabled"] \
@@ -634,11 +636,15 @@ class ProfileManager(object):
             if self.masterTimerFirst and al == timer:
                 curindex = index
                 index = 0
+            triggergatename = synchronizer[al] \
+                if al in synchronizer.keys() else None
+            triggergatedev = triggergatefname.get(
+                triggergatename, triggergatename)
             index = self.__addDevice(
                 al, dontdisplay, cnf,
                 al if al in tchannels else timer, index,
                 fullnames, sources,
-                synchronizer[al] if al in synchronizer.keys() else None,
+                triggergatedev,
                 int(synchronization[al]) if al in synchronization.keys()
                 else None,
                 valuerefenabled[al]
@@ -658,7 +664,6 @@ class ProfileManager(object):
             )
             if self.masterTimerFirst and al == timer:
                 index = curindex
-
         conf = json.dumps(cnf)
 
         mginfo = {
@@ -694,6 +699,9 @@ class ProfileManager(object):
         synchronizer = {}
         # synchronization = props["synchronization"] \
         #     if "synchronization" in props.keys() else {}
+        triggergatefname = props["__triggergatedict__"] \
+            if "__triggergatedict__" in props.keys() else {}
+        ftg = {v: k for k, v in triggergatefname.items()}
         synchronization = {}
         valuerefenabled = {}
         valuerefpattern = {}
@@ -719,6 +727,7 @@ class ProfileManager(object):
             otimers = self.__reorderTimers(conf, timers, dsg, hel, avtimers)
             ochs = self.__reorderChannels(idch)
 
+        synchronizer = {k: (ftg.get(v, v)) for k, v in synchronizer.items()}
         props["synchronizer"] = synchronizer
         props["synchronization"] = synchronization
         props["value_ref_enabled"] = valuerefenabled

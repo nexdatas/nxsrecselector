@@ -184,7 +184,7 @@ class Selection(dict):
         if devicecontrollers:
             props["__controllers__"] = devicecontrollers
         if triggergate:
-            props["__triggergatelist__"] = triggergate
+            props["__triggergatedict__"] = triggergate
         self["ChannelProperties"] = json.dumps(props)
 
     def updateComponentSelection(self):
