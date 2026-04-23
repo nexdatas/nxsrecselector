@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 4.8.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 4.10.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.8</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -171,7 +171,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">syncsnapshot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">writepoolmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">syncmntgrp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">writeallmotorpositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">syncmntgrp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">checkdescription</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param selector: selector object</span>
@@ -187,6 +188,8 @@
 <span class="sd">        :type writeallmotorpositions: :obj:`bool`</span>
 <span class="sd">        :param syncmntgrp: selection merges current Measurement Group</span>
 <span class="sd">        :type syncmntgrp: :obj:`bool`</span>
+<span class="sd">        :param checkdescription: apply checks for preselected components</span>
+<span class="sd">        :type checkdescription: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.Selector.Selector`) configuration selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">selector</span>
@@ -233,6 +236,9 @@
 
         <span class="c1">#: (:obj:`bool`) add dynamic components for all pool motor positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span> <span class="o">=</span> <span class="n">writeallmotorpositions</span>
+
+        <span class="c1">#: (:obj:`bool`) apply checks for preselected components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checkdescription</span> <span class="o">=</span> <span class="n">checkdescription</span>
 
     <span class="k">def</span> <span class="nf">__updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updatas MacroServer name</span>
@@ -676,14 +682,16 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">resetPreselectedComponents</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkdescription</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">sync</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span>
                        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writepoolmotorpositions</span>
                        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeallmotorpositions</span><span class="p">):</span>
             <span class="n">changed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addPreselectedComponents</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span></div>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkdescription</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__createMntGrpConf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">,</span>
                            <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
@@ -726,6 +734,8 @@
         <span class="n">props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">])</span>
         <span class="n">synchronizer</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronizer&quot;</span><span class="p">]</span> \
             <span class="k">if</span> <span class="s2">&quot;synchronizer&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">triggergatefname</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;__triggergatedict__&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;__triggergatedict__&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">synchronization</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronization&quot;</span><span class="p">]</span> \
             <span class="k">if</span> <span class="s2">&quot;synchronization&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">valuerefenabled</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;value_ref_enabled&quot;</span><span class="p">]</span> \
@@ -752,11 +762,15 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="ow">and</span> <span class="n">al</span> <span class="o">==</span> <span class="n">timer</span><span class="p">:</span>
                 <span class="n">curindex</span> <span class="o">=</span> <span class="n">index</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">triggergatename</span> <span class="o">=</span> <span class="n">synchronizer</span><span class="p">[</span><span class="n">al</span><span class="p">]</span> \
+                <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">synchronizer</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">triggergatedev</span> <span class="o">=</span> <span class="n">triggergatefname</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">triggergatename</span><span class="p">,</span> <span class="n">triggergatename</span><span class="p">)</span>
             <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addDevice</span><span class="p">(</span>
                 <span class="n">al</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span>
                 <span class="n">al</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">tchannels</span> <span class="k">else</span> <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span>
                 <span class="n">fullnames</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span>
-                <span class="n">synchronizer</span><span class="p">[</span><span class="n">al</span><span class="p">]</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">synchronizer</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">triggergatedev</span><span class="p">,</span>
                 <span class="nb">int</span><span class="p">(</span><span class="n">synchronization</span><span class="p">[</span><span class="n">al</span><span class="p">])</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">synchronization</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                 <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">valuerefenabled</span><span class="p">[</span><span class="n">al</span><span class="p">]</span>
@@ -776,7 +790,6 @@
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">masterTimerFirst</span> <span class="ow">and</span> <span class="n">al</span> <span class="o">==</span> <span class="n">timer</span><span class="p">:</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="n">curindex</span>
-
         <span class="n">conf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
 
         <span class="n">mginfo</span> <span class="o">=</span> <span class="p">{</span>
@@ -812,6 +825,9 @@
         <span class="n">synchronizer</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># synchronization = props[&quot;synchronization&quot;] \</span>
         <span class="c1">#     if &quot;synchronization&quot; in props.keys() else {}</span>
+        <span class="n">triggergatefname</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;__triggergatedict__&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;__triggergatedict__&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">ftg</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">triggergatefname</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="n">synchronization</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">valuerefenabled</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">valuerefpattern</span> <span class="o">=</span> <span class="p">{}</span>
@@ -837,6 +853,7 @@
             <span class="n">otimers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderTimers</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">avtimers</span><span class="p">)</span>
             <span class="n">ochs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderChannels</span><span class="p">(</span><span class="n">idch</span><span class="p">)</span>
 
+        <span class="n">synchronizer</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">ftg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">synchronizer</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">synchronizer</span>
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;synchronization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">synchronization</span>
         <span class="n">props</span><span class="p">[</span><span class="s2">&quot;value_ref_enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">valuerefenabled</span>

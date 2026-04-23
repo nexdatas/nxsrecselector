@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Utils &#8212; NXSRecSelector 4.8.0 documentation</title>
+    <title>nxsrecconfig.Utils &#8212; NXSRecSelector 4.10.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.8</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -816,26 +816,35 @@
         <span class="k">return</span> <span class="n">elements</span></div>
 
 <div class="viewcode-block" id="PoolUtils.getFullDeviceNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getFullDeviceNames">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">getFullDeviceNames</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getFullDeviceNames</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">listattr</span><span class="o">=</span><span class="s2">&quot;AcqChannelList&quot;</span><span class="p">,</span>
+                           <span class="n">lastsubterm</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; find device names from aliases</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
 <span class="sd">        :type pools: :obj:`list` &lt;:class:`tango.DeviceProxy`&gt;</span>
 <span class="sd">        :param names: alias names if None returns name for all aliases</span>
 <span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :param listattr: pool attribute with list</span>
+<span class="sd">        :type listattr: :obj:`str`</span>
+<span class="sd">        :param lastsubterm: last subterm of full_name separated by &#39;/&#39;</span>
+<span class="sd">                            e.g. -1 or None</span>
+<span class="sd">        :type lastsubterm: :obj:`int`</span>
 <span class="sd">        :returns: full device name</span>
 <span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span><span class="p">:</span>
-                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">listattr</span><span class="p">):</span>
+                <span class="n">ellist</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">listattr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ellist</span><span class="p">:</span>
+                    <span class="n">lst</span> <span class="o">+=</span> <span class="n">ellist</span>
         <span class="n">argout</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
-            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
-                <span class="n">arr</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;full_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-                <span class="n">argout</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">elm</span><span class="p">:</span>
+                <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                    <span class="n">arr</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;full_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                    <span class="n">argout</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">lastsubterm</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">argout</span></div>
 
 <div class="viewcode-block" id="PoolUtils.getAliases"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getAliases">[docs]</a>    <span class="nd">@classmethod</span>

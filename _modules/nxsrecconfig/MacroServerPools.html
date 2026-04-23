@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.MacroServerPools &#8212; NXSRecSelector 3.39.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>nxsrecconfig.MacroServerPools &#8212; NXSRecSelector 4.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
 
   </head><body>
@@ -35,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.39</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -160,10 +162,10 @@
 
 <div class="viewcode-block" id="MacroServerPools"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools">[docs]</a><span class="k">class</span> <span class="nc">MacroServerPools</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; sardanamacro server and pools &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; sardanamacro server and pools &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param numberOfThreads: number of threads</span>
 <span class="sd">        :type numberOfThreads: :obj:`str`</span>
@@ -206,7 +208,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="MacroServerPools.updateMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer">[docs]</a>    <span class="k">def</span> <span class="nf">updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates MacroServer and sardana pools for given door</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates MacroServer and sardana pools for given door</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -240,7 +242,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroserver</span></div>
 
 <div class="viewcode-block" id="MacroServerPools.getMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getMacroServer">[docs]</a>    <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; door macro server device name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; door macro server device name</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -252,7 +254,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroserver</span></div>
 
 <div class="viewcode-block" id="MacroServerPools.getPools"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getPools">[docs]</a>    <span class="k">def</span> <span class="nf">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; door pool device proxies</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; door pool device proxies</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -266,7 +268,7 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__toCheck</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">configdevice</span><span class="p">,</span> <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">components</span><span class="p">,</span>
                   <span class="n">datasources</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; prepares list of channels to check</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; prepares list of channels to check</span>
 
 <span class="sd">        :param configdevice: configuration device proxy</span>
 <span class="sd">        :type configdevice: :class:`tango.DeviceProxy` \</span>
@@ -332,7 +334,7 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__createCheckItem</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dss</span><span class="p">,</span> <span class="n">toCheck</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">,</span>
                           <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">describer</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates Checker Item</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates Checker Item</span>
 
 <span class="sd">        :param name: item name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -381,7 +383,7 @@
 <div class="viewcode-block" id="MacroServerPools.checkChannels"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels">[docs]</a>    <span class="k">def</span> <span class="nf">checkChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">configdevice</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span>
                       <span class="n">componentgroup</span><span class="p">,</span> <span class="n">datasourcegroup</span><span class="p">,</span>
                       <span class="n">channelerrors</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; checks component channels</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; checks component channels</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -441,7 +443,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__updategroup</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">disgroup</span><span class="p">,</span> <span class="n">channelerrors</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates selection dictionary</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates selection dictionary</span>
 
 <span class="sd">        :param group: selection dictionary</span>
 <span class="sd">        :type group: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt;</span>
@@ -468,7 +470,7 @@
                     <span class="n">group</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="MacroServerPools.isDoorRunning"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorRunning">[docs]</a>    <span class="k">def</span> <span class="nf">isDoorRunning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; check if any door server is running</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; check if any door server is running</span>
 
 <span class="sd">        :param ms: macroserver device name</span>
 <span class="sd">        :type ms: :obj:`str`</span>
@@ -494,7 +496,7 @@
         <span class="k">return</span> <span class="n">status</span></div>
 
 <div class="viewcode-block" id="MacroServerPools.getSelectorEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getSelectorEnv">[docs]</a>    <span class="k">def</span> <span class="nf">getSelectorEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; imports Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; imports Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -531,7 +533,7 @@
                     <span class="n">data</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">vl</span></div>
 
 <div class="viewcode-block" id="MacroServerPools.setSelectorEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setSelectorEnv">[docs]</a>    <span class="k">def</span> <span class="nf">setSelectorEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">cmddata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; exports all Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; exports all Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -578,7 +580,7 @@
                 <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">msp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MacroServerPools.getScanEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getScanEnv">[docs]</a>    <span class="k">def</span> <span class="nf">getScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; fetches Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; fetches Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -606,7 +608,7 @@
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MacroServerPools.setScanEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setScanEnv">[docs]</a>    <span class="k">def</span> <span class="nf">setScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">jdata</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -650,7 +652,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>
