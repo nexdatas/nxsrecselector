@@ -21,6 +21,7 @@
 
 import threading
 import sys
+import time
 
 try:
     import tango
@@ -39,6 +40,7 @@ else:
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
 
+bt = time.time()
 
 class TangoDSItem(object):
 
@@ -136,18 +138,23 @@ class CheckerThread(threading.Thread):
         """
         # print("E", self.tangoSourceErrorStates)
         # print("W", self.tangoSourceWarningStates)
+
         for ds in checkeritem:
             try:
+
+                #print("DS", ds.name)
                 if ds.attr:
                     dvat = "%s/%s" % (ds.device or ds.name, ds.attr)
                 else:
                     dvat = "%s" % (ds.device or ds.name)
+                st = time.time()
                 dp = tango.DeviceProxy(ds.device or ds.name)
+                pt = time.time()
                 # read real value (not polled)
                 dp.set_source(tango.DevSource.DEV)
                 # wait when DeviceProxy is ready
                 TangoUtils.wait(dp, state=None, counter=2)
-                dp.set_timeout_millis(10000)
+                dp.set_timeout_millis(1000)
                 state = dp.state()
                 if str(state) in self.tangoSourceErrorStates:
                     raise FaultStateError("%s STATE" % state)
@@ -172,12 +179,14 @@ class CheckerThread(threading.Thread):
                         raise Exception("Empty Attribute")
                 if str(state) in self.tangoSourceWarningStates:
                     raise AlarmStateError("%s STATE" % state)
+                print("END DS", ds.name, ds.device or ds.name,  time.time() - st, pt-st, st-bt)
             except AlarmStateError as e:
                 checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
                     checkeritem.errords = "%s [%s]" % (ds.name, dvat)
                 else:
                     checkeritem.errords = ds.name
+                print("END ALARM DS", ds.name, ds.device or ds.name, time.time() - st, st-bt, checkeritem.message)
             except Exception as e:
                 checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
@@ -185,6 +194,7 @@ class CheckerThread(threading.Thread):
                 else:
                     checkeritem.errords = ds.name
                 checkeritem.active = False
+                print("END ERROR DS", ds.name, ds.device or ds.name, time.time() - st, st-bt, checkeritem.message)
                 break
 
 

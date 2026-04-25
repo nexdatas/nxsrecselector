@@ -91,6 +91,7 @@ class Settings(object):
         :type checkdescription: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
+        print("SET")
         self.__server = server
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
@@ -1405,6 +1406,7 @@ class Settings(object):
     def preselectComponents(self):
         """ checks existing controllers of pools
         """
+        print("PRE")
         if self.__profileManager.checkdescription:
             self.__selector.preselect()
         gc.collect()
