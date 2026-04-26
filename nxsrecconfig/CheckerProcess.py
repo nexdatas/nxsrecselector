@@ -79,7 +79,7 @@ class CheckerProcess(mp.Process):
                 elem = self.__queue.get(block=False)
                 check(elem, self.tangoSourceErrorStates,
                       self.tangoSourceWarningStates)
-                self.rqueue.put(elem)
+                self.__rqueue.put(elem)
             except Queue.Empty:
                 break
             except Exception as e:
