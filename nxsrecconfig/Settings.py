@@ -62,7 +62,8 @@ class Settings(object):
                  globaluserdata=False,
                  cacheconfiguration=False,
                  syncmntgrp=False,
-                 checkdescription=True
+                 checkdescription=True,
+                 numberofprocesses=5
                  ):
         """ contructor
 
@@ -89,11 +90,15 @@ class Settings(object):
         :type syncmntgrp: :obj:`bool`
         :param checkdescription: apply checks for preselected components
         :type checkdescription: :obj:`bool`
+        :param numberofprocesses: number of processes used to check device
+        :type numberofprocesses: :obj:`int`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
+        #: (:obj:`int`) number of processes
+        self.numberOfProcesses = numberofprocesses or 0
 
         #: (:class:`StreamSet` or :class:`tango.LatestDeviceImpl`) stream set
         self._streams = StreamSet(weakref.ref(server) if server else None)
@@ -150,7 +155,8 @@ class Settings(object):
 
         #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
         #:     configuration selection
-        self.__msp = MacroServerPools(self.numberOfThreads)
+        self.__msp = MacroServerPools(self.numberOfThreads,
+                                      self.numberOfProcesses)
 
         #: (:class:`nxsrecconfg.Selector.Selector`) \
         #:   configuration selector

@@ -19,24 +19,28 @@
 
 """  Component CheckerThread - thread which checks tango server attributes"""
 
-import threading
+import multiprocessing as mp
 import sys
-
-from .Checker import (ATTRIBUTESTOCHECK, TangoDSItem, CheckerItem,
-                      AlarmStateError, FaultStateError, OffStateError, check)
 
 if sys.version_info > (3,):
     import queue as Queue
 else:
     import Queue
 
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
-class CheckerThread(threading.Thread):
+from .Checker import check
+
+
+class CheckerProcess(mp.Process):
 
     """ Single CheckerThread
     """
 
-    def __init__(self, index, queue):
+    def __init__(self, index, queue, rqueue):
         """ constructor
 
         :brief: It creates ElementThread from the runnable element
@@ -44,12 +48,16 @@ class CheckerThread(threading.Thread):
         :type index: :obj:`int`
         :param queue: queue with tasks
         :type queue: :class:`Queue.Queue`
+        :param rqueue: queue with results
+        :type rqueue: :class:`Queue.Queue`
         """
-        threading.Thread.__init__(self)
-        #: (:obj:`int`) thread index
+        mp.Process.__init__(self)
+        #: (:obj:`int`) process index
         self.index = index
         #: (:class:`Queue.Queue`) queue with runnable elements
         self.__queue = queue
+        #: (:class:`Queue.Queue`) queue with runnable elements
+        self.__rqueue = rqueue
 
         #: (:obj:`list` <:obj:`str`>) tango datasources error states
         self.tangoSourceErrorStates = [
@@ -63,17 +71,16 @@ class CheckerThread(threading.Thread):
 
         :brief: It runs the defined thread
         """
-        full = True
-        while full:
+        if hasattr(tango.ApiUtil, 'cleanup'):
+            tango.ApiUtil.cleanup()
+        while not self.__queue.empty():
+            elem = None
             try:
                 elem = self.__queue.get(block=False)
                 check(elem, self.tangoSourceErrorStates,
                       self.tangoSourceWarningStates)
+                self.rqueue.put(elem)
             except Queue.Empty:
-                full = False
-
-
-# backward compatibility imports
-__all__ = ["ATTRIBUTESTOCHECK", "TangoDSItem", "CheckerItem",
-           "AlarmStateError", "FaultStateError", "OffStateError",
-           "CheckerThread"]
+                break
+            except Exception as e:
+                print("Error:", str(e))
