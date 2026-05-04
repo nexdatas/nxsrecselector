@@ -73,6 +73,8 @@ class CheckerProcess(mp.Process):
         """
         if hasattr(tango.ApiUtil, 'cleanup'):
             tango.ApiUtil.cleanup()
+        import time
+        time.sleep(self.index/100.)
         while not self.__queue.empty():
             elem = None
             try:
