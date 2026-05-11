@@ -58,7 +58,7 @@ Extract the sources and run
 Debian packages
 ^^^^^^^^^^^^^^^
 
-Debian trixie, bookworm, bullseye or ubuntu questing, noble, jammy packages can be found in the HDRI repository.
+Debian trixie, bookworm, bullseye or ubuntu resolute, noble, jammy packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
