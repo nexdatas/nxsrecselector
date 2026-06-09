@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "NXSRECCONFIG" "1" "Mar 05, 2026" "4.7" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "Apr 26, 2026" "4.11" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .sp
@@ -317,11 +317,6 @@ where the path should point the \fIsardananxsrecorder\fP package.
 .SS nxsrecconfig.CheckerThread module
 .sp
 Component CheckerThread \- thread which checks tango server attributes
-.INDENT 0.0
-.TP
-.B nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK  =  [\(aqValue\(aq, \(aqPosition\(aq, \(aqCounts\(aq, \(aqData\(aq, \(aqVoltage\(aq, \(aqEnergy\(aq, \(aqSampleTime\(aq]
-(\fI\%list\fP < \fI\%str\fP>) default attributes to check
-.UNINDENT
 .INDENT 0.0
 .TP
 .B exception  nxsrecconfig.CheckerThread.AlarmStateError
@@ -1084,7 +1079,7 @@ sets user datasources with type and shape
 Selection state
 .INDENT 0.0
 .TP
-.B class  nxsrecconfig.MacroServerPools.MacroServerPools(numberOfThreads)
+.B class  nxsrecconfig.MacroServerPools.MacroServerPools(numberOfThreads, numberOfProcesses=5)
 Bases: \fI\%object\fP
 .sp
 sardanamacro server and pools
@@ -1093,7 +1088,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
 \fBnumberOfThreads\fP (\fI\%str\fP) – number of threads
+.IP \(bu 2
+\fBnumberOfProcesses\fP (\fI\%str\fP) – number of processes
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3128,7 +3128,7 @@ Command definitions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B device_property_list  =  {\(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqCacheConfiguration\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqcache writer configuration in configuration server as \en__configuration_<profile_name>__ components\(aq, [False]], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultCanFailDataSources\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default datasources in the CanFail mode\(aq, []], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/instrument:NXinstrument/collection\(dq]], \(aqDefaultNeXusType\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault dynamic component NeXus data type\(aq, [\(aqNX_CHAR\(aq]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultUserDataPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus User Data path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/user_data:NXparameters\(dq]], \(aqGlobalUserData\(aq: [tango._tango.CmdArgType.DevBoolean, \(aquse global user data dictionary\(aq, [False]], \(aqMasterTimer\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqset the master timer/monitor channel for older MG\(aq, [False]], \(aqMasterTimerFirst\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqthe master timer channel of MG with the index: 0\(aq, [True]], \(aqMergeProfilesToMntGrps\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqmerge profiles to available measurement groups\(aq, [False]], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqMutedPreScanAttrFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted attribute channel filters for PreScanSnapshot\(aq, []], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqResetInvalidDoor\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqreset Door when it is invalid\(aq, [True]], \(aqSyncSnapshot\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqpreselection merges the current ScanSnapshot\(aq, [False]], \(aqTangoSourceErrorStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango error states for tango datasources\(aq, [\(aqOFF\(aq, \(aqINIT\(aq, \(aqINSERT\(aq, \(aqCLOSE\(aq, \(aqUNKNOWN\(aq, \(aqFAULT\(aq]], \(aqTangoSourceWarningStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango warning states for tango datasources\(aq, [\(aqALARM\(aq, \(aqDISABLE\(aq]], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqWriteAllMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for all pool motor positions\(aq, [False]], \(aqWritePoolMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for pool motor positions without any omponent\(aq, [False]]}
+.B device_property_list  =  {\(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqCacheConfiguration\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqcache writer configuration in configuration server as \en__configuration_<profile_name>__ components\(aq, [False]], \(aqCheckDescription\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqapply checks for preselected components\(aq, [True]], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultCanFailDataSources\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default datasources in the CanFail mode\(aq, []], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/instrument:NXinstrument/collection\(dq]], \(aqDefaultNeXusType\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault dynamic component NeXus data type\(aq, [\(aqNX_CHAR\(aq]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultUserDataPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus User Data path\(aq, [\(dq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/user_data:NXparameters\(dq]], \(aqGlobalUserData\(aq: [tango._tango.CmdArgType.DevBoolean, \(aquse global user data dictionary\(aq, [False]], \(aqMasterTimer\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqset the master timer/monitor channel for older MG\(aq, [False]], \(aqMasterTimerFirst\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqthe master timer channel of MG with the index: 0\(aq, [True]], \(aqMergeProfilesToMntGrps\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqmerge profiles to available measurement groups\(aq, [False]], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqMutedMotorFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted motor filters\(aq, []], \(aqMutedPreScanAttrFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted attribute channel filters for PreScanSnapshot\(aq, []], \(aqNumberOfProcesses\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of processes\(aq, [5]], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqResetInvalidDoor\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqreset Door when it is invalid\(aq, [True]], \(aqSyncMntGrp\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqselection merges the current Measurement Group\(aq, [False]], \(aqSyncSnapshot\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqpreselection merges the current ScanSnapshot\(aq, [False]], \(aqTangoSourceErrorStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango error states for tango datasources\(aq, [\(aqOFF\(aq, \(aqINIT\(aq, \(aqINSERT\(aq, \(aqCLOSE\(aq, \(aqUNKNOWN\(aq, \(aqFAULT\(aq]], \(aqTangoSourceWarningStates\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of tango warning states for tango datasources\(aq, [\(aqALARM\(aq, \(aqDISABLE\(aq]], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqWriteAllMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for all pool motor positions\(aq, [False]], \(aqWritePoolMotorPositions\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqadd dynamic components for pool motor positions without any omponent\(aq, [False]]}
 (\fI\%dict\fP <\fI\%str\fP, [ \fI\%str\fP, \fI\%tango.CmdArgType\fP, [ \fI\%list\fP <\fI\%int\fP> ] ] > ) Device Properties
 .UNINDENT
 .UNINDENT
@@ -3147,7 +3147,7 @@ ProfileManager
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class  nxsrecconfig.ProfileManager.ProfileManager(selector, syncsnapshot=False, writepoolmotorpositions=False, writeallmotorpositions=False)
+.B class  nxsrecconfig.ProfileManager.ProfileManager(selector, syncsnapshot=False, writepoolmotorpositions=False, writeallmotorpositions=False, syncmntgrp=False, checkdescription=True)
 Bases: \fI\%object\fP
 .sp
 Manages Measurement Group and Profile from Selector
@@ -3168,6 +3168,10 @@ without any component
 .IP \(bu 2
 \fBwriteallmotorpositions\fP (\fI\%bool\fP) – add dynamic components
 for all pool motor positions
+.IP \(bu 2
+\fBsyncmntgrp\fP (\fI\%bool\fP) – selection merges current Measurement Group
+.IP \(bu 2
+\fBcheckdescription\fP (\fI\%bool\fP) – apply checks for preselected components
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3182,6 +3186,11 @@ list of available measurement groups
 .B Return type
 \fI\%list\fP <\fI\%str\fP>
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B checkdescription
+(\fI\%bool\fP) apply checks for preselected components
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3344,6 +3353,11 @@ string with mntgrp configuration
 .B Return type
 \fI\%str\fP
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B mutedMotorFilters
+(\fI\%list\fP <\fI\%str\fP>) muted motor filters
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3853,7 +3867,7 @@ saves configuration
 NeXus Sardana Recorder Settings implementation
 .INDENT 0.0
 .TP
-.B class  nxsrecconfig.Settings.Settings(server=None, numberofthreads=None, defaultnexuspath=None, defaulttimezone=None, defaultmntgrp=None, syncsnapshot=False, writepoolmotorpositions=False, writeallmotorpositions=False, defaultnexustype=None, defaultudatapath=None, globaluserdata=False, cacheconfiguration=False)
+.B class  nxsrecconfig.Settings.Settings(server=None, numberofthreads=None, defaultnexuspath=None, defaulttimezone=None, defaultmntgrp=None, syncsnapshot=False, writepoolmotorpositions=False, writeallmotorpositions=False, defaultnexustype=None, defaultudatapath=None, globaluserdata=False, cacheconfiguration=False, syncmntgrp=False, checkdescription=True, numberofprocesses=5)
 Bases: \fI\%object\fP
 .sp
 NeXus Sardana Recorder settings
@@ -3882,6 +3896,12 @@ for all pool motor positions
 \fBglobaluserdata\fP (\fI\%bool\fP) – global user data flag
 .IP \(bu 2
 \fBcacheconfiguration\fP (\fI\%bool\fP) – cache writer configuration in configServer
+.IP \(bu 2
+\fBsyncmntgrp\fP (\fI\%bool\fP) – selection merges current Measurement Group
+.IP \(bu 2
+\fBcheckdescription\fP (\fI\%bool\fP) – apply checks for preselected components
+.IP \(bu 2
+\fBnumberofprocesses\fP (\fI\%int\fP) – number of processes used to check device
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -4384,6 +4404,11 @@ muted channels from pool
 .UNINDENT
 .INDENT 7.0
 .TP
+.B property  mutedMotorFilters
+(\fI\%list\fP <\fI\%str\fP>) muted motor filters
+.UNINDENT
+.INDENT 7.0
+.TP
 .B property  mutedPreScanAttrFilters
 (\fI\%list\fP <\fI\%str\fP>) muted prescan attribute filters
 .UNINDENT
@@ -4399,6 +4424,11 @@ all names of variables
 .B Rtypes
 \fI\%list\fP <\fI\%str\fP>
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B numberOfProcesses
+(\fI\%int\fP) number of processes
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -4582,6 +4612,11 @@ switch to active measurement
 .B Parameters
 \fBtoActive\fP (\fI\%bool\fP) – if False update the current profile
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B syncMntGrp
+(\fI\%bool\fP) selection merges current Measurement Group
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -5080,7 +5115,7 @@ names from given pool listattr
 .UNINDENT
 .INDENT 7.0
 .TP
-.B classmethod  getFullDeviceNames(pools, names=None)
+.B classmethod  getFullDeviceNames(pools, names=None, listattr=\(aqAcqChannelList\(aq, lastsubterm=\-1)
 find device names from aliases
 .INDENT 7.0
 .TP
@@ -5090,6 +5125,11 @@ find device names from aliases
 \fBpools\fP (\fI\%list\fP <\fI\%tango.DeviceProxy\fP>) – list of pool devices
 .IP \(bu 2
 \fBnames\fP (\fI\%list\fP <\fI\%str\fP>) – alias names if None returns name for all aliases
+.IP \(bu 2
+\fBlistattr\fP (\fI\%str\fP) – pool attribute with list
+.IP \(bu 2
+\fBlastsubterm\fP (\fI\%int\fP) – last subterm of full_name separated by ‘/’
+e.g. \-1 or None
 .UNINDENT
 .TP
 .B Returns
@@ -5122,7 +5162,7 @@ full name of the measurement group alias
 .UNINDENT
 .INDENT 7.0
 .TP
-.B classmethod  getMotorPositionAttributes(pools)
+.B classmethod  getMotorPositionAttributes(pools, filters=None)
 find motor names
 .INDENT 7.0
 .TP

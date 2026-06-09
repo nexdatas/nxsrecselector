@@ -1,3 +1,7 @@
+2026-04-27 Jan Kotanski <jankotan@gmail.com>
+	* add NumberOfProcesses tango property (#202)
+	* tagged as v4.11.0
+
 2026-04-23 Jan Kotanski <jankotan@gmail.com>
 	* add CheckDescription tango property (#199)
 	* change __triggergatelist__  to __triggergatedict__ channel property (#197)

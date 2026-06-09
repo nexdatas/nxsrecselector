@@ -21,6 +21,7 @@
 
 import json
 import sys
+import multiprocessing
 
 try:
     import tango
@@ -31,7 +32,9 @@ except Exception:
 from .Utils import (
     Utils, TangoUtils, MSUtils, PoolUtils, OldTangoError, PYTG_BUG_213)
 from .Describer import Describer
-from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
+from .Checker import TangoDSItem, CheckerItem
+from .CheckerThread import CheckerThread
+from .CheckerProcess import CheckerProcess
 
 if sys.version_info > (3,):
     import queue as Queue
@@ -46,13 +49,16 @@ class MacroServerPools(object):
 
     """ sardanamacro server and pools """
 
-    def __init__(self, numberOfThreads):
+    def __init__(self, numberOfThreads,  numberOfProcesses=5):
         """ constructor
 
         :param numberOfThreads: number of threads
         :type numberOfThreads: :obj:`str`
+        :param numberOfProcesses: number of processes
+        :type numberOfProcesses: :obj:`str`
         """
         self.__numberOfThreads = numberOfThreads
+        self.__numberOfProcesses = numberOfProcesses
 
         #: (:class:`tango.Database`) tango database
         self.__db = tango.Database()
@@ -157,7 +163,7 @@ class MacroServerPools(object):
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param discomponentgroup: name dictionary of checker items
         :type discomponentgroup: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
+            :class:`nxsrecconfig.Checker.CheckerItem`>
         :param components: component list
         :type components: :obj:`list` <:obj:`str`>
         :param datasources: datasource list
@@ -167,7 +173,7 @@ class MacroServerPools(object):
         :param nonexisting: non-exising pool channels
         :type nonexisting: :obj:`list` <:obj:`str`>
         :returns: list of CheckerItems
-        :rtype: :obj:`list` <:class:`nxsrecconfig.CheckerThread.CheckerItem`>
+        :rtype: :obj:`list` <:class:`nxsrecconfig.Checker.CheckerItem`>
         """
         describer = Describer(configdevice, True, pyevalfromscript=True)
         availablecomponents = TangoUtils.command(
@@ -224,12 +230,12 @@ class MacroServerPools(object):
         :type dss: :obj:`dict` <:obj:`str`, `any`>
         :param toCheck: dictionary with checker items
         :type toCheck: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
+            :class:`nxsrecconfig.Checker.CheckerItem`>
         :param nonexisting: non-exising pool channels
         :type nonexisting: :obj:`list` <:obj:`str`>
         :param discomponentgroup: name dictionary of checker items
         :type discomponentgroup: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
+            :class:`nxsrecconfig.Checker.CheckerItem`>
         :param channels: pool channel list
         :type channels: :obj:`list` <:obj:`str`>
         :param describer: describer instance
@@ -283,7 +289,7 @@ class MacroServerPools(object):
         """
         channelerrors[:] = []
         discomponentgroup = {}
-        threads = []
+        workers = []
         pools = self.getPools(door)
         fnames = PoolUtils.getFullDeviceNames(pools, channels)
         nonexisting = [dev for dev in channels if dev not in fnames.keys()]
@@ -296,21 +302,49 @@ class MacroServerPools(object):
              if datasourcegroup[ds] is not False],
             channels, nonexisting)
 
-        cqueue = Queue.Queue()
+        numberOfWorkers = 1
+        if self.__numberOfProcesses < 1:
+            cqueue = Queue.Queue()
+            rqueue = None
+            if self.__numberOfThreads < 1:
+                numberOfWorkers = len(toCheck)
+            else:
+                numberOfWorkers = self.__numberOfThreads
+
+        else:
+            cqueue = multiprocessing.Queue()
+            rqueue = multiprocessing.Queue()
+            numberOfWorkers = self.__numberOfProcesses
+
         for checkeritem in toCheck:
             cqueue.put(checkeritem)
-        if self.__numberOfThreads < 1:
-            self.__numberOfThreads = len(toCheck)
 
-        for i in range(min(self.__numberOfThreads, len(toCheck))):
-            thd = CheckerThread(i, cqueue)
-            thd.tangoSourceErrorStates = self.tangoSourceErrorStates
-            thd.tangoSourceWarningStates = self.tangoSourceWarningStates
-            threads.append(thd)
-            thd.start()
+        for i in range(min(numberOfWorkers, len(toCheck))):
 
-        for th in threads:
-            th.join()
+            worker = None
+            if rqueue is None:
+                worker = CheckerThread(i, cqueue)
+            else:
+                worker = CheckerProcess(i, cqueue, rqueue)
+            worker.tangoSourceErrorStates = self.tangoSourceErrorStates
+            worker.tangoSourceWarningStates = self.tangoSourceWarningStates
+            workers.append(worker)
+            worker.start()
+
+        for worker in workers:
+            worker.join()
+
+        if rqueue is not None:
+            toCheck = []
+            while not rqueue.empty():
+                elem = None
+                try:
+                    elem = rqueue.get(block=False)
+                    toCheck.append(elem)
+                except Queue.Empty:
+                    break
+                except Exception as e:
+                    print("Error:", str(e))
 
         for checkeritem in toCheck:
             if checkeritem.errords is not None:

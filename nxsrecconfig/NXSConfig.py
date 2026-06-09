@@ -90,6 +90,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
             self.__stg = None
         self.get_device_properties(self.get_device_class())
         numberofthreads = self.NumberOfThreads or None
+        numberofprocesses = self.NumberOfProcesses \
+            if self.NumberOfProcesses is not None else 5
         defaultpath = self.DefaultNeXusPath or None
         defaultudatapath = self.DefaultUserDataPath or None
         defaultzone = self.DefaultTimeZone or None
@@ -109,7 +111,8 @@ class NXSRecSelector(tango.LatestDeviceImpl):
                          defaultnexustype,
                          defaultudatapath, globaluserdata,
                          cacheconfiguration, syncmntgrp,
-                         checkdescription)
+                         checkdescription,
+                         numberofprocesses)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1985,6 +1988,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevLong,
          "maximal number of threads",
          [20]],
+        'NumberOfProcesses':
+        [tango.DevLong,
+         "maximal number of processes",
+         [5]],
         'DefaultNeXusPath':
         [tango.DevString,
          "default NeXus path",
