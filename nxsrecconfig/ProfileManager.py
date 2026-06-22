@@ -44,7 +44,7 @@ if sys.version_info > (3,):
 #: (:obj:`list` <:obj:`str`>) default data names
 DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
                        'point_nb', 'timestamps', 'scan_title',
-                       'filename']
+                       'filename', 'end_reason']
 
 
 class ProfileManager(object):
