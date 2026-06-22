@@ -1,3 +1,7 @@
+2026-06-22 Jan Kotanski <jankotan@gmail.com>
+	* add end_reason to default keywords (#208)
+	* tagged as v4.11.0
+
 2026-04-23 Jan Kotanski <jankotan@gmail.com>
 	* add CheckDescription tango property (#199)
 	* change __triggergatelist__  to __triggergatedict__ channel property (#197)
