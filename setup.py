@@ -118,7 +118,9 @@ SETUPDATA = dict(
         'Programming Language :: Python :: 3.12',
     ],
     install_requires=install_requires,
-    scripts=['NXSRecSelector'],
+    entry_points={
+        'console_scripts':
+        'NXSRecSelector = nxsrecconfig:main'},
     cmdclass={
         # 'test': TestCommand,
         'build_sphinx': BuildDoc
