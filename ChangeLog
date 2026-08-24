@@ -1,3 +1,7 @@
+2026-08-24 Jan Kotanski <jankotan@gmail.com>
+	* define NXSRecSelector as entry point (#211)
+	* tagged as v4.12.0
+
 2026-06-22 Jan Kotanski <jankotan@gmail.com>
 	* add end_reason to default keywords (#208)
 	* tagged as v4.11.0
