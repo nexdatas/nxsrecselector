@@ -56,36 +56,21 @@ class ServerSetUp(object):
         db.add_server(self.new_device_info_writer.server,
                       self.new_device_info_writer)
 
-        if sys.version_info > (3,):
-            if os.path.isfile("../NXSRecSelector"):
-                self._psub = subprocess.call(
-                    "cd ..; ./NXSRecSelector %s &" % self.instance,
-                    stdout=None,
-                    stderr=None, shell=True)
-            if os.path.isfile("./NXSRecSelector"):
-                self._psub = subprocess.call(
-                    " ./NXSRecSelector %s &" % self.instance,
-                    stdout=None,
-                    stderr=None, shell=True)
-            else:
-                self._psub = subprocess.call(
-                    "NXSRecSelector %s &" % self.instance, stdout=None,
-                    stderr=None, shell=True)
+        if os.path.isfile("../NXSRecSelector"):
+            self._psub = subprocess.call(
+                "cd ..; %s ./NXSRecSelector %s &" %
+                (sys.executable, self.instance),
+                stdout=None,
+                stderr=None, shell=True)
+        if os.path.isfile("./NXSRecSelector"):
+            self._psub = subprocess.call(
+                "%s ./NXSRecSelector %s &" % (sys.executable, self.instance),
+                stdout=None,
+                stderr=None, shell=True)
         else:
-            if os.path.isfile("../NXSRecSelector"):
-                self._psub = subprocess.call(
-                    "cd ..; ./NXSRecSelector %s &" % self.instance,
-                    stdout=None,
-                    stderr=None, shell=True)
-            if os.path.isfile("./NXSRecSelector"):
-                self._psub = subprocess.call(
-                    "./NXSRecSelector %s &" % self.instance,
-                    stdout=None,
-                    stderr=None, shell=True)
-            else:
-                self._psub = subprocess.call(
-                    "NXSRecSelector %s &" % self.instance, stdout=None,
-                    stderr=None, shell=True)
+            self._psub = subprocess.call(
+                "NXSRecSelector %s &" % self.instance, stdout=None,
+                stderr=None, shell=True)
         sys.stdout.write("waiting for server ")
 
         found = False

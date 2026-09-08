@@ -41,15 +41,13 @@ class TestMacroServerSetUp(object):
     # constructor
     # \brief defines server parameters
 
-    def __init__(self, instance="MSTESTS1", msdevices=None, doordevices=None,
-                 python=None):
+    def __init__(self, instance="MSTESTS1", msdevices=None, doordevices=None):
         if not isinstance(msdevices, list):
             msdevices = ["mstestp09/testts/t1r228"]
         if not isinstance(doordevices, list):
             doordevices = ["doortestp09/testts/t1r228"]
         # information about tango writer
         self.server = "MacroServer/%s" % instance
-        self.python = python
         self.door = {}
         self.ms = {}
         # device proxy
@@ -95,17 +93,10 @@ class TestMacroServerSetUp(object):
         if not path:
             path = '.'
 
-        if (sys.version_info > (3,) and self.python is None) or \
-           self.python == 3:
-            self._psub = subprocess.call(
-                "cd %s;  ./TestMacroServer.py %s &" %
-                (path, self.instance),
-                stdout=None, stderr=None, shell=True)
-        else:
-            self._psub = subprocess.call(
-                "cd %s;   ./TestMacroServer.py %s &" %
-                (path, self.instance),
-                stdout=None, stderr=None, shell=True)
+        self._psub = subprocess.call(
+            "cd %s; %s  ./TestMacroServer.py %s &" %
+            (path, sys.executable, self.instance),
+            stdout=None, stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
 
         found = False
