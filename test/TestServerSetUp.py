@@ -106,7 +106,7 @@ class TestServerSetUp(object):
 
         self._psub = subprocess.call(
             "cd %s; %s ./TestServer.py %s &" %
-            (path, sys.ecevutable, self.instance), stdout=None,
+            (path, sys.executable, self.instance), stdout=None,
             stderr=None, shell=True)
 
         sys.stdout.write("waiting for simple server")

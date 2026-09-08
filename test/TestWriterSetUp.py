@@ -83,7 +83,7 @@ class TestWriterSetUp(object):
 
         self._psub = subprocess.call(
             "cd %s; %s ./TestWriter.py %s &" %
-            (path, sys.ecevutable, self.instance),
+            (path, sys.executable, self.instance),
             stdout=None,
             stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
