@@ -76,6 +76,8 @@ jobs:
           OSYS: ${{ matrix.os }}
         run: .ci/install_tango.sh ${OSYS}
       - name: Run pixi and tests
+        env:
+          TEST: ${{ matrix.test }}
         run: .ci/run_pixi.sh ${TEST}
       - name: Stop the docker
         run: |
