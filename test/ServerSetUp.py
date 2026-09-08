@@ -59,12 +59,12 @@ class ServerSetUp(object):
         if sys.version_info > (3,):
             if os.path.isfile("../NXSRecSelector"):
                 self._psub = subprocess.call(
-                    "cd ..; python3 ./NXSRecSelector %s &" % self.instance,
+                    "cd ..; ./NXSRecSelector %s &" % self.instance,
                     stdout=None,
                     stderr=None, shell=True)
             if os.path.isfile("./NXSRecSelector"):
                 self._psub = subprocess.call(
-                    "python3 ./NXSRecSelector %s &" % self.instance,
+                    " ./NXSRecSelector %s &" % self.instance,
                     stdout=None,
                     stderr=None, shell=True)
             else:

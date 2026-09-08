@@ -82,7 +82,7 @@ class TestMeasurementGroupSetUp(object):
 
         if sys.version_info > (3,):
             self._psub = subprocess.call(
-                "cd %s;  python3 ./TestMG.py %s &" %
+                "cd %s;  ./TestMG.py %s &" %
                 (path, self.instance),
                 stdout=None,
                 stderr=None, shell=True)

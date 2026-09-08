@@ -83,7 +83,7 @@ class TestWriterSetUp(object):
 
         if sys.version_info > (3,):
             self._psub = subprocess.call(
-                "cd %s;  python3 ./TestWriter.py %s &" %
+                "cd %s;  ./TestWriter.py %s &" %
                 (path, self.instance),
                 stdout=None,
                 stderr=None, shell=True)

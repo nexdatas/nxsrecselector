@@ -82,13 +82,13 @@ class TestPoolSetUp(object):
 
         if sys.version_info > (3,):
             self._psub = subprocess.call(
-                "cd %s;  python3 ./TestPool.py %s &" %
+                "cd %s;   ./TestPool.py %s &" %
                 (path, self.instance),
                 stdout=None,
                 stderr=None, shell=True)
         else:
             self._psub = subprocess.call(
-                "cd %s;  python ./TestPool.py %s &" %
+                "cd %s;   ./TestPool.py %s &" %
                 (path, self.instance),
                 stdout=None,
                 stderr=None, shell=True)
