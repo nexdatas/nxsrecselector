@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 echo "install pixi"
-docker exec  ndts /bin/bash -c 'mkdir /home/tango/bin; cp /home/tango/test/TestServer2 /home/tango/bin/TestServer ; cp /home/tango/test/MacroServer2 /home/tango/bin/MacroServer'
 docker exec  ndts /bin/bash -c 'curl -fsSL https://pixi.sh/install.sh | sh ; export PATH=/var/lib/tango/.pixi/bin:$PATH ; cp .github/workflows/pixi/pixi.toml . ; pixi shell-hook  > .sh.sh ; source .sh.sh ; pixi add   numpy pytango  setuptools pip wheel argcomplete lxml pytz pyyaml pytango python-dateutil pninexus fabio h5py matplotlib-base blissdata pytest docutils nxsconfigserver nxswriter pymysql nxstools pymysql sardana'
 
 echo "run nxsrecselector tests"
