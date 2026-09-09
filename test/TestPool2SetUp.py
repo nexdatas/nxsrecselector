@@ -79,18 +79,11 @@ class TestPool2SetUp(object):
         if not path:
             path = '.'
 
-        if sys.version_info > (3,):
-            self._psub = subprocess.call(
-                "cd %s;  python3 ./TestPool2.py %s &" %
-                (path, self.instance),
-                stdout=None,
-                stderr=None, shell=True)
-        else:
-            self._psub = subprocess.call(
-                "cd %s;  python ./TestPool2.py %s &" %
-                (path, self.instance),
-                stdout=None,
-                stderr=None, shell=True)
+        self._psub = subprocess.call(
+            "cd %s; %s  ./TestPool2.py %s &" %
+            (path, sys.executable, self.instance),
+            stdout=None,
+            stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
 
         found = False

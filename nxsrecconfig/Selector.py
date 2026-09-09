@@ -377,7 +377,6 @@ class Selector(object):
             configDevice.command_inout("Open")
         else:
             from nxsconfigserver import XMLConfigurator
-            from MySQLdb.connections import DatabaseError
             configDevice = XMLConfigurator.XMLConfigurator()
             self.getMacroServer()
 
@@ -392,7 +391,7 @@ class Selector(object):
                 configDevice.jsonsettings = dbp
                 configDevice.open()
                 configDevice.availableComponents()
-            except DatabaseError:
+            except Exception:
                 home = expanduser("~")
                 # user = getpass.getuser()
                 dbp = '{"db":"nxsconfig",' \

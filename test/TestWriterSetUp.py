@@ -81,18 +81,11 @@ class TestWriterSetUp(object):
         if not path:
             path = '.'
 
-        if sys.version_info > (3,):
-            self._psub = subprocess.call(
-                "cd %s;  python3 ./TestWriter.py %s &" %
-                (path, self.instance),
-                stdout=None,
-                stderr=None, shell=True)
-        else:
-            self._psub = subprocess.call(
-                "cd %s;  python ./TestWriter.py %s &" %
-                (path, self.instance),
-                stdout=None,
-                stderr=None, shell=True)
+        self._psub = subprocess.call(
+            "cd %s; %s ./TestWriter.py %s &" %
+            (path, sys.executable, self.instance),
+            stdout=None,
+            stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
 
         found = False

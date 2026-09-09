@@ -61,24 +61,36 @@ class NotEqualException(Exception):
 
 
 try:
-    import MySQLdb
+    try:
+        import MySQLdb
+    except ImportError:
+        import pymysql as MySQLdb
+        MySQLdb.install_as_MySQLdb()
     # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except Exception:
     try:
-        import MySQLdb
-    # connection arguments to MYSQL DB
+        try:
+            import MySQLdb
+        except ImportError:
+            import pymysql as MySQLdb
+            MySQLdb.install_as_MySQLdb()
+        # connection arguments to MYSQL DB
         args = {'db': 'nxsconfig',
                 'read_default_file': '/etc/my.cnf', 'use_unicode': True}
-    # inscance of MySQLdb
+        # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
     except Exception:
         try:
-            import MySQLdb
+            try:
+                import MySQLdb
+            except ImportError:
+                import pymysql as MySQLdb
+                MySQLdb.install_as_MySQLdb()
             from os.path import expanduser
             home = expanduser("~")
         # connection arguments to MYSQL DB

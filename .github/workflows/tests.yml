@@ -11,7 +11,7 @@ jobs:
   flake8_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
@@ -20,14 +20,14 @@ jobs:
       - name: Run flake8
         run: flake8 .
 
-  python3_tests:
+  dpkg_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [debian13, debian12, ubuntu26.04, ubuntu24.04, ubuntu22.04]
+        os: [debian13, debian12, ubuntu26.04, ubuntu24.04]
         test: [extrasettings, extraserver, basicserver, basicsettings, basic]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v2
       - name: Update bash files
         run: |
@@ -52,3 +52,34 @@ jobs:
              docker exec  --user root ndts  /bin/bash -c "chown -R 1001 /home/tango "
              docker container stop ndts
 
+  pixi_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [debian13, ubuntu26.04]
+        test: [extrasettings, extraserver, basicserver, basicsettings, basic]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v2
+      - name: Update bash files
+        run: |
+          chmod +x .ci/run_pixi.sh
+          chmod +x .ci/install_tango.sh
+      - name: Build the docker
+        env:
+          OSYS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OSYS}_pixi
+      - name: Run the docker
+        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts
+      - name: Install tango
+        env:
+          OSYS: ${{ matrix.os }}
+        run: .ci/install_tango.sh ${OSYS}
+      - name: Run pixi and tests
+        env:
+          TEST: ${{ matrix.test }}
+        run: .ci/run_pixi.sh ${TEST}
+      - name: Stop the docker
+        run: |
+             docker exec  --user root ndts  /bin/bash -c "chown -R 1001 /home/tango "
+             docker container stop ndts
