@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Selector &#8212; NXSRecSelector 4.10.0 documentation</title>
+    <title>nxsrecconfig.Selector &#8212; NXSRecSelector 4.13.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.10</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -495,7 +495,6 @@
             <span class="n">configDevice</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="s2">&quot;Open&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">nxsconfigserver</span> <span class="kn">import</span> <span class="n">XMLConfigurator</span>
-            <span class="kn">from</span> <span class="nn">MySQLdb.connections</span> <span class="kn">import</span> <span class="n">DatabaseError</span>
             <span class="n">configDevice</span> <span class="o">=</span> <span class="n">XMLConfigurator</span><span class="o">.</span><span class="n">XMLConfigurator</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
 
@@ -510,7 +509,7 @@
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">jsonsettings</span> <span class="o">=</span> <span class="n">dbp</span>
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">availableComponents</span><span class="p">()</span>
-            <span class="k">except</span> <span class="n">DatabaseError</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
                 <span class="c1"># user = getpass.getuser()</span>
                 <span class="n">dbp</span> <span class="o">=</span> <span class="s1">&#39;{&quot;db&quot;:&quot;nxsconfig&quot;,&#39;</span> \
