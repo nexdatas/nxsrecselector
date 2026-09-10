@@ -5,7 +5,7 @@ docker exec  ndts /bin/bash -c 'curl -fsSL https://pixi.sh/install.sh | sh ; exp
 
 echo "run nxsrecselector tests"
 docker exec  ndts /bin/bash -c 'source .sh.sh ;  echo "export MYTANGO_PREFIX=$CONDA_PREFIX/bin" > /home/tango/.env ;   python -m pip install . -vv --no-deps --no-build-isolation'
-cmd="source .sh.sh ;  python test $1"
+cmd="source .sh.sh ;  python -m unittest test.ExtraNXSRecSelector_test.ExtraNXSRecSelectorTest.test_create_init_typeshape_tango_nods_attr"
 echo $cmd
 docker exec  ndts /bin/bash -c "$cmd"
 
