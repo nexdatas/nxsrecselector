@@ -23,7 +23,9 @@
 import os
 import sys
 from setuptools import setup
-from distutils.core import Command
+# from distutils.core import Command
+from importlib.util import module_from_spec, spec_from_file_location
+from pathlib import Path
 
 try:
     from sphinx.setup_command import BuildDoc
@@ -34,10 +36,18 @@ except Exception:
 #: package name
 NDTS = "nxsrecconfig"
 #: nxswriter imported package
-INDTS = __import__(NDTS)
+# INDTS = __import__(NDTS)
 
 needs_pytest = set(['test']).intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
+
+
+def get_version():
+    path = Path(__file__).parent / "nxsrecconfig" / "Release.py"
+    spec = spec_from_file_location("Release", path.as_posix())
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def read(fname):
@@ -46,30 +56,6 @@ def read(fname):
     :param fname: readme file name
     """
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
-
-class TestCommand(Command):
-
-    """ test command class
-    """
-
-    #: user options
-    user_options = []
-
-    #: initializes options
-    def initialize_options(self):
-        pass
-
-    #: finalizes options
-    def finalize_options(self):
-        pass
-
-    #: runs command
-    def run(self):
-        import sys
-        import subprocess
-        errno = subprocess.call([sys.executable, 'test/runtest.py'])
-        raise SystemExit(errno)
 
 
 #: required python packages
@@ -85,14 +71,14 @@ install_requires = [
     # 'pymysqldb',
 ]
 
-release = INDTS.__version__
+release = get_version().__version__
 version = ".".join(release.split(".")[:2])
 name = "NXSRecSelector"
 
 #: metadata for distutils
 SETUPDATA = dict(
     name="nxsrecselector",
-    version=INDTS.__version__,
+    version=release,
     author="Jan Kotanski",
     author_email="jankotan@gmail.com",
     description=("Selector Server for NeXus Sardana recorder"),
@@ -106,23 +92,25 @@ SETUPDATA = dict(
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
+        # 'Programming Language :: Python :: 2.7',
+        # 'Programming Language :: Python :: 3',
+        # 'Programming Language :: Python :: 3.5',
+        # 'Programming Language :: Python :: 3.6',
+        # 'Programming Language :: Python :: 3.7',
+        # 'Programming Language :: Python :: 3.8',
+        # 'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
+        'Programming Language :: Python :: 3.14',
+        'Programming Language :: Python :: 3.15',
     ],
     install_requires=install_requires,
     entry_points={
         'console_scripts':
         'NXSRecSelector = nxsrecconfig:main'},
     cmdclass={
-        # 'test': TestCommand,
         'build_sphinx': BuildDoc
     },
     zip_safe=False,
