@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Welcome to nxsrecconfig’s documentation! &#8212; NXSRecSelector 4.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="nxsrecconfig package" href="nxsrecconfig.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          NXSRecSelector</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Welcome to nxsrecconfig’s documentation!</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#from-sources">From sources</a></li>
+<li><a class="reference internal" href="#debian-packages">Debian packages</a></li>
+<li><a class="reference internal" href="#from-pip">From pip</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-environment">Setting environment</a><ul>
+<li><a class="reference internal" href="#setting-saradna">Setting Saradna</a></li>
+<li><a class="reference internal" href="#setting-nexus-servers">Setting NeXus Servers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contents">Contents:</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="nxsrecconfig.html" title="Next Chapter: nxsrecconfig package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">nxsrecconfig package &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="welcome-to-nxsrecconfig-s-documentation">
+<h1>Welcome to nxsrecconfig’s documentation!<a class="headerlink" href="#welcome-to-nxsrecconfig-s-documentation" title="Permalink to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/nexdatas/nxsrecselector/actions"><img alt="" src="https://github.com/nexdatas/nxsrecselector/actions/workflows/tests.yml/badge.svg" /></a>
+<a class="reference external" href="https://nexdatas.github.io/nxsrecselector/index.html"><img alt="" src="https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/nxsrecselector"><img alt="" src="https://img.shields.io/pypi/v/nxsrecselector.svg" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/nxsrecselector/"><img alt="" src="https://img.shields.io/pypi/pyversions/nxsrecselector.svg" /></a></p>
+<p>Authors: Jan Kotanski
+Introduction</p>
+<p>Tango server with Sardana Recorder settings</p>
+<p>Tango Server API: <a class="reference external" href="https://nexdatas.github.io/nxsrecselector/doc_html">https://nexdatas.github.io/nxsrecselector/doc_html</a></p>
+<div class="line-block">
+<div class="line">Source code: <a class="reference external" href="https://github.com/nexdatas/nxsrecselector">https://github.com/nexdatas/nxsrecselector</a></div>
+<div class="line">Web page: <a class="reference external" href="https://nexdatas.github.io/nxsrecselector">https://nexdatas.github.io/nxsrecselector</a></div>
+<div class="line">NexDaTaS Web page: <a class="reference external" href="https://nexdatas.github.io">https://nexdatas.github.io</a></div>
+</div>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>Install the dependencies:</p>
+<div class="line-block">
+<div class="line">sardana, tango, sphinx</div>
+</div>
+<section id="from-sources">
+<h3>From sources<a class="headerlink" href="#from-sources" title="Permalink to this heading">¶</a></h3>
+<p>Download the latest version of NeXuS Configuration Server from</p>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/nexdatas/nxsrecselector">https://github.com/nexdatas/nxsrecselector</a></div>
+</div>
+<p>Extract the sources and run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>setup.py<span class="w"> </span>install
+</pre></div>
+</div>
+</section>
+<section id="debian-packages">
+<h3>Debian packages<a class="headerlink" href="#debian-packages" title="Permalink to this heading">¶</a></h3>
+<p>Debian trixie, bookworm, bullseye or ubuntu resolute, noble, jammy packages can be found in the HDRI repository.</p>
+<p>To install the debian packages, add the PGP repository key</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>su
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>http://repos.pni-hdri.de/debian_repo.pub.gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--no-default-keyring<span class="w"> </span>--keyring<span class="w"> </span>gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg<span class="w"> </span>--import
+<span class="gp">$ </span>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
+</pre></div>
+</div>
+<p>and then download the corresponding source list</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/etc/apt/sources.list.d
+<span class="gp">$ </span>wget<span class="w"> </span>http://repos.pni-hdri.de/trixie-pni-hdri.sources
+</pre></div>
+</div>
+<p>Finally, install module</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt-get<span class="w"> </span>update
+<span class="gp">$ </span>apt-get<span class="w"> </span>install<span class="w"> </span>python3-nxsrecselector
+</pre></div>
+</div>
+<p>and the NXSRecSelector tango server</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt-get<span class="w"> </span>update
+<span class="gp">$ </span>apt-get<span class="w"> </span>install<span class="w"> </span>nxsrecselector
+</pre></div>
+</div>
+<p>To instal other NexDaTaS packages</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt-get<span class="w"> </span>install<span class="w"> </span>python3-nxswriter<span class="w"> </span>nxsconfigtool<span class="w"> </span>nxstools<span class="w"> </span>python3-nxsconfigserver<span class="w"> </span>nxsconfigserver-db
+</pre></div>
+</div>
+<p>and</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt-get<span class="w"> </span>install<span class="w"> </span>nxselector<span class="w"> </span>python3-sardana-nxsrecorder
+</pre></div>
+</div>
+<p>for Component Selector and Sardana related packages.</p>
+</section>
+<section id="from-pip">
+<h3>From pip<a class="headerlink" href="#from-pip" title="Permalink to this heading">¶</a></h3>
+<p>To install it from pip you can</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>myvenv
+<span class="gp">$ </span>.<span class="w"> </span>myvenv/bin/activate
+
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>nxsrecselector
+</pre></div>
+</div>
+<p>Moreover it is also good to install</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>pytango
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>taurus
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>sardana
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>nxswriter
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>nxsconfigserver
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>nxstools
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>pymysqldb
+</pre></div>
+</div>
+</section>
+</section>
+<section id="setting-environment">
+<h2>Setting environment<a class="headerlink" href="#setting-environment" title="Permalink to this heading">¶</a></h2>
+<section id="setting-saradna">
+<h3>Setting Saradna<a class="headerlink" href="#setting-saradna" title="Permalink to this heading">¶</a></h3>
+<p>If sardana is not yet set up run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>Pool
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>enter a new instance name</p></li>
+<li><p>create the new instance</p></li>
+</ul>
+<p>Then wait a while until Pool is started and in a new terminal run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>MacroServer
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>enter a new instance name</p></li>
+<li><p>create the new instance</p></li>
+<li><p>connect pool</p></li>
+</ul>
+<p>Next, run Astor and change start-up levels: for Pool to 2,
+for MacroServer to 3 and restart servers.</p>
+<p>Alternatively, terminate Pool and MacroServer in the terminals and run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nxsetup<span class="w"> </span>-s<span class="w"> </span>Pool<span class="w"> </span>-l2
+</pre></div>
+</div>
+<p>wait until Pool is started and run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nxsetup<span class="w"> </span>-s<span class="w"> </span>MacroServer<span class="w"> </span>-l3
+</pre></div>
+</div>
+<p>Additionally, one can create dummy devices by running <cite>sar_demo</cite> in</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spock
+</pre></div>
+</div>
+</section>
+<section id="setting-nexus-servers">
+<h3>Setting NeXus Servers<a class="headerlink" href="#setting-nexus-servers" title="Permalink to this heading">¶</a></h3>
+<p>To set up  NeXus Servers run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nxsetup<span class="w"> </span>-x
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nxsetup<span class="w"> </span>-x<span class="w"> </span>NXSDataWriter
+<span class="gp">$ </span>nxsetup<span class="w"> </span>-x<span class="w"> </span>NXSConfigServer
+<span class="gp">$ </span>nxsetup<span class="w"> </span>-x<span class="w"> </span>NXSRecSelector
+</pre></div>
+</div>
+<p>for specific servers.</p>
+<p>If the <cite>RecoderPath</cite> property of MacroServer is not set one can do it by</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nxsetup<span class="w"> </span>-a<span class="w"> </span>/usr/lib/python2.7/dist-packages/sardananxsrecorder
+</pre></div>
+</div>
+<p>where the path should point the <cite>sardananxsrecorder</cite> package.</p>
+</section>
+</section>
+</section>
+<section id="contents">
+<h1>Contents:<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK"><code class="docutils literal notranslate"><span class="pre">ATTRIBUTESTOCHECK</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.AlarmStateError"><code class="docutils literal notranslate"><span class="pre">AlarmStateError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem"><code class="docutils literal notranslate"><span class="pre">CheckerItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.active"><code class="docutils literal notranslate"><span class="pre">CheckerItem.active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.errords"><code class="docutils literal notranslate"><span class="pre">CheckerItem.errords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.message"><code class="docutils literal notranslate"><span class="pre">CheckerItem.message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.name"><code class="docutils literal notranslate"><span class="pre">CheckerItem.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread"><code class="docutils literal notranslate"><span class="pre">CheckerThread</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.index"><code class="docutils literal notranslate"><span class="pre">CheckerThread.index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.run"><code class="docutils literal notranslate"><span class="pre">CheckerThread.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.tangoSourceErrorStates"><code class="docutils literal notranslate"><span class="pre">CheckerThread.tangoSourceErrorStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.tangoSourceWarningStates"><code class="docutils literal notranslate"><span class="pre">CheckerThread.tangoSourceWarningStates</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.FaultStateError"><code class="docutils literal notranslate"><span class="pre">FaultStateError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.OffStateError"><code class="docutils literal notranslate"><span class="pre">OffStateError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem"><code class="docutils literal notranslate"><span class="pre">TangoDSItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem.attr"><code class="docutils literal notranslate"><span class="pre">TangoDSItem.attr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem.device"><code class="docutils literal notranslate"><span class="pre">TangoDSItem.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem.name"><code class="docutils literal notranslate"><span class="pre">TangoDSItem.name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter"><code class="docutils literal notranslate"><span class="pre">Converter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.allkeys"><code class="docutils literal notranslate"><span class="pre">Converter.allkeys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.convert"><code class="docutils literal notranslate"><span class="pre">Converter.convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.down"><code class="docutils literal notranslate"><span class="pre">Converter.down</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.majorversion"><code class="docutils literal notranslate"><span class="pre">Converter.majorversion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.minorversion"><code class="docutils literal notranslate"><span class="pre">Converter.minorversion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.patchversion"><code class="docutils literal notranslate"><span class="pre">Converter.patchversion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.up"><code class="docutils literal notranslate"><span class="pre">Converter.up</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.version"><code class="docutils literal notranslate"><span class="pre">Converter.version()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2"><code class="docutils literal notranslate"><span class="pre">Converter1to2</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.convert"><code class="docutils literal notranslate"><span class="pre">Converter1to2.convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.names"><code class="docutils literal notranslate"><span class="pre">Converter1to2.names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.pnames"><code class="docutils literal notranslate"><span class="pre">Converter1to2.pnames</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1"><code class="docutils literal notranslate"><span class="pre">Converter2to1</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.convert"><code class="docutils literal notranslate"><span class="pre">Converter2to1.convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.names"><code class="docutils literal notranslate"><span class="pre">Converter2to1.names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.pnames"><code class="docutils literal notranslate"><span class="pre">Converter2to1.pnames</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3"><code class="docutils literal notranslate"><span class="pre">Converter2to3</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.convert"><code class="docutils literal notranslate"><span class="pre">Converter2to3.convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.names"><code class="docutils literal notranslate"><span class="pre">Converter2to3.names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.seltoint"><code class="docutils literal notranslate"><span class="pre">Converter2to3.seltoint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2"><code class="docutils literal notranslate"><span class="pre">Converter3to2</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.convert"><code class="docutils literal notranslate"><span class="pre">Converter3to2.convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.names"><code class="docutils literal notranslate"><span class="pre">Converter3to2.names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltobool"><code class="docutils literal notranslate"><span class="pre">Converter3to2.seltobool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltolist"><code class="docutils literal notranslate"><span class="pre">Converter3to2.seltolist()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to4"><code class="docutils literal notranslate"><span class="pre">Converter3to4</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.Converter4to3"><code class="docutils literal notranslate"><span class="pre">Converter4to3</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY"><code class="docutils literal notranslate"><span class="pre">ConverterXtoY</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY.convert"><code class="docutils literal notranslate"><span class="pre">ConverterXtoY.convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY.names"><code class="docutils literal notranslate"><span class="pre">ConverterXtoY.names</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.DSItem"><code class="docutils literal notranslate"><span class="pre">DSItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.DSItem.dstype"><code class="docutils literal notranslate"><span class="pre">DSItem.dstype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.DSItem.name"><code class="docutils literal notranslate"><span class="pre">DSItem.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.DSItem.parentobj"><code class="docutils literal notranslate"><span class="pre">DSItem.parentobj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.DSItem.record"><code class="docutils literal notranslate"><span class="pre">DSItem.record</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.Describer"><code class="docutils literal notranslate"><span class="pre">Describer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.Describer.components"><code class="docutils literal notranslate"><span class="pre">Describer.components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.Describer.dataSources"><code class="docutils literal notranslate"><span class="pre">Describer.dataSources()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSDict"><code class="docutils literal notranslate"><span class="pre">ExDSDict</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSDict.appendDSList"><code class="docutils literal notranslate"><span class="pre">ExDSDict.appendDSList()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem"><code class="docutils literal notranslate"><span class="pre">ExDSItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem.mode"><code class="docutils literal notranslate"><span class="pre">ExDSItem.mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem.nxtype"><code class="docutils literal notranslate"><span class="pre">ExDSItem.nxtype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem.shape"><code class="docutils literal notranslate"><span class="pre">ExDSItem.shape</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent"><code class="docutils literal notranslate"><span class="pre">DynamicComponent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.create"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.remove"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setDefaultLinkPath"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.setDefaultLinkPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setInitDSources"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.setInitDSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setLabelParams"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.setLabelParams()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDSources"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.setStepDSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDictDSources"><code class="docutils literal notranslate"><span class="pre">DynamicComponent.setStepDictDSources()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools"><code class="docutils literal notranslate"><span class="pre">MacroServerPools</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.checkChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getMacroServer"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getPools"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getPools()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getScanEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getScanEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getSelectorEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getSelectorEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorRunning"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.isDoorRunning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.poolBlacklist"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.poolBlacklist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setScanEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setScanEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setSelectorEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setSelectorEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.tangoSourceErrorStates"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.tangoSourceErrorStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.tangoSourceWarningStates"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.tangoSourceWarningStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.updateMacroServer()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AddStepDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AddStepDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AdministratorDataNames"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AdministratorDataNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AvailableComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AvailableDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableMntGrps"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AvailableMntGrps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableProfiles"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AvailableProfiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableTimers"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.AvailableTimers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CacheWriterConfiguration"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.CacheWriterConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ChannelProperties"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ChannelProperties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ClearCache"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ClearCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentClientSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ComponentClientSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ComponentDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentDescription"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ComponentDescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ComponentSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.CreateDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDynamicComponent"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.CreateDynamicComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateWriterConfiguration"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.CreateWriterConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DataSourceDescription"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.DataSourceDescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteAllProfiles"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.DeleteAllProfiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.DeleteProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ExportEnvProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ExportEnvProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.FetchProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.FetchProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.FullDeviceNames"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.FullDeviceNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ImportEnvProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ImportEnvProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ImportMntGrp"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ImportMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.IsMntGrpUpdated"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.IsMntGrpUpdated()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.LoadProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.LoadProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MandatoryComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.MandatoryComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.MntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MutedChannels"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.MutedChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PoolElementNames"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.PoolElementNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.PreselectComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectedComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.PreselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectedDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.PreselectedDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.RemoveDynamicComponent"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.RemoveDynamicComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ResetPreselectedComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ResetPreselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SaveProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SaveProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ScanEnvVariables"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.ScanEnvVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SelectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SelectedDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetChannelProperties"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SetChannelProperties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetScanEnvVariables"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SetScanEnvVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.StoreProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.StoreProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SwitchProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SwitchProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SyncProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.SyncProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateConfigVariables"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.UpdateConfigVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateMntGrp"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.UpdateMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateProfile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.UpdateProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.VariableComponents"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.VariableComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.always_executed_hook"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.always_executed_hook()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.delete_device"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.delete_device()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.init_device"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.init_device()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AdministratorDataNames_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_AdministratorDataNames_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_AvailableComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableDataSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_AvailableDataSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableMntGrps_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_AvailableMntGrps_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableProfiles_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_AvailableProfiles_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableTimers_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_AvailableTimers_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CacheWriterConfiguration_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_CacheWriterConfiguration_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CanFailDataSources_write_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_CanFailDataSources_write_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ChannelProperties_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ChannelProperties_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ClearCache_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ClearCache_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentClientSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ComponentClientSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDataSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ComponentDataSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDescription_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ComponentDescription_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ComponentSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDataSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_CreateDataSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDynamicComponent_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_CreateDynamicComponent_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateWriterConfiguration_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_CreateWriterConfiguration_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DataSourceDescription_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_DataSourceDescription_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteAllProfiles_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_DeleteAllProfiles_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_DeleteProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExportEnv_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ExportEnv_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExtraLinkDataSources_write_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ExtraLinkDataSources_write_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_FetchProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_FullDeviceNames_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ImportEnv_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ImportMntGrp_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_IsMntGrpUpdated_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LinkDataSources_write_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_LinkDataSources_write_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LoadProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_LoadProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MandatoryComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_MandatoryComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MntGrpConfiguration_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_MntGrpConfiguration_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MutedChannels_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_MutedChannels_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PoolElementNames_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_PoolElementNames_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_PreselectComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_PreselectedComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedDataSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_PreselectedDataSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_RemoveDynamicComponent_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_RemoveDynamicComponent_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ResetPreselectedComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ResetPreselectedComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SaveProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SaveProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ScanEnvVariables_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_ScanEnvVariables_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SelectedComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedDataSources_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SelectedDataSources_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetChannelProperties_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SetChannelProperties_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetScanEnvVariables_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SetScanEnvVariables_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StepDataSources_write_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_StepDataSources_write_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StoreProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_StoreProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SwitchProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SwitchProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SyncProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_SyncProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateConfigVariables_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_UpdateConfigVariables_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateMntGrp_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_UpdateMntGrp_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateProfile_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_UpdateProfile_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_VariableComponents_allowed"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.is_VariableComponents_allowed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_AppendEntry"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_AppendEntry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_CacheComponent"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_CacheComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_CanFailDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_CanFailDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Components"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_Components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ConfigDevice"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ConfigDevice()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ConfigVariables"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ConfigVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_DataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_DataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_DescriptionErrors"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_DescriptionErrors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_DeviceGroups"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_DeviceGroups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Door"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_Door()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ExtraLinkDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ExtraLinkDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_LinkDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_LinkDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_MacroServer"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_MacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_MntGrp"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_MntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ProfileConfiguration"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ProfileConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ProfileFile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ProfileFile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanDir"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ScanDir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanFile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ScanFile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanID"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_ScanID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_StepDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_StepDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_UserData"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_UserData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Version"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_Version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_WriterDevice"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_WriterDevice()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_attr_hardware"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.read_attr_hardware()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_AppendEntry"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_AppendEntry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_CanFailDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_CanFailDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ConfigDevice"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ConfigDevice()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ConfigVariables"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ConfigVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_DeviceGroups"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_DeviceGroups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_Door"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_Door()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ExtraLinkDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ExtraLinkDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_LinkDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_LinkDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_MntGrp"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_MntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileConfiguration"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ProfileConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileFile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ProfileFile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanDir"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ScanDir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanFile"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ScanFile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ScanID"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_ScanID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_StepDataSources"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_StepDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_UserData"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_UserData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_WriterDevice"><code class="docutils literal notranslate"><span class="pre">NXSRecSelector.write_WriterDevice()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass"><code class="docutils literal notranslate"><span class="pre">NXSRecSelectorClass</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list"><code class="docutils literal notranslate"><span class="pre">NXSRecSelectorClass.attr_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.class_property_list"><code class="docutils literal notranslate"><span class="pre">NXSRecSelectorClass.class_property_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list"><code class="docutils literal notranslate"><span class="pre">NXSRecSelectorClass.cmd_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list"><code class="docutils literal notranslate"><span class="pre">NXSRecSelectorClass.device_property_list</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.DEFAULT_RECORD_KEYS"><code class="docutils literal notranslate"><span class="pre">DEFAULT_RECORD_KEYS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.NXSTOOLS"><code class="docutils literal notranslate"><span class="pre">NXSTOOLS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager"><code class="docutils literal notranslate"><span class="pre">ProfileManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps"><code class="docutils literal notranslate"><span class="pre">ProfileManager.availableMntGrps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.checkdescription"><code class="docutils literal notranslate"><span class="pre">ProfileManager.checkdescription</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.clientRecordKeys"><code class="docutils literal notranslate"><span class="pre">ProfileManager.clientRecordKeys</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.componentDataSources"><code class="docutils literal notranslate"><span class="pre">ProfileManager.componentDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.components"><code class="docutils literal notranslate"><span class="pre">ProfileManager.components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.cpdescription"><code class="docutils literal notranslate"><span class="pre">ProfileManager.cpdescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.createDataSources"><code class="docutils literal notranslate"><span class="pre">ProfileManager.createDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.dataSources"><code class="docutils literal notranslate"><span class="pre">ProfileManager.dataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.defaultPreselectedComponents"><code class="docutils literal notranslate"><span class="pre">ProfileManager.defaultPreselectedComponents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.deleteProfile"><code class="docutils literal notranslate"><span class="pre">ProfileManager.deleteProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile"><code class="docutils literal notranslate"><span class="pre">ProfileManager.fetchProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.getPoolMotors"><code class="docutils literal notranslate"><span class="pre">ProfileManager.getPoolMotors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.importMntGrp"><code class="docutils literal notranslate"><span class="pre">ProfileManager.importMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.isMntGrpUpdated"><code class="docutils literal notranslate"><span class="pre">ProfileManager.isMntGrpUpdated()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.masterTimer"><code class="docutils literal notranslate"><span class="pre">ProfileManager.masterTimer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.masterTimerFirst"><code class="docutils literal notranslate"><span class="pre">ProfileManager.masterTimerFirst</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">ProfileManager.mntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mutedMotorFilters"><code class="docutils literal notranslate"><span class="pre">ProfileManager.mutedMotorFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mutedPreScanAttrFilters"><code class="docutils literal notranslate"><span class="pre">ProfileManager.mutedPreScanAttrFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedComponents"><code class="docutils literal notranslate"><span class="pre">ProfileManager.preselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedDataSources"><code class="docutils literal notranslate"><span class="pre">ProfileManager.preselectedDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.switchProfile"><code class="docutils literal notranslate"><span class="pre">ProfileManager.switchProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.timerFilters"><code class="docutils literal notranslate"><span class="pre">ProfileManager.timerFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.updateProfile"><code class="docutils literal notranslate"><span class="pre">ProfileManager.updateProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.writeallmotorpositions"><code class="docutils literal notranslate"><span class="pre">ProfileManager.writeallmotorpositions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection"><code class="docutils literal notranslate"><span class="pre">Selection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.deselect"><code class="docutils literal notranslate"><span class="pre">Selection.deselect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.reset"><code class="docutils literal notranslate"><span class="pre">Selection.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetMntGrp"><code class="docutils literal notranslate"><span class="pre">Selection.resetMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetPreselectedComponents"><code class="docutils literal notranslate"><span class="pre">Selection.resetPreselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetTimeZone"><code class="docutils literal notranslate"><span class="pre">Selection.resetTimeZone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateChannelProperties"><code class="docutils literal notranslate"><span class="pre">Selection.updateChannelProperties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateComponentSelection"><code class="docutils literal notranslate"><span class="pre">Selection.updateComponentSelection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateDataSourceSelection"><code class="docutils literal notranslate"><span class="pre">Selection.updateDataSourceSelection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateOrderedChannels"><code class="docutils literal notranslate"><span class="pre">Selection.updateOrderedChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updatePreselectingDataSources"><code class="docutils literal notranslate"><span class="pre">Selection.updatePreselectingDataSources()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector"><code class="docutils literal notranslate"><span class="pre">Selector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand"><code class="docutils literal notranslate"><span class="pre">Selector.configCommand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.descErrors"><code class="docutils literal notranslate"><span class="pre">Selector.descErrors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.deselect"><code class="docutils literal notranslate"><span class="pre">Selector.deselect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.exportEnv"><code class="docutils literal notranslate"><span class="pre">Selector.exportEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.fetchSelection"><code class="docutils literal notranslate"><span class="pre">Selector.fetchSelection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.get"><code class="docutils literal notranslate"><span class="pre">Selector.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.getMacroServer"><code class="docutils literal notranslate"><span class="pre">Selector.getMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.getPools"><code class="docutils literal notranslate"><span class="pre">Selector.getPools()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.getScanEnvVariables"><code class="docutils literal notranslate"><span class="pre">Selector.getScanEnvVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.importEnv"><code class="docutils literal notranslate"><span class="pre">Selector.importEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.isDoorValid"><code class="docutils literal notranslate"><span class="pre">Selector.isDoorValid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.keys"><code class="docutils literal notranslate"><span class="pre">Selector.keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.moduleLabel"><code class="docutils literal notranslate"><span class="pre">Selector.moduleLabel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.poolElementNames"><code class="docutils literal notranslate"><span class="pre">Selector.poolElementNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.preselect"><code class="docutils literal notranslate"><span class="pre">Selector.preselect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.reset"><code class="docutils literal notranslate"><span class="pre">Selector.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.resetPreselectedComponents"><code class="docutils literal notranslate"><span class="pre">Selector.resetPreselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.set"><code class="docutils literal notranslate"><span class="pre">Selector.set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.setConfigInstance"><code class="docutils literal notranslate"><span class="pre">Selector.setConfigInstance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.setScanEnvVariables"><code class="docutils literal notranslate"><span class="pre">Selector.setScanEnvVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.storeSelection"><code class="docutils literal notranslate"><span class="pre">Selector.storeSelection()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings"><code class="docutils literal notranslate"><span class="pre">Settings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.addStepDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.addStepDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.adminDataNames"><code class="docutils literal notranslate"><span class="pre">Settings.adminDataNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.administratorDataNames"><code class="docutils literal notranslate"><span class="pre">Settings.administratorDataNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.appendEntry"><code class="docutils literal notranslate"><span class="pre">Settings.appendEntry</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableComponents"><code class="docutils literal notranslate"><span class="pre">Settings.availableComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.availableDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableMntGrps"><code class="docutils literal notranslate"><span class="pre">Settings.availableMntGrps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableProfiles"><code class="docutils literal notranslate"><span class="pre">Settings.availableProfiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableTimers"><code class="docutils literal notranslate"><span class="pre">Settings.availableTimers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheComponent"><code class="docutils literal notranslate"><span class="pre">Settings.cacheComponent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.cacheConfiguration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheWriterConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.cacheWriterConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.canfaildatasources"><code class="docutils literal notranslate"><span class="pre">Settings.canfaildatasources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.channelProperties"><code class="docutils literal notranslate"><span class="pre">Settings.channelProperties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.clearCache"><code class="docutils literal notranslate"><span class="pre">Settings.clearCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.clientRecordKeys"><code class="docutils literal notranslate"><span class="pre">Settings.clientRecordKeys</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentClientSources"><code class="docutils literal notranslate"><span class="pre">Settings.componentClientSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.componentDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentDescription"><code class="docutils literal notranslate"><span class="pre">Settings.componentDescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentSources"><code class="docutils literal notranslate"><span class="pre">Settings.componentSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.components"><code class="docutils literal notranslate"><span class="pre">Settings.components</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.configDevice"><code class="docutils literal notranslate"><span class="pre">Settings.configDevice</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.configVariables"><code class="docutils literal notranslate"><span class="pre">Settings.configVariables</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.createDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.createDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.createDynamicComponent"><code class="docutils literal notranslate"><span class="pre">Settings.createDynamicComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.createWriterConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.createWriterConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.dataSourceDescription"><code class="docutils literal notranslate"><span class="pre">Settings.dataSourceDescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.dataSources"><code class="docutils literal notranslate"><span class="pre">Settings.dataSources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultCanFailDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.defaultCanFailDataSources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultMntGrp"><code class="docutils literal notranslate"><span class="pre">Settings.defaultMntGrp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultNeXusPath"><code class="docutils literal notranslate"><span class="pre">Settings.defaultNeXusPath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultNeXusType"><code class="docutils literal notranslate"><span class="pre">Settings.defaultNeXusType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultPreselectedComponents"><code class="docutils literal notranslate"><span class="pre">Settings.defaultPreselectedComponents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultTimeZone"><code class="docutils literal notranslate"><span class="pre">Settings.defaultTimeZone</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultUserDataPath"><code class="docutils literal notranslate"><span class="pre">Settings.defaultUserDataPath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.deleteAllProfiles"><code class="docutils literal notranslate"><span class="pre">Settings.deleteAllProfiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.deleteProfile"><code class="docutils literal notranslate"><span class="pre">Settings.deleteProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.descriptionErrors"><code class="docutils literal notranslate"><span class="pre">Settings.descriptionErrors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.deviceGroups"><code class="docutils literal notranslate"><span class="pre">Settings.deviceGroups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.door"><code class="docutils literal notranslate"><span class="pre">Settings.door</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.exportEnvProfile"><code class="docutils literal notranslate"><span class="pre">Settings.exportEnvProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.extralinkdatasources"><code class="docutils literal notranslate"><span class="pre">Settings.extralinkdatasources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.fetchProfile"><code class="docutils literal notranslate"><span class="pre">Settings.fetchProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.fullDeviceNames"><code class="docutils literal notranslate"><span class="pre">Settings.fullDeviceNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.globalUserData"><code class="docutils literal notranslate"><span class="pre">Settings.globalUserData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.importEnvProfile"><code class="docutils literal notranslate"><span class="pre">Settings.importEnvProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.importMntGrp"><code class="docutils literal notranslate"><span class="pre">Settings.importMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.isMntGrpUpdated"><code class="docutils literal notranslate"><span class="pre">Settings.isMntGrpUpdated()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.linkdatasources"><code class="docutils literal notranslate"><span class="pre">Settings.linkdatasources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.loadProfile"><code class="docutils literal notranslate"><span class="pre">Settings.loadProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.macroServer"><code class="docutils literal notranslate"><span class="pre">Settings.macroServer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mandatoryComponents"><code class="docutils literal notranslate"><span class="pre">Settings.mandatoryComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.masterTimer"><code class="docutils literal notranslate"><span class="pre">Settings.masterTimer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.masterTimerFirst"><code class="docutils literal notranslate"><span class="pre">Settings.masterTimerFirst</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mergeProfilesToMntGrps"><code class="docutils literal notranslate"><span class="pre">Settings.mergeProfilesToMntGrps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mntGrp"><code class="docutils literal notranslate"><span class="pre">Settings.mntGrp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.mntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mutedChannelFilters"><code class="docutils literal notranslate"><span class="pre">Settings.mutedChannelFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mutedChannels"><code class="docutils literal notranslate"><span class="pre">Settings.mutedChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mutedMotorFilters"><code class="docutils literal notranslate"><span class="pre">Settings.mutedMotorFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mutedPreScanAttrFilters"><code class="docutils literal notranslate"><span class="pre">Settings.mutedPreScanAttrFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.names"><code class="docutils literal notranslate"><span class="pre">Settings.names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.numberOfThreads"><code class="docutils literal notranslate"><span class="pre">Settings.numberOfThreads</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.poolBlacklist"><code class="docutils literal notranslate"><span class="pre">Settings.poolBlacklist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.poolElementNames"><code class="docutils literal notranslate"><span class="pre">Settings.poolElementNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.preselectComponents"><code class="docutils literal notranslate"><span class="pre">Settings.preselectComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.preselectedComponents"><code class="docutils literal notranslate"><span class="pre">Settings.preselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.preselectedDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.preselectedDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.profileConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.profileConfiguration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.profileFile"><code class="docutils literal notranslate"><span class="pre">Settings.profileFile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.removeDynamicComponent"><code class="docutils literal notranslate"><span class="pre">Settings.removeDynamicComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.resetInvalidDoor"><code class="docutils literal notranslate"><span class="pre">Settings.resetInvalidDoor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.resetPreselectedComponents"><code class="docutils literal notranslate"><span class="pre">Settings.resetPreselectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.saveProfile"><code class="docutils literal notranslate"><span class="pre">Settings.saveProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanDir"><code class="docutils literal notranslate"><span class="pre">Settings.scanDir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanEnvVariables"><code class="docutils literal notranslate"><span class="pre">Settings.scanEnvVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanFile"><code class="docutils literal notranslate"><span class="pre">Settings.scanFile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanID"><code class="docutils literal notranslate"><span class="pre">Settings.scanID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.selectedComponents"><code class="docutils literal notranslate"><span class="pre">Settings.selectedComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.selectedDataSources"><code class="docutils literal notranslate"><span class="pre">Settings.selectedDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.setChannelProperties"><code class="docutils literal notranslate"><span class="pre">Settings.setChannelProperties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.setScanEnvVariables"><code class="docutils literal notranslate"><span class="pre">Settings.setScanEnvVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.stepdatasources"><code class="docutils literal notranslate"><span class="pre">Settings.stepdatasources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.storeProfile"><code class="docutils literal notranslate"><span class="pre">Settings.storeProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.switchProfile"><code class="docutils literal notranslate"><span class="pre">Settings.switchProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.syncMntGrp"><code class="docutils literal notranslate"><span class="pre">Settings.syncMntGrp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.syncProfile"><code class="docutils literal notranslate"><span class="pre">Settings.syncProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.syncSnapshot"><code class="docutils literal notranslate"><span class="pre">Settings.syncSnapshot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.tangoSourceErrorStates"><code class="docutils literal notranslate"><span class="pre">Settings.tangoSourceErrorStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.tangoSourceWarningStates"><code class="docutils literal notranslate"><span class="pre">Settings.tangoSourceWarningStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.timerFilters"><code class="docutils literal notranslate"><span class="pre">Settings.timerFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateConfigVariables"><code class="docutils literal notranslate"><span class="pre">Settings.updateConfigVariables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateMntGrp"><code class="docutils literal notranslate"><span class="pre">Settings.updateMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateProfile"><code class="docutils literal notranslate"><span class="pre">Settings.updateProfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.userData"><code class="docutils literal notranslate"><span class="pre">Settings.userData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.value"><code class="docutils literal notranslate"><span class="pre">Settings.value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.variableComponents"><code class="docutils literal notranslate"><span class="pre">Settings.variableComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.version"><code class="docutils literal notranslate"><span class="pre">Settings.version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writeallmotorpositions"><code class="docutils literal notranslate"><span class="pre">Settings.writeallmotorpositions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writepoolmotorpositions"><code class="docutils literal notranslate"><span class="pre">Settings.writepoolmotorpositions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writerDevice"><code class="docutils literal notranslate"><span class="pre">Settings.writerDevice</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet"><code class="docutils literal notranslate"><span class="pre">StreamSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.debug"><code class="docutils literal notranslate"><span class="pre">StreamSet.debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.error"><code class="docutils literal notranslate"><span class="pre">StreamSet.error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.fatal"><code class="docutils literal notranslate"><span class="pre">StreamSet.fatal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.info"><code class="docutils literal notranslate"><span class="pre">StreamSet.info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_debug"><code class="docutils literal notranslate"><span class="pre">StreamSet.log_debug</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_error"><code class="docutils literal notranslate"><span class="pre">StreamSet.log_error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_fatal"><code class="docutils literal notranslate"><span class="pre">StreamSet.log_fatal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_info"><code class="docutils literal notranslate"><span class="pre">StreamSet.log_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_warn"><code class="docutils literal notranslate"><span class="pre">StreamSet.log_warn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.warn"><code class="docutils literal notranslate"><span class="pre">StreamSet.warn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils"><code class="docutils literal notranslate"><span class="pre">MSUtils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getEnv"><code class="docutils literal notranslate"><span class="pre">MSUtils.getEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getMacroServer"><code class="docutils literal notranslate"><span class="pre">MSUtils.getMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnv"><code class="docutils literal notranslate"><span class="pre">MSUtils.setEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnvs"><code class="docutils literal notranslate"><span class="pre">MSUtils.setEnvs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.usetEnv"><code class="docutils literal notranslate"><span class="pre">MSUtils.usetEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.writeEnvAttr"><code class="docutils literal notranslate"><span class="pre">MSUtils.writeEnvAttr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.OldTangoError"><code class="docutils literal notranslate"><span class="pre">OldTangoError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PYTG_BUG_213"><code class="docutils literal notranslate"><span class="pre">PYTG_BUG_213</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils"><code class="docutils literal notranslate"><span class="pre">PoolUtils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterNames"><code class="docutils literal notranslate"><span class="pre">PoolUtils.filterNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterOutTango"><code class="docutils literal notranslate"><span class="pre">PoolUtils.filterOutTango()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getAliases"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getAliases()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getChannelSources"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getChannelSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getDeviceControllers"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getDeviceControllers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getElementNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getFullDeviceNames"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getFullDeviceNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMntGrpName"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getMntGrpName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMotorPositionAttributes"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getMotorPositionAttributes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getSource"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getTimers"><code class="docutils literal notranslate"><span class="pre">PoolUtils.getTimers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils"><code class="docutils literal notranslate"><span class="pre">TangoUtils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.command"><code class="docutils literal notranslate"><span class="pre">TangoUtils.command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getDeviceName"><code class="docutils literal notranslate"><span class="pre">TangoUtils.getDeviceName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getFullAttrName"><code class="docutils literal notranslate"><span class="pre">TangoUtils.getFullAttrName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getProxies"><code class="docutils literal notranslate"><span class="pre">TangoUtils.getProxies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getShapeTypeUnit"><code class="docutils literal notranslate"><span class="pre">TangoUtils.getShapeTypeUnit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.openProxy"><code class="docutils literal notranslate"><span class="pre">TangoUtils.openProxy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.tTnp"><code class="docutils literal notranslate"><span class="pre">TangoUtils.tTnp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.wait"><code class="docutils literal notranslate"><span class="pre">TangoUtils.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils"><code class="docutils literal notranslate"><span class="pre">Utils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict"><code class="docutils literal notranslate"><span class="pre">Utils.compareDict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.getRecord"><code class="docutils literal notranslate"><span class="pre">Utils.getRecord()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.getText"><code class="docutils literal notranslate"><span class="pre">Utils.getText()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.pickleloads"><code class="docutils literal notranslate"><span class="pre">Utils.pickleloads()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToDictJson"><code class="docutils literal notranslate"><span class="pre">Utils.stringToDictJson()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson"><code class="docutils literal notranslate"><span class="pre">Utils.stringToListJson()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.toString"><code class="docutils literal notranslate"><span class="pre">Utils.toString()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.tostr"><code class="docutils literal notranslate"><span class="pre">Utils.tostr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
