@@ -61,7 +61,7 @@ jobs:
              docker  exec ndts /bin/bash -c "mv -f build/sphinx/html/* ./latest/"
              docker  exec ndts /bin/bash -c "mv -f build/index.html build/_config.yml ."
              docker  exec ndts /bin/bash -c "mv -f build/doc_html/* ./latest/doc_html/"
-             docker  exec --user root ndts /bin/bash -c "rm -rf build test nxsrecconfig  dist  nxsrecconfig.egg-info testresult.txt *.h5"
+             docker  exec --user root ndts /bin/bash -c "rm -rf build test nxsrecconfig  dist  nxsrecselector.egg-info testresult.txt *.h5"
 
       - name: Extract the code version from the branch name
         if: startsWith(github.ref, 'refs/heads/docs_') && matrix.os == 'debian13'
@@ -82,7 +82,7 @@ jobs:
              docker  exec ndts /bin/bash -c "mv -f build/sphinx/html/* ./${{ steps.extract_docver.outputs.docver }}"
              docker  exec ndts /bin/bash -c "mkdir -p ./${{ steps.extract_docver.outputs.docver }}/doc_html"
              docker  exec ndts /bin/bash -c "mv -f build/doc_html/* ./${{ steps.extract_docver.outputs.docver }}/doc_html/"
-             docker  exec --user root ndts /bin/bash -c "rm -rf build test nxswriter  dist  nxswriter.egg-info  testresult.txt *.h5"
+             docker  exec --user root ndts /bin/bash -c "rm -rf build test nxswriter  dist  nxsrecselector.egg-info  testresult.txt *.h5"
              docker  exec --user root ndts /bin/bash -c "rm -rf  *.h5"
 
       - name: Deploy documentation
