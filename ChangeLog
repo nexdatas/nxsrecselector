@@ -1,3 +1,7 @@
+2026-10-27 Jan Kotanski <jankotan@gmail.com>
+	* add pixi tests without HDRI repo (#220)
+	* tagged as v4.13.1
+
 2026-09-09 Jan Kotanski <jankotan@gmail.com>
 	* add support for pymysql and pixi (#213)
 	* tagged as v4.13.0
