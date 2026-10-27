@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Utils &#8212; NXSRecSelector 4.11.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>nxsrecconfig.Utils &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -36,8 +33,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../../index.html">
-          NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.11</b></span>
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -113,7 +110,23 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for nxsrecconfig.Utils</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
@@ -174,17 +187,24 @@
         <span class="k">pass</span>
 
 
-<div class="viewcode-block" id="OldTangoError"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.OldTangoError">[docs]</a><span class="k">class</span> <span class="nc">OldTangoError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="OldTangoError">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.OldTangoError">[docs]</a>
+<span class="k">class</span> <span class="nc">OldTangoError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Old Tango version Exception class</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="Utils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils">[docs]</a><span class="k">class</span> <span class="nc">Utils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Utils">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils">[docs]</a>
+<span class="k">class</span> <span class="nc">Utils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  Miscellaneous Utilities &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Utils.tostr"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.tostr">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Utils.tostr">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.tostr">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">tostr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; convert bytestr or unicode to python str</span>
 <span class="sd">        :param text: text to convert</span>
@@ -201,7 +221,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Utils.pickleloads"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.pickleloads">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.pickleloads">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.pickleloads">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">pickleloads</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bytestr</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; loads pickle byte string</span>
 <span class="sd">        :param bytestr: byte string to convert</span>
@@ -214,7 +237,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bytestr</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Utils.compareDict"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.compareDict">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">compareDict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">dct2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; copares two dictionaries</span>
 
@@ -247,7 +273,10 @@
                     <span class="k">break</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="Utils.getRecord"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.getRecord">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.getRecord">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.getRecord">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getRecord</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides datasource record from xml dom node</span>
 
@@ -293,7 +322,10 @@
                     <span class="n">res</span> <span class="o">=</span> <span class="n">rname</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="Utils.getText"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.getText">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.getText">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.getText">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getText</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; collects text from text child nodes</span>
 
@@ -306,7 +338,10 @@
             <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tnodes</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="Utils.stringToDictJson"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToDictJson">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.stringToDictJson">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToDictJson">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">stringToDictJson</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">toBool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts string to json dictionary</span>
 
@@ -336,7 +371,10 @@
             <span class="n">jstring</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">jstring</span></div>
 
-<div class="viewcode-block" id="Utils.stringToListJson"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.stringToListJson">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">stringToListJson</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts string to json list</span>
 
@@ -357,7 +395,10 @@
             <span class="n">jstring</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">jstring</span></div>
 
-<div class="viewcode-block" id="Utils.toString"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.toString">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Utils.toString">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.toString">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">toString</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts list/dict/object of unicode/string to string object</span>
 
@@ -374,10 +415,14 @@
             <span class="k">return</span> <span class="nb">dict</span><span class="p">([(</span><span class="bp">cls</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="bp">cls</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
                          <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">obj</span></div></div>
+            <span class="k">return</span> <span class="n">obj</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TangoUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils">[docs]</a><span class="k">class</span> <span class="nc">TangoUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TangoUtils">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils">[docs]</a>
+<span class="k">class</span> <span class="nc">TangoUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  Tango Utilities &quot;&quot;&quot;</span>
 
@@ -390,7 +435,9 @@
             <span class="n">tango</span><span class="o">.</span><span class="n">DevFloat</span><span class="p">:</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevString</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="n">tango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevEncoded</span><span class="p">:</span> <span class="s2">&quot;encoded&quot;</span><span class="p">}</span>
 
-<div class="viewcode-block" id="TangoUtils.openProxy"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.openProxy">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.openProxy">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.openProxy">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">openProxy</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; opens device proxy of the given device</span>
 
@@ -418,7 +465,10 @@
         <span class="n">cnfServer</span><span class="o">.</span><span class="n">set_source</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevSource</span><span class="o">.</span><span class="n">DEV</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cnfServer</span></div>
 
-<div class="viewcode-block" id="TangoUtils.wait"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.wait">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TangoUtils.wait">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.wait">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proxy</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;RUNNING&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;waits for device proxy not running</span>
 
@@ -449,7 +499,10 @@
             <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">found</span></div>
 
-<div class="viewcode-block" id="TangoUtils.getProxies"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getProxies">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TangoUtils.getProxies">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getProxies">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getProxies</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides proxies of given device names</span>
 
@@ -468,7 +521,10 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">dps</span></div>
 
-<div class="viewcode-block" id="TangoUtils.getDeviceName"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getDeviceName">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TangoUtils.getDeviceName">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getDeviceName">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getDeviceName</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">cname</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; finds device of give class</span>
 
@@ -492,7 +548,10 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">device</span></div>
 
-<div class="viewcode-block" id="TangoUtils.getFullAttrName"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getFullAttrName">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TangoUtils.getFullAttrName">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getFullAttrName">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getFullAttrName</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">fqdn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides tango device full name with host and port</span>
 
@@ -519,7 +578,10 @@
                 <span class="n">host</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getfqdn</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
             <span class="k">return</span> <span class="s2">&quot;tango://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TangoUtils.getShapeTypeUnit"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getShapeTypeUnit">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TangoUtils.getShapeTypeUnit">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getShapeTypeUnit">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getShapeTypeUnit</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; retrives shape type units for attribure</span>
 
@@ -566,7 +628,10 @@
             <span class="n">ut</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">unit</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">ut</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TangoUtils.command"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.command">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TangoUtils.command">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.command">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; executes command on server on python package</span>
 
@@ -585,14 +650,20 @@
         <span class="k">elif</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">server</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">server</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="n">server</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MSUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils">[docs]</a><span class="k">class</span> <span class="nc">MSUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MSUtils">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils">[docs]</a>
+<span class="k">class</span> <span class="nc">MSUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  MacroServer Utilities &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MSUtils.getEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getEnv">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MSUtils.getEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getEnv">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getEnv</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides environment variable value</span>
 
@@ -616,7 +687,10 @@
                 <span class="n">active</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">active</span></div>
 
-<div class="viewcode-block" id="MSUtils.setEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnv">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MSUtils.setEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnv">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">setEnv</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets environment variable value</span>
 
@@ -632,7 +706,10 @@
         <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MSUtils.setEnvs"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnvs">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MSUtils.setEnvs">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnvs">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">setEnvs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">varvalues</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets environment variable value</span>
 
@@ -647,7 +724,10 @@
             <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MSUtils.usetEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.usetEnv">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MSUtils.usetEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.usetEnv">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">usetEnv</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; unsets environment variable</span>
 
@@ -660,7 +740,10 @@
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;del&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">var</span><span class="p">]}</span>
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MSUtils.getMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getMacroServer">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MSUtils.getMacroServer">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getMacroServer">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">find</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides macro server of given door</span>
 
@@ -700,7 +783,10 @@
                 <span class="n">ms</span> <span class="o">=</span> <span class="n">mss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ms</span></div>
 
-<div class="viewcode-block" id="MSUtils.writeEnvAttr"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.writeEnvAttr">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MSUtils.writeEnvAttr">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.writeEnvAttr">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">writeEnvAttr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dp</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets environment variable value</span>
 
@@ -734,14 +820,20 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">newvalue</span> <span class="o">=</span> <span class="n">value</span>
             <span class="n">pk</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">newvalue</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">dp</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="p">]</span></div></div>
+            <span class="n">dp</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="p">]</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PoolUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils">[docs]</a><span class="k">class</span> <span class="nc">PoolUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PoolUtils">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils">[docs]</a>
+<span class="k">class</span> <span class="nc">PoolUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  Pool Utilities &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PoolUtils.getDeviceControllers"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getDeviceControllers">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getDeviceControllers">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getDeviceControllers">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getDeviceControllers</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides device controller full names</span>
 
@@ -763,7 +855,10 @@
                 <span class="n">ctrls</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;controller&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ctrls</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getChannelSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getChannelSources">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getChannelSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getChannelSources">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getChannelSources</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides channel sources</span>
 
@@ -785,7 +880,10 @@
                 <span class="n">srs</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">srs</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getElementNames">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getElementNames</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">listattr</span><span class="p">,</span> <span class="n">typefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides experimental Channels</span>
 
@@ -815,7 +913,10 @@
                     <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">elements</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getFullDeviceNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getFullDeviceNames">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getFullDeviceNames">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getFullDeviceNames">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getFullDeviceNames</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">listattr</span><span class="o">=</span><span class="s2">&quot;AcqChannelList&quot;</span><span class="p">,</span>
                            <span class="n">lastsubterm</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; find device names from aliases</span>
@@ -847,7 +948,10 @@
                     <span class="n">argout</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">lastsubterm</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">argout</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getAliases"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getAliases">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getAliases">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getAliases">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getAliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; find aliases from fullnames</span>
 
@@ -871,7 +975,10 @@
                 <span class="n">argout</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">argout</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getMntGrpName"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMntGrpName">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getMntGrpName">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMntGrpName">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getMntGrpName</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; find measurement group name from alias</span>
 
@@ -894,7 +1001,10 @@
                 <span class="k">break</span>
         <span class="k">return</span> <span class="n">argout</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getMotorPositionAttributes"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMotorPositionAttributes">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getMotorPositionAttributes">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMotorPositionAttributes">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getMotorPositionAttributes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; find motor names</span>
 
@@ -932,7 +1042,10 @@
                 <span class="n">argout</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">fname</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">argout</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getTimers"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getTimers">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getTimers">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getTimers">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getTimers</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides tiemrs of given pools</span>
 
@@ -966,7 +1079,10 @@
                         <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="PoolUtils.filterNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterNames">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.filterNames">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterNames">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">filterNames</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides channels of given pools</span>
 
@@ -998,7 +1114,10 @@
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="PoolUtils.filterOutTango"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterOutTango">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.filterOutTango">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterOutTango">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">filterOutTango</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lst</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides channels of given pools</span>
 
@@ -1032,7 +1151,10 @@
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="PoolUtils.getSource"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getSource">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="PoolUtils.getSource">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getSource">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getSource</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides datasource from pool device</span>
 
@@ -1053,7 +1175,9 @@
                 <span class="n">source</span> <span class="o">=</span> <span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="k">return</span> <span class="n">source</span></div></div>
+        <span class="k">return</span> <span class="n">source</span></div>
+</div>
+
 </pre></div>
 
     </div>
@@ -1070,7 +1194,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>

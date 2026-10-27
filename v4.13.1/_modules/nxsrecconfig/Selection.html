@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nxsrecconfig.Selection &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for nxsrecconfig.Selection</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot;  Selection state &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="Selection">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection">[docs]</a>
+<span class="k">class</span> <span class="nc">Selection</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Selection Dictionary which contains the following records:</span>
+<span class="sd">    {</span>
+<span class="sd">    &quot;Timer&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;OrderedChannels&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;ComponentSelection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;DataSourceSelection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;DataSourcePreselection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;ComponentPreselection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;PreselectingDataSources&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;OptionalComponents&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;AppendEntry&quot;:  False,</span>
+<span class="sd">    &quot;ComponentsFromMntGrp&quot;:  False,</span>
+<span class="sd">    &quot;ConfigVariables&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;UserData&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;ChannelProperties&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;UnplottedComponents&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;DynamicComponents&quot;:  True,</span>
+<span class="sd">    &quot;DefaultDynamicLinks&quot;:  True,</span>
+<span class="sd">    &quot;DefaultDynamicPath&quot;:  \</span>
+<span class="sd">    &#39;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry&#39; \</span>
+<span class="sd">    &#39;/instrument:NXinstrument/collection&#39;,</span>
+<span class="sd">    &quot;TimeZone&quot;:  self.__defaultzone,</span>
+<span class="sd">    &quot;ConfigDevice&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;WriterDevice&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;Door&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;MntGrp&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;Version&quot;:  self.__version,</span>
+<span class="sd">    &quot;MntGrpConfiguration&quot;:  &#39;&#39;</span>
+<span class="sd">    }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param args: dictionary args</span>
+<span class="sd">        :type args: :obj:`list` &lt;`any`&gt;</span>
+<span class="sd">        :param kw: dictionary kw</span>
+<span class="sd">        :type kw: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="c1">#: (:obj:`str`) default zone</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;TimeZone&#39;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s1">&#39;TimeZone&#39;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s1">&#39;Europe/Berlin&#39;</span>
+
+        <span class="c1">#: (:obj:`str`) default mntgrp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultmntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;MntGrp&#39;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s1">&#39;MntGrp&#39;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s1">&#39;nxsmntgrp&#39;</span>
+        <span class="c1">#: (:obj:`str`) version string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Version&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s2">&quot;Version&quot;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s2">&quot;1.0.0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Selection.reset">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets dictionary to default value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="c1"># timer</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Timer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span>
+        <span class="c1"># ordered channels</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span>
+        <span class="c1"># group of electable components</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># step selected datasources</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># init preselected datasources</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># group of preselected components describing instrument state</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentPreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># preselected datasources</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;PreselectingDataSources&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span>
+        <span class="c1"># group of optional components available for preselected selqection</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;OptionalComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span>
+        <span class="c1"># appending new entries to existing file</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;AppendEntry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># select components from the active measurement group</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentsFromMntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># Configuration Server variables</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ConfigVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># JSON with Client Data Record</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># JSON with channel properties</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="c1"># JSON with NeXus paths for Label Paths</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;UnplottedComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span>
+        <span class="c1"># create dynamic components</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DynamicComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># create links for dynamic components</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DefaultDynamicLinks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># path for dynamic components</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DefaultDynamicPath&quot;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry&quot;</span> \
+            <span class="s2">&quot;/instrument:NXinstrument/collection&quot;</span>
+        <span class="c1"># timezone</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;TimeZone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span>
+        <span class="c1"># Configuration Server device name</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ConfigDevice&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># NeXus Data Writer device</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;WriterDevice&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># Door device name</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># MntGrp</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># version</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__version</span>
+        <span class="c1"># MntGrp configuration</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrpConfiguration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+
+<div class="viewcode-block" id="Selection.deselect">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.deselect">[docs]</a>
+    <span class="k">def</span> <span class="nf">deselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; deselects components and datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">])</span>
+        <span class="n">ads</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cps</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ads</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">ads</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;UnplottedComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span></div>
+
+
+<div class="viewcode-block" id="Selection.updatePreselectingDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updatePreselectingDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">updatePreselectingDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for Preselected DataSources</span>
+
+<span class="sd">        :brief: appends new datasources to Preselected DataSources</span>
+<span class="sd">        :param datasources: list of datasources</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">adsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;PreselectingDataSources&quot;</span><span class="p">])</span>
+        <span class="n">adsg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">adsg</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span> <span class="ow">or</span> <span class="p">[]))</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;PreselectingDataSources&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">adsg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Selection.updateOrderedChannels">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateOrderedChannels">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateOrderedChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channels</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for orderedChannels attribute</span>
+
+<span class="sd">        :brief: sets pool channels in order defined by OrderedChannels</span>
+<span class="sd">        :param channels: pool channels</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">och</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">])</span>
+        <span class="n">ordchannels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">och</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">]</span>
+        <span class="n">uordchannels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">och</span><span class="p">))</span>
+        <span class="n">ordchannels</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">uordchannels</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ordchannels</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Selection.updateChannelProperties">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateChannelProperties">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateChannelProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devicecontrollers</span><span class="p">,</span> <span class="n">triggergate</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for orderedChannels attribute</span>
+
+<span class="sd">        :brief: sets pool channels in order defined by OrderedChannels</span>
+<span class="sd">        :param devicecontrollers: device controller dictionary</span>
+<span class="sd">        :type devicecontrollers: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">        :param triggergate: trigger gate list</span>
+<span class="sd">        :type triggergate: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">devicecontrollers</span><span class="p">:</span>
+            <span class="n">props</span><span class="p">[</span><span class="s2">&quot;__controllers__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">devicecontrollers</span>
+        <span class="k">if</span> <span class="n">triggergate</span><span class="p">:</span>
+            <span class="n">props</span><span class="p">[</span><span class="s2">&quot;__triggergatedict__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">triggergate</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Selection.updateComponentSelection">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateComponentSelection">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateComponentSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for componentGroup attribute</span>
+
+<span class="sd">        :brief: It removes datasource components from component group</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cpg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">])</span>
+        <span class="n">dss</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">cpg</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">dss</span><span class="p">:</span>
+                <span class="n">cpg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cpg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Selection.updateDataSourceSelection">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateDataSourceSelection">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateDataSourceSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update method for dataSourceGroup attribute</span>
+
+<span class="sd">        :brief: It removes datasources from DataSourceSelection if they are</span>
+<span class="sd">                neither in poolchannels nor in avaiblable datasources</span>
+<span class="sd">                It adds new channels to DataSourceSelection</span>
+<span class="sd">        :param channels: pool channels</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :param datasources: available datasources</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
+        <span class="n">datasources</span> <span class="o">=</span> <span class="n">datasources</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">channels</span> <span class="ow">and</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">datasources</span><span class="p">:</span>
+                <span class="n">dsg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pc</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">dsg</span><span class="p">[</span><span class="n">pc</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dsg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Selection.resetMntGrp">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetMntGrp">[docs]</a>
+    <span class="k">def</span> <span class="nf">resetMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reset method for mntGrp attribute</span>
+
+<span class="sd">        :brief: If MntGrp not defined set it to default value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;MntGrp&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultmntgrp</span></div>
+
+
+<div class="viewcode-block" id="Selection.resetTimeZone">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetTimeZone">[docs]</a>
+    <span class="k">def</span> <span class="nf">resetTimeZone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reset method for timeZone attribute</span>
+
+<span class="sd">        :brief: If TimeZone not defined set it to default value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;TimeZone&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;TimeZone&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;TimeZone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span></div>
+
+
+<div class="viewcode-block" id="Selection.resetPreselectedComponents">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.resetPreselectedComponents">[docs]</a>
+    <span class="k">def</span> <span class="nf">resetPreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets Preselected Components with given components and set them</span>
+<span class="sd">        to not active</span>
+<span class="sd">        :param components: list of components to be set</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">acps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+            <span class="n">acps</span><span class="p">[</span><span class="n">cp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ComponentPreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">acps</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

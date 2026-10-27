@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Selector &#8212; NXSRecSelector 4.13.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>nxsrecconfig.Selector &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -36,7 +33,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../../index.html">
-          NXSRecSelector</a>
+          nxsrecconfig</a>
         <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
       </div>
 
@@ -113,7 +110,23 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for nxsrecconfig.Selector</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
@@ -151,7 +164,9 @@
 <span class="kn">from</span> <span class="nn">.Converter</span> <span class="kn">import</span> <span class="n">Converter</span>
 
 
-<div class="viewcode-block" id="Selector"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector">[docs]</a><span class="k">class</span> <span class="nc">Selector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Selector">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector">[docs]</a>
+<span class="k">class</span> <span class="nc">Selector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; access class to Selection dictionary and Config Device &quot;&quot;&quot;</span>
 
@@ -206,7 +221,9 @@
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) error descriptions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descErrors</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Selector.reset"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Selector.reset">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; resets seleciton except Door and ConfigDevice</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">door</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span>
@@ -215,12 +232,18 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">door</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ConfigDevice&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span></div>
 
-<div class="viewcode-block" id="Selector.deselect"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.deselect">[docs]</a>    <span class="k">def</span> <span class="nf">deselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.deselect">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.deselect">[docs]</a>
+    <span class="k">def</span> <span class="nf">deselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deselects all seleciton elements</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">deselect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Selector.set"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.set">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.set">[docs]</a>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets selection from state data</span>
 
 <span class="sd">        :param state: state data</span>
@@ -239,7 +262,10 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_Selector__postSet&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">):</span>
                 <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_Selector__postSet&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)(</span><span class="n">changed</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.keys"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.keys">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.keys">[docs]</a>
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides all names of variables</span>
 
 <span class="sd">        :returns: selection keys</span>
@@ -247,7 +273,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="Selector.get"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.get">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides selection data</span>
 
 <span class="sd">        :returns: selection data</span>
@@ -257,6 +286,7 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_Selector__preGet&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">):</span>
                 <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_Selector__preGet&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)()</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">)</span></div>
+
 
     <span class="c1">#</span>
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -404,7 +434,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">resetTimeZone</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Selector.isDoorValid"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.isDoorValid">[docs]</a>    <span class="k">def</span> <span class="nf">isDoorValid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Selector.isDoorValid">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.isDoorValid">[docs]</a>
+    <span class="k">def</span> <span class="nf">isDoorValid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; checks if Door valid</span>
 
 <span class="sd">        :returns: valid Door device flag</span>
@@ -422,7 +454,10 @@
                 <span class="n">door</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">door</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.resetPreselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.resetPreselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">resetPreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.resetPreselectedComponents">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.resetPreselectedComponents">[docs]</a>
+    <span class="k">def</span> <span class="nf">resetPreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; resets preselected components to set of given components</span>
 
 <span class="sd">        :param components: new selection preselected components</span>
@@ -430,7 +465,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">resetPreselectedComponents</span><span class="p">(</span><span class="n">components</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.preselect"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.preselect">[docs]</a>    <span class="k">def</span> <span class="nf">preselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.preselect">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.preselect">[docs]</a>
+    <span class="k">def</span> <span class="nf">preselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates active state of preselected components</span>
 
 <span class="sd">        :brief: It provides new group of preselected components</span>
@@ -452,7 +490,10 @@
         <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Selector.getPools"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getPools">[docs]</a>    <span class="k">def</span> <span class="nf">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.getPools">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getPools">[docs]</a>
+    <span class="k">def</span> <span class="nf">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides pool proxies</span>
 
 <span class="sd">        :returns: list of pool proxies</span>
@@ -460,7 +501,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Selector.getMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getMacroServer">[docs]</a>    <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.getMacroServer">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getMacroServer">[docs]</a>
+    <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides MacroServer name</span>
 
 <span class="sd">        :returns: MacroServer name</span>
@@ -468,7 +512,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Selector.poolElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.poolElementNames">[docs]</a>    <span class="k">def</span> <span class="nf">poolElementNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listattr</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.poolElementNames">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.poolElementNames">[docs]</a>
+    <span class="k">def</span> <span class="nf">poolElementNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listattr</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides names from the given pool listattr</span>
 
 <span class="sd">        :param listattr: pool attribute with list</span>
@@ -478,7 +525,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getPools</span><span class="p">(),</span> <span class="n">listattr</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.setConfigInstance"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.setConfigInstance">[docs]</a>    <span class="k">def</span> <span class="nf">setConfigInstance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.setConfigInstance">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.setConfigInstance">[docs]</a>
+    <span class="k">def</span> <span class="nf">setConfigInstance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets config instances</span>
 
 <span class="sd">        :returns: set config instance</span>
@@ -524,7 +574,10 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;ConfigDevice&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">configDevice</span></div>
 
-<div class="viewcode-block" id="Selector.configCommand"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand">[docs]</a>    <span class="k">def</span> <span class="nf">configCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.configCommand">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand">[docs]</a>
+    <span class="k">def</span> <span class="nf">configCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; executes command on configuration server</span>
 
 <span class="sd">        :param command: command name</span>
@@ -537,7 +590,10 @@
         <span class="n">configdevice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">configdevice</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.importEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.importEnv">[docs]</a>    <span class="k">def</span> <span class="nf">importEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.importEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.importEnv">[docs]</a>
+    <span class="k">def</span> <span class="nf">importEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; imports Selector Environment Data</span>
 
 <span class="sd">        :param names: names of required variables</span>
@@ -555,7 +611,10 @@
         <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.exportEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.exportEnv">[docs]</a>    <span class="k">def</span> <span class="nf">exportEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmddata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.exportEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.exportEnv">[docs]</a>
+    <span class="k">def</span> <span class="nf">exportEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmddata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; exports Selector Environment Data</span>
 
 <span class="sd">        :param data: dictionary with input data</span>
@@ -567,7 +626,10 @@
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">setSelectorEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">,</span> <span class="n">cmddata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.getScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">getScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.getScanEnvVariables">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getScanEnvVariables">[docs]</a>
+    <span class="k">def</span> <span class="nf">getScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; gets Scan Environment Data</span>
 
 <span class="sd">        :returns: JSON String with important variables</span>
@@ -575,7 +637,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Selector.setScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.setScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">setScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdata</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.setScanEnvVariables">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.setScanEnvVariables">[docs]</a>
+    <span class="k">def</span> <span class="nf">setScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdata</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets Scan Environment Data</span>
 
 <span class="sd">        :param jdata: JSON String with important variables</span>
@@ -583,7 +648,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">setScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">],</span> <span class="n">jdata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Selector.storeSelection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.storeSelection">[docs]</a>    <span class="k">def</span> <span class="nf">storeSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.storeSelection">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.storeSelection">[docs]</a>
+    <span class="k">def</span> <span class="nf">storeSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; saves configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
@@ -591,7 +659,10 @@
         <span class="n">inst</span><span class="o">.</span><span class="n">selection</span> <span class="o">=</span> <span class="n">conf</span>
         <span class="n">inst</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Selector.fetchSelection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.fetchSelection">[docs]</a>    <span class="k">def</span> <span class="nf">fetchSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Selector.fetchSelection">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.fetchSelection">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetchSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; fetch configuration</span>
 
 <span class="sd">        :returns: if configuration was fetched</span>
@@ -607,7 +678,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">confs</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
             <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;ConfigDevice&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnfdv</span>
             <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div></div>
+        <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
 </pre></div>
 
     </div>
@@ -624,7 +697,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>

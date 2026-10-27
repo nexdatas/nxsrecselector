@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; NXSRecSelector 4.11.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>nxsrecconfig.ProfileManager &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -36,8 +33,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../../index.html">
-          NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.11</b></span>
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -113,7 +110,23 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for nxsrecconfig.ProfileManager</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
@@ -165,7 +178,9 @@
                        <span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;end_reason&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="ProfileManager"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager">[docs]</a><span class="k">class</span> <span class="nc">ProfileManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager">[docs]</a>
+<span class="k">class</span> <span class="nc">ProfileManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  Manages Measurement Group and Profile from Selector&quot;&quot;&quot;</span>
 
@@ -267,7 +282,9 @@
             <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;TriggerGateList&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="ProfileManager.availableMntGrps"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps">[docs]</a>    <span class="k">def</span> <span class="nf">availableMntGrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager.availableMntGrps">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps">[docs]</a>
+    <span class="k">def</span> <span class="nf">availableMntGrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; available mntgrps</span>
 
 <span class="sd">        :returns: list of available measurement groups</span>
@@ -291,7 +308,10 @@
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">mntgrps</span></div>
 
-<div class="viewcode-block" id="ProfileManager.getPoolMotors"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.getPoolMotors">[docs]</a>    <span class="k">def</span> <span class="nf">getPoolMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.getPoolMotors">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.getPoolMotors">[docs]</a>
+    <span class="k">def</span> <span class="nf">getPoolMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; available mntgrps</span>
 
 <span class="sd">        :returns: list of available measurement groups</span>
@@ -308,7 +328,10 @@
         <span class="n">motors</span> <span class="o">=</span> <span class="n">motors</span> <span class="k">if</span> <span class="n">motors</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="n">motors</span></div>
 
-<div class="viewcode-block" id="ProfileManager.components"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.components">[docs]</a>    <span class="k">def</span> <span class="nf">components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.components">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.components">[docs]</a>
+    <span class="k">def</span> <span class="nf">components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides selected components</span>
 
 <span class="sd">        :returns: list of available selected components</span>
@@ -326,7 +349,10 @@
                     <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="ProfileManager.preselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">preselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.preselectedComponents">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedComponents">[docs]</a>
+    <span class="k">def</span> <span class="nf">preselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides preselected components</span>
 
 <span class="sd">        :returns: list of available preselected components</span>
@@ -338,7 +364,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="ProfileManager.preselectedDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">preselectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.preselectedDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">preselectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides preselected datasources</span>
 
 <span class="sd">        :returns: list of available preselected components</span>
@@ -350,7 +379,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="ProfileManager.cpdescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.cpdescription">[docs]</a>    <span class="k">def</span> <span class="nf">cpdescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.cpdescription">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.cpdescription">[docs]</a>
+    <span class="k">def</span> <span class="nf">cpdescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides description of components</span>
 
 <span class="sd">        :param full: if True describes all available ones are taken</span>
@@ -378,13 +410,17 @@
             <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="ProfileManager.componentDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.componentDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.componentDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.componentDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides a list of Component DataSources</span>
 
 <span class="sd">        :returns: list of component datasources</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpdescription</span><span class="p">())</span></div>
+
 
     <span class="k">def</span> <span class="nf">__componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides a list of Component DataSources</span>
@@ -427,7 +463,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="ProfileManager.dataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.dataSources">[docs]</a>    <span class="k">def</span> <span class="nf">dataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager.dataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.dataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">dataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides selected datasources</span>
 
 <span class="sd">        :returns: list of available selected datasources</span>
@@ -435,7 +473,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ProfileManager.deleteProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.deleteProfile">[docs]</a>    <span class="k">def</span> <span class="nf">deleteProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.deleteProfile">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.deleteProfile">[docs]</a>
+    <span class="k">def</span> <span class="nf">deleteProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deletes mntgrp</span>
 
 <span class="sd">        :param name: mntgrp name</span>
@@ -453,7 +494,10 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">inst</span><span class="o">.</span><span class="n">AvailableSelections</span><span class="p">():</span>
             <span class="n">inst</span><span class="o">.</span><span class="n">deleteSelection</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ProfileManager.updateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.updateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">updateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resetDoor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.updateProfile">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.updateProfile">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resetDoor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets active measurement group from components and</span>
 <span class="sd">        import setting from active measurement</span>
 
@@ -511,7 +555,10 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">conf</span></div>
 
-<div class="viewcode-block" id="ProfileManager.switchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.switchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">switchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toActive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.switchProfile">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.switchProfile">[docs]</a>
+    <span class="k">def</span> <span class="nf">switchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toActive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; switchProfile to active measurement</span>
 
 <span class="sd">        :param toActive: if False update the current profile</span>
@@ -528,7 +575,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">jconf</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ProfileManager.mntGrpConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">mntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.mntGrpConfiguration">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration">[docs]</a>
+    <span class="k">def</span> <span class="nf">mntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration of mntgrp</span>
 
 <span class="sd">        :returns: string with mntgrp configuration</span>
@@ -544,7 +594,10 @@
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ProfileManager.isMntGrpUpdated"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.isMntGrpUpdated">[docs]</a>    <span class="k">def</span> <span class="nf">isMntGrpUpdated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.isMntGrpUpdated">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.isMntGrpUpdated">[docs]</a>
+    <span class="k">def</span> <span class="nf">isMntGrpUpdated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; check if active measurement group was changed</span>
 
 <span class="sd">        :returns: True if it is different to the current setting</span>
@@ -586,7 +639,10 @@
         <span class="n">lsconf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">llconf</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">compareDict</span><span class="p">(</span><span class="n">mgconf</span><span class="p">,</span> <span class="n">lsconf</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ProfileManager.importMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.importMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">importMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProfileManager.importMntGrp">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.importMntGrp">[docs]</a>
+    <span class="k">def</span> <span class="nf">importMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; import setting from active measurement</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
@@ -594,6 +650,7 @@
         <span class="n">jconf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">jconf</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span></div>
+
 
     <span class="k">def</span> <span class="nf">__addPreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; add preselected components to set of given components</span>
@@ -663,7 +720,9 @@
             <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">changed</span>
 
-<div class="viewcode-block" id="ProfileManager.fetchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">fetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager.fetchProfile">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; fetches the profile configuration</span>
 
 <span class="sd">        :param sync: sync snapshot or motor positions</span>
@@ -692,6 +751,7 @@
             <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkdescription</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span></div>
+
 
     <span class="k">def</span> <span class="nf">__createMntGrpConf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">,</span>
                            <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
@@ -1531,7 +1591,9 @@
                                        <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
                     <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
 
-<div class="viewcode-block" id="ProfileManager.createDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.createDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">createDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ProfileManager.createDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.createDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">createDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;adds known and creates unknown datasources</span>
 
 <span class="sd">        :param tangods: tango datasources list</span>
@@ -1555,6 +1617,7 @@
         <span class="n">jds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addKnownSources</span><span class="p">(</span><span class="n">extangods</span><span class="p">,</span> <span class="n">sds</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__createUnknownSources</span><span class="p">(</span><span class="n">extangods</span><span class="p">,</span> <span class="n">exsource</span><span class="p">,</span> <span class="n">ads</span><span class="p">,</span> <span class="n">jds</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">jds</span></div>
+
 
     <span class="k">def</span> <span class="nf">__addDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span>
                     <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1878,6 +1941,7 @@
             <span class="n">ctrlChannels</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">dct</span>
 
         <span class="k">return</span> <span class="n">index</span></div>
+
 </pre></div>
 
     </div>
@@ -1894,7 +1958,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>

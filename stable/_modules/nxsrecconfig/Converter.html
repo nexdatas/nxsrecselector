@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Converter &#8212; NXSRecSelector 4.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>nxsrecconfig.Converter &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -36,8 +33,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../../index.html">
-          NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.0</b></span>
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -113,7 +110,23 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for nxsrecconfig.Converter</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
@@ -140,7 +153,9 @@
 <span class="kn">import</span> <span class="nn">json</span>
 
 
-<div class="viewcode-block" id="ConverterXtoY"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY">[docs]</a><span class="k">class</span> <span class="nc">ConverterXtoY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ConverterXtoY">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY">[docs]</a>
+<span class="k">class</span> <span class="nc">ConverterXtoY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; virtual selection version converter</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -151,7 +166,9 @@
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names to convert</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="ConverterXtoY.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+<div class="viewcode-block" id="ConverterXtoY.convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY.convert">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts selection to the current selector version</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -159,14 +176,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">old</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="n">selection</span><span class="p">[</span><span class="n">new</span><span class="p">]</span> <span class="o">=</span> <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">old</span><span class="p">)</span></div></div>
+                <span class="n">selection</span><span class="p">[</span><span class="n">new</span><span class="p">]</span> <span class="o">=</span> <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">old</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Converter3to4"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to4">[docs]</a><span class="k">class</span> <span class="nc">Converter3to4</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter3to4">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to4">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter3to4</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="Converter2to3"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3">[docs]</a><span class="k">class</span> <span class="nc">Converter2to3</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter2to3">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter2to3</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Selection converter from version 2 to 3</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -182,7 +206,9 @@
             <span class="s2">&quot;InitDataSources&quot;</span><span class="p">:</span> <span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-<div class="viewcode-block" id="Converter2to3.seltoint"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.seltoint">[docs]</a>    <span class="k">def</span> <span class="nf">seltoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
+<div class="viewcode-block" id="Converter2to3.seltoint">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.seltoint">[docs]</a>
+    <span class="k">def</span> <span class="nf">seltoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converters list/dict of elements to dictionary with logical values</span>
 
 <span class="sd">        :param jselelem: json list or dict selection element</span>
@@ -197,7 +223,10 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sel</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Converter2to3.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter2to3.convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.convert">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts selection from version 2 to 3</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -212,14 +241,21 @@
             <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seltoint</span><span class="p">(</span>
                 <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="s1">&#39;MntGrpConfiguration&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">selection</span><span class="p">[</span><span class="s1">&#39;MntGrpConfiguration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div></div>
+            <span class="n">selection</span><span class="p">[</span><span class="s1">&#39;MntGrpConfiguration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Converter4to3"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter4to3">[docs]</a><span class="k">class</span> <span class="nc">Converter4to3</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter4to3">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter4to3">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter4to3</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="Converter3to2"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2">[docs]</a><span class="k">class</span> <span class="nc">Converter3to2</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter3to2">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter3to2</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Selection converter from version 3 to 2</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -235,7 +271,9 @@
             <span class="s2">&quot;DataSourcePreselection&quot;</span><span class="p">:</span> <span class="s2">&quot;InitDataSources&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-<div class="viewcode-block" id="Converter3to2.seltobool"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltobool">[docs]</a>    <span class="k">def</span> <span class="nf">seltobool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
+<div class="viewcode-block" id="Converter3to2.seltobool">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltobool">[docs]</a>
+    <span class="k">def</span> <span class="nf">seltobool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converters dictioanry with None/True/False values</span>
 <span class="sd">            to dictionary with True/False values</span>
 
@@ -248,7 +286,10 @@
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
             <span class="nb">dict</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">sel</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="Converter3to2.seltolist"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltolist">[docs]</a>    <span class="k">def</span> <span class="nf">seltolist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter3to2.seltolist">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltolist">[docs]</a>
+    <span class="k">def</span> <span class="nf">seltolist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converters dictioanry with None/True/False values</span>
 <span class="sd">            to list of elementes with walue True</span>
 
@@ -260,7 +301,10 @@
         <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">sel</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">vl</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Converter3to2.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter3to2.convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.convert">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts selection from version 3 to 2</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -274,10 +318,14 @@
             <span class="n">selection</span><span class="p">[</span><span class="s1">&#39;InitDataSources&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seltolist</span><span class="p">(</span>
                 <span class="n">selection</span><span class="p">[</span><span class="s1">&#39;InitDataSources&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="s1">&#39;MntGrpConfiguration&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;MntGrpConfiguration&#39;</span><span class="p">)</span></div></div>
+            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;MntGrpConfiguration&#39;</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Converter1to2"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2">[docs]</a><span class="k">class</span> <span class="nc">Converter1to2</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter1to2">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter1to2</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Selection converter from version 1 to 2</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -309,7 +357,9 @@
             <span class="s2">&quot;LabelShapes&quot;</span><span class="p">:</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-<div class="viewcode-block" id="Converter1to2.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+<div class="viewcode-block" id="Converter1to2.convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.convert">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts selection from version 1 to 2</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -320,10 +370,14 @@
         <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">pn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="n">props</span><span class="p">[</span><span class="n">pn</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
-        <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="p">)</span></div></div>
+        <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Converter2to1"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1">[docs]</a><span class="k">class</span> <span class="nc">Converter2to1</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter2to1">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter2to1</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Selection converter from version 2 to 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -354,7 +408,9 @@
             <span class="s2">&quot;DefaultDynamicPath&quot;</span><span class="p">:</span> <span class="s2">&quot;DynamicPath&quot;</span>
         <span class="p">}</span>
 
-<div class="viewcode-block" id="Converter2to1.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+<div class="viewcode-block" id="Converter2to1.convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.convert">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts selection from version 2 to 1</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -368,10 +424,14 @@
                     <span class="n">selection</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">pn</span><span class="p">))</span>
             <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;ChannelProperties&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;Version&quot;</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
-            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Version&quot;</span><span class="p">)</span></div></div>
+            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Version&quot;</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Converter"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter">[docs]</a><span class="k">class</span> <span class="nc">Converter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter">[docs]</a>
+<span class="k">class</span> <span class="nc">Converter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; selection version converter &quot;&quot;&quot;</span>
 
@@ -395,7 +455,9 @@
         <span class="c1">#: (:obj:`list` &lt;:class:`ConverterXtoY`&gt;) converter down sequence</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">down</span> <span class="o">=</span> <span class="p">[</span><span class="n">Converter2to1</span><span class="p">(),</span> <span class="n">Converter3to2</span><span class="p">(),</span> <span class="n">Converter4to3</span><span class="p">()]</span>
 
-<div class="viewcode-block" id="Converter.allkeys"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.allkeys">[docs]</a>    <span class="k">def</span> <span class="nf">allkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+<div class="viewcode-block" id="Converter.allkeys">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.allkeys">[docs]</a>
+    <span class="k">def</span> <span class="nf">allkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -411,7 +473,10 @@
         <span class="n">ak</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">lkeys</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ak</span></div>
 
-<div class="viewcode-block" id="Converter.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Converter.convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.convert">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts selection from any version to any other</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
@@ -430,7 +495,10 @@
         <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;Version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minorversion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">patchversion</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Converter.version"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.version">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Converter.version">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.version">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; fetches selection version and converts it</span>
 <span class="sd">            into (major, minor, patch)</span>
@@ -449,7 +517,9 @@
             <span class="n">major</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">minor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">patch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">patch</span></div></div>
+        <span class="k">return</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">patch</span></div>
+</div>
+
 </pre></div>
 
     </div>
@@ -466,7 +536,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>

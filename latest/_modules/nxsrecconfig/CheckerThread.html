@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.CheckerThread &#8212; NXSRecSelector 4.10.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>nxsrecconfig.CheckerThread &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -36,8 +33,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../../index.html">
-          NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.10</b></span>
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -113,7 +110,23 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for nxsrecconfig.CheckerThread</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
@@ -158,7 +171,9 @@
                      <span class="s2">&quot;Voltage&quot;</span><span class="p">,</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span> <span class="s2">&quot;SampleTime&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="TangoDSItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem">[docs]</a><span class="k">class</span> <span class="nc">TangoDSItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="TangoDSItem">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem">[docs]</a>
+<span class="k">class</span> <span class="nc">TangoDSItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Tango DataSource item</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -182,7 +197,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">attr</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="CheckerItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem">[docs]</a><span class="k">class</span> <span class="nc">CheckerItem</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CheckerItem">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem">[docs]</a>
+<span class="k">class</span> <span class="nc">CheckerItem</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Checker list Item</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -204,7 +222,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="CheckerThread"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread">[docs]</a><span class="k">class</span> <span class="nc">CheckerThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CheckerThread">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread">[docs]</a>
+<span class="k">class</span> <span class="nc">CheckerThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Single CheckerThread</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -231,7 +252,9 @@
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources warning states</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="CheckerThread.run"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CheckerThread.run">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; runner</span>
 
 <span class="sd">        :brief: It runs the defined thread</span>
@@ -244,6 +267,7 @@
 
             <span class="k">except</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
                 <span class="n">full</span> <span class="o">=</span> <span class="kc">False</span></div>
+
 
     <span class="k">def</span> <span class="nf">__check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkeritem</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; checks oen device list item which usually corresponds</span>
@@ -306,22 +330,32 @@
                 <span class="k">break</span></div>
 
 
-<div class="viewcode-block" id="AlarmStateError"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.AlarmStateError">[docs]</a><span class="k">class</span> <span class="nc">AlarmStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AlarmStateError">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.AlarmStateError">[docs]</a>
+<span class="k">class</span> <span class="nc">AlarmStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Alarm State Exception class</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="FaultStateError"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.FaultStateError">[docs]</a><span class="k">class</span> <span class="nc">FaultStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FaultStateError">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.FaultStateError">[docs]</a>
+<span class="k">class</span> <span class="nc">FaultStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Fault State Exception class</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="OffStateError"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.OffStateError">[docs]</a><span class="k">class</span> <span class="nc">OffStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OffStateError">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.OffStateError">[docs]</a>
+<span class="k">class</span> <span class="nc">OffStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Off State Exception class</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
 </pre></div>
 
     </div>
@@ -338,7 +372,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>
