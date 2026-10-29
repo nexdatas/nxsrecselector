@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title> NXSRecSelector Tango Class Properties </title>
+</head>
+<body text="Black" bgcolor="White" link="Blue" vlink="Purple" alink="Red">
+<br><br><br>
+<font size="+1"><u><b> NXSRecSelector  Properties : </b></u></font>
+<br><br><br>
+<font size="+1"><u><b> There is no class properties </b></u></font>
+<br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=4> <font size=+1> <center><b> Device Properties </b></font></center></td>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+		<td> <center><b> Name </b></center> </td>
+		<td> <center><b> Description </b></center> </td>
+		<td> <center><b> Type </b></center> </td>
+		<td> <center><b> Default Value </b></center> </td>
+	</tr>
+	<tr>
+		<td> NumberOfThreads </td>
+		<td> maximal number of threads </td>
+		<td> int </td>
+		<td> 20 <br> </td>
+	</tr>
+	<tr>
+		<td> PoolBlacklist </td>
+		<td> blacklist of pools </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> TimerFilters </td>
+		<td> list of timer filters </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> MutedChannelFilters </td>
+		<td> list of muted channel filters </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> AdminDataNames </td>
+		<td> list of administrator data names </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> DefaultPreselectedComponents </td>
+		<td> list of default preselected components </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> DefaultNeXusPath </td>
+		<td> default NeXus path </td>
+		<td> String </td>
+		<td> /scan$var.serialno:NXentry/instrument:NXinstrument/collection <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultTimeZone </td>
+		<td> default time zone </td>
+		<td> String </td>
+		<td> Europe/Berlin <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultMntGrp </td>
+		<td> defaultmeasurement group name </td>
+		<td> String </td>
+		<td> nxsmntgrp <br> </td>
+	</tr>
+	<tr>
+		<td> SyncSnapshot </td>
+		<td> preselection merges the current ScanSnapshot </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> GlobalUserData </td>
+		<td> use global user data flag </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultCanFailDataSources </td>
+		<td> list of default datasources in the CanFail mode </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> MasterTimerFirst </td>
+		<td> the master timer channel of MG with the index: 0 </td>
+		<td> boolean </td>
+		<td> True <br> </td>
+	</tr>
+	<tr>
+		<td> MutedPreScanAttrFilters </td>
+		<td> list of muted attribute channel filters for PreScanSnapshot </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> WritePoolMotorPositions </td>
+		<td> add dynamic components for pool motor positions without any component </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> WriteAllMotorPositions </td>
+		<td> add dynamic components for all pool motor positions </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> TangoSourceErrorStates </td>
+		<td> list of tango error states for tango datasources </td>
+		<td> String[] </td>
+		<td> OFF, INIT, INSERT, CLOSE, UNKNOWN, FAULT </td>
+	</tr>
+	<tr>
+		<td> TangoSourceWarningStates </td>
+		<td> list of tango warning states for tango datasources </td>
+		<td> String[] </td>
+		<td> ALARM <br>
+			DISABLE <br> </td>
+	</tr>
+	<tr>
+		<td> ClientRecordKeys </td>
+		<td> list of record keys for CLIENT datasources </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> MasterTimer </td>
+		<td> set the master timer/monitor channel for older MG </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultNeXusType </td>
+		<td> default dynamic component NeXus type </td>
+		<td> String </td>
+		<td> NX_CHAR <br> </td>
+	</tr>
+	<tr>
+		<td> ResetInvalidDoor </td>
+		<td> reset Door when it is invalid </td>
+		<td> boolean </td>
+		<td> True <br> </td>
+	</tr>
+	<tr>
+		<td> MergeProfilesToMntGrps </td>
+		<td> merge profiles to available measurement groups </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultUserDataPath </td>
+		<td> default NeXus User data path </td>
+		<td> String </td>
+		<td> /scan$var.serialno:NXentry/user_data:NXparameters <br> </td>
+	</tr>
+	<tr>
+		<td> CacheConfiguration </td>
+		<td> cache writer configuration in configuration server as <Br>
+			__configuration_<profile_name>__ components </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> SyncMntGrp </td>
+		<td> selection merges the current Measurement Group </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> MutedMotorFilers </td>
+		<td> list of muted motor filters </td>
+		<td> String[] </td>
+		<td> none </td>
+	</tr>
+	<tr>
+		<td> CheckDescription </td>
+		<td> apply checks for preselected components </td>
+		<td> boolean </td>
+		<td> True <br> </td>
+	</tr>
+</table>
+</body>
+</html>
