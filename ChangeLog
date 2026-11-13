@@ -1,3 +1,7 @@
+2026-XX-YY Jan Kotanski <jankotan@gmail.com>
+	* update URL for the HDRI repository (#219)
+	* tagged as v4.13.X
+
 2026-10-27 Jan Kotanski <jankotan@gmail.com>
 	* add pixi tests without HDRI repo (#220)
 	* tagged as v4.13.1
