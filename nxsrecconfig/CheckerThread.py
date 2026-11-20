@@ -173,12 +173,14 @@ class CheckerThread(threading.Thread):
                 if str(state) in self.tangoSourceWarningStates:
                     raise AlarmStateError("%s STATE" % state)
             except AlarmStateError as e:
+                print("CH ALARM", ds.name, str(e))
                 checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
                     checkeritem.errords = "%s [%s]" % (ds.name, dvat)
                 else:
                     checkeritem.errords = ds.name
             except Exception as e:
+                print("CH Other",  ds.name, str(e))
                 checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
                     checkeritem.errords = "%s [%s]" % (ds.name, dvat)
