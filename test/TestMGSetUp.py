@@ -85,7 +85,7 @@ class TestMeasurementGroupSetUp(object):
             (path, sys.executable, self.instance),
             stdout=None,
             stderr=None, shell=True)
-        sys.stdout.write("waiting for simple server")
+        sys.stdout.write("waiting for MG server")
 
         found = False
         cnt = 0

@@ -97,7 +97,7 @@ class TestMacroServerSetUp(object):
             "cd %s; %s  ./TestMacroServer.py %s &" %
             (path, sys.executable, self.instance),
             stdout=None, stderr=None, shell=True)
-        sys.stdout.write("waiting for simple server")
+        sys.stdout.write("waiting for macro server")
 
         found = False
         cnt = 0
