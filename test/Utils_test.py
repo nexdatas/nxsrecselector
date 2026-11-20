@@ -2149,7 +2149,7 @@ class UtilsTest(unittest.TestCase):
                'ScalarDouble', 'ScalarString', 'ScalarULong64',
                'SpectrumBoolean', 'SpectrumUChar', 'SpectrumShort',
                'SpectrumUShort', 'SpectrumLong', 'SpectrumULong',
-            'SpectrumLong64', 'SpectrumULong64', 'SpectrumFloat',
+               'SpectrumLong64', 'SpectrumULong64', 'SpectrumFloat',
                'SpectrumDouble', 'SpectrumString', 'ImageBoolean',
                'ImageUChar', 'ImageShort', 'ImageUShort', 'ImageLong',
                'ImageULong', 'ImageLong64', 'ImageULong64', 'ImageFloat',

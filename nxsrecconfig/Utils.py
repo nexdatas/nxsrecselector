@@ -958,6 +958,7 @@ class PoolUtils(object):
                     print("GS  EMPTY", sds[-1])
                     raise Exception("Empty proxy")
                 source = sds[-1]
+                print("GS  END", sds)
         except tango.DevFailed as e:
             print("ERROR", str(e))
             pass
