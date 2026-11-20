@@ -940,4 +940,7 @@ class PoolUtils(object):
         except tango.DevFailed as e:
             print("ERROR", str(e))
             pass
+        except Exception as e:
+            print("OTHER ERROR", str(e))
+            pass
         return source
