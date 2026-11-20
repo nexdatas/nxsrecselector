@@ -917,7 +917,7 @@ class PoolUtils(object):
     @classmethod
     def getSource(cls, name):
         """ provides datasource from pool device
-
+        
         :param name: pool device name
         :type name:  :obj:`str`
         :returns: source of pool device
@@ -925,14 +925,19 @@ class PoolUtils(object):
         """
         source = None
         try:
+            print("GS NAME", name)
             dp = tango.DeviceProxy(Utils.tostr(name))
             if hasattr(dp, 'DataSource'):
+                print("GS HAS DS", name)
                 ds = dp.DataSource
                 sds = ds.split("://")
+                print("GS  SDS", sds)
                 ap = tango.AttributeProxy(sds[-1])
                 if ap is None:
+                    print("GS  EMPTY", sds[-1])
                     raise Exception("Empty proxy")
                 source = sds[-1]
-        except tango.DevFailed:
+        except tango.DevFailed as e:
+            print("ERROR", str(e))
             pass
         return source
