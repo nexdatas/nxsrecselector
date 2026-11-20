@@ -192,6 +192,7 @@ class CheckerThread(threading.Thread):
                     checkeritem.errords = ds.name
             except Exception as e:
                 print("CH Other",  ds.name, str(e))
+                print(traceback.format_exc())
                 checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
                     checkeritem.errords = "%s [%s]" % (ds.name, dvat)
