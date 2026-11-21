@@ -21,6 +21,7 @@
 
 import threading
 import sys
+import traceback
 
 try:
     import tango
@@ -137,21 +138,21 @@ class CheckerThread(threading.Thread):
         # print("E", self.tangoSourceErrorStates)
         # print("W", self.tangoSourceWarningStates)
         for ds in checkeritem:
-            # print("CHECK1", ds.name)
+            print("CHECK1", ds.name)
             try:
                 if ds.attr:
                     dvat = "%s/%s" % (ds.device or ds.name, ds.attr)
                 else:
                     dvat = "%s" % (ds.device or ds.name)
-                # print("CHECK2", ds.name)
+                print("CHECK2", ds.name)
                 dp = tango.DeviceProxy(ds.device or ds.name)
                 # read real value (not polled)
-                # print("CHECK3", ds.name)
+                print("CHECK3", ds.name)
                 dp.set_source(tango.DevSource.DEV)
                 # wait when DeviceProxy is ready
                 TangoUtils.wait(dp, state=None, counter=2)
                 dp.set_timeout_millis(10000)
-                # print("CHECK4", ds.name)
+                print("CHECK4", ds.name)
                 state = dp.state()
                 # print("CHECK5", ds.name)
                 if str(state) in self.tangoSourceErrorStates:
@@ -159,32 +160,32 @@ class CheckerThread(threading.Thread):
                 # if str(state) in self.tangoSourceOffStates:
                 #     raise OffStateError("%s STATE" % state)
                 dp.ping()
-                # print("CHECK6", ds.name)
+                print("CHECK6", ds.name)
                 if not ds.attr:
-                    # print("CHECK7a", ds.name)
+                    print("CHECK7a", ds.name)
                     for gattr in ATTRIBUTESTOCHECK:
                         if hasattr(dp, gattr):
                             at = getattr(dp, gattr)
                             if at is None:
                                 raise Exception("Empty Attribute")
                 elif ds.attr.startswith("@"):
-                    # print("CHECK7b", ds.name)
+                    print("CHECK7b", ds.name)
                     pass
                 elif ds.attr.endswith("()"):
-                    # print("CHECK7c", ds.name)
+                    print("CHECK7c", ds.name)
                     at = getattr(dp, ds.attr[:-2])
                     if at is None:
                         raise Exception("Empty Attribute")
                 else:
-                    # print("CHECK7d", ds.name)
+                    print("CHECK7d", ds.name)
                     v = dp.read_attributes([ds.attr])
                     if v[0].has_failed or v[0].value is None:
                         raise Exception("Empty Attribute")
-                # print("CHECK8", ds.name)
+                print("CHECK8", ds.name)
                 if str(state) in self.tangoSourceWarningStates:
                     raise AlarmStateError("%s STATE" % state)
             except AlarmStateError as e:
-                # print("CH ALARM", ds.name, str(e))
+                print("CH ALARM", ds.name, str(e))
                 checkeritem.message = Utils.tostr(e)
                 if ds.name != dvat:
                     checkeritem.errords = "%s [%s]" % (ds.name, dvat)
