@@ -8,7 +8,7 @@ version = "1.0.1"
 [tasks]
 
 [dependencies]
-python = "==3.13"
+python = "==3.14"
 # conda-smithy = ">=3.56.3,<4"
 # rattler-build = ">=0.60.0,<0.61"
 # ipython = ">=9.11.0,<10"
