@@ -137,13 +137,13 @@ class CheckerThread(threading.Thread):
         # print("E", self.tangoSourceErrorStates)
         # print("W", self.tangoSourceWarningStates)
         for ds in checkeritem:
-            print("CHECK1", ds.name)
+            # print("CHECK1", ds.name)
             try:
                 if ds.attr:
                     dvat = "%s/%s" % (ds.device or ds.name, ds.attr)
                 else:
                     dvat = "%s" % (ds.device or ds.name)
-                print("CHECK2", ds.name)
+                # print("CHECK2", ds.name)
                 dp = tango.DeviceProxy(ds.device or ds.name)
                 # read real value (not polled)
                 # print("CHECK3", ds.name)
@@ -180,7 +180,7 @@ class CheckerThread(threading.Thread):
                     v = dp.read_attributes([ds.attr])
                     if v[0].has_failed or v[0].value is None:
                         raise Exception("Empty Attribute")
-                print("CHECK8", ds.name)
+                # print("CHECK8", ds.name)
                 if str(state) in self.tangoSourceWarningStates:
                     raise AlarmStateError("%s STATE" % state)
             except AlarmStateError as e:
