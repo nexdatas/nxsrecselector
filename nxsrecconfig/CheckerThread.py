@@ -21,6 +21,7 @@
 
 import threading
 import sys
+import traceback
 
 try:
     import tango
