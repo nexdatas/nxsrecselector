@@ -3874,7 +3874,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
             result = subprocess.run("ps -ef | grep '[T]estServer'",shell=True, capture_output=True, text=True)
-            print("TESTSERVER ALIVE:\n", result.stdout)                        
+            print("TESTSERVER ALIVE:\n", result.stdout)
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": False,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,

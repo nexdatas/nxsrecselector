@@ -30,6 +30,7 @@ import json
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
 import binascii
+import subprocess
 
 try:
     import tango
