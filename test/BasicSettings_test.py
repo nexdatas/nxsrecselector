@@ -3822,6 +3822,8 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
+            result = subprocess.run("ps -ef | grep '[T]estServer'",shell=True, capture_output=True, text=True)
+            print("TESTSERVER STARTE:\n", result.stdout)
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
@@ -7659,6 +7661,8 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
+            result = subprocess.run("ps -ef | grep '[T]estServer'",shell=True, capture_output=True, text=True)
+            print("TESTSERVER STARTE:\n", result.stdout)
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
