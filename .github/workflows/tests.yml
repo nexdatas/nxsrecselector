@@ -8,25 +8,25 @@ on:
 
 jobs:
 
-  # flake8_tests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - name: Install flake8
-  #       run: pip install flake8
-  #     - name: Run flake8
-  #       run: flake8 .
+  flake8_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        run: flake8 .
 
   dpkg_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu26.10py]
+        # os: [ubuntu26.10py]
         # os: [debian13, debian12, ubuntu26.04, ubuntu24.04]
-        # os: [debian13, debian12, ubuntu26.10py, ubuntu26.04, ubuntu24.04]
+        os: [debian13, debian12, ubuntu26.10py, ubuntu26.04, ubuntu24.04]
         test: [extrasettings, extraserver, basicserver, basicsettings, basic]
     steps:
       - uses: actions/checkout@v4
@@ -106,8 +106,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu26.04]
-        # os: [debian13, ubuntu26.04]
+        # os: [ubuntu26.04]
+        os: [debian13, ubuntu26.04]
         test: [extrasettings, extraserver, basicserver, basicsettings, basic]
     steps:
       - uses: actions/checkout@v4

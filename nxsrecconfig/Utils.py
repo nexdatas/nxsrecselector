@@ -938,7 +938,7 @@ class PoolUtils(object):
     @classmethod
     def getSource(cls, name):
         """ provides datasource from pool device
-        
+
         :param name: pool device name
         :type name:  :obj:`str`
         :returns: source of pool device

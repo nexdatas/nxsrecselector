@@ -2164,7 +2164,9 @@ class UtilsTest(unittest.TestCase):
                                  "ttestp09/testts/t1r228/%s" % ar)
             except Exception as e:
                 print(e)
-                result = subprocess.run("ps -ef | grep '[T]estServer'",shell=True, capture_output=True, text=True)
+                result = subprocess.run(
+                    "ps -ef | grep '[T]estServer'",
+                    shell=True, capture_output=True, text=True)
                 print("TESTSERVER ALIVE:\n", result.stdout)
 
         self._simps.dp.DataSource = "ttestp09/testts/t1r228/%s" % "sdfsdf"

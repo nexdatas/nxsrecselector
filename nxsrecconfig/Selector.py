@@ -322,8 +322,9 @@ class Selector(object):
         adsgroup = json.loads(self["DataSourcePreselection"])
         print("PS1", acpgroup)
         configdevice = self.setConfigInstance()
-        print("PS2", configdevice, self["Door"], configdevice, datasources,
-            acpgroup, adsgroup, self.descErrors)
+        print("PS2", configdevice, self["Door"],
+              configdevice, datasources,
+              acpgroup, adsgroup, self.descErrors)
         jacps, jadss = self.__msp.checkChannels(
             self["Door"], configdevice, datasources,
             acpgroup, adsgroup, self.descErrors)

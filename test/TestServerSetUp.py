@@ -290,7 +290,7 @@ class MultiTestServerSetUp(object):
         env = dict(os.environ, PYTHONFAULTHANDLER="1")
         self._psub = subprocess.Popen(
             "cd %s;  %s ./TestServer.py %s" % (path, sys.executable,
-                                                self.instance),
+                                               self.instance),
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
             env=env)
         sys.stdout.write("waiting for simple server")
