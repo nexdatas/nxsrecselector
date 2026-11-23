@@ -35,6 +35,11 @@ import sys
 import numpy
 import struct
 import pickle
+import faulthandler
+
+# dump a C-level traceback to stderr on a fatal signal (e.g. segfault),
+# so a crash of this device server is diagnosable instead of silent
+faulthandler.enable()
 
 try:
     import tango

@@ -104,10 +104,14 @@ class TestServerSetUp(object):
         if not path:
             path = '.'
 
+        # force the python fault handler on in the server subprocess so a
+        # fatal signal (e.g. segfault) prints a C-level traceback to stderr
+        env = dict(os.environ, PYTHONFAULTHANDLER="1")
         self._psub = subprocess.Popen(
             "cd %s; %s ./TestServer.py %s" %
             (path, sys.executable, self.instance),
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            env=env)
 
         sys.stdout.write("waiting for simple server")
 
@@ -137,6 +141,16 @@ class TestServerSetUp(object):
                   % out.decode('utf8', errors='replace'))
             print("TestServer stderr:\n%s"
                   % err.decode('utf8', errors='replace'))
+            self.dumpps()
+
+    # dumps the TestServer processes still running, for crash diagnostics
+    def dumpps(self):
+        with subprocess.Popen(
+                "ps -ef | grep 'TestServer.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True) as proc:
+            out = proc.stdout.read().decode('utf8', errors='replace')
+            print("TestServer ps:\n%s" % out)
 
     # test closer
     # \brief Common tear down of Tango Server
@@ -271,10 +285,14 @@ class MultiTestServerSetUp(object):
         if not path:
             path = '.'
 
+        # force the python fault handler on in the server subprocess so a
+        # fatal signal (e.g. segfault) prints a C-level traceback to stderr
+        env = dict(os.environ, PYTHONFAULTHANDLER="1")
         self._psub = subprocess.Popen(
             "cd %s;  %s ./TestServer.py %s" % (path, sys.executable,
                                                 self.instance),
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            env=env)
         sys.stdout.write("waiting for simple server")
 
         found = False
@@ -307,6 +325,16 @@ class MultiTestServerSetUp(object):
                   % out.decode('utf8', errors='replace'))
             print("TestServer stderr:\n%s"
                   % err.decode('utf8', errors='replace'))
+            self.dumpps()
+
+    # dumps the TestServer processes still running, for crash diagnostics
+    def dumpps(self):
+        with subprocess.Popen(
+                "ps -ef | grep 'TestServer.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True) as proc:
+            out = proc.stdout.read().decode('utf8', errors='replace')
+            print("TestServer ps:\n%s" % out)
 
     # test closer
     # \brief Common tear down of Tango Server
