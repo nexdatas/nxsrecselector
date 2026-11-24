@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Utils &#8212; nxsrecconfig 4.13.1 documentation</title>
+    <title>nxsrecconfig.Utils &#8212; nxsrecconfig 4.13.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=a4f8271a"></script>
+    <script src="../../_static/documentation_options.js?v=9300ad70"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -118,6 +118,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
       
@@ -461,6 +462,12 @@
                 <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">raise</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span>
             <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">cnfServer</span><span class="o">.</span><span class="n">set_source</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevSource</span><span class="o">.</span><span class="n">DEV</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cnfServer</span></div>
@@ -496,6 +503,12 @@
                 <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">raise</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span>
             <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">found</span></div>
 
@@ -518,6 +531,9 @@
                 <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
                 <span class="n">dps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">dps</span></div>
 
@@ -545,6 +561,9 @@
                 <span class="n">device</span> <span class="o">=</span> <span class="n">server</span>
                 <span class="k">break</span>
             <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">device</span></div>
 
@@ -608,6 +627,9 @@
             <span class="c1"># if ac and ac.data_format != tango.AttrDataFormat.SCALAR \</span>
             <span class="c1">#         and (da is None or not hasattr(da, &#39;dim_x&#39;)):</span>
             <span class="c1">#     raise</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">pass</span>
 
         <span class="k">if</span> <span class="n">vl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">shp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">vl</span><span class="p">))</span>
@@ -1174,6 +1196,9 @@
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Empty proxy&quot;</span><span class="p">)</span>
                 <span class="n">source</span> <span class="o">=</span> <span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">source</span></div>
 </div>
