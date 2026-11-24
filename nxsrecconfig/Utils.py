@@ -954,10 +954,9 @@ class PoolUtils(object):
                 if ap is None:
                     raise Exception("Empty proxy")
                 source = sds[-1]
-        except tango.DevFailed as e:
-            print("ERROR: ", str(e))
+        except tango.DevFailed:
             pass
         except Exception as e:
-            print("OTHER ERROR", str(e))
+            print("ERROR:", str(e))
             pass
         return source
