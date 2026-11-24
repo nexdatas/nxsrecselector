@@ -651,7 +651,7 @@ class Describer(object):
         except tango.DevFailed:
             dsource = []
         except Exception as e:
-            print("OTHER ERROR ", str(e))
+            print("ERROR:", str(e))
             dsource = []
         if len(dsource) > 0:
             if sys.version_info > (3,):
