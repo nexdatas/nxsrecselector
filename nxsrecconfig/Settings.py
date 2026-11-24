@@ -1406,26 +1406,26 @@ class Settings(object):
         """ checks existing controllers of pools
         """
         if self.__profileManager.checkdescription:
-            print("PC1", self.__selector["ComponentPreselection"])
+            # print("PC1", self.__selector["ComponentPreselection"])
             self.__selector.preselect()
-            print("PC2", self.__selector["ComponentPreselection"])
+            # print("PC2", self.__selector["ComponentPreselection"])
         gc.collect()
 
     def resetPreselectedComponents(self):
         """ reset preselected Components to defaultPreselectedComponents
         """
-        print(self.defaultPreselectedComponents)
-        print("RPC1", self.__selector["ComponentPreselection"])
+        # print(self.defaultPreselectedComponents)
+        # print("RPC1", self.__selector["ComponentPreselection"])
         self.__selector.resetPreselectedComponents(
             list(self.defaultPreselectedComponents))
-        print("RPC2", self.__selector["ComponentPreselection"])
-        print(self.defaultPreselectedComponents)
+        # print("RPC2", self.__selector["ComponentPreselection"])
+        # print(self.defaultPreselectedComponents)
         self.__selector["DataSourcePreselection"] = '{}'
-        print("RPC3", self.__selector["ComponentPreselection"])
+        # print("RPC3", self.__selector["ComponentPreselection"])
         self.preselectComponents()
-        print("RPC4", self.__selector["ComponentPreselection"])
+        # print("RPC4", self.__selector["ComponentPreselection"])
         self.storeProfile()
-        print("RPC5", self.__selector["ComponentPreselection"])
+        # print("RPC5", self.__selector["ComponentPreselection"])
 
     def deleteAllProfiles(self):
         """ clear all selections

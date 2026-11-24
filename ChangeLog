@@ -1,6 +1,8 @@
-2026-XX-YY Jan Kotanski <jankotan@gmail.com>
+2026-11-24 Jan Kotanski <jankotan@gmail.com>
 	* update URL for the HDRI repository (#219)
-	* tagged as v4.13.X
+	* add ubuntu 26.10 tests back (#224)
+	* add caching  no tangoDevFailed errors (#224)
+	* tagged as v4.13.2
 
 2026-10-27 Jan Kotanski <jankotan@gmail.com>
 	* add pixi tests without HDRI repo (#220)

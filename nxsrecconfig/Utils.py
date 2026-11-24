@@ -297,7 +297,7 @@ class TangoUtils(object):
                 if cnt == counter - 1:
                     raise
             except Exception as e:
-                print("OTHER ERROR ", str(e))
+                print("ERROR:", str(e))
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -335,7 +335,7 @@ class TangoUtils(object):
                 if cnt == counter - 1:
                     raise
             except Exception as e:
-                print("OTHER ERROR ", str(e))
+                print("ERROR: ", str(e))
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -361,7 +361,7 @@ class TangoUtils(object):
             except tango.DevFailed:
                 pass
             except Exception as e:
-                print("OTHER ERROR ", str(e))
+                print("ERROR: ", str(e))
                 pass
         return dps
 
@@ -388,7 +388,7 @@ class TangoUtils(object):
             except tango.DevFailed:
                 pass
             except Exception as e:
-                print("OTHER ERROR ", str(e))
+                print("ERROR: ", str(e))
                 pass
         return device
 
@@ -447,7 +447,7 @@ class TangoUtils(object):
             #         and (da is None or not hasattr(da, 'dim_x')):
             #     raise
         except Exception as e:
-            print("OTHER ERROR ", str(e))
+            print("ERROR: ", str(e))
             pass
 
         if vl is not None:
@@ -946,21 +946,16 @@ class PoolUtils(object):
         """
         source = None
         try:
-            print("GS NAME", name)
             dp = tango.DeviceProxy(Utils.tostr(name))
             if hasattr(dp, 'DataSource'):
-                print("GS HAS DS", name)
                 ds = dp.DataSource
                 sds = ds.split("://")
-                print("GS  SDS", sds)
                 ap = tango.AttributeProxy(sds[-1])
                 if ap is None:
-                    print("GS  EMPTY", sds[-1])
                     raise Exception("Empty proxy")
                 source = sds[-1]
-                print("GS  END", sds)
         except tango.DevFailed as e:
-            print("ERROR", str(e))
+            print("ERROR: ", str(e))
             pass
         except Exception as e:
             print("OTHER ERROR", str(e))
