@@ -86,7 +86,7 @@ class TestPoolSetUp(object):
             stdout=None,
             stderr=None, shell=True)
 
-        sys.stdout.write("waiting for simple server")
+        sys.stdout.write("waiting for Pool server")
 
         found = False
         cnt = 0

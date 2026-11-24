@@ -296,6 +296,12 @@ class TangoUtils(object):
                 found = False
                 if cnt == counter - 1:
                     raise
+            except Exception as e:
+                print("OTHER ERROR ", str(e))
+                time.sleep(0.01)
+                found = False
+                if cnt == counter - 1:
+                    raise
             cnt += 1
         cnfServer.set_source(tango.DevSource.DEV)
         return cnfServer
@@ -328,6 +334,12 @@ class TangoUtils(object):
                 found = False
                 if cnt == counter - 1:
                     raise
+            except Exception as e:
+                print("OTHER ERROR ", str(e))
+                time.sleep(0.01)
+                found = False
+                if cnt == counter - 1:
+                    raise
             cnt += 1
         return found
 
@@ -347,6 +359,9 @@ class TangoUtils(object):
                 dp.ping()
                 dps.append(dp)
             except tango.DevFailed:
+                pass
+            except Exception as e:
+                print("OTHER ERROR ", str(e))
                 pass
         return dps
 
@@ -371,6 +386,9 @@ class TangoUtils(object):
                 device = server
                 break
             except tango.DevFailed:
+                pass
+            except Exception as e:
+                print("OTHER ERROR ", str(e))
                 pass
         return device
 
@@ -428,6 +446,9 @@ class TangoUtils(object):
             # if ac and ac.data_format != tango.AttrDataFormat.SCALAR \
             #         and (da is None or not hasattr(da, 'dim_x')):
             #     raise
+        except Exception as e:
+            print("OTHER ERROR ", str(e))
+            pass
 
         if vl is not None:
             shp = list(numpy.shape(vl))
@@ -925,14 +946,23 @@ class PoolUtils(object):
         """
         source = None
         try:
+            print("GS NAME", name)
             dp = tango.DeviceProxy(Utils.tostr(name))
             if hasattr(dp, 'DataSource'):
+                print("GS HAS DS", name)
                 ds = dp.DataSource
                 sds = ds.split("://")
+                print("GS  SDS", sds)
                 ap = tango.AttributeProxy(sds[-1])
                 if ap is None:
+                    print("GS  EMPTY", sds[-1])
                     raise Exception("Empty proxy")
                 source = sds[-1]
-        except tango.DevFailed:
+                print("GS  END", sds)
+        except tango.DevFailed as e:
+            print("ERROR", str(e))
+            pass
+        except Exception as e:
+            print("OTHER ERROR", str(e))
             pass
         return source

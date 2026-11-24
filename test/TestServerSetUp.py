@@ -104,10 +104,14 @@ class TestServerSetUp(object):
         if not path:
             path = '.'
 
-        self._psub = subprocess.call(
-            "cd %s; %s ./TestServer.py %s &" %
-            (path, sys.executable, self.instance), stdout=None,
-            stderr=None, shell=True)
+        # force the python fault handler on in the server subprocess so a
+        # fatal signal (e.g. segfault) prints a C-level traceback to stderr
+        env = dict(os.environ, PYTHONFAULTHANDLER="1")
+        self._psub = subprocess.Popen(
+            "cd %s; %s ./TestServer.py %s" %
+            (path, sys.executable, self.instance),
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            env=env)
 
         sys.stdout.write("waiting for simple server")
 
@@ -131,6 +135,22 @@ class TestServerSetUp(object):
                 found = False
             cnt += 1
         print("")
+        if self._psub.poll() is not None:
+            out, err = self._psub.communicate()
+            print("TestServer stdout:\n%s"
+                  % out.decode('utf8', errors='replace'))
+            print("TestServer stderr:\n%s"
+                  % err.decode('utf8', errors='replace'))
+            self.dumpps()
+
+    # dumps the TestServer processes still running, for crash diagnostics
+    def dumpps(self):
+        with subprocess.Popen(
+                "ps -ef | grep 'TestServer.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True) as proc:
+            out = proc.stdout.read().decode('utf8', errors='replace')
+            print("TestServer ps:\n%s" % out)
 
     # test closer
     # \brief Common tear down of Tango Server
@@ -174,6 +194,19 @@ class TestServerSetUp(object):
                         "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
                         shell=True)
             pipe.close()
+        if self._psub is not None:
+            self._psub.kill()
+            try:
+                out, err = self._psub.communicate(timeout=5)
+            except subprocess.TimeoutExpired:
+                self._psub.kill()
+                out, err = self._psub.communicate()
+            if out:
+                print("TestServer stdout:\n%s"
+                      % out.decode('utf8', errors='replace'))
+            if err:
+                print("TestServer stderr:\n%s"
+                      % err.decode('utf8', errors='replace'))
 
 
 # test fixture
@@ -252,14 +285,14 @@ class MultiTestServerSetUp(object):
         if not path:
             path = '.'
 
-        if sys.version_info > (3,):
-            self._psub = subprocess.call(
-                "cd %s;  python3 ./TestServer.py %s &" % (path, self.instance),
-                stdout=None, stderr=None, shell=True)
-        else:
-            self._psub = subprocess.call(
-                "cd %s;  python ./TestServer.py %s &" % (path, self.instance),
-                stdout=None, stderr=None, shell=True)
+        # force the python fault handler on in the server subprocess so a
+        # fatal signal (e.g. segfault) prints a C-level traceback to stderr
+        env = dict(os.environ, PYTHONFAULTHANDLER="1")
+        self._psub = subprocess.Popen(
+            "cd %s;  %s ./TestServer.py %s" % (path, sys.executable,
+                                               self.instance),
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            env=env)
         sys.stdout.write("waiting for simple server")
 
         found = False
@@ -286,6 +319,22 @@ class MultiTestServerSetUp(object):
                 found = False
             cnt += 1
         print("")
+        if self._psub.poll() is not None:
+            out, err = self._psub.communicate()
+            print("TestServer stdout:\n%s"
+                  % out.decode('utf8', errors='replace'))
+            print("TestServer stderr:\n%s"
+                  % err.decode('utf8', errors='replace'))
+            self.dumpps()
+
+    # dumps the TestServer processes still running, for crash diagnostics
+    def dumpps(self):
+        with subprocess.Popen(
+                "ps -ef | grep 'TestServer.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True) as proc:
+            out = proc.stdout.read().decode('utf8', errors='replace')
+            print("TestServer ps:\n%s" % out)
 
     # test closer
     # \brief Common tear down of Tango Server
@@ -329,6 +378,19 @@ class MultiTestServerSetUp(object):
                         "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
                         shell=True)
             pipe.close()
+        if self._psub is not None:
+            self._psub.kill()
+            try:
+                out, err = self._psub.communicate(timeout=5)
+            except subprocess.TimeoutExpired:
+                self._psub.kill()
+                out, err = self._psub.communicate()
+            if out:
+                print("TestServer stdout:\n%s"
+                      % out.decode('utf8', errors='replace'))
+            if err:
+                print("TestServer stderr:\n%s"
+                      % err.decode('utf8', errors='replace'))
 
 
 if __name__ == "__main__":

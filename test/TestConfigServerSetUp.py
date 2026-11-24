@@ -84,7 +84,7 @@ class TestConfigServerSetUp(object):
             "cd %s;  %s ./TestConfigServer.py %s &" %
             (path, sys.executable, self.instance),
             stdout=None, stderr=None, shell=True)
-        sys.stdout.write("waiting for simple server")
+        sys.stdout.write("waiting for config server")
 
         found = False
         cnt = 0

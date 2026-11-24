@@ -24,8 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [debian13, debian12, ubuntu26.04, ubuntu24.04]
-        # os: [debian13, debian12, ubuntu26.10py, ubuntu26.04, ubuntu24.04]
+        # os: [ubuntu26.10py]
+        # os: [debian13, debian12, ubuntu26.04, ubuntu24.04]
+        os: [debian13, debian12, ubuntu26.10py, ubuntu26.04, ubuntu24.04]
         test: [extrasettings, extraserver, basicserver, basicsettings, basic]
     steps:
       - uses: actions/checkout@v4
@@ -105,6 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        # os: [ubuntu26.04]
         os: [debian13, ubuntu26.04]
         test: [extrasettings, extraserver, basicserver, basicsettings, basic]
     steps:

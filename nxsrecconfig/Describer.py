@@ -650,6 +650,9 @@ class Describer(object):
                 dsource = [dsxml]
         except tango.DevFailed:
             dsource = []
+        except Exception as e:
+            print("OTHER ERROR ", str(e))
+            dsource = []
         if len(dsource) > 0:
             if sys.version_info > (3,):
                 root = et.fromstring(bytes(dsource[0], "UTF-8"),

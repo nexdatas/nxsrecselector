@@ -35,6 +35,11 @@ import sys
 import numpy
 import struct
 import pickle
+import faulthandler
+
+# dump a C-level traceback to stderr on a fatal signal (e.g. segfault),
+# so a crash of this device server is diagnosable instead of silent
+faulthandler.enable()
 
 try:
     import tango
@@ -60,7 +65,15 @@ else:
 # =================================================================
 
 
-class TestServer(tango.LatestDeviceImpl):
+# NOTE: deliberately IDL4 (Device_4Impl) rather than LatestDeviceImpl.
+# This mock server adds/removes attributes at runtime (CreateAttribute,
+# ChangeValueType). On an IDL5+ device every such change makes cppTango's
+# DevIntrThread push a "device interface change" event over ZMQ, which
+# segfaults in ZmqEventSupplier::push_event (NULL pub_event_socket race,
+# cppTango 10.x) and kills the server mid-test. IDL4 devices never emit
+# interface-change events, so that crash path is never exercised. No test
+# subscribes to interface-change events, so nothing is lost.
+class TestServer(tango.Device_4Impl):
 
     # -------- Add you global variables here --------------------------
 
@@ -69,7 +82,7 @@ class TestServer(tango.LatestDeviceImpl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        tango.LatestDeviceImpl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
 
         self.defaults = {}
         self.defaults["ScalarBoolean"] = [
