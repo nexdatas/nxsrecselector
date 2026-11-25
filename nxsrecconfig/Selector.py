@@ -28,7 +28,7 @@ except Exception:
 
 # import getpass
 from os.path import expanduser
-from .Utils import TangoUtils, PoolUtils, Utils, MSUtils
+from .Utils import TangoUtils, PoolUtils, Utils
 from .Selection import Selection
 from .Converter import Converter
 
@@ -211,8 +211,7 @@ class Selector(object):
         """
         if "Door" not in self.__selection.keys() \
                 or not self.__selection["Door"]:
-            self.__selection["Door"] = TangoUtils.getDeviceName(
-                self.__db, "Door")
+            self.__selection["Door"] = self.__msp.defaultDoor(self.__db)
             self.__msp.updateMacroServer(self.__selection["Door"])
 
     def __postSetDoor(self, changed=True):
@@ -222,8 +221,7 @@ class Selector(object):
         :type changed: :obj:`bool`
         """
         if not self.__selection["Door"]:
-            self.__selection["Door"] = TangoUtils.getDeviceName(
-                self.__db, "Door")
+            self.__selection["Door"] = self.__msp.defaultDoor(self.__db)
             changed = True
         if changed:
             self.__msp.updateMacroServer(self.__selection["Door"])
@@ -292,17 +290,7 @@ class Selector(object):
         :returns: valid Door device flag
         :rtype: :obj:`bool`
         """
-        door = self["Door"]
-        if door:
-            if ":" in door.split("/")[0] and len(door.split("/")) > 1:
-                host, port = door.split("/")[0].split(":")
-                db = tango.Database(host, int(port))
-                macroserver = MSUtils.getMacroServer(db, door, False)
-            else:
-                macroserver = MSUtils.getMacroServer(self.__db, door, False)
-            if not macroserver:
-                door = ""
-        return bool(door)
+        return self.__msp.isDoorValid(self["Door"])
 
     def resetPreselectedComponents(self, components):
         """ resets preselected components to set of given components
@@ -333,6 +321,15 @@ class Selector(object):
             changed = True
         if changed:
             self.storeSelection()
+
+    @property
+    def backend(self):
+        """ scan backend
+
+        :returns: scan backend
+        :rtype: :class:`nxsrecconfig.ScanBackend.ScanBackend`
+        """
+        return self.__msp
 
     def getPools(self):
         """ provides pool proxies

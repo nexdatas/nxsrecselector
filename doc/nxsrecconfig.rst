@@ -4,6 +4,14 @@ nxsrecconfig package
 Submodules
 ----------
 
+nxsrecconfig.Backends module
+----------------------------
+
+.. automodule:: nxsrecconfig.Backends
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 nxsrecconfig.CheckerThread module
 ---------------------------------
 
@@ -64,6 +72,14 @@ nxsrecconfig.Release module
 ---------------------------
 
 .. automodule:: nxsrecconfig.Release
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nxsrecconfig.ScanBackend module
+-------------------------------
+
+.. automodule:: nxsrecconfig.ScanBackend
     :members:
     :undoc-members:
     :show-inheritance:

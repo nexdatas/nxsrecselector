@@ -21,12 +21,7 @@
 
 import json
 
-try:
-    import tango
-except Exception:
-    import PyTango as tango
-
-from .Utils import TangoUtils, PoolUtils, MSUtils, Utils
+from .Utils import TangoUtils, PoolUtils, Utils
 from .Describer import Describer
 
 try:
@@ -118,6 +113,15 @@ class ProfileManager(object):
         #: (:obj:`bool`) apply checks for preselected components
         self.checkdescription = checkdescription
 
+    @property
+    def __backend(self):
+        """ scan backend of the selector
+
+        :returns: scan backend
+        :rtype: :class:`nxsrecconfig.ScanBackend.ScanBackend`
+        """
+        return self.__selector.backend
+
     def __updateMacroServer(self):
         """ updatas MacroServer name
         """
@@ -154,7 +158,7 @@ class ProfileManager(object):
         self.__updateMacroServer()
         self.__updatePools()
         mntgrps = None
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        amntgrp = self.__backend.getEnv('ActiveMntGrp', self.__macroServerName)
         fpool = self.__getActivePool(amntgrp)
         if fpool:
             mntgrps = PoolUtils.getElementNames(
@@ -178,7 +182,7 @@ class ProfileManager(object):
         self.__updateMacroServer()
         self.__updatePools()
         motors = None
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        amntgrp = self.__backend.getEnv('ActiveMntGrp', self.__macroServerName)
         fpool = self.__getActivePool(amntgrp)
         if fpool:
             motors = PoolUtils.getMotorPositionAttributes(
@@ -323,10 +327,12 @@ class ProfileManager(object):
         for pool in self.__pools:
             mntgrps = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
             if name in mntgrps:
-                TangoUtils.command(
-                    pool, "DeleteElement", Utils.tostr(name))
-        if MSUtils.getEnv('ActiveMntGrp', self.__macroServerName) == name:
-            MSUtils.usetEnv("ActiveMntGrp", self.__macroServerName)
+                self.__backend.deleteMntGrp(pool, name)
+        amntgrp = self.__backend.getEnv(
+            'ActiveMntGrp', self.__macroServerName)
+        if amntgrp == name:
+            self.__backend.usetEnv(
+                "ActiveMntGrp", self.__macroServerName)
         inst = self.__selector.setConfigInstance()
         if name in inst.AvailableSelections():
             inst.deleteSelection(name)
@@ -343,6 +349,8 @@ class ProfileManager(object):
         :returns: json dictionary with mntgrp configuration information
         :rtype: :obj:`str`
         """
+        if not self.__backend.supportsMntGrps:
+            return self.__updateProfileWithoutMntGrp(resetDoor)
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         components = list(
             set(self.components()) | set(self.preselectedComponents()) |
@@ -357,9 +365,7 @@ class ProfileManager(object):
         mginfo = self.__createMntGrpConf(
             datasources, componentdatasources, description)
         conf = mginfo['configuration']
-        dpmg = TangoUtils.openProxy(Utils.tostr(mginfo['device']))
-        dpmg.Configuration = conf
-        conf = Utils.tostr(dpmg.configuration)
+        conf = self.__backend.setMntGrpConfiguration(mginfo['device'], conf)
         self.__selector['MntGrpConfiguration'] = conf
         mginfo['configuration'] = conf
         if resetDoor:
@@ -382,7 +388,7 @@ class ProfileManager(object):
                 unique_snapshot.append(sn)
         mginfo['snapshot'] = unique_snapshot
 
-        MSUtils.setEnvs(
+        self.__backend.setEnvs(
             {'PreScanSnapshot': mginfo['snapshot'],
              'ActiveMntGrp': mginfo['alias']},
             self.__macroServerName
@@ -397,7 +403,7 @@ class ProfileManager(object):
         """
         if toActive:
             ms = self.__selector.getMacroServer()
-            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
+            amntgrp = self.__backend.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
                 self.__selector["MntGrp"] = amntgrp
         self.fetchProfile(sync=True)
@@ -405,6 +411,23 @@ class ProfileManager(object):
         self.__updateConfigServer()
         if self.__setFromMntGrpConf(jconf):
             self.__selector.storeSelection()
+
+    def __updateProfileWithoutMntGrp(self, resetDoor=False):
+        """ stores the profile for backends without measurement groups
+
+        :param resetDoor: reset door device name flag
+        :type resetDoor: :obj:`bool`
+        :returns: empty json dictionary
+        :rtype: :obj:`str`
+        """
+        self.__updateMacroServer()
+        if resetDoor:
+            self.__selector["Door"] = ""
+        self.__selector.storeSelection()
+        self.__backend.setEnvs(
+            {"ActiveMntGrp": self.__selector["MntGrp"]},
+            self.__macroServerName)
+        return "{}"
 
     def mntGrpConfiguration(self):
         """ provides configuration of mntgrp
@@ -417,10 +440,9 @@ class ProfileManager(object):
         mntGrpName = self.__selector["MntGrp"]
         fullname = Utils.tostr(PoolUtils.getMntGrpName(
             self.__pools, mntGrpName))
-        dpmg = TangoUtils.openProxy(fullname) if fullname else None
-        if not dpmg:
+        if not fullname:
             return "{}"
-        return Utils.tostr(dpmg.Configuration)
+        return self.__backend.mntGrpConfiguration(fullname)
 
     def isMntGrpUpdated(self):
         """ check if active measurement group was changed
@@ -428,6 +450,8 @@ class ProfileManager(object):
         :returns: True if it is different to the current setting
         :rtype: :obj:`bool`
         """
+        if not self.__backend.supportsMntGrps:
+            return True
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         components = list(
             set(self.components()) | set(self.preselectedComponents()) |
@@ -441,21 +465,18 @@ class ProfileManager(object):
         mgconf = json.loads(self.mntGrpConfiguration())
 
         state = self.__selector.get()
-        amg = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        amg = self.__backend.getEnv('ActiveMntGrp', self.__macroServerName)
 
         mginfo = self.__createMntGrpConf(
             datasources, componentdatasources, description)
         llconf = mginfo["configuration"]
 
-        dpmg = TangoUtils.openProxy(Utils.tostr(mginfo['device']))
-        oldconf = Utils.tostr(dpmg.configuration)
-        dpmg.Configuration = llconf
-        llconf = Utils.tostr(dpmg.configuration)
-        dpmg.Configuration = oldconf
+        llconf = self.__backend.testMntGrpConfiguration(
+            mginfo['device'], llconf)
 
-        amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        amg2 = self.__backend.getEnv('ActiveMntGrp', self.__macroServerName)
         if amg != amg2:
-            MSUtils.setEnv(
+            self.__backend.setEnv(
                 'ActiveMntGrp', Utils.tostr(amg), self.__macroServerName)
         state2 = self.__selector.get()
         if json.dumps(state) != json.dumps(state2):
@@ -485,7 +506,7 @@ class ProfileManager(object):
         tangods = []
         snpds = {}
         if self.__syncsnapshot:
-            snapshot = MSUtils.getEnv(
+            snapshot = self.__backend.getEnv(
                 'PreScanSnapshot', self.__macroServerName)
             tangods = [[ds[1], ds[1], ds[0]] for ds in snapshot]
         poolds = []
@@ -1115,18 +1136,11 @@ class ProfileManager(object):
         :returns: measurement group full name
         :rtype: :obj:`str`
         """
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        mfullname = ""
+        amntgrp = self.__backend.getEnv('ActiveMntGrp', self.__macroServerName)
         apool = self.__getActivePool(amntgrp)
         if apool:
-            try:
-                TangoUtils.command(apool, "CreateMeasurementGroup",
-                                   [mntGrpName, timer])
-            except tango.CommunicationFailed as cf:
-                if len(cf.args) >= 2 and \
-                   cf.args[1].reason == "API_DeviceTimedOut":
-                    TangoUtils.wait(apool)
-                else:
-                    raise
+            self.__backend.createMntGrp(apool, mntGrpName, timer)
             mfullname = Utils.tostr(PoolUtils.getMntGrpName(
                 self.__pools, mntGrpName))
         return mfullname

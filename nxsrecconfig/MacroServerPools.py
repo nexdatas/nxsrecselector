@@ -17,7 +17,8 @@
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-"""  Selection state """
+
+""" sardana scan backend, i.e. macroserver and pools """
 
 import json
 
@@ -29,15 +30,18 @@ except Exception:
 
 from .Utils import (
     Utils, TangoUtils, MSUtils, PoolUtils, OldTangoError, PYTG_BUG_213)
-from .Describer import Describer
-from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
-
-import queue as Queue
+from .ScanBackend import ScanBackend
 
 
-class MacroServerPools(object):
+class MacroServerPools(ScanBackend):
 
-    """ sardanamacro server and pools """
+    """ sardana macro server and pools """
+
+    #: (:obj:`str`) backend name
+    name = "sardana"
+
+    #: (:obj:`bool`) the backend provides measurement group devices
+    supportsMntGrps = True
 
     def __init__(self, numberOfThreads):
         """ constructor
@@ -45,42 +49,44 @@ class MacroServerPools(object):
         :param numberOfThreads: number of threads
         :type numberOfThreads: :obj:`str`
         """
-        self.__numberOfThreads = numberOfThreads
+        ScanBackend.__init__(self, numberOfThreads)
 
         #: (:class:`tango.Database`) tango database
         self.__db = tango.Database()
-
-        #: (:obj:`str`) nexus configuration variable name in ms
-        self.__nxsenv = "NeXusConfiguration"
 
         #: (:obj:`str`) macro server device name
         self.__macroserver = ""
         #: (:obj:`list` <:obj:`tango.DeviceProxy`>) pool instances
         self.__pools = []
-        #: (:obj:`list` <:obj:`str`>) black list of pools
-        self.poolBlacklist = []
 
-        #: (:obj:`list` <:obj:`str`>) pure variables
-        self.__pureVar = [
-            "AppendEntry",
-            "ComponentsFromMntGrp",
-            "DynamicComponents",
-            "DefaultDynamicLinks",
-            "DefaultDynamicPath",
-            "TimeZone",
-            "ConfigDevice",
-            "WriterDevice",
-            "Door",
-            "MntGrp",
-            "ScanDir"
-        ]
+    def defaultDoor(self, db):
+        """ provides the default door
 
-        #: (:obj:`list` <:obj:`str`>) tango datasources off states
-        self.tangoSourceErrorStates = [
-            "OFF", "INIT", "INSERT", "CLOSE", "UNKNOWN", "FAULT"]
+        :param db: tango database
+        :type db: :class:`tango.Database`
+        :returns: door device name
+        :rtype: :obj:`str`
+        """
+        return TangoUtils.getDeviceName(db, "Door")
 
-        #: (:obj:`list` <:obj:`str`>) tango datasources warning states
-        self.tangoSourceWarningStates = ["ALARM", "DISABLE"]
+    def isDoorValid(self, door):
+        """ checks if the door has a macro server
+
+        :param door: door device name
+        :type door: :obj:`str`
+        :returns: True if valid
+        :rtype: :obj:`bool`
+        """
+        if door:
+            if ':' in door.split('/')[0] and len(door.split('/')) > 1:
+                host, port = door.split('/')[0].split(':')
+                db = tango.Database(host, int(port))
+                macroserver = MSUtils.getMacroServer(db, door, False)
+            else:
+                macroserver = MSUtils.getMacroServer(self.__db, door, False)
+            if not macroserver:
+                door = ''
+        return bool(door)
 
     def updateMacroServer(self, door):
         """ updates MacroServer and sardana pools for given door
@@ -140,209 +146,29 @@ class MacroServerPools(object):
             self.updateMacroServer(door)
         return self.__pools
 
-    @classmethod
-    def __toCheck(cls, configdevice, discomponentgroup, components,
-                  datasources, channels, nonexisting):
-        """ prepares list of channels to check
-
-        :param configdevice: configuration device proxy
-        :type configdevice: :class:`tango.DeviceProxy` \
-             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
-        :param discomponentgroup: name dictionary of checker items
-        :type discomponentgroup: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
-        :param components: component list
-        :type components: :obj:`list` <:obj:`str`>
-        :param datasources: datasource list
-        :type datasources: :obj:`list` <:obj:`str`>
-        :param channels: pool channel list
-        :type channels: :obj:`list` <:obj:`str`>
-        :param nonexisting: non-exising pool channels
-        :type nonexisting: :obj:`list` <:obj:`str`>
-        :returns: list of CheckerItems
-        :rtype: :obj:`list` <:class:`nxsrecconfig.CheckerThread.CheckerItem`>
-        """
-        describer = Describer(configdevice, True, pyevalfromscript=True)
-        availablecomponents = TangoUtils.command(
-            configdevice, "availableComponents")
-        availabledatasouces = TangoUtils.command(
-            configdevice, "availableDataSources")
-
-        for k in set(components) - set(availablecomponents):
-            discomponentgroup[Utils.tostr(k)] = CheckerItem(Utils.tostr(k))
-            discomponentgroup[Utils.tostr(k)].errords = "..."
-            discomponentgroup[Utils.tostr(k)].active = False
-            discomponentgroup[Utils.tostr(k)].message = \
-                "%s not defined in Configuration Server" % k
-        for k in set(datasources) - set(availabledatasouces):
-            discomponentgroup[Utils.tostr(k)] = CheckerItem(Utils.tostr(k))
-            discomponentgroup[Utils.tostr(k)].errords = k
-            discomponentgroup[Utils.tostr(k)].active = False
-            discomponentgroup[Utils.tostr(k)].message = \
-                "%s not defined i<n Configuration Server" % k
-        toCheck = {}
-        cps = set(components) & set(availablecomponents)
-        for acp in cps:
-            res = describer.components([acp], '', '')
-            for cp, dss in res[0].items():
-                for ds in dss.keys():
-                    if ds not in availabledatasouces:
-                        discomponentgroup[Utils.tostr(cp)] = CheckerItem(
-                            Utils.tostr(cp))
-                        discomponentgroup[Utils.tostr(cp)].errords = ds
-                        discomponentgroup[Utils.tostr(cp)].active = False
-                        discomponentgroup[Utils.tostr(cp)].message = \
-                            "%s of %s not defined in Configuration Server" \
-                            % (ds, cp)
-                        break
-                cls.__createCheckItem(cp, dss, toCheck, nonexisting,
-                                      discomponentgroup, channels, describer)
-        adss = set(datasources) & set(availabledatasouces)
-        for ads in adss:
-            res = describer.dataSources([ads])
-            if ads not in res[0].keys():
-                res[0][ads] = None
-            cls.__createCheckItem(ads, res[0], toCheck, nonexisting,
-                                  discomponentgroup, channels, describer)
-        return list(toCheck.values())
-
-    @classmethod
-    def __createCheckItem(cls, name, dss, toCheck, nonexisting,
-                          discomponentgroup, channels, describer):
-        """ creates Checker Item
-
-        :param name: item name
-        :type name: :obj:`str`
-        :param dss: datasource dictionary
-        :type dss: :obj:`dict` <:obj:`str`, `any`>
-        :param toCheck: dictionary with checker items
-        :type toCheck: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
-        :param nonexisting: non-exising pool channels
-        :type nonexisting: :obj:`list` <:obj:`str`>
-        :param discomponentgroup: name dictionary of checker items
-        :type discomponentgroup: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
-        :param channels: pool channel list
-        :type channels: :obj:`list` <:obj:`str`>
-        :param describer: describer instance
-        :type describer: :class:`nxsrecconfig.Describer.Describer`
-        """
-        if isinstance(dss, dict):
-            tgds = describer.dataSources(list(dss.keys()), 'TANGO')[0]
-            for ds in dss.keys():
-                if ds in tgds.keys():
-                    if name not in toCheck.keys():
-                        toCheck[name] = CheckerItem(name)
-                    srec = tgds[ds].record.split("/")
-                    attr = srec[-1]
-                    toCheck[name].append(
-                        TangoDSItem(Utils.tostr(ds),
-                                    Utils.tostr("/".join(srec[:-1])),
-                                    Utils.tostr(attr)))
-                elif ds in nonexisting:
-                    discomponentgroup[name] = CheckerItem(name)
-                    discomponentgroup[name].errords = ds
-                    discomponentgroup[name].active = False
-                    discomponentgroup[name].message = \
-                        "%s not defined in Pool" % ds
-
-                    if name in list(toCheck.keys()):
-                        toCheck.pop(name)
-                    break
-                elif ds in channels:
-                    if name not in toCheck.keys():
-                        toCheck[name] = CheckerItem(name)
-                    toCheck[name].append(TangoDSItem(Utils.tostr(ds)))
-
-    def checkChannels(self, door, configdevice, channels,
-                      componentgroup, datasourcegroup,
-                      channelerrors):
-        """ checks component channels
+    def nonExistingChannels(self, door, channels):
+        """ provides the channels which are not found in the pools
 
         :param door: door device name
         :type door: :obj:`str`
-        :param configdevice: configuration server
-        :type configdevice: :class:`tango.DeviceProxy` \
-             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
-        :param channels: pool channels
+        :param channels: channel names
         :type channels: :obj:`list` <:obj:`str`>
-        :param componentgroup: preselected component group
-        :type componentgroup: :obj:`dict` <:obj:`str` , :obj:`bool`>
-        :param channelerrors: list of deactivated component errors
-        :type channelerrors: :obj:`list` <:obj:`str`>
-        :returns: json dictionary with selected active components
-        :rtype: :obj:`str`
+        :returns: channels not found in the pools
+        :rtype: :obj:`list` <:obj:`str`>
         """
-        channelerrors[:] = []
-        discomponentgroup = {}
-        threads = []
         pools = self.getPools(door)
         fnames = PoolUtils.getFullDeviceNames(pools, channels)
-        nonexisting = [dev for dev in channels if dev not in fnames.keys()]
+        return [dev for dev in channels if dev not in fnames.keys()]
 
-        toCheck = self.__toCheck(
-            configdevice, discomponentgroup,
-            [cp for cp in componentgroup.keys()
-             if componentgroup[cp] is not False],
-            [ds for ds in datasourcegroup.keys()
-             if datasourcegroup[ds] is not False],
-            channels, nonexisting)
+    def channelSource(self, name):
+        """ provides the tango source of a pool channel
 
-        cqueue = Queue.Queue()
-        for checkeritem in toCheck:
-            cqueue.put(checkeritem)
-        if self.__numberOfThreads < 1:
-            self.__numberOfThreads = len(toCheck)
-
-        for i in range(min(self.__numberOfThreads, len(toCheck))):
-            thd = CheckerThread(i, cqueue)
-            thd.tangoSourceErrorStates = self.tangoSourceErrorStates
-            thd.tangoSourceWarningStates = self.tangoSourceWarningStates
-            threads.append(thd)
-            thd.start()
-
-        for th in threads:
-            th.join()
-
-        for checkeritem in toCheck:
-            if checkeritem.errords is not None:
-                discomponentgroup[checkeritem.name] = checkeritem
-
-        self.__updategroup(componentgroup, discomponentgroup,
-                           channelerrors)
-        self.__updategroup(datasourcegroup, discomponentgroup,
-                           channelerrors)
-
-        return (json.dumps(componentgroup), json.dumps(datasourcegroup))
-
-    @classmethod
-    def __updategroup(cls, group, disgroup, channelerrors):
-        """ updates selection dictionary
-
-        :param group: selection dictionary
-        :type group: :obj:`dict` <:obj:`str` , :obj:`bool`>
-        :param disgroup: dictionary with checker items
-        :type disgroup: :obj:`dict` <:obj:`str` ,
-            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
-        :param channelerrors: list with channel errors
-        :type channelerrors: :obj:`list` <:obj:`str`>
+        :param name: channel name
+        :type name: :obj:`str`
+        :returns: tango attribute name or None
+        :rtype: :obj:`str`
         """
-        for acp in group.keys():
-            if acp in disgroup.keys():
-                checkeritem = disgroup[acp]
-                channelerrors.append(json.dumps(
-                    {"component": Utils.tostr(acp),
-                     "datasource": Utils.tostr(checkeritem.errords),
-                     "message": Utils.tostr(checkeritem.message)}
-                ))
-                if checkeritem.active is False:
-                    group[acp] = None
-                elif group[acp] is not False:
-                    group[acp] = True
-            else:
-                if group[acp] is not False:
-                    group[acp] = True
+        return PoolUtils.getSource(name)
 
     def isDoorRunning(self, ms):
         """ check if any door server is running
@@ -380,32 +206,15 @@ class MacroServerPools(object):
         :param data: dictionary with resulting data
         :type data: :obj:`dict` <:obj:`str` , `any`>
         """
-        params = ["ScanDir",
-                  "ScanFile"]
-
         msp = TangoUtils.openProxy(self.getMacroServer(door))
         if PYTG_BUG_213:
             raise OldTangoError(
                 "Reading Encoded Attributes not supported in tango < 9.2.5")
         rec = msp.Environment
-        nenv = {}
-        vl = None
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
-                if self.__nxsenv in dc['new'].keys():
-                    nenv = dc['new'][self.__nxsenv]
-                for var in names:
-                    name = var if var in params else ("NeXus%s" % var)
-                    if name in dc['new'].keys():
-                        vl = dc['new'][name]
-                    elif var in nenv.keys():
-                        vl = nenv[var]
-                    else:
-                        continue
-                    if type(vl) not in [str, bool, int, str, float]:
-                        vl = json.dumps(vl)
-                    data[var] = vl
+                self._readSelectorEnv(dc['new'], names, data)
 
     def setSelectorEnv(self, door, data, cmddata=None):
         """ exports all Environment Data
@@ -417,9 +226,6 @@ class MacroServerPools(object):
         :param cmddata: command data dictionary
         :type cmddata: :obj:`dict` <:obj:`str` , `any`>
         """
-        params = ["ScanDir",
-                  "ScanFile"]
-
         msp = TangoUtils.openProxy(self.getMacroServer(door))
         if PYTG_BUG_213:
             raise OldTangoError(
@@ -428,31 +234,8 @@ class MacroServerPools(object):
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
-                dc = {'new': {}}
-                if self.__nxsenv not in dc['new'].keys() \
-                        or not isinstance(dc['new'][self.__nxsenv], dict):
-                    dc = {'new': {self.__nxsenv: {}}}
-                else:
-                    dc = {'new': {self.__nxsenv: dc['new'][self.__nxsenv]}}
-
-                nenv = dc['new'][self.__nxsenv]
-                for var in data.keys():
-                    if var in self.__pureVar:
-                        vl = data[var]
-                    else:
-                        try:
-                            vl = json.loads(data[var])
-                        except (ValueError, TypeError):
-                            vl = data[var]
-                    if var in params:
-                        dc['new'][Utils.tostr(var)] = vl
-                    else:
-                        nenv[("%s" % var)] = vl
-
-                if cmddata:
-                    for name, value in cmddata.items():
-                        nenv[Utils.tostr(name)] = value
-                MSUtils.writeEnvAttr(dc, msp)
+                MSUtils.writeEnvAttr(
+                    {'new': self._selectorEnvUpdate(data, cmddata)}, msp)
 
     def getScanEnv(self, door):
         """ fetches Scan Environment Data
@@ -462,24 +245,16 @@ class MacroServerPools(object):
         :returns: JSON String with important variables
         :rtype: :obj:`str`
         """
-        params = ["ScanDir",
-                  "ScanFile",
-                  "ScanID",
-                  # "ActiveMntGrp",
-                  "NeXusSelectorDevice"]
         res = {}
         msp = TangoUtils.openProxy(self.getMacroServer(door))
         if PYTG_BUG_213:
             raise OldTangoError(
-                "Reading Encoded Attributes not supported in "
-                "tango < 9.2.5")
+                "Reading Encoded Attributes not supported in tango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
-                for var in params:
-                    if var in dc['new'].keys():
-                        res[var] = dc['new'][var]
+                res = self._readScanEnv(dc['new'])
         return json.dumps(res)
 
     def setScanEnv(self, door, jdata):
@@ -496,18 +271,132 @@ class MacroServerPools(object):
         msp = TangoUtils.openProxy(self.getMacroServer(door))
         if PYTG_BUG_213:
             raise OldTangoError(
-                "Reading Encoded Attributes not supported in "
-                "tango < 9.2.5")
+                "Reading Encoded Attributes not supported in tango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
-            dc = {'new': {}}
-            for var in data.keys():
-                dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
-            if 'ScanID' in dc['new'].keys():
-                scanID = int(dc['new']["ScanID"])
-            MSUtils.writeEnvAttr(dc, msp)
+            new = self._scanEnvUpdate(data)
+            if 'ScanID' in new.keys():
+                scanID = int(new["ScanID"])
+            MSUtils.writeEnvAttr({'new': new}, msp)
         return scanID
+
+    def getEnv(self, var, ms):
+        """ provides a macroserver environment variable
+
+        :param var: variable name
+        :type var: :obj:`str`
+        :param ms: macroserver device name
+        :type ms: :obj:`str`
+        :returns: variable value
+        :rtype: `any`
+        """
+        return MSUtils.getEnv(var, ms)
+
+    def setEnv(self, var, value, ms):
+        """ sets a macroserver environment variable
+
+        :param var: variable name
+        :type var: :obj:`str`
+        :param value: variable value
+        :type value: `any`
+        :param ms: macroserver device name
+        :type ms: :obj:`str`
+        """
+        MSUtils.setEnv(var, value, ms)
+
+    def setEnvs(self, varvalues, ms):
+        """ sets macroserver environment variables
+
+        :param varvalues: variable names and values
+        :type varvalues: :obj:`dict` <:obj:`str`, `any`>
+        :param ms: macroserver device name
+        :type ms: :obj:`str`
+        """
+        MSUtils.setEnvs(varvalues, ms)
+
+    def usetEnv(self, var, ms):
+        """ unsets a macroserver environment variable
+
+        :param var: variable name
+        :type var: :obj:`str`
+        :param ms: macroserver device name
+        :type ms: :obj:`str`
+        """
+        MSUtils.usetEnv(var, ms)
+
+    def createMntGrp(self, pool, name, timer):
+        """ creates a measurement group in the pool
+
+        :param pool: pool proxy
+        :type pool: :class:`tango.DeviceProxy`
+        :param name: measurement group name
+        :type name: :obj:`str`
+        :param timer: timer name
+        :type timer: :obj:`str`
+        """
+        try:
+            TangoUtils.command(
+                pool, "CreateMeasurementGroup", [name, timer])
+        except tango.CommunicationFailed as cf:
+            if len(cf.args) >= 2 and \
+               cf.args[1].reason == "API_DeviceTimedOut":
+                TangoUtils.wait(pool)
+            else:
+                raise
+
+    def deleteMntGrp(self, pool, name):
+        """ deletes a measurement group from the pool
+
+        :param pool: pool proxy
+        :type pool: :class:`tango.DeviceProxy`
+        :param name: measurement group name
+        :type name: :obj:`str`
+        """
+        TangoUtils.command(pool, "DeleteElement", Utils.tostr(name))
+
+    def mntGrpConfiguration(self, device):
+        """ provides the measurement group configuration
+
+        :param device: measurement group device name
+        :type device: :obj:`str`
+        :returns: JSON configuration
+        :rtype: :obj:`str`
+        """
+        dpmg = TangoUtils.openProxy(Utils.tostr(device))
+        return Utils.tostr(dpmg.Configuration)
+
+    def setMntGrpConfiguration(self, device, conf):
+        """ sets the measurement group configuration
+
+        :param device: measurement group device name
+        :type device: :obj:`str`
+        :param conf: JSON configuration
+        :type conf: :obj:`str`
+        :returns: the configuration read back from the device
+        :rtype: :obj:`str`
+        """
+        dpmg = TangoUtils.openProxy(Utils.tostr(device))
+        dpmg.Configuration = conf
+        return Utils.tostr(dpmg.configuration)
+
+    def testMntGrpConfiguration(self, device, conf):
+        """ provides the configuration the measurement group makes of conf
+            and restores its current configuration
+
+        :param device: measurement group device name
+        :type device: :obj:`str`
+        :param conf: JSON configuration
+        :type conf: :obj:`str`
+        :returns: the configuration read back from the device
+        :rtype: :obj:`str`
+        """
+        dpmg = TangoUtils.openProxy(Utils.tostr(device))
+        oldconf = Utils.tostr(dpmg.configuration)
+        dpmg.Configuration = conf
+        conf = Utils.tostr(dpmg.configuration)
+        dpmg.Configuration = oldconf
+        return conf
