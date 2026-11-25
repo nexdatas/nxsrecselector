@@ -20,7 +20,6 @@
 """  Selection state """
 
 import json
-import sys
 
 try:
     import tango
@@ -33,13 +32,7 @@ from .Utils import (
 from .Describer import Describer
 from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
-if sys.version_info > (3,):
-    import queue as Queue
-else:
-    import Queue
-
-if sys.version_info > (3,):
-    unicode = str
+import queue as Queue
 
 
 class MacroServerPools(object):
@@ -410,7 +403,7 @@ class MacroServerPools(object):
                         vl = nenv[var]
                     else:
                         continue
-                    if type(vl) not in [str, bool, int, unicode, float]:
+                    if type(vl) not in [str, bool, int, str, float]:
                         vl = json.dumps(vl)
                     data[var] = vl
 

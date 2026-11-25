@@ -41,17 +41,11 @@ except Exception:
 from nxsrecconfig.CheckerThread import (
     CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK)
 
-if sys.version_info > (3,):
-    import queue as Queue
-else:
-    import Queue
+import queue as Queue
 
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-if sys.version_info > (3,):
-    long = int
 
 
 # test fixture
@@ -78,9 +72,9 @@ class CheckerItemTest(unittest.TestCase):
             "ttestp09/testts/t5r228", "OFF")
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 

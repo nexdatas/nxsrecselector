@@ -59,8 +59,6 @@ from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 import logging
 logger = logging.getLogger()
 
-if sys.version_info > (3,):
-    unicode = str
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -9532,7 +9530,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             en = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
-            if isinstance(en['ScanFile'], (str, unicode)):
+            if isinstance(en['ScanFile'], (str, str)):
                 try:
                     sc = json.loads(rs.scanFile)[0]
                 except Exception:

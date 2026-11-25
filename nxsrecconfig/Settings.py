@@ -24,7 +24,6 @@ import gc
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
 # from lxml import etree
-import sys
 import weakref
 
 try:
@@ -41,9 +40,6 @@ from .Selector import Selector
 from .Release import __version__
 from .MacroServerPools import MacroServerPools
 from .StreamSet import StreamSet
-
-if sys.version_info > (3,):
-    unicode = str
 
 
 class Settings(object):
@@ -226,7 +222,7 @@ class Settings(object):
         vl = ''
         if name in self.__selector.keys():
             vl = self.__selector[name]
-            if isinstance(vl, unicode):
+            if isinstance(vl, str):
                 vl = Utils.tostr(vl)
         return vl
 
@@ -1047,7 +1043,7 @@ class Settings(object):
         """
         ms = self.__selector.getMacroServer()
         val = MSUtils.getEnv('ScanFile', ms)
-        ret = [val] if isinstance(val, (str, unicode)) else val
+        ret = [val] if isinstance(val, (str, str)) else val
         return json.dumps(ret)
 
     def __setScanFile(self, name):
@@ -1140,12 +1136,8 @@ class Settings(object):
                     pass
         lst = []
         for ds, dsxml in dsxmls.items():
-            if sys.version_info > (3,):
-                root = et.fromstring(bytes(dsxml, "UTF-8"),
-                                     parser=XMLParser(collect_ids=False))
-            else:
-                root = et.fromstring(dsxml,
-                                     parser=XMLParser(collect_ids=False))
+            root = et.fromstring(bytes(dsxml, "UTF-8"),
+                                 parser=XMLParser(collect_ids=False))
             nodes = root.findall(".//datasource")
             if nodes:
                 record = Utils.getRecord(nodes[0])

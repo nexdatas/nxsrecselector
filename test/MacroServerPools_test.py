@@ -58,8 +58,6 @@ from nxsrecconfig.Utils import Utils
 import logging
 logger = logging.getLogger()
 
-if sys.version_info > (3,):
-    long = int
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -84,9 +82,9 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._simps = TestServerSetUp.TestServerSetUp()
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 

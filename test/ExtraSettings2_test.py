@@ -114,23 +114,14 @@ except Exception:
 
 
 def miniparseString(text):
-    if sys.version_info > (3,):
-        return et.fromstring(bytes(text, "UTF-8"),
-                             parser=XMLParser(collect_ids=False))
-    else:
-        return et.fromstring(text,
-                             parser=XMLParser(collect_ids=False))
+    return et.fromstring(bytes(text, "UTF-8"),
+                         parser=XMLParser(collect_ids=False))
 
 
 def tostring(node):
-    if sys.version_info > (3,):
-        return Utils.tostr(lxml.etree.tostring(
-            node, encoding='unicode',
-            method='xml', pretty_print=True))
-    else:
-        return Utils.tostr(lxml.etree.tostring(
-            node, encoding='utf8',
-            method='xml', pretty_print=True))
+    return Utils.tostr(lxml.etree.tostring(
+        node, encoding='unicode',
+        method='xml', pretty_print=True))
 
 
 # test fixture

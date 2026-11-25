@@ -21,7 +21,6 @@
 #
 import unittest
 import os
-import sys
 import random
 import struct
 import binascii
@@ -85,9 +84,6 @@ DB_AVAILABLE = []
 
 #: tango version
 TGVER = tango.__version_info__[0]
-
-if sys.version_info > (3,):
-    long = int
 
 
 class NotEqualException(Exception):
@@ -165,9 +161,9 @@ class SettingsTest(unittest.TestCase):
         self._masterTimerFirst = False
 
         try:
-            self._seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self._seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self._seed = long(time.time() * 256)
+            self._seed = int(time.time() * 256)
 
         #        self._seed = 133807022068754062020588864622821989794
         #        self._seed = 252610957556978915330732248482858942194
@@ -2216,10 +2212,7 @@ class SettingsTest(unittest.TestCase):
                         set(self.value(el, key)))
 
     def getRandomName(self, maxsize):
-        if sys.version_info > (3,):
-            letters = string.ascii_letters + string.digits
-        else:
-            letters = string.letters + string.digits
+        letters = string.ascii_letters + string.digits
         size = self._rnd.randint(1, maxsize)
         return ''.join(self._rnd.choice(letters) for _ in range(size))
 
@@ -2294,16 +2287,14 @@ class SettingsTest(unittest.TestCase):
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         if not isinstance(dct2, dict):
-            if sys.version_info > (3,):
-                print("NOT DICT", type(dct2), dct2)
-                print("DICT", type(dct), dct)
+            print("NOT DICT", type(dct2), dct2)
+            print("DICT", type(dct), dct)
         self.assertTrue(isinstance(dct2, dict))
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
         if set(dct.keys()) ^ set(dct2.keys()):
-            if sys.version_info > (3,):
-                print('DCT', dct.keys())
-                print('DCT2', dct2.keys())
-                print("DIFF", set(dct.keys()) ^ set(dct2.keys()))
+            print('DCT', dct.keys())
+            print('DCT2', dct2.keys())
+            print("DIFF", set(dct.keys()) ^ set(dct2.keys()))
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
@@ -2313,8 +2304,7 @@ class SettingsTest(unittest.TestCase):
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
-                    if sys.version_info > (3,):
-                        print('VALUES', k, v, dct2[k])
+                    print('VALUES', k, v, dct2[k])
                 self.assertEqual(v, dct2[k])
 
     def myCompDict(self, dct, dct2):

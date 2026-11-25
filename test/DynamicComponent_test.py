@@ -53,8 +53,6 @@ from nxsrecconfig.Utils import Utils
 import logging
 logger = logging.getLogger()
 
-if sys.version_info > (3,):
-    long = int
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -113,23 +111,14 @@ except Exception:
 
 
 def miniparseString(text):
-    if sys.version_info > (3,):
-        return et.fromstring(bytes(text, "UTF-8"),
-                             parser=XMLParser(collect_ids=False))
-    else:
-        return et.fromstring(text,
-                             parser=XMLParser(collect_ids=False))
+    return et.fromstring(bytes(text, "UTF-8"),
+                         parser=XMLParser(collect_ids=False))
 
 
 def tostring(node):
-    if sys.version_info > (3,):
-        return Utils.tostr(lxml.etree.tostring(
-            node, encoding='unicode',
-            method='xml', pretty_print=True))
-    else:
-        return Utils.tostr(lxml.etree.tostring(
-            node, encoding='utf8',
-            method='xml', pretty_print=True))
+    return Utils.tostr(lxml.etree.tostring(
+        node, encoding='unicode',
+        method='xml', pretty_print=True))
 
 
 # test fixture
@@ -151,9 +140,9 @@ class DynamicComponentTest(unittest.TestCase):
         self._simps = TestServerSetUp.TestServerSetUp()
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 
@@ -1014,10 +1003,7 @@ class DynamicComponentTest(unittest.TestCase):
         self._cf.tearDown()
 
     def getRandomName(self, maxsize):
-        if sys.version_info > (3,):
-            letters = string.ascii_letters + string.digits
-        else:
-            letters = string.letters + string.digits
+        letters = string.ascii_letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 

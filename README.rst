@@ -201,6 +201,6 @@ If the `RecoderPath` property of MacroServer is not set one can do it by
 
 .. code-block:: console
 
-	  $ nxsetup -a /usr/lib/python2.7/dist-packages/sardananxsrecorder
+	  $ nxsetup -a /usr/lib/python3/dist-packages/sardananxsrecorder
 
 where the path should point the `sardananxsrecorder` package.

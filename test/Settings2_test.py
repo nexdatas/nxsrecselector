@@ -20,7 +20,6 @@
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
-import sys
 import struct
 
 try:
@@ -51,9 +50,6 @@ DB_AVAILABLE = []
 
 #: tango version
 TGVER = tango.__version_info__[0]
-
-if sys.version_info > (3,):
-    long = int
 
 
 class NotEqualException(Exception):

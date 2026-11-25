@@ -121,28 +121,13 @@ class TestMeasurementGroupSetUp(object):
 
     # stops server
     def stop(self):
-        if sys.version_info > (3,):
-            with subprocess.Popen(
-                "ps -ef | grep 'TestMG.py %s' | grep -v grep" %
-                    self.instance,
-                    stdout=subprocess.PIPE, shell=True) as proc:
-                pipe = proc.stdout
+        with subprocess.Popen(
+            "ps -ef | grep 'TestMG.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True) as proc:
+            pipe = proc.stdout
 
-                res = str(pipe.read(), "utf-8").split("\n")
-
-                for r in res:
-                    sr = r.split()
-                    if len(sr) > 2:
-                        subprocess.call(
-                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
-                            shell=True)
-                pipe.close()
-        else:
-            pipe = subprocess.Popen(
-                "ps -ef | grep 'TestMG.py %s' | grep -v grep" % self.instance,
-                stdout=subprocess.PIPE, shell=True).stdout
-
-            res = str(pipe.read()).split("\n")
+            res = str(pipe.read(), "utf-8").split("\n")
 
             for r in res:
                 sr = r.split()

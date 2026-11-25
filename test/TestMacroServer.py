@@ -38,13 +38,6 @@ try:
 except Exception:
     import PyTango as tango
 
-# # workaround for problems when pytango locally compiled
-# if sys.version_info[0] == 2:
-#     sys.path = [pth for pth in sys.path if 'python3' not in pth]
-# else:
-#     sys.path = [pth for pth in sys.path if 'python2' not in pth]
-# tango = __import__("tango")
-
 
 def pickleloads(bytestr):
     """ loads pickle byte string
@@ -53,10 +46,7 @@ def pickleloads(bytestr):
     :returns: loaded bytestring
     :rtype: :obj:`any`
     """
-    if sys.version_info > (3,):
-        return pickle.loads(bytestr, encoding='latin1')
-    else:
-        return pickle.loads(bytestr)
+    return pickle.loads(bytestr, encoding='latin1')
 
 # =================================================================
 #   TestMacroServer Class Description:
