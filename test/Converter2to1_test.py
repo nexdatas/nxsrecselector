@@ -31,8 +31,6 @@ import time
 
 from nxsrecconfig.Converter import Converter2to1, ConverterXtoY
 
-if sys.version_info > (3,):
-    long = int
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -47,9 +45,9 @@ class Converter2to1Test(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 
@@ -116,10 +114,7 @@ class Converter2to1Test(unittest.TestCase):
                     self.assertEqual(v, dct2[k])
 
     def getRandomName(self, maxsize):
-        if sys.version_info > (3,):
-            letters = string.ascii_letters + string.digits
-        else:
-            letters = string.letters + string.digits
+        letters = string.ascii_letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 

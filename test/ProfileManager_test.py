@@ -71,9 +71,6 @@ from nxsrecconfig.Utils import MSUtils, Utils
 import logging
 logger = logging.getLogger()
 
-if sys.version_info > (3,):
-    long = int
-
 
 class NotEqualException(Exception):
     pass
@@ -158,9 +155,9 @@ class ProfileManagerTest(unittest.TestCase):
         self._simps = TestServerSetUp.TestServerSetUp()
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
         # self.__seed  = 244826915137294083694874616207392554673
         # self.__seed  = 337589427218504574960819174792358025904
         # self.__seed  = 171720102041281689442418387294614295423
@@ -1864,15 +1861,11 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(w1, w2)
                 else:
                     if self.__dump[name][key] != el[key]:
-                        if sys.version_info > (3,):
-                            print("COMP", key)
+                        print("COMP", key)
                     self.assertEqual(self.__dump[name][key], el[key])
 
     def getRandomName(self, maxsize):
-        if sys.version_info > (3,):
-            letters = string.ascii_letters + string.digits
-        else:
-            letters = string.letters + string.digits
+        letters = string.ascii_letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
@@ -1897,16 +1890,14 @@ class ProfileManagerTest(unittest.TestCase):
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         if not isinstance(dct2, dict):
-            if sys.version_info > (3,):
-                print("NOT DICT", type(dct2), dct2)
-                print("DICT", type(dct), dct)
+            print("NOT DICT", type(dct2), dct2)
+            print("DICT", type(dct), dct)
         self.assertTrue(isinstance(dct2, dict))
         logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
         if set(dct.keys()) ^ set(dct2.keys()):
-            if sys.version_info > (3,):
-                print('DCT', dct.keys())
-                print('DCT2', dct2.keys())
-                print("DIFF", set(dct.keys()) ^ set(dct2.keys()))
+            print('DCT', dct.keys())
+            print('DCT2', dct2.keys())
+            print("DIFF", set(dct.keys()) ^ set(dct2.keys()))
         self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
@@ -1916,8 +1907,7 @@ class ProfileManagerTest(unittest.TestCase):
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
-                    if sys.version_info > (3,):
-                        print('VALUES!! ', k, v, dct2[k])
+                    print('VALUES!! ', k, v, dct2[k])
                 self.assertEqual(v, dct2[k])
 
     def myCompDict(self, dct, dct2):

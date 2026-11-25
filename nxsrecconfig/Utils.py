@@ -26,7 +26,6 @@ import pickle
 import numpy
 import fnmatch
 import socket
-import sys
 
 try:
     import tango
@@ -34,26 +33,21 @@ except Exception:
     import PyTango as tango
 
 
-if sys.version_info > (3,):
-    unicode = str
-
-
 #: (:obj:`bool`) tango bug #213 flag related to EncodedAttributes in python3
 PYTG_BUG_213 = False
-if sys.version_info > (3,):
-    try:
-        PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
-            map(int, tango.__version__.split(".")[:3]))
-        if PYTGMAJOR <= 9:
-            if PYTGMAJOR == 9:
-                if PYTGMINOR < 2:
-                    PYTG_BUG_213 = True
-                elif PYTGMINOR == 2 and PYTGPATCH <= 4:
-                    PYTG_BUG_213 = True
-            else:
+try:
+    PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
+        map(int, tango.__version__.split(".")[:3]))
+    if PYTGMAJOR <= 9:
+        if PYTGMAJOR == 9:
+            if PYTGMINOR < 2:
                 PYTG_BUG_213 = True
-    except Exception:
-        pass
+            elif PYTGMINOR == 2 and PYTGPATCH <= 4:
+                PYTG_BUG_213 = True
+        else:
+            PYTG_BUG_213 = True
+except Exception:
+    pass
 
 
 class OldTangoError(Exception):
@@ -77,8 +71,7 @@ class Utils(object):
         if isinstance(text, str):
             return text
         else:
-            if sys.version_info > (3,) and \
-               (isinstance(text, bytes) or isinstance(text, unicode)):
+            if isinstance(text, bytes):
                 return str(text, "utf-8")
             else:
                 return str(text)
@@ -91,10 +84,7 @@ class Utils(object):
         :returns: loaded bytestring
         :rtype: :obj:`any`
         """
-        if sys.version_info > (3,):
-            return pickle.loads(bytestr, encoding='latin1')
-        else:
-            return pickle.loads(bytestr)
+        return pickle.loads(bytestr, encoding='latin1')
 
     @classmethod
     def compareDict(cls, dct, dct2):
@@ -185,7 +175,7 @@ class Utils(object):
         if node is not None:
             tnodes = ([node.text] if node.text else []) \
                      + [child.tail for child in node if child.tail]
-            return unicode("".join(tnodes)).strip()
+            return str("".join(tnodes)).strip()
         return ""
 
     @classmethod
@@ -248,7 +238,7 @@ class Utils(object):
         :returns: string object
         :rtype: :obj:`str`
         """
-        if isinstance(obj, unicode) or isinstance(obj, bytes):
+        if isinstance(obj, str) or isinstance(obj, bytes):
             return Utils.tostr(obj)
         elif isinstance(obj, list):
             return [cls.toString(el) for el in obj]
@@ -619,8 +609,6 @@ class MSUtils(object):
             pk = pickle.dumps(value, protocol=2)
             dp.Environment = ['pickle', pk]
         except Exception:
-            if sys.version_info < (3,):
-                raise
             if isinstance(value, dict):
                 newvalue = {}
                 for key, vl in value.items():
@@ -628,12 +616,12 @@ class MSUtils(object):
                         nvl = {}
                         for ky, it in vl.items():
                             nvl[bytes(ky, "utf-8")
-                                if isinstance(ky, unicode) else ky] = it
+                                if isinstance(ky, str) else ky] = it
                         newvalue[bytes(key, "utf-8")
-                                 if isinstance(key, unicode) else key] = nvl
+                                 if isinstance(key, str) else key] = nvl
                     else:
                         newvalue[bytes(key, "utf-8")
-                                 if isinstance(key, unicode) else key] = vl
+                                 if isinstance(key, str) else key] = vl
             else:
                 newvalue = value
             pk = pickle.dumps(newvalue, protocol=2)

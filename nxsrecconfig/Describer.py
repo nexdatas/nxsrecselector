@@ -20,7 +20,6 @@
 """  Component Describer """
 
 import re
-import sys
 import json
 
 try:
@@ -32,10 +31,6 @@ import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
 # from lxml import etree
 from .Utils import Utils, TangoUtils
-
-
-if sys.version_info > (3,):
-    unicode = str
 
 
 class DSItem(object):
@@ -350,15 +345,10 @@ class Describer(object):
             index = dstxt.find("$%s." % label)
             while index != -1:
                 try:
-                    if sys.version_info > (3,):
-                        subc = re.finditer(
-                            r"[\w]+",
-                            dstxt[(index + len(label) + 2):]
-                        ).__next__().group(0)
-                    else:
-                        subc = re.finditer(
-                            r"[\w]+",
-                            dstxt[(index + len(label) + 2):]).next().group(0)
+                    subc = re.finditer(
+                        r"[\w]+",
+                        dstxt[(index + len(label) + 2):]
+                    ).__next__().group(0)
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
@@ -409,12 +399,8 @@ class Describer(object):
         dslist = []
         result = ""
         label = 'datasources'
-        if sys.version_info > (3,):
-            root = et.fromstring(bytes(dsxml, "UTF-8"),
-                                 parser=XMLParser(collect_ids=False))
-        else:
-            root = et.fromstring(dsxml,
-                                 parser=XMLParser(collect_ids=False))
+        root = et.fromstring(bytes(dsxml, "UTF-8"),
+                             parser=XMLParser(collect_ids=False))
 
         cnode = root.findall("datasource")
         if cnode:
@@ -424,14 +410,9 @@ class Describer(object):
         index = dsxml.find("$%s." % label)
         while index != -1:
             try:
-                if sys.version_info > (3,):
-                    subc = re.finditer(
-                        r"[\w]+",
-                        dsxml[(index + len(label) + 2):]).__next__().group(0)
-                else:
-                    subc = re.finditer(
-                        r"[\w]+",
-                        dsxml[(index + len(label) + 2):]).next().group(0)
+                subc = re.finditer(
+                    r"[\w]+",
+                    dsxml[(index + len(label) + 2):]).__next__().group(0)
             except (StopIteration, IndexError):
                 subc = ''
             name = subc.strip() if subc else ""
@@ -540,12 +521,8 @@ class Describer(object):
         """
         dss = ExDSDict()
         for cpxml in cpxmls:
-            if sys.version_info > (3,):
-                root = et.fromstring(bytes(cpxml, "UTF-8"),
-                                     parser=XMLParser(collect_ids=False))
-            else:
-                root = et.fromstring(cpxml,
-                                     parser=XMLParser(collect_ids=False))
+            root = et.fromstring(bytes(cpxml, "UTF-8"),
+                                 parser=XMLParser(collect_ids=False))
             parents = root.findall(".//field")
             parents.extend(root.findall(".//vds"))
             parents.extend(root.findall(".//map"))
@@ -654,12 +631,8 @@ class Describer(object):
             print("ERROR:", str(e))
             dsource = []
         if len(dsource) > 0:
-            if sys.version_info > (3,):
-                root = et.fromstring(bytes(dsource[0], "UTF-8"),
-                                     parser=XMLParser(collect_ids=False))
-            else:
-                root = et.fromstring(dsource[0],
-                                     parser=XMLParser(collect_ids=False))
+            root = et.fromstring(bytes(dsource[0], "UTF-8"),
+                                 parser=XMLParser(collect_ids=False))
             dss = root.findall(".//datasource")
             for ds in dss:
                 if ds.tag == 'datasource':

@@ -31,14 +31,7 @@ import time
 from nxsrecconfig import StreamSet
 
 # import string
-if sys.version_info > (3,):
-    from io import StringIO
-else:
-    from StringIO import StringIO
-
-
-if sys.version_info > (3,):
-    long = int
+from io import StringIO
 
 
 # if 64-bit machione
@@ -54,9 +47,9 @@ class StreamSetTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 

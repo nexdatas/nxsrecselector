@@ -34,9 +34,6 @@ from nxsrecconfig.Converter import Converter1to2, ConverterXtoY
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-if sys.version_info > (3,):
-    long = int
-
 
 # test fixture
 class Converter1to2Test(unittest.TestCase):
@@ -47,9 +44,9 @@ class Converter1to2Test(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 
@@ -121,10 +118,7 @@ class Converter1to2Test(unittest.TestCase):
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
     def getRandomName(self, maxsize):
-        if sys.version_info > (3,):
-            letters = string.ascii_letters + string.digits
-        else:
-            letters = string.letters + string.digits
+        letters = string.ascii_letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 

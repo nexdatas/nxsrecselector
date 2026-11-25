@@ -20,7 +20,6 @@
 """  ProfileManager """
 
 import json
-import sys
 
 try:
     import tango
@@ -36,9 +35,6 @@ try:
     NXSTOOLS = True
 except ImportError:
     NXSTOOLS = False
-
-if sys.version_info > (3,):
-    unicode = str
 
 
 #: (:obj:`list` <:obj:`str`>) default data names

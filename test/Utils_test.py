@@ -60,17 +60,10 @@ IS64BIT = (struct.calcsize("P") == 8)
 #: tango version
 TGVER = tango.__version_info__[0]
 
-if sys.version_info > (3,):
-    long = int
-
 
 def miniparseString(text):
-    if sys.version_info > (3,):
-        return et.fromstring(bytes(text, "UTF-8"),
-                             parser=XMLParser(collect_ids=False))
-    else:
-        return et.fromstring(text,
-                             parser=XMLParser(collect_ids=False))
+    return et.fromstring(bytes(text, "UTF-8"),
+                         parser=XMLParser(collect_ids=False))
 
 
 class Datum(object):
@@ -189,9 +182,9 @@ class UtilsTest(unittest.TestCase):
             '"nexus_path": "", "data_units": "No unit", "source": "%s"}'
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 
@@ -2002,7 +1995,7 @@ class UtilsTest(unittest.TestCase):
         self._simps.dp.ScalarFloat = self._fcounter[0]
         self._simps.dp.ScalarDouble = self._dcounter[0]
         self._simps.dp.ScalarString = self._bools[0]
-        self._simps.dp.ScalarULong64 = long(abs(self._counter[0]))
+        self._simps.dp.ScalarULong64 = int(abs(self._counter[0]))
 
         # print("TGVER", TGVER
         arr = {

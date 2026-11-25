@@ -20,7 +20,6 @@
 """  Component CheckerThread - thread which checks tango server attributes"""
 
 import threading
-import sys
 # import traceback
 
 try:
@@ -30,10 +29,7 @@ except Exception:
 
 from .Utils import TangoUtils, Utils
 
-if sys.version_info > (3,):
-    import queue as Queue
-else:
-    import Queue
+import queue as Queue
 
 
 #: (:obj:`list` < :obj:`str`>) default attributes to check

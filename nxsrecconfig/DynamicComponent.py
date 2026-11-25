@@ -20,7 +20,6 @@
 """  Dynamic Component """
 
 import json
-import sys
 import lxml.etree
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
@@ -312,14 +311,9 @@ class DynamicComponent(object):
                     dsource = TangoUtils.command(
                         self.__nexusconfig_device, "dataSources",
                         [Utils.tostr(ds)])
-                    if sys.version_info > (3,):
-                        root = et.fromstring(
-                            bytes(dsource[0], "UTF-8"),
-                            parser=XMLParser(collect_ids=False))
-                    else:
-                        root = et.fromstring(
-                            dsource[0],
-                            parser=XMLParser(collect_ids=False))
+                    root = et.fromstring(
+                        bytes(dsource[0], "UTF-8"),
+                        parser=XMLParser(collect_ids=False))
                     dss = root.findall(".//datasource")
                     if dss and shape is None:
                         shape, nxtype = self.__shapeFromTango(dss[0])
@@ -370,16 +364,10 @@ class DynamicComponent(object):
         self.__createNonSardanaNodes(created, avds, definition, 'STEP')
         self.__createNonSardanaNodes(created, avds, definition, 'INIT')
 
-        if sys.version_info > (3,):
-            xmls = Utils.tostr(
-                lxml.etree.tostring(
-                    definition, encoding='unicode',
-                    method='xml', pretty_print=True))
-        else:
-            xmls = Utils.tostr(
-                lxml.etree.tostring(
-                    definition, encoding='utf-8',
-                    method='xml', pretty_print=True))
+        xmls = Utils.tostr(
+            lxml.etree.tostring(
+                definition, encoding='unicode',
+                method='xml', pretty_print=True))
         if xmls.startswith("<?xml"):
             self.__nexusconfig_device.xmlstring = xmls
         else:
