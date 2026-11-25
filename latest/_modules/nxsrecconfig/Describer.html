@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Describer &#8212; nxsrecconfig 4.13.2 documentation</title>
+    <title>nxsrecconfig.Describer &#8212; nxsrecconfig 4.14.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=9300ad70"></script>
+    <script src="../../_static/documentation_options.js?v=8edb52cd"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.13</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.14</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -118,6 +118,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
@@ -152,7 +153,6 @@
 <span class="sd">&quot;&quot;&quot;  Component Describer &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -164,10 +164,6 @@
 <span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="kn">import</span> <span class="n">XMLParser</span>
 <span class="c1"># from lxml import etree</span>
 <span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span>
-
-
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
 <div class="viewcode-block" id="DSItem">
@@ -499,15 +495,10 @@
             <span class="n">index</span> <span class="o">=</span> <span class="n">dstxt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
             <span class="k">while</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-                        <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
-                            <span class="sa">r</span><span class="s2">&quot;[\w]+&quot;</span><span class="p">,</span>
-                            <span class="n">dstxt</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):]</span>
-                        <span class="p">)</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
-                            <span class="sa">r</span><span class="s2">&quot;[\w]+&quot;</span><span class="p">,</span>
-                            <span class="n">dstxt</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):])</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
+                        <span class="sa">r</span><span class="s2">&quot;[\w]+&quot;</span><span class="p">,</span>
+                        <span class="n">dstxt</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):]</span>
+                    <span class="p">)</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">StopIteration</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
                     <span class="n">subc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">subc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">subc</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
@@ -558,12 +549,8 @@
         <span class="n">dslist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;datasources&#39;</span>
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">dsxml</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
-                                 <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">dsxml</span><span class="p">,</span>
-                                 <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">dsxml</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
+                             <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
         <span class="n">cnode</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;datasource&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cnode</span><span class="p">:</span>
@@ -573,14 +560,9 @@
         <span class="n">index</span> <span class="o">=</span> <span class="n">dsxml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
         <span class="k">while</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-                    <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
-                        <span class="sa">r</span><span class="s2">&quot;[\w]+&quot;</span><span class="p">,</span>
-                        <span class="n">dsxml</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):])</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
-                        <span class="sa">r</span><span class="s2">&quot;[\w]+&quot;</span><span class="p">,</span>
-                        <span class="n">dsxml</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):])</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;[\w]+&quot;</span><span class="p">,</span>
+                    <span class="n">dsxml</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):])</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">StopIteration</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
                 <span class="n">subc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">subc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">subc</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
@@ -689,12 +671,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dss</span> <span class="o">=</span> <span class="n">ExDSDict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">cpxml</span> <span class="ow">in</span> <span class="n">cpxmls</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">cpxml</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
-                                     <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">cpxml</span><span class="p">,</span>
-                                     <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">cpxml</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
+                                 <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
             <span class="n">parents</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//field&quot;</span><span class="p">)</span>
             <span class="n">parents</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//vds&quot;</span><span class="p">))</span>
             <span class="n">parents</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//map&quot;</span><span class="p">))</span>
@@ -806,12 +784,8 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
             <span class="n">dsource</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dsource</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
-                                     <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                     <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
+                                 <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
             <span class="n">dss</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//datasource&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;datasource&#39;</span><span class="p">:</span>
