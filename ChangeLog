@@ -1,3 +1,10 @@
+2026-XX-YY Jan Kotanski <jankotan@gmail.com>
+	* add scan backends: sardana and null (without scan control system)
+	* add the Backend device property
+	* fix tango sources with host and port in dynamic components
+	* add WriterConfiguration creating the writer configuration of a profile for any scan system
+	* tagged as v4.14.X
+
 2026-11-25 Jan Kotanski <jankotan@gmail.com>
 	* remove python2 support
 	* tagged as v4.14.0

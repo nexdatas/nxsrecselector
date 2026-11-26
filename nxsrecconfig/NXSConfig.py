@@ -100,6 +100,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         cacheconfiguration = bool(self.CacheConfiguration)
         globaluserdata = bool(self.GlobalUserData)
         checkdescription = bool(self.CheckDescription)
+        backend = self.Backend or None
         writepoolmotorpositions = bool(self.WritePoolMotorPositions)
         writeallmotorpositions = bool(self.WriteAllMotorPositions)
         self.__stg = STG(self, numberofthreads, defaultpath,
@@ -109,7 +110,7 @@ class NXSRecSelector(tango.LatestDeviceImpl):
                          defaultnexustype,
                          defaultudatapath, globaluserdata,
                          cacheconfiguration, syncmntgrp,
-                         checkdescription)
+                         checkdescription, backend)
         self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -2007,6 +2008,10 @@ class NXSRecSelectorClass(tango.DeviceClass):
         [tango.DevString,
          "default measurement group name",
          ["nxsmntgrp"]],
+        'Backend':
+        [tango.DevString,
+         "scan backend, i.e. sardana or null (without scan control system)",
+         ["sardana"]],
         'PoolBlacklist':
         [tango.DevVarStringArray,
          "blacklist of pools",

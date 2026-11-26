@@ -34,11 +34,11 @@ except Exception:
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import (
-    Utils, TangoUtils, MSUtils, PoolUtils, PYTG_BUG_213)
+    Utils, TangoUtils, PoolUtils, PYTG_BUG_213)
 from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .Release import __version__
-from .MacroServerPools import MacroServerPools
+from .Backends import createBackend
 from .StreamSet import StreamSet
 
 
@@ -58,7 +58,8 @@ class Settings(object):
                  globaluserdata=False,
                  cacheconfiguration=False,
                  syncmntgrp=False,
-                 checkdescription=True
+                 checkdescription=True,
+                 backend=None
                  ):
         """ contructor
 
@@ -85,6 +86,9 @@ class Settings(object):
         :type syncmntgrp: :obj:`bool`
         :param checkdescription: apply checks for preselected components
         :type checkdescription: :obj:`bool`
+        :param backend: scan backend name, i.e. ``sardana`` or ``null``,
+                        ``sardana`` if None
+        :type backend: :obj:`str`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -144,9 +148,9 @@ class Settings(object):
                 "tango < 9.2.5"
                 " is not supported ")
 
-        #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
+        #: (:class:`nxsrecconfg.ScanBackend.ScanBackend`) \
         #:     configuration selection
-        self.__msp = MacroServerPools(self.numberOfThreads)
+        self.__msp = createBackend(backend, self.numberOfThreads)
 
         #: (:class:`nxsrecconfg.Selector.Selector`) \
         #:   configuration selector
@@ -193,7 +197,7 @@ class Settings(object):
             self.fetchProfile()
         try:
             ms = self.__selector.getMacroServer()
-            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
+            amntgrp = self.__msp.getEnv('ActiveMntGrp', ms)
             if amntgrp:
                 self.__selector["MntGrp"] = amntgrp
             else:
@@ -962,6 +966,18 @@ class Settings(object):
     macroServer = property(__getMacroServer,
                            doc='macroserver device name')
 
+    def __getBackend(self):
+        """ get method for backend attribute
+
+        :returns: scan backend name, e.g. ``sardana`` or ``null``
+        :rtype :obj:`str`
+        """
+        return self.__msp.name
+
+    #: (:obj:`str`) scan backend name
+    backend = property(__getBackend,
+                       doc='scan backend name')
+
     def __getWriterDevice(self):
         """ get method for writerDevice attribute
 
@@ -990,7 +1006,7 @@ class Settings(object):
         :rtype: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
-        return Utils.tostr(MSUtils.getEnv('ScanDir', ms))
+        return Utils.tostr(self.__msp.getEnv('ScanDir', ms))
 
     def __setScanDir(self, name):
         """ set method for ScanDir attribute
@@ -999,7 +1015,7 @@ class Settings(object):
         :type name: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
-        MSUtils.setEnv('ScanDir', Utils.tostr(name), ms)
+        self.__msp.setEnv('ScanDir', Utils.tostr(name), ms)
 
     #: the json data string
     scanDir = property(__getScanDir, __setScanDir,
@@ -1012,7 +1028,7 @@ class Settings(object):
         :rtype: :obj:`int`
         """
         ms = self.__selector.getMacroServer()
-        sid = MSUtils.getEnv('ScanID', ms)
+        sid = self.__msp.getEnv('ScanID', ms)
         try:
             return int(sid)
         except Exception:
@@ -1029,7 +1045,7 @@ class Settings(object):
         :type name: :obj:`int`
         """
         ms = self.__selector.getMacroServer()
-        MSUtils.setEnv('ScanID', name, ms)
+        self.__msp.setEnv('ScanID', name, ms)
 
     #: (:obj:`int`) the json data string
     scanID = property(__getScanID, __setScanID,
@@ -1042,7 +1058,7 @@ class Settings(object):
         :rtype: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
-        val = MSUtils.getEnv('ScanFile', ms)
+        val = self.__msp.getEnv('ScanFile', ms)
         ret = [val] if isinstance(val, (str, str)) else val
         return json.dumps(ret)
 
@@ -1057,7 +1073,7 @@ class Settings(object):
         ms = self.__selector.getMacroServer()
         if isinstance(jname, (list, tuple)) and len(jname) == 1:
             jname = jname[0]
-        MSUtils.setEnv('ScanFile', jname, ms)
+        self.__msp.setEnv('ScanFile', jname, ms)
 
     #: (:obj:`str`) the json data string
     scanFile = property(__getScanFile, __setScanFile,
@@ -1566,7 +1582,7 @@ class Settings(object):
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(
             nexusconfig_device, self.defaultNeXusPath, self.defaultNeXusType,
-            self.defaultUserDataPath)
+            self.defaultUserDataPath, backend=self.__msp)
         if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
                 dcpcreator.setStepDSources(

@@ -43,7 +43,8 @@ class DynamicComponent(object):
                  "instrument:NXinstrument/collection",
                  defaulttype="NX_CHAR",
                  defaultuserpath="/$var.entryname#'scan'$var.serialno:NXentry/"
-                 "user_data:NXparameters"):
+                 "user_data:NXparameters",
+                 backend=None):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server
@@ -51,7 +52,12 @@ class DynamicComponent(object):
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param defaultpath:  default dynamic component path
         :type defaultpath: :obj:`str`
+        :param backend: scan backend providing channel sources,
+                        sardana pool channels if None
+        :type backend: :class:`nxsrecconfig.ScanBackend.ScanBackend`
         """
+        #: (:class:`nxsrecconfig.ScanBackend.ScanBackend`) scan backend
+        self.__backend = backend
         #: (:class:`tango.DeviceProxy` \
         #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
         #:    configuration server
@@ -448,8 +454,7 @@ class DynamicComponent(object):
             link.attrib["target"] = "%s/%s" % (path, name)
             link.attrib["name"] = name
 
-    @classmethod
-    def __findDataSource(cls, name):
+    def __findDataSource(self, name):
         """ finds datasource details:
         (attribute name, device name, host, port) tuple
 
@@ -468,14 +473,15 @@ class DynamicComponent(object):
         if name and sname[0] == 'tango' and sname[-1].count('/') > 2:
             source = sname[-1]
         else:
-            source = PoolUtils.getSource(name)
+            source = self.__backend.channelSource(name) \
+                if self.__backend is not None else PoolUtils.getSource(name)
         if source:
             arr = source.split("/")
             if len(arr) > 4 and ":" in arr[0]:
                 device = "/".join(arr[1:-1])
                 attr = arr[-1]
                 hat = arr[0].split(":")
-                if hat > 1:
+                if len(hat) > 1:
                     host = hat[0]
                     port = hat[1]
             elif len(arr) > 3:
@@ -483,8 +489,7 @@ class DynamicComponent(object):
                 attr = arr[-1]
         return (attr, device, host, port)
 
-    @classmethod
-    def __createField(cls, parent, fname, nxtype, sname,
+    def __createField(self, parent, fname, nxtype, sname,
                       record=None, shape=None, dsnode=None,
                       strategy='STEP', dstype=None):
         """ creates XML node for NeXus field
@@ -526,7 +531,7 @@ class DynamicComponent(object):
                 device = None
                 attr = None
             else:
-                (attr, device, host, port) = cls.__findDataSource(sname)
+                (attr, device, host, port) = self.__findDataSource(sname)
             if device and attr:
                 dsource = lxml.etree.Element("datasource")
                 dsource.attrib["name"] = sname

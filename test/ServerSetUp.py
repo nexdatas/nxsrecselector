@@ -25,6 +25,11 @@ import subprocess
 import time
 
 try:
+    from TangoDbUtils import delete_server
+except ImportError:
+    from .TangoDbUtils import delete_server
+
+try:
     import tango
 except Exception:
     import PyTango as tango
@@ -99,8 +104,7 @@ class ServerSetUp(object):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         print("tearing down ...")
-        db = tango.Database()
-        db.delete_server(self.new_device_info_writer.server)
+        delete_server(self.new_device_info_writer.server)
 
         with subprocess.Popen(
                 "ps -ef | grep 'NXSRecSelector %s' | grep -v grep" %
