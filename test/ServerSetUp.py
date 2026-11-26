@@ -25,9 +25,11 @@ import subprocess
 import time
 
 try:
-    from TangoDbUtils import delete_server
+    from TangoDbUtils import (
+        add_device, add_server, database, delete_server)
 except ImportError:
-    from .TangoDbUtils import delete_server
+    from .TangoDbUtils import (
+        add_device, add_server, database, delete_server)
 
 try:
     import tango
@@ -56,10 +58,10 @@ class ServerSetUp(object):
     # \brief Common set up of Tango Server
     def setUp(self):
         print("tearing down ...")
-        db = tango.Database()
-        db.add_device(self.new_device_info_writer)
-        db.add_server(self.new_device_info_writer.server,
-                      self.new_device_info_writer)
+        db = database()
+        add_device(self.new_device_info_writer, db)
+        add_server(self.new_device_info_writer.server,
+                   self.new_device_info_writer, db)
 
         if os.path.isfile("../NXSRecSelector"):
             self._psub = subprocess.call(
