@@ -58,9 +58,9 @@ copyright = u'2012-2017 DESY, Jan Kotanski <jkotan@mail.desy.de>' \
 # built documents.
 #
 # The short X.Y version.
-version = '4.14'
+version = '5.0'
 # The full version, including alpha/beta/rc tags.
-release = '4.14.0'
+release = '5.0.0'
 
 try:
     sys.path.insert(0, os.path.abspath("../"))
@@ -254,8 +254,9 @@ if os.getenv("NXSCONFIGSERVER_HIDE_VERSIONS") != 'TRUE':
     html_sidebars['**'].append('versions.html')
 
 html_context = {
-    "current_version": "v4.14.0",
+    "current_version": "v5.0.0",
     "docs_versions": [
+        "v5.0.0",
         "v4.14.0",
         "v4.13.2",
         "v4.13.1",
