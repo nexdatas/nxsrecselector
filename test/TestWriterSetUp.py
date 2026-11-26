@@ -26,9 +26,11 @@ import subprocess
 import time
 
 try:
-    from TangoDbUtils import delete_server
+    from TangoDbUtils import (
+        add_device, add_server, database, delete_server)
 except ImportError:
-    from .TangoDbUtils import delete_server
+    from .TangoDbUtils import (
+        add_device, add_server, database, delete_server)
 
 try:
     import tango
@@ -74,14 +76,14 @@ class TestWriterSetUp(object):
         self.start()
 
     def add(self):
-        db = tango.Database()
-        db.add_device(self.new_device_info_writer)
-        db.add_server(self.new_device_info_writer.server,
-                      self.new_device_info_writer)
+        db = database()
+        add_device(self.new_device_info_writer, db)
+        add_server(self.new_device_info_writer.server,
+                   self.new_device_info_writer, db)
 
     # starts server
     def start(self):
-        db = tango.Database()
+        db = database()
         path = os.path.dirname(TestWriter.__file__)
         if not path:
             path = '.'

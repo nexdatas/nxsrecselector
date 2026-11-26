@@ -31,6 +31,71 @@ except Exception:
 DBTIMEOUT = 30000
 
 
+def database(timeout=DBTIMEOUT):
+    """ provides a tango database proxy with an increased timeout
+
+    Database commands, e.g. DbAddDevice or DbDeleteServer, can exceed
+    the default 3 s timeout on busy databases.
+
+    :param timeout: database timeout in ms
+    :type timeout: :obj:`int`
+    :returns: tango database proxy
+    :rtype: :class:`tango.Database`
+    """
+    db = tango.Database()
+    db.set_timeout_millis(timeout)
+    return db
+
+
+def retry(command, *args, **kwargs):
+    """ executes a database command and retries it if it fails
+
+    :param command: database command, e.g. ``db.add_device``
+    :type command: :obj:`callable`
+    :param args: command arguments
+    :type args: :obj:`list`
+    :param retries: number of attempts
+    :type retries: :obj:`int`
+    :returns: command result
+    :rtype: `any`
+    """
+    retries = kwargs.pop("retries", 3)
+    for attempt in range(retries):
+        try:
+            return command(*args, **kwargs)
+        except tango.DevFailed:
+            if attempt == retries - 1:
+                raise
+            time.sleep(1)
+
+
+def add_device(info, db=None):
+    """ adds a device to the tango database
+
+    :param info: device info
+    :type info: :class:`tango.DbDevInfo`
+    :param db: tango database proxy, :func:`database` if None
+    :type db: :class:`tango.Database`
+    """
+    db = db or database()
+    retry(db.add_device, info)
+
+
+def add_server(server, devices, db=None):
+    """ adds a server with its devices to the tango database
+
+    :param server: server name, i.e. ``executable/instance``
+    :type server: :obj:`str`
+    :param devices: device info or list of device infos
+    :type devices: :class:`tango.DbDevInfo` \
+                   or :obj:`list` <:class:`tango.DbDevInfo`>
+    :param db: tango database proxy, :func:`database` if None
+    :type db: :class:`tango.Database`
+    """
+    db = db or database()
+    retry(db.add_server, server, devices)
+
+
 def delete_server(server, retries=3, timeout=DBTIMEOUT):
     """ deletes a server from the tango database
 
@@ -44,13 +109,4 @@ def delete_server(server, retries=3, timeout=DBTIMEOUT):
     :param timeout: database timeout in ms
     :type timeout: :obj:`int`
     """
-    db = tango.Database()
-    db.set_timeout_millis(timeout)
-    for attempt in range(retries):
-        try:
-            db.delete_server(server)
-            return
-        except tango.DevFailed:
-            if attempt == retries - 1:
-                raise
-            time.sleep(1)
+    retry(database(timeout).delete_server, server, retries=retries)
