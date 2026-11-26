@@ -25,17 +25,11 @@ import subprocess
 import time
 
 try:
-<<<<<<< HEAD
-    from TangoDbUtils import delete_server
-except ImportError:
-    from .TangoDbUtils import delete_server
-=======
     from TangoDbUtils import (
         add_device, add_server, database, delete_server)
 except ImportError:
     from .TangoDbUtils import (
         add_device, add_server, database, delete_server)
->>>>>>> issue_233
 
 try:
     import tango
