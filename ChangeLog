@@ -5,7 +5,7 @@
 	* add WriterConfiguration creating the writer configuration of a profile for any scan system
 	* add BlissScanMeta providing INIT and FINAL fields of a profile as BLISS user scan metadata
 	* add BlissSession publishing BLISS sessions for the bliss backend and applying selected channels to BLISS measurement groups
-	* tagged as v5.0.0
+	* tagged as v4.15.0
 
 2026-11-25 Jan Kotanski <jankotan@gmail.com>
 	* remove python2 support
