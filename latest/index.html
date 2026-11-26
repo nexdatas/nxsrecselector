@@ -54,6 +54,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -62,11 +63,13 @@
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -322,6 +325,40 @@ for MacroServer to 3 and restart servers.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.BACKENDS"><code class="docutils literal notranslate"><span class="pre">BACKENDS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.DEFAULTBACKEND"><code class="docutils literal notranslate"><span class="pre">DEFAULTBACKEND</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend"><code class="docutils literal notranslate"><span class="pre">NullBackend</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.channelSource"><code class="docutils literal notranslate"><span class="pre">NullBackend.channelSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.createMntGrp"><code class="docutils literal notranslate"><span class="pre">NullBackend.createMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.defaultDoor"><code class="docutils literal notranslate"><span class="pre">NullBackend.defaultDoor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.deleteMntGrp"><code class="docutils literal notranslate"><span class="pre">NullBackend.deleteMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.environment"><code class="docutils literal notranslate"><span class="pre">NullBackend.environment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.getEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getMacroServer"><code class="docutils literal notranslate"><span class="pre">NullBackend.getMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getPools"><code class="docutils literal notranslate"><span class="pre">NullBackend.getPools()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getScanEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.getScanEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getSelectorEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.getSelectorEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.isDoorRunning"><code class="docutils literal notranslate"><span class="pre">NullBackend.isDoorRunning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.isDoorValid"><code class="docutils literal notranslate"><span class="pre">NullBackend.isDoorValid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.mntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">NullBackend.mntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.name"><code class="docutils literal notranslate"><span class="pre">NullBackend.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.nonExistingChannels"><code class="docutils literal notranslate"><span class="pre">NullBackend.nonExistingChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.setEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setEnvs"><code class="docutils literal notranslate"><span class="pre">NullBackend.setEnvs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setMntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">NullBackend.setMntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setScanEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.setScanEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setSelectorEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.setSelectorEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.supportsMntGrps"><code class="docutils literal notranslate"><span class="pre">NullBackend.supportsMntGrps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.testMntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">NullBackend.testMntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.updateMacroServer"><code class="docutils literal notranslate"><span class="pre">NullBackend.updateMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.usetEnv"><code class="docutils literal notranslate"><span class="pre">NullBackend.usetEnv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.SardanaBackend"><code class="docutils literal notranslate"><span class="pre">SardanaBackend</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Backends.createBackend"><code class="docutils literal notranslate"><span class="pre">createBackend()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK"><code class="docutils literal notranslate"><span class="pre">ATTRIBUTESTOCHECK</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.CheckerThread.AlarmStateError"><code class="docutils literal notranslate"><span class="pre">AlarmStateError</span></code></a></li>
@@ -435,18 +472,29 @@ for MacroServer to 3 and restart servers.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools"><code class="docutils literal notranslate"><span class="pre">MacroServerPools</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.checkChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.channelSource"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.channelSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.createMntGrp"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.createMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.defaultDoor"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.defaultDoor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.deleteMntGrp"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.deleteMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getEnv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getMacroServer"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getMacroServer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getPools"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getPools()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getScanEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getScanEnv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getSelectorEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.getSelectorEnv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorRunning"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.isDoorRunning()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.poolBlacklist"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.poolBlacklist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorValid"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.isDoorValid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.mntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.mntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.name"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.nonExistingChannels"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.nonExistingChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setEnvs"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setEnvs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setMntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setMntGrpConfiguration()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setScanEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setScanEnv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setSelectorEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.setSelectorEnv()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.tangoSourceErrorStates"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.tangoSourceErrorStates</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.tangoSourceWarningStates"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.tangoSourceWarningStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.supportsMntGrps"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.supportsMntGrps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.testMntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.testMntGrpConfiguration()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.updateMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.usetEnv"><code class="docutils literal notranslate"><span class="pre">MacroServerPools.usetEnv()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -643,6 +691,39 @@ for MacroServer to 3 and restart servers.</p>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend"><code class="docutils literal notranslate"><span class="pre">ScanBackend</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.channelSource"><code class="docutils literal notranslate"><span class="pre">ScanBackend.channelSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.checkChannels"><code class="docutils literal notranslate"><span class="pre">ScanBackend.checkChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.createMntGrp"><code class="docutils literal notranslate"><span class="pre">ScanBackend.createMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.defaultDoor"><code class="docutils literal notranslate"><span class="pre">ScanBackend.defaultDoor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.deleteMntGrp"><code class="docutils literal notranslate"><span class="pre">ScanBackend.deleteMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.getEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getMacroServer"><code class="docutils literal notranslate"><span class="pre">ScanBackend.getMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getPools"><code class="docutils literal notranslate"><span class="pre">ScanBackend.getPools()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getScanEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.getScanEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getSelectorEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.getSelectorEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.isDoorRunning"><code class="docutils literal notranslate"><span class="pre">ScanBackend.isDoorRunning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.isDoorValid"><code class="docutils literal notranslate"><span class="pre">ScanBackend.isDoorValid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.mntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">ScanBackend.mntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.name"><code class="docutils literal notranslate"><span class="pre">ScanBackend.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.nonExistingChannels"><code class="docutils literal notranslate"><span class="pre">ScanBackend.nonExistingChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.poolBlacklist"><code class="docutils literal notranslate"><span class="pre">ScanBackend.poolBlacklist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setEnvs"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setEnvs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setMntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setMntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setScanEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setScanEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setSelectorEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setSelectorEnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.supportsMntGrps"><code class="docutils literal notranslate"><span class="pre">ScanBackend.supportsMntGrps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.tangoSourceErrorStates"><code class="docutils literal notranslate"><span class="pre">ScanBackend.tangoSourceErrorStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.tangoSourceWarningStates"><code class="docutils literal notranslate"><span class="pre">ScanBackend.tangoSourceWarningStates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.testMntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">ScanBackend.testMntGrpConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.updateMacroServer"><code class="docutils literal notranslate"><span class="pre">ScanBackend.updateMacroServer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.usetEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.usetEnv()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection"><code class="docutils literal notranslate"><span class="pre">Selection</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.deselect"><code class="docutils literal notranslate"><span class="pre">Selection.deselect()</span></code></a></li>
@@ -661,6 +742,7 @@ for MacroServer to 3 and restart servers.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector"><code class="docutils literal notranslate"><span class="pre">Selector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.backend"><code class="docutils literal notranslate"><span class="pre">Selector.backend</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand"><code class="docutils literal notranslate"><span class="pre">Selector.configCommand()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.descErrors"><code class="docutils literal notranslate"><span class="pre">Selector.descErrors</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.deselect"><code class="docutils literal notranslate"><span class="pre">Selector.deselect()</span></code></a></li>
@@ -697,6 +779,7 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableMntGrps"><code class="docutils literal notranslate"><span class="pre">Settings.availableMntGrps()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableProfiles"><code class="docutils literal notranslate"><span class="pre">Settings.availableProfiles()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableTimers"><code class="docutils literal notranslate"><span class="pre">Settings.availableTimers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.backend"><code class="docutils literal notranslate"><span class="pre">Settings.backend</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheComponent"><code class="docutils literal notranslate"><span class="pre">Settings.cacheComponent</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.cacheConfiguration</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheWriterConfiguration"><code class="docutils literal notranslate"><span class="pre">Settings.cacheWriterConfiguration()</span></code></a></li>
@@ -855,6 +938,41 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson"><code class="docutils literal notranslate"><span class="pre">Utils.stringToListJson()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.toString"><code class="docutils literal notranslate"><span class="pre">Utils.toString()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.tostr"><code class="docutils literal notranslate"><span class="pre">Utils.tostr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.NumpyEncoder"><code class="docutils literal notranslate"><span class="pre">NumpyEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.NumpyEncoder.default"><code class="docutils literal notranslate"><span class="pre">NumpyEncoder.default()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.aliases"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.aliases</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.availableComponents"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.availableComponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.availableComps"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.availableComps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.cacheprefix"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.cacheprefix</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.collectAliases"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.collectAliases()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.command"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.conf"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.conf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.confVar"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.confVar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.create"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.createDynamicComponent"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.createDynamicComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.deviceAliases"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.deviceAliases</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.dynamicCP"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.dynamicCP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.dynamicDataSources"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.dynamicDataSources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.getalias"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.getalias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.log"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.log</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.moveableDataSources"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.moveableDataSources</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.moveables"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.moveables</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.oddmntgrp"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.oddmntgrp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.removeDynamicComponent"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.removeDynamicComponent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.searchDataSources"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.searchDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.selector"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.selector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.serverVar"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.serverVar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.shortName"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.shortName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.tangoAlias"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.tangoAlias()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.variables"><code class="docutils literal notranslate"><span class="pre">WriterConfiguration.variables</span></code></a></li>
 </ul>
 </li>
 </ul>

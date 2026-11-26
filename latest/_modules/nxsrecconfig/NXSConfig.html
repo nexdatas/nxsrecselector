@@ -52,6 +52,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +61,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -240,6 +243,7 @@
         <span class="n">cacheconfiguration</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CacheConfiguration</span><span class="p">)</span>
         <span class="n">globaluserdata</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GlobalUserData</span><span class="p">)</span>
         <span class="n">checkdescription</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CheckDescription</span><span class="p">)</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Backend</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">writepoolmotorpositions</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WritePoolMotorPositions</span><span class="p">)</span>
         <span class="n">writeallmotorpositions</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WriteAllMotorPositions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="n">STG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">,</span>
@@ -249,7 +253,7 @@
                          <span class="n">defaultnexustype</span><span class="p">,</span>
                          <span class="n">defaultudatapath</span><span class="p">,</span> <span class="n">globaluserdata</span><span class="p">,</span>
                          <span class="n">cacheconfiguration</span><span class="p">,</span> <span class="n">syncmntgrp</span><span class="p">,</span>
-                         <span class="n">checkdescription</span><span class="p">)</span>
+                         <span class="n">checkdescription</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PoolBlacklist</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimerFilters</span> <span class="ow">or</span> <span class="p">[</span>
@@ -2580,6 +2584,10 @@
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
          <span class="s2">&quot;default measurement group name&quot;</span><span class="p">,</span>
          <span class="p">[</span><span class="s2">&quot;nxsmntgrp&quot;</span><span class="p">]],</span>
+        <span class="s1">&#39;Backend&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
+         <span class="s2">&quot;scan backend, i.e. sardana or null (without scan control system)&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s2">&quot;sardana&quot;</span><span class="p">]],</span>
         <span class="s1">&#39;PoolBlacklist&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">tango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
          <span class="s2">&quot;blacklist of pools&quot;</span><span class="p">,</span>

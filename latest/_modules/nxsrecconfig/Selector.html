@@ -52,6 +52,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +61,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -161,7 +164,7 @@
 
 <span class="c1"># import getpass</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
-<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">Utils</span><span class="p">,</span> <span class="n">MSUtils</span>
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">Utils</span>
 <span class="kn">from</span> <span class="nn">.Selection</span> <span class="kn">import</span> <span class="n">Selection</span>
 <span class="kn">from</span> <span class="nn">.Converter</span> <span class="kn">import</span> <span class="n">Converter</span>
 
@@ -361,8 +364,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;Door&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
                 <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="p">,</span> <span class="s2">&quot;Door&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">defaultDoor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">__postSetDoor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -372,8 +374,7 @@
 <span class="sd">        :type changed: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="p">,</span> <span class="s2">&quot;Door&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">defaultDoor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="p">)</span>
             <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">])</span>
@@ -444,17 +445,7 @@
 <span class="sd">        :returns: valid Door device flag</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">door</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">door</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-                <span class="n">db</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
-                <span class="n">macroserver</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">macroserver</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">macroserver</span><span class="p">:</span>
-                <span class="n">door</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">door</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">isDoorValid</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="Selector.resetPreselectedComponents">
@@ -492,6 +483,15 @@
         <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span></div>
 
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">backend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; scan backend</span>
+
+<span class="sd">        :returns: scan backend</span>
+<span class="sd">        :rtype: :class:`nxsrecconfig.ScanBackend.ScanBackend`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span>
 
 <div class="viewcode-block" id="Selector.getPools">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.getPools">[docs]</a>

@@ -52,6 +52,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +61,13 @@
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -135,6 +138,7 @@
 
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
@@ -172,6 +176,8 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.AlarmStateError">AlarmStateError</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.aliases">aliases (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.allkeys">allkeys() (nxsrecconfig.Converter.Converter method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.always_executed_hook">always_executed_hook() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -182,15 +188,21 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem.attr">attr (nxsrecconfig.CheckerThread.TangoDSItem attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list">attr_list (nxsrecconfig.NXSConfig.NXSRecSelectorClass attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK">ATTRIBUTESTOCHECK (in module nxsrecconfig.CheckerThread)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableComponents">AvailableComponents() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.availableComponents">availableComponents() (nxsrecconfig.Settings.Settings method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.availableComponents">(nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
+</li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.availableComps">availableComps (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableDataSources">AvailableDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
@@ -215,12 +227,30 @@
   </ul></td>
 </tr></table>
 
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.backend">backend (nxsrecconfig.Selector.Selector property)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.backend">(nxsrecconfig.Settings.Settings property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.BACKENDS">BACKENDS (in module nxsrecconfig.Backends)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheComponent">cacheComponent (nxsrecconfig.Settings.Settings property)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.cacheConfiguration">cacheConfiguration (nxsrecconfig.Settings.Settings attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.cacheprefix">cacheprefix (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CacheWriterConfiguration">CacheWriterConfiguration() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
@@ -232,7 +262,15 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.channelProperties">channelProperties() (nxsrecconfig.Settings.Settings method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels">checkChannels() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.channelSource">channelSource() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.channelSource">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.channelSource">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.checkChannels">checkChannels() (nxsrecconfig.ScanBackend.ScanBackend method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.checkdescription">checkdescription (nxsrecconfig.ProfileManager.ProfileManager attribute)</a>
 </li>
@@ -254,8 +292,14 @@
       </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list">cmd_list (nxsrecconfig.NXSConfig.NXSRecSelectorClass attribute)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.command">command() (nxsrecconfig.Utils.TangoUtils class method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.collectAliases">collectAliases() (nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.command">command() (nxsrecconfig.Utils.TangoUtils class method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.command">(nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict">compareDict() (nxsrecconfig.Utils.Utils class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentClientSources">ComponentClientSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -288,11 +332,15 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentSources">componentSources() (nxsrecconfig.Settings.Settings method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.conf">conf (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand">configCommand() (nxsrecconfig.Selector.Selector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.configDevice">configDevice (nxsrecconfig.Settings.Settings property)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.configVariables">configVariables (nxsrecconfig.Settings.Settings property)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.confVar">confVar() (nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter.convert">convert() (nxsrecconfig.Converter.Converter method)</a>
 
@@ -327,6 +375,12 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.cpdescription">cpdescription() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.create">create() (nxsrecconfig.DynamicComponent.DynamicComponent method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.create">(nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
+</li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.createBackend">createBackend() (in module nxsrecconfig.Backends)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDataSources">CreateDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
@@ -339,7 +393,19 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDynamicComponent">CreateDynamicComponent() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.createDynamicComponent">createDynamicComponent() (nxsrecconfig.Settings.Settings method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.createDynamicComponent">(nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
 </li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.createMntGrp">createMntGrp() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.createMntGrp">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.createMntGrp">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateWriterConfiguration">CreateWriterConfiguration() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.createWriterConfiguration">createWriterConfiguration() (nxsrecconfig.Settings.Settings method)</a>
@@ -364,10 +430,22 @@
       </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.debug">debug() (nxsrecconfig.StreamSet.StreamSet method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.NumpyEncoder.default">default() (nxsrecconfig.WriterConfiguration.NumpyEncoder method)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.DEFAULT_RECORD_KEYS">DEFAULT_RECORD_KEYS (in module nxsrecconfig.ProfileManager)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.DEFAULTBACKEND">DEFAULTBACKEND (in module nxsrecconfig.Backends)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultCanFailDataSources">defaultCanFailDataSources (nxsrecconfig.Settings.Settings attribute)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.defaultDoor">defaultDoor() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.defaultDoor">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.defaultDoor">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultMntGrp">defaultMntGrp (nxsrecconfig.Settings.Settings attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultNeXusPath">defaultNeXusPath (nxsrecconfig.Settings.Settings attribute)</a>
@@ -392,6 +470,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.deleteAllProfiles">deleteAllProfiles() (nxsrecconfig.Settings.Settings method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.deleteMntGrp">deleteMntGrp() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.deleteMntGrp">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.deleteMntGrp">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteProfile">DeleteProfile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.deleteProfile">deleteProfile() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
@@ -416,6 +502,8 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list">device_property_list (nxsrecconfig.NXSConfig.NXSRecSelectorClass attribute)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.deviceAliases">deviceAliases (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.deviceGroups">deviceGroups (nxsrecconfig.Settings.Settings property)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.door">door (nxsrecconfig.Settings.Settings property)</a>
@@ -428,22 +516,28 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent">DynamicComponent (class in nxsrecconfig.DynamicComponent)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.dynamicCP">dynamicCP (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.dynamicDataSources">dynamicDataSources (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.environment">environment (nxsrecconfig.Backends.NullBackend property)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.error">error() (nxsrecconfig.StreamSet.StreamSet method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.errords">errords (nxsrecconfig.CheckerThread.CheckerItem attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSDict">ExDSDict (class in nxsrecconfig.Describer)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem">ExDSItem (class in nxsrecconfig.Describer)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem">ExDSItem (class in nxsrecconfig.Describer)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.exportEnv">exportEnv() (nxsrecconfig.Selector.Selector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ExportEnvProfile">ExportEnvProfile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -490,6 +584,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.get">get() (nxsrecconfig.Selector.Selector method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.getalias">getalias (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getAliases">getAliases() (nxsrecconfig.Utils.PoolUtils class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getChannelSources">getChannelSources() (nxsrecconfig.Utils.PoolUtils class method)</a>
@@ -500,15 +596,27 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames">getElementNames() (nxsrecconfig.Utils.PoolUtils class method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getEnv">getEnv() (nxsrecconfig.Utils.MSUtils class method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getEnv">getEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getEnv">(nxsrecconfig.Utils.MSUtils class method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getFullAttrName">getFullAttrName() (nxsrecconfig.Utils.TangoUtils class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getFullDeviceNames">getFullDeviceNames() (nxsrecconfig.Utils.PoolUtils class method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getMacroServer">getMacroServer() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getMacroServer">getMacroServer() (nxsrecconfig.Backends.NullBackend method)</a>
 
       <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getMacroServer">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getMacroServer">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.getMacroServer">(nxsrecconfig.Selector.Selector method)</a>
 </li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getMacroServer">(nxsrecconfig.Utils.MSUtils class method)</a>
@@ -522,9 +630,13 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.getPoolMotors">getPoolMotors() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getPools">getPools() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getPools">getPools() (nxsrecconfig.Backends.NullBackend method)</a>
 
       <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getPools">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getPools">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.getPools">(nxsrecconfig.Selector.Selector method)</a>
 </li>
       </ul></li>
@@ -532,12 +644,24 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.getRecord">getRecord() (nxsrecconfig.Utils.Utils class method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getScanEnv">getScanEnv() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getScanEnv">getScanEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getScanEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getScanEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.getScanEnvVariables">getScanEnvVariables() (nxsrecconfig.Selector.Selector method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getSelectorEnv">getSelectorEnv() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.getSelectorEnv">getSelectorEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getSelectorEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getSelectorEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getShapeTypeUnit">getShapeTypeUnit() (nxsrecconfig.Utils.TangoUtils class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getSource">getSource() (nxsrecconfig.Utils.PoolUtils class method)</a>
@@ -622,12 +746,12 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed">is_FullDeviceNames_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed">is_ImportEnv_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed">is_ImportMntGrp_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed">is_IsMntGrpUpdated_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LinkDataSources_write_allowed">is_LinkDataSources_write_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -680,10 +804,24 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_VariableComponents_allowed">is_VariableComponents_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorRunning">isDoorRunning() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.isDoorRunning">isDoorRunning() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorRunning">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.isDoorValid">isDoorValid() (nxsrecconfig.Selector.Selector method)</a>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.isDoorRunning">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
 </li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.isDoorValid">isDoorValid() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorValid">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.isDoorValid">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.isDoorValid">(nxsrecconfig.Selector.Selector method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.IsMntGrpUpdated">IsMntGrpUpdated() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.isMntGrpUpdated">isMntGrpUpdated() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
@@ -712,10 +850,12 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.loadProfile">loadProfile() (nxsrecconfig.Settings.Settings method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_debug">log_debug (nxsrecconfig.StreamSet.StreamSet attribute)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.log">log (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_debug">log_debug (nxsrecconfig.StreamSet.StreamSet attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_error">log_error (nxsrecconfig.StreamSet.StreamSet attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_fatal">log_fatal (nxsrecconfig.StreamSet.StreamSet attribute)</a>
@@ -762,11 +902,19 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mntGrp">mntGrp (nxsrecconfig.Settings.Settings property)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.mntGrpConfiguration">mntGrpConfiguration() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.mntGrpConfiguration">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MntGrpConfiguration">MntGrpConfiguration() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration">mntGrpConfiguration() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
 
       <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.mntGrpConfiguration">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.mntGrpConfiguration">(nxsrecconfig.Settings.Settings method)</a>
 </li>
       </ul></li>
@@ -777,6 +925,8 @@
 
       <ul>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig">nxsrecconfig</a>
+</li>
+        <li><a href="nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends</a>
 </li>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread</a>
 </li>
@@ -794,6 +944,8 @@
 </li>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release</a>
 </li>
+        <li><a href="nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend</a>
+</li>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection</a>
 </li>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector</a>
@@ -804,10 +956,16 @@
 </li>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils</a>
 </li>
+        <li><a href="nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.moduleLabel">moduleLabel (nxsrecconfig.Selector.Selector attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.moveableDataSources">moveableDataSources (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.moveables">moveables (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils">MSUtils (class in nxsrecconfig.Utils)</a>
 </li>
@@ -835,12 +993,18 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.name">name (nxsrecconfig.CheckerThread.CheckerItem attribute)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.name">name (nxsrecconfig.Backends.NullBackend attribute)</a>
 
       <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem.name">(nxsrecconfig.CheckerThread.CheckerItem attribute)</a>
+</li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem.name">(nxsrecconfig.CheckerThread.TangoDSItem attribute)</a>
 </li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Describer.DSItem.name">(nxsrecconfig.Describer.DSItem attribute)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.name">(nxsrecconfig.MacroServerPools.MacroServerPools attribute)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.name">(nxsrecconfig.ScanBackend.ScanBackend attribute)</a>
 </li>
       </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.names">names (nxsrecconfig.Converter.Converter1to2 attribute)</a>
@@ -857,13 +1021,32 @@
       </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.names">names() (nxsrecconfig.Settings.Settings method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.nonExistingChannels">nonExistingChannels() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.nonExistingChannels">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.nonExistingChannels">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend">NullBackend (class in nxsrecconfig.Backends)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.numberOfThreads">numberOfThreads (nxsrecconfig.Settings.Settings attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.NumpyEncoder">NumpyEncoder (class in nxsrecconfig.WriterConfiguration)</a>
 </li>
       <li>
     nxsrecconfig
 
       <ul>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    nxsrecconfig.Backends
+
+      <ul>
+        <li><a href="nxsrecconfig.html#module-nxsrecconfig.Backends">module</a>
 </li>
       </ul></li>
       <li>
@@ -887,6 +1070,8 @@
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Describer">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     nxsrecconfig.DynamicComponent
 
@@ -901,8 +1086,6 @@
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     nxsrecconfig.NXSConfig
 
@@ -922,6 +1105,13 @@
 
       <ul>
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Release">module</a>
+</li>
+      </ul></li>
+      <li>
+    nxsrecconfig.ScanBackend
+
+      <ul>
+        <li><a href="nxsrecconfig.html#module-nxsrecconfig.ScanBackend">module</a>
 </li>
       </ul></li>
       <li>
@@ -959,6 +1149,13 @@
         <li><a href="nxsrecconfig.html#module-nxsrecconfig.Utils">module</a>
 </li>
       </ul></li>
+      <li>
+    nxsrecconfig.WriterConfiguration
+
+      <ul>
+        <li><a href="nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">module</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector">NXSRecSelector (class in nxsrecconfig.NXSConfig)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass">NXSRecSelectorClass (class in nxsrecconfig.NXSConfig)</a>
@@ -973,6 +1170,8 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.oddmntgrp">oddmntgrp (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.OffStateError">OffStateError</a>
 </li>
   </ul></td>
@@ -999,7 +1198,7 @@
         <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.pnames">(nxsrecconfig.Converter.Converter2to1 attribute)</a>
 </li>
       </ul></li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.poolBlacklist">poolBlacklist (nxsrecconfig.MacroServerPools.MacroServerPools attribute)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.poolBlacklist">poolBlacklist (nxsrecconfig.ScanBackend.ScanBackend attribute)</a>
 
       <ul>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.poolBlacklist">(nxsrecconfig.Settings.Settings property)</a>
@@ -1091,10 +1290,10 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanFile">read_ScanFile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_ScanID">read_ScanID() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_StepDataSources">read_StepDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_UserData">read_UserData() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
@@ -1110,7 +1309,11 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.RemoveDynamicComponent">RemoveDynamicComponent() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.removeDynamicComponent">removeDynamicComponent() (nxsrecconfig.Settings.Settings method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.removeDynamicComponent">(nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
 </li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.reset">reset() (nxsrecconfig.Selection.Selection method)</a>
 
       <ul>
@@ -1145,9 +1348,13 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.SardanaBackend">SardanaBackend (class in nxsrecconfig.Backends)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SaveProfile">SaveProfile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.saveProfile">saveProfile() (nxsrecconfig.Settings.Settings method)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend">ScanBackend (class in nxsrecconfig.ScanBackend)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanDir">scanDir (nxsrecconfig.Settings.Settings property)</a>
 </li>
@@ -1158,6 +1365,8 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanFile">scanFile (nxsrecconfig.Settings.Settings property)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.scanID">scanID (nxsrecconfig.Settings.Settings property)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.searchDataSources">searchDataSources() (nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedComponents">SelectedComponents() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
@@ -1171,11 +1380,15 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector">Selector (class in nxsrecconfig.Selector)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.selector">selector (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltobool">seltobool() (nxsrecconfig.Converter.Converter3to2 method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.seltoint">seltoint() (nxsrecconfig.Converter.Converter2to3 method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltolist">seltolist() (nxsrecconfig.Converter.Converter3to2 method)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.serverVar">serverVar() (nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.set">set() (nxsrecconfig.Selector.Selector method)</a>
 </li>
@@ -1187,18 +1400,48 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setDefaultLinkPath">setDefaultLinkPath() (nxsrecconfig.DynamicComponent.DynamicComponent method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnv">setEnv() (nxsrecconfig.Utils.MSUtils class method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setEnv">setEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnvs">setEnvs() (nxsrecconfig.Utils.MSUtils class method)</a>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnv">(nxsrecconfig.Utils.MSUtils class method)</a>
+</li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setEnvs">setEnvs() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setEnvs">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setEnvs">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnvs">(nxsrecconfig.Utils.MSUtils class method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setInitDSources">setInitDSources() (nxsrecconfig.DynamicComponent.DynamicComponent method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setLabelParams">setLabelParams() (nxsrecconfig.DynamicComponent.DynamicComponent method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setScanEnv">setScanEnv() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setMntGrpConfiguration">setMntGrpConfiguration() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setMntGrpConfiguration">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setMntGrpConfiguration">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setScanEnv">setScanEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setScanEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setScanEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetScanEnvVariables">SetScanEnvVariables() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.setScanEnvVariables">setScanEnvVariables() (nxsrecconfig.Selector.Selector method)</a>
@@ -1207,8 +1450,14 @@
         <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.setScanEnvVariables">(nxsrecconfig.Settings.Settings method)</a>
 </li>
       </ul></li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setSelectorEnv">setSelectorEnv() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.setSelectorEnv">setSelectorEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setSelectorEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setSelectorEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDictDSources">setStepDictDSources() (nxsrecconfig.DynamicComponent.DynamicComponent method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDSources">setStepDSources() (nxsrecconfig.DynamicComponent.DynamicComponent method)</a>
@@ -1216,6 +1465,8 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings">Settings (class in nxsrecconfig.Settings)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem.shape">shape (nxsrecconfig.Describer.ExDSItem attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.shortName">shortName() (nxsrecconfig.WriterConfiguration.WriterConfiguration class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.stepdatasources">stepdatasources (nxsrecconfig.Settings.Settings property)</a>
 </li>
@@ -1231,6 +1482,14 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson">stringToListJson() (nxsrecconfig.Utils.Utils class method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.supportsMntGrps">supportsMntGrps (nxsrecconfig.Backends.NullBackend attribute)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.supportsMntGrps">(nxsrecconfig.MacroServerPools.MacroServerPools attribute)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.supportsMntGrps">(nxsrecconfig.ScanBackend.ScanBackend attribute)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SwitchProfile">SwitchProfile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.switchProfile">switchProfile() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
@@ -1253,12 +1512,14 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.tangoAlias">tangoAlias() (nxsrecconfig.WriterConfiguration.WriterConfiguration method)</a>
+</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem">TangoDSItem (class in nxsrecconfig.CheckerThread)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.tangoSourceErrorStates">tangoSourceErrorStates (nxsrecconfig.CheckerThread.CheckerThread attribute)</a>
 
       <ul>
-        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.tangoSourceErrorStates">(nxsrecconfig.MacroServerPools.MacroServerPools attribute)</a>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.tangoSourceErrorStates">(nxsrecconfig.ScanBackend.ScanBackend attribute)</a>
 </li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.tangoSourceErrorStates">(nxsrecconfig.Settings.Settings property)</a>
 </li>
@@ -1266,7 +1527,7 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.tangoSourceWarningStates">tangoSourceWarningStates (nxsrecconfig.CheckerThread.CheckerThread attribute)</a>
 
       <ul>
-        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.tangoSourceWarningStates">(nxsrecconfig.MacroServerPools.MacroServerPools attribute)</a>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.tangoSourceWarningStates">(nxsrecconfig.ScanBackend.ScanBackend attribute)</a>
 </li>
         <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.tangoSourceWarningStates">(nxsrecconfig.Settings.Settings property)</a>
 </li>
@@ -1275,6 +1536,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils">TangoUtils (class in nxsrecconfig.Utils)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.testMntGrpConfiguration">testMntGrpConfiguration() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.testMntGrpConfiguration">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.testMntGrpConfiguration">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.timerFilters">timerFilters (nxsrecconfig.ProfileManager.ProfileManager attribute)</a>
 
       <ul>
@@ -1305,14 +1574,20 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateDataSourceSelection">updateDataSourceSelection() (nxsrecconfig.Selection.Selection method)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer">updateMacroServer() (nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.updateMacroServer">updateMacroServer() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.updateMacroServer">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateMntGrp">UpdateMntGrp() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateMntGrp">updateMntGrp() (nxsrecconfig.Settings.Settings method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateMntGrp">updateMntGrp() (nxsrecconfig.Settings.Settings method)</a>
-</li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updateOrderedChannels">updateOrderedChannels() (nxsrecconfig.Selection.Selection method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Selection.Selection.updatePreselectingDataSources">updatePreselectingDataSources() (nxsrecconfig.Selection.Selection method)</a>
@@ -1327,8 +1602,16 @@
       </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.userData">userData (nxsrecconfig.Settings.Settings property)</a>
 </li>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.usetEnv">usetEnv() (nxsrecconfig.Utils.MSUtils class method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Backends.NullBackend.usetEnv">usetEnv() (nxsrecconfig.Backends.NullBackend method)</a>
+
+      <ul>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.usetEnv">(nxsrecconfig.MacroServerPools.MacroServerPools method)</a>
 </li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.usetEnv">(nxsrecconfig.ScanBackend.ScanBackend method)</a>
+</li>
+        <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.usetEnv">(nxsrecconfig.Utils.MSUtils class method)</a>
+</li>
+      </ul></li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.Utils">Utils (class in nxsrecconfig.Utils)</a>
 </li>
   </ul></td>
@@ -1341,9 +1624,11 @@
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.VariableComponents">VariableComponents() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
 </li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.variableComponents">variableComponents() (nxsrecconfig.Settings.Settings method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.variableComponents">variableComponents() (nxsrecconfig.Settings.Settings method)</a>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration.variables">variables (nxsrecconfig.WriterConfiguration.WriterConfiguration attribute)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.version">version (nxsrecconfig.Settings.Settings property)</a>
 </li>
@@ -1404,6 +1689,8 @@
       <li><a href="nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.writeEnvAttr">writeEnvAttr() (nxsrecconfig.Utils.MSUtils class method)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writepoolmotorpositions">writepoolmotorpositions (nxsrecconfig.Settings.Settings attribute)</a>
+</li>
+      <li><a href="nxsrecconfig.html#nxsrecconfig.WriterConfiguration.WriterConfiguration">WriterConfiguration (class in nxsrecconfig.WriterConfiguration)</a>
 </li>
       <li><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.writerDevice">writerDevice (nxsrecconfig.Settings.Settings property)</a>
 </li>

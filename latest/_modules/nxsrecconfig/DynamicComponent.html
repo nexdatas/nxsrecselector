@@ -52,6 +52,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +61,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -178,7 +181,8 @@
                  <span class="s2">&quot;instrument:NXinstrument/collection&quot;</span><span class="p">,</span>
                  <span class="n">defaulttype</span><span class="o">=</span><span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span>
                  <span class="n">defaultuserpath</span><span class="o">=</span><span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span>
-                 <span class="s2">&quot;user_data:NXparameters&quot;</span><span class="p">):</span>
+                 <span class="s2">&quot;user_data:NXparameters&quot;</span><span class="p">,</span>
+                 <span class="n">backend</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param nexusconfig_device: configserver configuration server</span>
@@ -186,7 +190,12 @@
 <span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
 <span class="sd">        :param defaultpath:  default dynamic component path</span>
 <span class="sd">        :type defaultpath: :obj:`str`</span>
+<span class="sd">        :param backend: scan backend providing channel sources,</span>
+<span class="sd">                        sardana pool channels if None</span>
+<span class="sd">        :type backend: :class:`nxsrecconfig.ScanBackend.ScanBackend`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:class:`nxsrecconfig.ScanBackend.ScanBackend`) scan backend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span> <span class="o">=</span> <span class="n">backend</span>
         <span class="c1">#: (:class:`tango.DeviceProxy` \</span>
         <span class="c1">#: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \</span>
         <span class="c1">#:    configuration server</span>
@@ -601,8 +610,7 @@
             <span class="n">link</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
             <span class="n">link</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__findDataSource</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__findDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; finds datasource details:</span>
 <span class="sd">        (attribute name, device name, host, port) tuple</span>
 
@@ -621,14 +629,15 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">sname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tango&#39;</span> <span class="ow">and</span> <span class="n">sname</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="n">sname</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">source</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getSource</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">channelSource</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getSource</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">source</span><span class="p">:</span>
             <span class="n">arr</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="n">attr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">hat</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">hat</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">host</span> <span class="o">=</span> <span class="n">hat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">port</span> <span class="o">=</span> <span class="n">hat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
@@ -636,8 +645,7 @@
                 <span class="n">attr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__createField</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">sname</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__createField</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">sname</span><span class="p">,</span>
                       <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dsnode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;STEP&#39;</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; creates XML node for NeXus field</span>
@@ -679,7 +687,7 @@
                 <span class="n">device</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">attr</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__findDataSource</span><span class="p">(</span><span class="n">sname</span><span class="p">)</span>
+                <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__findDataSource</span><span class="p">(</span><span class="n">sname</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">device</span> <span class="ow">and</span> <span class="n">attr</span><span class="p">:</span>
                 <span class="n">dsource</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;datasource&quot;</span><span class="p">)</span>
                 <span class="n">dsource</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sname</span>
