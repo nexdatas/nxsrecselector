@@ -1,6 +1,6 @@
 2026-XX-YY Jan Kotanski <jankotan@gmail.com>
 	* add scan backends: sardana, bliss and null (without scan control system)
-	* add the Backend device property
+	* add the Backend device property and attribute
 	* fix tango sources with host and port in dynamic components
 	* add WriterConfiguration creating the writer configuration of a profile for any scan system
 	* add BlissScanMeta providing INIT and FINAL fields of a profile as BLISS user scan metadata
