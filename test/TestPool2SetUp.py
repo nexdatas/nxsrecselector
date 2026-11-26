@@ -25,6 +25,11 @@ import subprocess
 import time
 
 try:
+    from TangoDbUtils import delete_server
+except ImportError:
+    from .TangoDbUtils import delete_server
+
+try:
     import tango
 except Exception:
     import PyTango as tango
@@ -115,8 +120,7 @@ class TestPool2SetUp(object):
         self.stop()
 
     def delete(self):
-        db = tango.Database()
-        db.delete_server(self.new_device_info_writer.server)
+        delete_server(self.new_device_info_writer.server)
 
     # stops server
     def stop(self):
