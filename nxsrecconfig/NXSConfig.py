@@ -2010,7 +2010,8 @@ class NXSRecSelectorClass(tango.DeviceClass):
          ["nxsmntgrp"]],
         'Backend':
         [tango.DevString,
-         "scan backend, i.e. sardana or null (without scan control system)",
+         "scan backend, i.e. sardana, bliss "
+         "or null (without scan control system)",
          ["sardana"]],
         'PoolBlacklist':
         [tango.DevVarStringArray,

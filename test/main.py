@@ -68,6 +68,7 @@ import StreamSet_test
 import Backends_test
 import WriterConfiguration_test
 import BlissScanMeta_test
+import BlissBackend_test
 
 # list of available databases
 DB_AVAILABLE = []
@@ -143,6 +144,8 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             BlissScanMeta_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(BlissBackend_test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter_test))
     basicsuite.addTests(

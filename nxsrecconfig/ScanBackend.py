@@ -44,6 +44,11 @@ class ScanBackend(object):
     #: (:obj:`bool`) the backend provides measurement group devices
     supportsMntGrps = False
 
+    #: (:obj:`bool`) the backend selects channels of its measurement groups
+    #:   by :meth:`selectChannels` for backends without measurement
+    #:   group devices
+    selectsChannels = False
+
     def __init__(self, numberOfThreads=None):
         """ constructor
 
@@ -316,6 +321,20 @@ class ScanBackend(object):
         :rtype: :obj:`str`
         """
         raise NotImplementedError()
+
+    def selectChannels(self, ms, mntgrp, channels):
+        """ selects channels of a measurement group of the scan system
+
+        It is used by backends without measurement group devices
+        and with :attr:`selectsChannels`
+
+        :param ms: scan server name
+        :type ms: :obj:`str`
+        :param mntgrp: measurement group name
+        :type mntgrp: :obj:`str`
+        :param channels: ordered channel names
+        :type channels: :obj:`list` <:obj:`str`>
+        """
 
     # helpers for the environment variables
 
