@@ -3,6 +3,7 @@
 	* add the Backend device property
 	* fix tango sources with host and port in dynamic components
 	* add WriterConfiguration creating the writer configuration of a profile for any scan system
+	* add BlissScanMeta providing INIT and FINAL fields of a profile as BLISS user scan metadata
 	* tagged as v4.14.X
 
 2026-11-25 Jan Kotanski <jankotan@gmail.com>

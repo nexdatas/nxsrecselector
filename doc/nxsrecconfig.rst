@@ -12,6 +12,14 @@ nxsrecconfig.Backends module
     :undoc-members:
     :show-inheritance:
 
+nxsrecconfig.BlissScanMeta module
+---------------------------------
+
+.. automodule:: nxsrecconfig.BlissScanMeta
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 nxsrecconfig.CheckerThread module
 ---------------------------------
 
