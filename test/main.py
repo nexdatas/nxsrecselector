@@ -66,6 +66,7 @@ import Converter3to2_test
 import Converter2to3_test
 import StreamSet_test
 import Backends_test
+import WriterConfiguration_test
 
 # list of available databases
 DB_AVAILABLE = []
@@ -135,6 +136,9 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(StreamSet_test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Backends_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            WriterConfiguration_test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter_test))
     basicsuite.addTests(

@@ -124,6 +124,14 @@ nxsrecconfig.Utils module
     :undoc-members:
     :show-inheritance:
 
+nxsrecconfig.WriterConfiguration module
+---------------------------------------
+
+.. automodule:: nxsrecconfig.WriterConfiguration
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
