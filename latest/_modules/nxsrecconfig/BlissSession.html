@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nxsrecconfig.BlissSession &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for nxsrecconfig.BlissSession</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2014-2026 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; BLISS session side of the ``bliss`` scan backend</span>
+
+<span class="sd">It publishes channels, motors and measurement groups of a BLISS session</span>
+<span class="sd">for the selector and applies the channels selected by the selector to</span>
+<span class="sd">the BLISS measurement groups.  In a BLISS session::</span>
+
+<span class="sd">    from nxsrecconfig.BlissSession import NXSBlissSession</span>
+<span class="sd">    nxsbliss = NXSBlissSession()</span>
+<span class="sd">    nxsbliss.sync()      # after changes in the selector or the session</span>
+
+<span class="sd">The selector has to use the ``bliss`` backend with the session name</span>
+<span class="sd">as its ``Door``.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">.BlissBackend</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BlissBackend</span><span class="p">,</span> <span class="n">channelName</span><span class="p">,</span> <span class="n">redisConnection</span><span class="p">,</span> <span class="n">sessionKey</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BlissAPI">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI">[docs]</a>
+<span class="k">class</span> <span class="nc">BlissAPI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; access to the current BLISS session</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BlissAPI.session">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.session">[docs]</a>
+    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the session name</span>
+
+<span class="sd">        :returns: session name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss</span> <span class="kn">import</span> <span class="n">current_session</span>
+        <span class="k">return</span> <span class="n">current_session</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="BlissAPI.counters">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.counters">[docs]</a>
+    <span class="k">def</span> <span class="nf">counters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the counters of the session</span>
+
+<span class="sd">        :returns: counters, i.e. dictionaries with ``fullname``,</span>
+<span class="sd">                  ``controller``, ``shape`` and ``dtype``</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`dict` &lt;:obj:`str`, `any`&gt;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">numpy</span>
+        <span class="kn">from</span> <span class="nn">bliss</span> <span class="kn">import</span> <span class="n">global_map</span>
+        <span class="n">counters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">global_map</span><span class="o">.</span><span class="n">get_counters_iter</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;float64&quot;</span>
+            <span class="n">ctrl</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="s2">&quot;_counter_controller&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">counters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;fullname&quot;</span><span class="p">:</span> <span class="n">cnt</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
+                <span class="s2">&quot;controller&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]),</span>
+                <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">dtype</span><span class="p">,</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="n">counters</span></div>
+
+
+<div class="viewcode-block" id="BlissAPI.axes">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.axes">[docs]</a>
+    <span class="k">def</span> <span class="nf">axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the axis names of the session</span>
+
+<span class="sd">        :returns: axis names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss</span> <span class="kn">import</span> <span class="n">global_map</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">axis</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">global_map</span><span class="o">.</span><span class="n">get_axes_iter</span><span class="p">()]</span></div>
+
+
+<div class="viewcode-block" id="BlissAPI.mntgrps">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.mntgrps">[docs]</a>
+    <span class="k">def</span> <span class="nf">mntgrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the measurement groups of the session</span>
+
+<span class="sd">        :returns: ``{name: {&quot;available&quot;: [...], &quot;enabled&quot;: [...]}}``</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`dict`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss.common</span> <span class="kn">import</span> <span class="n">measurementgroup</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">mg</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;available&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">available</span><span class="p">),</span>
+                          <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">enabled</span><span class="p">)}</span>
+                <span class="k">for</span> <span class="n">mg</span> <span class="ow">in</span> <span class="n">measurementgroup</span><span class="o">.</span><span class="n">get_all</span><span class="p">()}</span></div>
+
+
+<div class="viewcode-block" id="BlissAPI.activeMntGrp">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.activeMntGrp">[docs]</a>
+    <span class="k">def</span> <span class="nf">activeMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the active measurement group name</span>
+
+<span class="sd">        :returns: measurement group name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss.common</span> <span class="kn">import</span> <span class="n">measurementgroup</span>
+        <span class="k">return</span> <span class="n">measurementgroup</span><span class="o">.</span><span class="n">get_active_name</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BlissAPI.selectChannels">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.selectChannels">[docs]</a>
+    <span class="k">def</span> <span class="nf">selectChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">fullnames</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; enables only the given counters of a measurement group,</span>
+<span class="sd">            the group is created if it does not exist</span>
+
+<span class="sd">        :param name: measurement group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param fullnames: counter full names</span>
+<span class="sd">        :type fullnames: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss.common</span> <span class="kn">import</span> <span class="n">measurementgroup</span>
+        <span class="n">mgs</span> <span class="o">=</span> <span class="p">{</span><span class="n">mg</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">mg</span> <span class="k">for</span> <span class="n">mg</span> <span class="ow">in</span> <span class="n">measurementgroup</span><span class="o">.</span><span class="n">get_all</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mgs</span><span class="p">:</span>
+            <span class="n">measurementgroup</span><span class="o">.</span><span class="n">MeasurementGroup</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;counters&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">fullnames</span><span class="p">)})</span>
+            <span class="k">return</span>
+        <span class="n">mg</span> <span class="o">=</span> <span class="n">mgs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">disable_all</span><span class="p">()</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fullnames</span> <span class="k">if</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">mg</span><span class="o">.</span><span class="n">available</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">mg</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="o">*</span><span class="n">names</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlissAPI.setActiveMntGrp">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.setActiveMntGrp">[docs]</a>
+    <span class="k">def</span> <span class="nf">setActiveMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; activates a measurement group</span>
+
+<span class="sd">        :param name: measurement group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss.common</span> <span class="kn">import</span> <span class="n">measurementgroup</span>
+        <span class="n">measurementgroup</span><span class="o">.</span><span class="n">set_active_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NXSBlissSession">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession">[docs]</a>
+<span class="k">class</span> <span class="nc">NXSBlissSession</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; publishes a BLISS session for the selector</span>
+<span class="sd">        and applies the selected channels</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">redis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param session: session name, the current session if None</span>
+<span class="sd">        :type session: :obj:`str`</span>
+<span class="sd">        :param redis: Redis connection, see</span>
+<span class="sd">                      :func:`nxsrecconfig.BlissBackend.redisConnection`</span>
+<span class="sd">        :type redis: :class:`redis.Redis`</span>
+<span class="sd">        :param api: BLISS session access</span>
+<span class="sd">        :type api: :class:`BlissAPI`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:class:`BlissAPI`) BLISS session access</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">api</span> <span class="ow">or</span> <span class="n">BlissAPI</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`str`) session name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+        <span class="c1">#: (:class:`redis.Redis`) Redis connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redis</span> <span class="o">=</span> <span class="n">redis</span> <span class="k">if</span> <span class="n">redis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">redisConnection</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NXSBlissSession.elements">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the session elements in the format of Sardana pools</span>
+
+<span class="sd">        :returns: element lists</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`list` &lt;:obj:`dict`&gt;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">counters</span><span class="p">():</span>
+            <span class="n">channels</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">channelName</span><span class="p">(</span><span class="n">cnt</span><span class="p">[</span><span class="s2">&quot;fullname&quot;</span><span class="p">]),</span>
+                <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="n">cnt</span><span class="p">[</span><span class="s2">&quot;fullname&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">cnt</span><span class="p">[</span><span class="s2">&quot;fullname&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;controller&quot;</span><span class="p">:</span> <span class="n">cnt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;controller&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;CounterTimer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;interfaces&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Counter&quot;</span><span class="p">,</span> <span class="s2">&quot;ExpChannel&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="n">cnt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">cnt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dtype&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">),</span>
+            <span class="p">})</span>
+        <span class="n">motors</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">channelName</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span>
+            <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="n">axis</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">axis</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Motor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;interfaces&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Motor&quot;</span><span class="p">,</span> <span class="s2">&quot;Moveable&quot;</span><span class="p">],</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">axes</span><span class="p">()]</span>
+        <span class="n">mntgrps</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;MeasurementGroup&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;channels&quot;</span><span class="p">:</span> <span class="n">mg</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">],</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">mntgrps</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;AcqChannelList&quot;</span><span class="p">:</span> <span class="n">channels</span><span class="p">,</span>
+            <span class="s2">&quot;ExpChannelList&quot;</span><span class="p">:</span> <span class="n">channels</span><span class="p">,</span>
+            <span class="s2">&quot;MotorList&quot;</span><span class="p">:</span> <span class="n">motors</span><span class="p">,</span>
+            <span class="s2">&quot;MeasurementGroupList&quot;</span><span class="p">:</span> <span class="n">mntgrps</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="NXSBlissSession.publish">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.publish">[docs]</a>
+    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; publishes the session elements and its active measurement group</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">()</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">sessionKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s2">&quot;elements&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">elements</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">activeMntGrp</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">active</span><span class="p">:</span>
+            <span class="n">backend</span> <span class="o">=</span> <span class="n">BlissBackend</span><span class="p">(</span><span class="n">redis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">backend</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">,</span> <span class="n">active</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NXSBlissSession.apply">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; applies the selected channels to the measurement groups</span>
+<span class="sd">            and activates the measurement group of the selector</span>
+
+<span class="sd">        :returns: names of updated measurement groups</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">sessionKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s2">&quot;mntgrps&quot;</span><span class="p">)</span>
+        <span class="n">requests</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">requests</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">selectChannels</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="n">updated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">requests</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hdel</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">requests</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">BlissBackend</span><span class="p">(</span><span class="n">redis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="p">)</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">active</span> <span class="ow">and</span> <span class="n">active</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">activeMntGrp</span><span class="p">()</span> <span class="ow">and</span> \
+           <span class="n">active</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">mntgrps</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">setActiveMntGrp</span><span class="p">(</span><span class="n">active</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NXSBlissSession.sync">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.sync">[docs]</a>
+    <span class="k">def</span> <span class="nf">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; applies the selection and publishes the session</span>
+
+<span class="sd">        :returns: names of updated measurement groups</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">updated</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

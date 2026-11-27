@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Backends &#8212; nxsrecconfig 4.14.0 documentation</title>
+    <title>nxsrecconfig.Backends &#8212; nxsrecconfig 4.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=8edb52cd"></script>
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.14</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -53,6 +53,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -121,6 +124,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
@@ -153,12 +157,14 @@
 <span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 <span class="c1">#</span>
 
-<span class="sd">&quot;&quot;&quot; scan backends: ``sardana`` and ``null``</span>
+<span class="sd">&quot;&quot;&quot; scan backends: ``sardana``, ``bliss`` and ``null``</span>
 
 <span class="sd">The ``sardana`` backend uses the Sardana MacroServer and its pools.</span>
 <span class="sd">The ``null`` backend runs without any scan control system, e.g. to</span>
 <span class="sd">select components for scans of other systems: it has no channels and</span>
 <span class="sd">no measurement groups, and keeps its scan environment in memory.</span>
+<span class="sd">The ``bliss`` backend uses BLISS sessions published in Redis,</span>
+<span class="sd">see :mod:`nxsrecconfig.BlissBackend`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">copy</span>
@@ -167,6 +173,7 @@
 <span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">Utils</span>
 <span class="kn">from</span> <span class="nn">.ScanBackend</span> <span class="kn">import</span> <span class="n">ScanBackend</span>
 <span class="kn">from</span> <span class="nn">.MacroServerPools</span> <span class="kn">import</span> <span class="n">MacroServerPools</span>
+<span class="kn">from</span> <span class="nn">.BlissBackend</span> <span class="kn">import</span> <span class="n">BlissBackend</span>
 
 
 <div class="viewcode-block" id="SardanaBackend">
@@ -461,6 +468,7 @@
 <span class="n">BACKENDS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;sardana&quot;</span><span class="p">:</span> <span class="n">SardanaBackend</span><span class="p">,</span>
     <span class="s2">&quot;null&quot;</span><span class="p">:</span> <span class="n">NullBackend</span><span class="p">,</span>
+    <span class="s2">&quot;bliss&quot;</span><span class="p">:</span> <span class="n">BlissBackend</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1">#: (:obj:`str`) default scan backend</span>

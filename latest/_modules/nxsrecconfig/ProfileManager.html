@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; nxsrecconfig 4.14.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; nxsrecconfig 4.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=8edb52cd"></script>
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.14</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -53,6 +53,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -121,6 +124,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
@@ -488,10 +492,12 @@
 <span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
-            <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">([</span><span class="n">pool</span><span class="p">],</span> <span class="s1">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mntgrps</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">deleteMntGrp</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">supportsMntGrps</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
+                <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">pool</span><span class="p">],</span> <span class="s1">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mntgrps</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">deleteMntGrp</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span>
             <span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">amntgrp</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
@@ -598,7 +604,45 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span>
             <span class="p">{</span><span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]},</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">selectsChannels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">selectChannels</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selectedChannels</span><span class="p">())</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__selectedChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides selected channels of the scan system,</span>
+<span class="sd">            i.e. selected datasources and STEP datasources of the selected</span>
+<span class="sd">            components which are channels of the backend</span>
+
+<span class="sd">        :returns: ordered channel names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="n">available</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="s2">&quot;AcqChannelList&quot;</span><span class="p">))</span>
+        <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s2">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">mcp</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="n">description</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">description</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">grp</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">param</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> \
+                           <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;STEP&#39;</span> <span class="ow">and</span> \
+                           <span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TANGO&#39;</span><span class="p">,</span> <span class="s1">&#39;CLIENT&#39;</span><span class="p">]:</span>
+                            <span class="n">channels</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+        <span class="n">channels</span> <span class="o">&amp;=</span> <span class="n">available</span>
+        <span class="n">ordered</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">])</span>
+                   <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">]</span>
+        <span class="n">ordered</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">channels</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">ordered</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">ordered</span>
 
 <div class="viewcode-block" id="ProfileManager.mntGrpConfiguration">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration">[docs]</a>
@@ -608,6 +652,8 @@
 <span class="sd">        :returns: string with mntgrp configuration</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">supportsMntGrps</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
         <span class="n">mntGrpName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span>
