@@ -36,9 +36,10 @@ Redis keys of a session:
 * ``nxsselector:<session>:env``: scan environment variables in JSON
 * ``nxsselector:<session>:mntgrps``: BLISS full names of channels
   selected for measurement groups, in JSON
-* ``nxsselector:<session>:datasources``: XML definitions of STEP
+* ``nxsselector:<session>:datasources``: descriptions of STEP
   datasources without BLISS counters selected for measurement groups,
-  in JSON, see :mod:`nxsrecconfig.BlissDataSources`
+  i.e. their XML definitions, NeXus types and ranks, in JSON,
+  see :mod:`nxsrecconfig.BlissDataSources`
 """
 
 import json
@@ -162,7 +163,7 @@ class BlissBackend(ScanBackend):
 
     #: (:obj:`list` <:obj:`str`>) types of STEP datasources without
     #:   BLISS counters which are read by BLISS sessions
-    dataSourceTypes = ["TANGO", "DB", "PYEVAL"]
+    dataSourceTypes = ["TANGO", "DB", "PYEVAL", "CLIENT"]
 
     def __init__(self, numberOfThreads=None, redis=None):
         """ constructor
@@ -477,8 +478,10 @@ class BlissBackend(ScanBackend):
         :type ms: :obj:`str`
         :param mntgrp: measurement group name
         :type mntgrp: :obj:`str`
-        :param datasources: datasource XML definitions by datasource names
-        :type datasources: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param datasources: datasource descriptions by datasource names,
+                            i.e. dictionaries with ``xml`` definitions,
+                            ``nxtype`` NeXus types and ``rank``
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`dict`>
         """
         if not ms or not mntgrp:
             return

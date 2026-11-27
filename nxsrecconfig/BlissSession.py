@@ -30,10 +30,13 @@ the BLISS measurement groups.  In a BLISS session::
 The selector has to use the ``bliss`` backend with the session name
 as its ``Door``.
 
-Selected STEP datasources which are not BLISS counters, e.g. TANGO, DB
-or PYEVAL datasources, are read by counters of
+Selected STEP datasources which are not BLISS counters, i.e. TANGO, DB,
+PYEVAL or CLIENT datasources, are read by counters of
 :class:`nxsrecconfig.BlissDataSources.NXSDataSourceController`
-which are added to the measurement groups.
+which are added to the measurement groups.  CLIENT datasources are
+read from ``userdata``, e.g.::
+
+    nxsbliss = NXSBlissSession(userdata=lambda: {"energy": mono.energy})
 """
 
 import json
@@ -48,19 +51,24 @@ class BlissAPI(object):
     """ access to the current BLISS session
     """
 
-    def __init__(self, controller=CONTROLLER, userdata=None):
+    def __init__(self, controller=CONTROLLER, userdata=None, canfail=True):
         """ constructor
 
         :param controller: name of the datasource counter controller
         :type controller: :obj:`str`
-        :param userdata: user data of CLIENT datasources used e.g. by
-                         PYEVAL datasources or a function returning them
+        :param userdata: user data of CLIENT datasources
+                         or a function returning them
         :type userdata: :obj:`dict` <:obj:`str`, `any`> or callable
+        :param canfail: fill values of datasources which cannot be read,
+                        stop the scan otherwise
+        :type canfail: :obj:`bool`
         """
         #: (:obj:`str`) name of the datasource counter controller
         self.controller = controller
         #: (:obj:`dict` or callable) user data
         self.userdata = userdata
+        #: (:obj:`bool`) fill values of datasources which cannot be read
+        self.canfail = canfail
         #: (:class:`nxsrecconfig.BlissDataSources.NXSDataSourceController`)
         #:     datasource counter controller
         self.__controller = None
@@ -68,8 +76,8 @@ class BlissAPI(object):
     def setDataSources(self, datasources):
         """ sets the datasources read by the datasource counters
 
-        :param datasources: datasource XML definitions by datasource names
-        :type datasources: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param datasources: datasource descriptions by datasource names
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`dict`>
         :returns: full names of the datasource counters by datasource names
         :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
@@ -79,7 +87,9 @@ class BlissAPI(object):
             from .BlissDataSources import (
                 DataSourceReader, NXSDataSourceController)
             self.__controller = NXSDataSourceController(
-                self.controller, DataSourceReader(self.userdata))
+                self.controller, DataSourceReader(self.userdata),
+                self.canfail)
+        self.__controller.canfail = self.canfail
         self.__controller.setDataSources(datasources)
         return {cnt.name: cnt.fullname
                 for cnt in self.__controller.counters}
@@ -190,7 +200,8 @@ class NXSBlissSession(object):
         and applies the selected channels
     """
 
-    def __init__(self, session=None, redis=None, api=None, userdata=None):
+    def __init__(self, session=None, redis=None, api=None, userdata=None,
+                 canfail=True):
         """ constructor
 
         :param session: session name, the current session if None
@@ -200,12 +211,15 @@ class NXSBlissSession(object):
         :type redis: :class:`redis.Redis`
         :param api: BLISS session access
         :type api: :class:`BlissAPI`
-        :param userdata: user data of CLIENT datasources used by
+        :param userdata: user data of CLIENT datasources read by
                          datasource counters or a function returning them
         :type userdata: :obj:`dict` <:obj:`str`, `any`> or callable
+        :param canfail: fill values of datasources which cannot be read,
+                        stop the scan otherwise
+        :type canfail: :obj:`bool`
         """
         #: (:class:`BlissAPI`) BLISS session access
-        self.api = api or BlissAPI(userdata=userdata)
+        self.api = api or BlissAPI(userdata=userdata, canfail=canfail)
         #: (:obj:`str`) session name
         self.session = session or self.api.session()
         #: (:class:`redis.Redis`) Redis connection

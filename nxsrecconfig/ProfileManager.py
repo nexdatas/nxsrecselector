@@ -447,10 +447,11 @@ class ProfileManager(object):
             and XML definitions of the other selected STEP datasources
             of :attr:`dataSourceTypes` of the backend
 
-        :returns: ordered channel names, datasource XML definitions
-                  by datasource names
+        :returns: ordered channel names, datasource descriptions
+                  by datasource names, i.e. dictionaries with ``xml``
+                  definitions, ``nxtype`` NeXus types and ``rank``
         :rtype: (:obj:`list` <:obj:`str`>,
-                 :obj:`dict` <:obj:`str`, :obj:`str`>)
+                 :obj:`dict` <:obj:`str`, :obj:`dict`>)
         """
         self.__updatePools()
         available = set(PoolUtils.getElementNames(
@@ -466,7 +467,7 @@ class ProfileManager(object):
             self.__componentDataSources(description)))
         channels = set(selected)
         steps = set(selected)
-        shapes = {}
+        fields = {}
         for grp in description:
             for dss in grp.values():
                 for ds, params in dss.items():
@@ -477,27 +478,35 @@ class ProfileManager(object):
                             steps.add(ds)
                             if param[1] in ['TANGO', 'CLIENT']:
                                 channels.add(ds)
-                            if len(param) > 4 and param[4]:
-                                shapes[ds] = param[4]
+                            if ds not in fields:
+                                fields[ds] = {
+                                    "nxtype": (param[3]
+                                               if len(param) > 3 else None),
+                                    "rank": (len(param[4])
+                                             if len(param) > 4 and param[4]
+                                             else 0)}
         channels &= available
         ordered = [ch for ch in json.loads(self.__selector["OrderedChannels"])
                    if ch in channels]
         ordered.extend(sorted(channels - set(ordered)))
         datasources = {}
         if self.__backend.dataSourceTypes:
-            datasources = self.__dataSourceXMLs(
-                [ds for ds in sorted(steps - available)
-                 if ds not in shapes])
+            datasources = self.__dataSourceDescriptions(
+                sorted(steps - available), fields)
         return ordered, datasources
 
-    def __dataSourceXMLs(self, names):
-        """ provides XML definitions of scalar datasources of
+    def __dataSourceDescriptions(self, names, fields):
+        """ provides descriptions of datasources of
             :attr:`dataSourceTypes` of the backend
 
         :param names: datasource names
         :type names: :obj:`list` <:obj:`str`>
-        :returns: datasource XML definitions by datasource names
-        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param fields: NeXus types and ranks of the datasource fields
+        :type fields: :obj:`dict` <:obj:`str`, :obj:`dict`>
+        :returns: datasource descriptions by datasource names,
+                  i.e. dictionaries with ``xml`` definitions,
+                  ``nxtype`` NeXus types and ``rank``
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`dict`>
         """
         if not names:
             return {}
@@ -512,7 +521,12 @@ class ProfileManager(object):
         for name, xml in zip(names, xmls):
             dstype = Utils.dataSourceType(xml)
             if dstype in self.__backend.dataSourceTypes:
-                datasources[name] = Utils.tostr(xml)
+                field = fields.get(name) or {}
+                datasources[name] = {
+                    "xml": Utils.tostr(xml),
+                    "nxtype": field.get("nxtype"),
+                    "rank": field.get("rank") or 0,
+                }
         return datasources
 
     def mntGrpConfiguration(self):

@@ -351,8 +351,10 @@ class ScanBackend(object):
         :type ms: :obj:`str`
         :param mntgrp: measurement group name
         :type mntgrp: :obj:`str`
-        :param datasources: datasource XML definitions by datasource names
-        :type datasources: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param datasources: datasource descriptions by datasource names,
+                            i.e. dictionaries with ``xml`` definitions,
+                            ``nxtype`` NeXus types and ``rank``
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`dict`>
         """
 
     # helpers for the environment variables

@@ -1,5 +1,7 @@
 2026-XX-YY Jan Kotanski <jankotan@gmail.com>
-	* add BlissDataSources reading STEP datasources without BLISS counters, i.e. TANGO, DB and PYEVAL, by BLISS counters
+	* add BlissDataSources reading STEP datasources without BLISS counters, i.e. TANGO, DB, PYEVAL and CLIENT, by BLISS counters
+	* store datasource counters with types and ranks of their NeXus fields, string datasources as scan metadata
+	* add the canfail option of BLISS sessions filling or stopping scans for datasources which cannot be read
 	* add counters of selected channels missing in BLISS measurement groups
 	* tagged as v4.16.X
 
