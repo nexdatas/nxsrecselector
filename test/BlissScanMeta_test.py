@@ -21,6 +21,7 @@
 #
 import base64
 import contextlib
+import copy
 import enum
 import json
 import sys
@@ -29,6 +30,7 @@ import unittest
 
 import numpy
 
+from nxsrecconfig import BlissH5Map
 from nxsrecconfig.BlissScanMeta import (
     NXSScanMeta, h5map_value, h5map_to_nxdict, entry_metadata)
 
@@ -421,6 +423,164 @@ class BlissScanMetaTest(unittest.TestCase):
         meta.unregister()
         self.assertTrue("nexdatas" not in cat.metadata)
         scanmetaclass.remove_categories([""])
+
+
+class FakeScanModule(object):
+    """ stand-in of bliss.scanning.scan with the h5map generator """
+
+    def __init__(self, mapping):
+        self.mapping = mapping
+        self.scan_info_to_h5map = self.generate
+
+    def generate(self, scan_info, configurable, flat,
+                 multivalue_positioners):
+        return {scan_info["filename"]: copy.deepcopy(self.mapping)}
+
+
+def bliss_mapping():
+    """ provides a BLISS-like h5map of a scan file """
+    def grp(nxclass, children):
+        return {"type": "group", "attributes": {"NX_class": nxclass},
+                "children": children}
+
+    def stream(name):
+        return {"type": "dataset", "attributes": {},
+                "value": {"type": "stream", "stream": name}}
+
+    return {"type": "group", "attributes": {}, "children": {
+        "12.1": grp("NXentry", {
+            "title": {"type": "dataset", "attributes": {},
+                      "value": "ascan"},
+            "instrument": grp("NXinstrument", {
+                "exp_c01": grp("NXdetector", {"data": stream(
+                    "nxsds:exp_c01")}),
+                "roby": grp("NXpositioner", {"value": stream("axis:roby")}),
+                "nxsds": grp("NXcollection", {"label": {
+                    "type": "dataset", "attributes": {},
+                    "value": ["a", "b"]}}),
+            }),
+            "measurement": grp("NXcollection", {
+                "exp_c01": {"type": "soft_link",
+                            "target_path": "/12.1/instrument/exp_c01/data"},
+            }),
+        })}}
+
+
+class BlissH5MapTest(unittest.TestCase):
+
+    def tearDown(self):
+        BlissH5Map.uninstallHook()
+
+    def test_stream_names(self):
+        names = BlissH5Map.streamNames(
+            ["axis:roby", "p201:ct1", "nxsds:exp_c01", "lima1:image:roi"])
+        self.assertEqual(names["roby"], "axis:roby")
+        self.assertEqual(names["p201_ct1"], "p201:ct1")
+        self.assertEqual(names["exp_c01"], "nxsds:exp_c01")
+        self.assertEqual(names["nxsds_exp_c01"], "nxsds:exp_c01")
+        self.assertEqual(names["lima1_image_roi"], "lima1:image:roi")
+
+    def test_apply(self):
+        overlay = {"type": "group", "attributes": {}, "children": {
+            "title": {"type": "step", "stream": "axis:roby"},
+            "instrument": {"type": "group",
+                           "attributes": {"NX_class": "NXinstrument"},
+                           "children": {
+                               "detector": {
+                                   "type": "group",
+                                   "attributes": {"NX_class": "NXdetector"},
+                                   "children": {
+                                       "counts": {"type": "step",
+                                                  "stream": "nxsds:exp_c01"},
+                                       "label": {"type": "step",
+                                                 "stream": "nxsds:label"},
+                                       "missing": {"type": "step",
+                                                   "stream": "p201:ct9"}}},
+                               "empty": {
+                                   "type": "group", "attributes": {},
+                                   "children": {"x": {"type": "step",
+                                                      "stream": "no:x"}}}}}}}
+        mapping = bliss_mapping()
+        self.assertEqual(BlissH5Map.addProfileLinks(mapping, overlay), 2)
+        entry = mapping["children"]["12.1"]
+        # existing items are kept
+        self.assertEqual(entry["children"]["title"]["value"], "ascan")
+        detector = entry["children"]["instrument"]["children"]["detector"]
+        self.assertEqual(detector["attributes"], {"NX_class": "NXdetector"})
+        self.assertEqual(detector["children"], {
+            "counts": {"type": "soft_link",
+                       "target_path": "/12.1/instrument/exp_c01/data"},
+            "label": {"type": "soft_link",
+                      "target_path": "/12.1/instrument/nxsds/label"}})
+        # groups without links are not created
+        self.assertTrue(
+            "empty" not in entry["children"]["instrument"]["children"])
+
+    @unittest.skipUnless(WRITER, "nxswriter or nxstools not available")
+    def test_links(self):
+        module = FakeScanModule(bliss_mapping())
+        hook = BlissH5Map.installHook(module)
+        self.assertTrue(module.scan_info_to_h5map is hook)
+        selector = ProfileSelector(profiles={"mg1": profile()},
+                                   components=["source"])
+        meta = NXSScanMeta(selector, profile="mg1",
+                           userdata={"energy": 7.0}, log=Log())
+        if BLISS:
+            scanmeta = ScanMeta()
+        else:
+            context = fake_scan_meta()
+            fake = context.__enter__()
+            scanmeta = fake.ScanMeta()
+        try:
+            meta.register(scanmeta, links=True)
+            scan = Scan(scan_nb=12, title="ascan",
+                        filename="/tmp/nxsscanmeta_links.h5",
+                        channels={"axis:roby": {}, "nxsds:exp_c01": {}})
+            init = meta(scan)
+            # STEP fields are not in the metadata
+            self.assertTrue("detector" not in init["instrument"])
+
+            mappings = module.scan_info_to_h5map(
+                scan.scan_info, True, True, False)
+            entry = mappings["/tmp/nxsscanmeta_links.h5"]["children"]["12.1"]
+            instrument = entry["children"]["instrument"]
+            detector = instrument["children"]["detector"]
+            self.assertEqual(detector["attributes"],
+                             {"NX_class": "NXdetector"})
+            self.assertEqual(detector["children"]["counts"], {
+                "type": "soft_link",
+                "target_path": "/12.1/instrument/exp_c01/data"})
+            # links to STEP fields
+            self.assertEqual(entry["children"]["data"], {
+                "type": "group", "attributes": {"NX_class": "NXdata"},
+                "children": {"counts": {
+                    "type": "soft_link",
+                    "target_path": "/12.1/instrument/exp_c01/data"}}})
+            # other files and scans are not changed
+            other = module.scan_info_to_h5map(
+                {"filename": "/tmp/other.h5", "scan_nb": 12}, True, True,
+                False)
+            self.assertEqual(other["/tmp/other.h5"], bliss_mapping())
+
+            scan.scan_info["end_time"] = "2026-11-27T10:00:00+01:00"
+            meta(scan)
+            scan.scan_info["end_reason"] = "SUCCESS"
+            mappings = module.scan_info_to_h5map(
+                scan.scan_info, True, True, False)
+            entry = mappings["/tmp/nxsscanmeta_links.h5"]["children"]["12.1"]
+            self.assertTrue("detector" in
+                            entry["children"]["instrument"]["children"])
+            # the scan is finished
+            mappings = module.scan_info_to_h5map(
+                scan.scan_info, True, True, False)
+            self.assertEqual(mappings["/tmp/nxsscanmeta_links.h5"],
+                             bliss_mapping())
+        finally:
+            meta.unregister()
+            if not BLISS:
+                context.__exit__(None, None, None)
+        # the hook is removed
+        self.assertEqual(module.scan_info_to_h5map, module.generate)
 
 
 if __name__ == '__main__':

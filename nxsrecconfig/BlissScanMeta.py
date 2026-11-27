@@ -36,6 +36,10 @@ The INIT fields are evaluated when the scan starts and the FINAL fields
 when the scan ends, by NXSDataWriter (:mod:`nxswriter`) with the ``h5map``
 writer of :mod:`nxstools`, which builds the NeXus tree in memory.
 Links to the written fields are kept, links to STEP fields are dropped.
+
+With ``nxsmeta.register(links=True)`` the STEP fields are added at their
+NeXus paths as links to the datasets of the BLISS channels,
+see :mod:`nxsrecconfig.BlissH5Map`.
 """
 
 import base64
@@ -54,6 +58,9 @@ START_SKIP = ["STEP", "FINAL"]
 
 #: (:obj:`list` <:obj:`str`>) fields exported at the end of the scan
 END_SKIP = ["STEP", "INIT"]
+
+#: (:obj:`list` <:obj:`str`>) fields exported as links to scan data
+STEP_SKIP = ["INIT", "FINAL"]
 
 
 def h5map_value(value):
@@ -246,6 +253,8 @@ class NXSScanMeta(object):
         self.__category = None
         #: (:obj:`str`) registered metadata name
         self.__name = None
+        #: (:class:`nxsrecconfig.BlissH5Map.NXSH5MapHook`) h5map hook
+        self.__hook = None
 
     @property
     def selector(self):
@@ -263,7 +272,8 @@ class NXSScanMeta(object):
             self.__selector = tango.DeviceProxy(self.__selector)
         return self.__selector
 
-    def register(self, scanmeta=None, category="", name="nexdatas"):
+    def register(self, scanmeta=None, category="", name="nexdatas",
+                 links=False):
         """ registers the metadata in the BLISS user scan metadata
 
         The empty category merges the metadata into the scan entry.
@@ -274,6 +284,9 @@ class NXSScanMeta(object):
         :type category: :obj:`str`
         :param name: metadata name in the category
         :type name: :obj:`str`
+        :param links: add STEP fields of the profile as links to
+                      the scan data, see :mod:`nxsrecconfig.BlissH5Map`
+        :type links: :obj:`bool`
         """
         from bliss.scanning.scan_meta import META_TIMING, get_user_scan_meta
         if scanmeta is None:
@@ -286,6 +299,9 @@ class NXSScanMeta(object):
         self.__scanmeta = scanmeta
         self.__category = category.lower()
         self.__name = name
+        if links:
+            from .BlissH5Map import installHook
+            self.__hook = installHook(log=self.log)
 
     def unregister(self):
         """ removes the metadata from the BLISS user scan metadata
@@ -295,6 +311,10 @@ class NXSScanMeta(object):
             if meta is not None:
                 meta.remove(self.__name)
         self.__scanmeta = None
+        if self.__hook is not None:
+            from .BlissH5Map import uninstallHook
+            uninstallHook()
+            self.__hook = None
         self.__closeAll()
 
     def __call__(self, scan):
@@ -455,7 +475,30 @@ class NXSScanMeta(object):
             scan_info, self.__profileName(scan), self.__userData(scan))
         writer = self.__writer(scan_info.get("filename"), xml, record)
         self.__writers[id(scan)] = (writer, record)
+        if self.__hook is not None:
+            self.__setOverlay(writer, scan_info)
         return entry_metadata(writer.getFile().h5map(skip=START_SKIP))
+
+    def __setOverlay(self, writer, scan_info):
+        """ sets STEP fields of the scan for the h5map hook
+
+        :param writer: NXSDataWriter
+        :type writer: :class:`nxswriter.TangoDataWriter.TangoDataWriter`
+        :param scan_info: scan info
+        :type scan_info: :obj:`dict` <:obj:`str`, `any`>
+        """
+        from .BlissH5Map import stepOverlay, streamNames
+        try:
+            names = streamNames(scan_info.get("channels") or {})
+            overlay = stepOverlay(writer.getFile().h5map(
+                streams=lambda path, dsname, record, strategy:
+                names.get(dsname),
+                skip=STEP_SKIP))
+            self.__hook.setOverlay(scan_info, overlay)
+        except Exception as e:
+            self.log.warning(
+                "NXSScanMeta: STEP fields cannot be linked: %s" % e)
+            self.__hook.setOverlay(scan_info, None)
 
     def end(self, scan):
         """ closes the entry and provides its FINAL fields

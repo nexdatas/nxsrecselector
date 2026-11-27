@@ -28,6 +28,14 @@ nxsrecconfig.BlissDataSources module
     :undoc-members:
     :show-inheritance:
 
+nxsrecconfig.BlissH5Map module
+------------------------------
+
+.. automodule:: nxsrecconfig.BlissH5Map
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 nxsrecconfig.BlissScanMeta module
 ---------------------------------
 
