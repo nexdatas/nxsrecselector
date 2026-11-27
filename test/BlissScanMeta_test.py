@@ -466,6 +466,32 @@ def bliss_mapping():
         })}}
 
 
+class FakeHookRegistry(object):
+    """ stand-in of bliss.scanning.h5map_hooks """
+
+    class META_TIMING(enum.Flag):
+        START = enum.auto()
+        END = enum.auto()
+
+    def __init__(self):
+        self.hooks = []
+
+    def add_h5map_hook(self, hook):
+        if hook not in self.hooks:
+            self.hooks.append(hook)
+
+    def remove_h5map_hook(self, hook):
+        if hook in self.hooks:
+            self.hooks.remove(hook)
+
+    def apply_h5map_hooks(self, scan, mappings, timing):
+        for hook in list(self.hooks):
+            result = hook(scan, mappings, timing)
+            if result is not None:
+                mappings = result
+        return mappings
+
+
 class BlissH5MapTest(unittest.TestCase):
 
     def tearDown(self):
@@ -515,6 +541,77 @@ class BlissH5MapTest(unittest.TestCase):
         # groups without links are not created
         self.assertTrue(
             "empty" not in entry["children"]["instrument"]["children"])
+
+    @unittest.skipUnless(WRITER, "nxswriter or nxstools not available")
+    def test_registry_links(self):
+        registry = FakeHookRegistry()
+        timing = registry.META_TIMING
+        hook = BlissH5Map.installHook(registry=registry)
+        self.assertEqual(registry.hooks, [hook.blissHook])
+        self.assertTrue(hook.module is None)
+        # installed once
+        self.assertTrue(BlissH5Map.installHook(registry=registry) is hook)
+        self.assertEqual(len(registry.hooks), 1)
+
+        selector = ProfileSelector(profiles={"mg1": profile()},
+                                   components=["source"])
+        meta = NXSScanMeta(selector, profile="mg1",
+                           userdata={"energy": 7.0}, log=Log())
+        if BLISS:
+            scanmeta = ScanMeta()
+        else:
+            context = fake_scan_meta()
+            fake = context.__enter__()
+            scanmeta = fake.ScanMeta()
+        try:
+            meta.register(scanmeta, links=True)
+            scan = Scan(scan_nb=12, title="ascan",
+                        filename="/tmp/nxsscanmeta_links.h5",
+                        channels={"axis:roby": {}, "nxsds:exp_c01": {}})
+            meta(scan)
+            fname = "/tmp/nxsscanmeta_links.h5"
+            for tm in [timing.START, timing.END]:
+                mappings = registry.apply_h5map_hooks(
+                    scan, {fname: bliss_mapping()}, tm)
+                entry = mappings[fname]["children"]["12.1"]
+                self.assertEqual(
+                    entry["children"]["instrument"]["children"][
+                        "detector"]["children"]["counts"],
+                    {"type": "soft_link",
+                     "target_path": "/12.1/instrument/exp_c01/data"})
+                self.assertEqual(
+                    entry["children"]["data"]["children"]["counts"][
+                        "target_path"], "/12.1/instrument/exp_c01/data")
+            # the overlay is removed at the END timing
+            self.assertEqual(hook.overlays, {})
+            mappings = registry.apply_h5map_hooks(
+                scan, {fname: bliss_mapping()}, timing.START)
+            self.assertEqual(mappings[fname], bliss_mapping())
+        finally:
+            meta.unregister()
+            if not BLISS:
+                context.__exit__(None, None, None)
+        # the hook is removed
+        self.assertEqual(registry.hooks, [])
+
+    def test_registry_failure(self):
+        registry = FakeHookRegistry()
+        log = Log()
+        hook = BlissH5Map.installHook(registry=registry, log=log)
+        scan = Scan(scan_nb=1, filename="/tmp/f.h5")
+        hook.setOverlay(scan.scan_info, {"children": {
+            "x": {"type": "step", "stream": "a:b"}}})
+
+        class Broken(dict):
+            def get(self, key, default=None):
+                raise RuntimeError("broken mapping")
+
+        # a wrong mapping is reported, the overlay removed at the end
+        mappings = {"/tmp/f.h5": Broken()}
+        self.assertEqual(registry.apply_h5map_hooks(
+            scan, mappings, registry.META_TIMING.END), mappings)
+        self.assertTrue(log.warnings())
+        self.assertEqual(hook.overlays, {})
 
     @unittest.skipUnless(WRITER, "nxswriter or nxstools not available")
     def test_links(self):

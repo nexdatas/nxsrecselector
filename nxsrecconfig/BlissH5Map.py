@@ -26,6 +26,10 @@ NeXus configuration, at their NeXus paths, to the scan entry as soft
 links to the datasets written by BLISS, i.e. the scan file has the NeXus
 structure of the profile as with NXSDataWriter, and the BLISS one.
 
+The hook is added by ``add_h5map_hook`` of :mod:`bliss.scanning.h5map_hooks`
+if BLISS provides it.  Otherwise ``scan_info_to_h5map`` of
+:mod:`bliss.scanning.scan` is wrapped by the hook.
+
 The STEP fields are provided by
 :class:`nxsrecconfig.BlissScanMeta.NXSScanMeta` registered with
 ``links=True``, which also provides INIT and FINAL fields::
@@ -485,6 +489,9 @@ class NXSH5MapHook(object):
         self.original = None
         #: (:obj:`module`) module of the h5map generator
         self.module = None
+        #: (:obj:`module`) module of the BLISS h5map hooks, i.e.
+        #:     :mod:`bliss.scanning.h5map_hooks`
+        self.registry = None
 
     def setOverlay(self, scan_info, overlay):
         """ sets the overlay of a scan
@@ -500,7 +507,7 @@ class NXSH5MapHook(object):
         else:
             self.overlays.pop(key, None)
 
-    def apply(self, scan_info, mappings):
+    def apply(self, scan_info, mappings, end=None):
         """ adds profile links to the h5maps of a scan
 
         :param scan_info: scan info
@@ -508,12 +515,17 @@ class NXSH5MapHook(object):
         :param mappings: h5map models or dictionaries by file names,
                          updated in place
         :type mappings: :obj:`dict` <:obj:`str`, `any`>
+        :param end: the last h5maps of the scan,
+                    the scan info with ``end_reason`` if None
+        :type end: :obj:`bool`
         :returns: updated mappings
         :rtype: :obj:`dict` <:obj:`str`, `any`>
         """
         key = scanKey(scan_info)
         overlay = self.overlays.get(key)
-        if "end_reason" in scan_info:
+        if end is None:
+            end = "end_reason" in scan_info
+        if end:
             # the last h5map of the scan
             self.overlays.pop(key, None)
         if not overlay:
@@ -526,6 +538,31 @@ class NXSH5MapHook(object):
                 else ModelItems()
             addProfileLinks(mapping, overlay, self.log, items)
         return mappings
+
+    def blissHook(self, scan, mappings, timing):
+        """ adds profile links to the h5maps of a scan,
+            called by :mod:`bliss.scanning.h5map_hooks`
+
+        :param scan: BLISS scan
+        :type scan: :class:`bliss.scanning.scan.Scan`
+        :param mappings: h5maps by file names, updated in place
+        :type mappings: :obj:`dict` <:obj:`str`,
+                        :class:`blissdata.h5map.Group`>
+        :param timing: ``META_TIMING.START`` or ``META_TIMING.END``
+        :type timing: :class:`bliss.scanning.scan_meta.META_TIMING`
+        :returns: updated mappings
+        :rtype: :obj:`dict` <:obj:`str`, :class:`blissdata.h5map.Group`>
+        """
+        scan_info = scan.scan_info
+        end = getattr(timing, "name", str(timing)) == "END"
+        try:
+            return self.apply(scan_info, mappings, end)
+        except Exception as e:
+            self.log.warning(
+                "nxsrecconfig: profile links cannot be added: %s" % e)
+            if end:
+                self.overlays.pop(scanKey(scan_info), None)
+            return mappings
 
     def __call__(self, scan_info, *args, **kwargs):
         """ generates h5maps with profile links
@@ -544,34 +581,53 @@ class NXSH5MapHook(object):
             return mappings
 
 
-def installHook(module=None, log=None):
-    """ installs the h5map hook in the BLISS scan module
+def installHook(module=None, log=None, registry=None):
+    """ installs the h5map hook in BLISS
 
-    :param module: module with ``scan_info_to_h5map``,
+    The hook is added to the BLISS h5map hooks if BLISS provides them,
+    otherwise ``scan_info_to_h5map`` of the BLISS scan module is wrapped.
+
+    :param module: module with ``scan_info_to_h5map`` to be wrapped,
                    :mod:`bliss.scanning.scan` if None
     :type module: :obj:`module`
     :param log: logger
     :type log: :class:`logging.Logger`
+    :param registry: module with ``add_h5map_hook`` and
+                     ``remove_h5map_hook``,
+                     :mod:`bliss.scanning.h5map_hooks` if available
+                     and *module* is None
+    :type registry: :obj:`module`
     :returns: the installed hook
     :rtype: :class:`NXSH5MapHook`
     """
     if _HOOK:
         return _HOOK[0]
-    if module is None:
-        import bliss.scanning.scan as module
     hook = NXSH5MapHook(log)
-    hook.module = module
-    hook.original = module.scan_info_to_h5map
-    module.scan_info_to_h5map = hook
+    if registry is None and module is None:
+        try:
+            from bliss.scanning import h5map_hooks as registry
+        except ImportError:
+            registry = None
+    if registry is not None:
+        hook.registry = registry
+        registry.add_h5map_hook(hook.blissHook)
+    else:
+        if module is None:
+            import bliss.scanning.scan as module
+        hook.module = module
+        hook.original = module.scan_info_to_h5map
+        module.scan_info_to_h5map = hook
     _HOOK.append(hook)
     return hook
 
 
 def uninstallHook():
-    """ removes the h5map hook from the BLISS scan module
+    """ removes the h5map hook from BLISS
     """
     while _HOOK:
         hook = _HOOK.pop()
-        if hook.module is not None and \
-           hook.module.scan_info_to_h5map is hook:
+        if hook.registry is not None:
+            hook.registry.remove_h5map_hook(hook.blissHook)
+        elif hook.module is not None and \
+                hook.module.scan_info_to_h5map is hook:
             hook.module.scan_info_to_h5map = hook.original
