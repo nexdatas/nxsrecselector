@@ -180,6 +180,59 @@ class Utils(object):
             return str("".join(tnodes)).strip()
         return ""
 
+    #: (:obj:`list` <:obj:`str`>) controller keys of measurement group
+    #:    configurations set by Sardana with blissdata publishing
+    MNTGRP_RUNTIME_CTRL_KEYS = ["streamable"]
+
+    #: (:obj:`list` <:obj:`str`>) channel keys of measurement group
+    #:    configurations set by Sardana with blissdata publishing,
+    #:    e.g. stream references of running scans
+    MNTGRP_RUNTIME_CHANNEL_KEYS = ["value_stream_ref"]
+
+    @classmethod
+    def stripMntGrpRuntimeKeys(cls, conf):
+        """ removes keys of measurement group configurations which are
+            set by Sardana at runtime, i.e. stream references of scans
+            and streamable controller flags of blissdata publishing
+
+        :param conf: measurement group configuration
+        :type conf: :obj:`str` or :obj:`dict`
+        :returns: configuration without the runtime keys,
+                  of the type of the given configuration
+        :rtype: :obj:`str` or :obj:`dict`
+        """
+        isstr = not isinstance(conf, dict)
+        if isstr:
+            try:
+                dct = json.loads(conf)
+            except Exception:
+                return conf
+            if not isinstance(dct, dict):
+                return conf
+        else:
+            dct = json.loads(json.dumps(conf))
+        controllers = dct.get("controllers")
+        if isinstance(controllers, dict):
+            for ctrl in controllers.values():
+                if not isinstance(ctrl, dict):
+                    continue
+                units = ctrl.get("units")
+                groups = [ctrl]
+                if isinstance(units, dict):
+                    groups.extend(
+                        unit for unit in units.values()
+                        if isinstance(unit, dict))
+                for grp in groups:
+                    for key in cls.MNTGRP_RUNTIME_CTRL_KEYS:
+                        grp.pop(key, None)
+                    channels = grp.get("channels")
+                    if isinstance(channels, dict):
+                        for ch in channels.values():
+                            if isinstance(ch, dict):
+                                for key in cls.MNTGRP_RUNTIME_CHANNEL_KEYS:
+                                    ch.pop(key, None)
+        return json.dumps(dct) if isstr else dct
+
     @classmethod
     def dataSourceNode(cls, xml):
         """ provides the datasource node of a datasource XML definition

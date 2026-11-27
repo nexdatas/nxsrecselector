@@ -367,7 +367,8 @@ class ProfileManager(object):
         mginfo = self.__createMntGrpConf(
             datasources, componentdatasources, description)
         conf = mginfo['configuration']
-        conf = self.__backend.setMntGrpConfiguration(mginfo['device'], conf)
+        conf = Utils.stripMntGrpRuntimeKeys(
+            self.__backend.setMntGrpConfiguration(mginfo['device'], conf))
         self.__selector['MntGrpConfiguration'] = conf
         mginfo['configuration'] = conf
         if resetDoor:
@@ -544,7 +545,8 @@ class ProfileManager(object):
             self.__pools, mntGrpName))
         if not fullname:
             return "{}"
-        return self.__backend.mntGrpConfiguration(fullname)
+        return Utils.stripMntGrpRuntimeKeys(
+            self.__backend.mntGrpConfiguration(fullname))
 
     def isMntGrpUpdated(self):
         """ check if active measurement group was changed
@@ -584,7 +586,7 @@ class ProfileManager(object):
         if json.dumps(state) != json.dumps(state2):
             self.__selector.set(state)
 
-        lsconf = json.loads(llconf)
+        lsconf = json.loads(Utils.stripMntGrpRuntimeKeys(llconf))
         return Utils.compareDict(mgconf, lsconf)
 
     def importMntGrp(self):
