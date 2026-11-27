@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.MacroServerPools &#8212; nxsrecconfig 4.14.0 documentation</title>
+    <title>nxsrecconfig.MacroServerPools &#8212; nxsrecconfig 4.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=8edb52cd"></script>
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.14</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -52,6 +52,10 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +64,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -118,6 +124,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
@@ -150,7 +157,8 @@
 <span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 <span class="c1">#</span>
 
-<span class="sd">&quot;&quot;&quot;  Selection state &quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot; sardana scan backend, i.e. macroserver and pools &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
 
@@ -162,17 +170,20 @@
 
 <span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">MSUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">OldTangoError</span><span class="p">,</span> <span class="n">PYTG_BUG_213</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.Describer</span> <span class="kn">import</span> <span class="n">Describer</span>
-<span class="kn">from</span> <span class="nn">.CheckerThread</span> <span class="kn">import</span> <span class="n">CheckerThread</span><span class="p">,</span> <span class="n">TangoDSItem</span><span class="p">,</span> <span class="n">CheckerItem</span>
-
-<span class="kn">import</span> <span class="nn">queue</span> <span class="k">as</span> <span class="nn">Queue</span>
+<span class="kn">from</span> <span class="nn">.ScanBackend</span> <span class="kn">import</span> <span class="n">ScanBackend</span>
 
 
 <div class="viewcode-block" id="MacroServerPools">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools">[docs]</a>
-<span class="k">class</span> <span class="nc">MacroServerPools</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MacroServerPools</span><span class="p">(</span><span class="n">ScanBackend</span><span class="p">):</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; sardanamacro server and pools &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; sardana macro server and pools &quot;&quot;&quot;</span>
+
+    <span class="c1">#: (:obj:`str`) backend name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sardana&quot;</span>
+
+    <span class="c1">#: (:obj:`bool`) the backend provides measurement group devices</span>
+    <span class="n">supportsMntGrps</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
@@ -180,42 +191,50 @@
 <span class="sd">        :param numberOfThreads: number of threads</span>
 <span class="sd">        :type numberOfThreads: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__numberOfThreads</span> <span class="o">=</span> <span class="n">numberOfThreads</span>
+        <span class="n">ScanBackend</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="p">)</span>
 
         <span class="c1">#: (:class:`tango.Database`) tango database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
-
-        <span class="c1">#: (:obj:`str`) nexus configuration variable name in ms</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span> <span class="o">=</span> <span class="s2">&quot;NeXusConfiguration&quot;</span>
 
         <span class="c1">#: (:obj:`str`) macro server device name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__macroserver</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`list` &lt;:obj:`tango.DeviceProxy`&gt;) pool instances</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) black list of pools</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) pure variables</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__pureVar</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;AppendEntry&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ComponentsFromMntGrp&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;DynamicComponents&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;DefaultDynamicLinks&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;DefaultDynamicPath&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;TimeZone&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ConfigDevice&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;WriterDevice&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Door&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;MntGrp&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ScanDir&quot;</span>
-        <span class="p">]</span>
+<div class="viewcode-block" id="MacroServerPools.defaultDoor">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.defaultDoor">[docs]</a>
+    <span class="k">def</span> <span class="nf">defaultDoor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the default door</span>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources off states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INSERT&quot;</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">,</span> <span class="s2">&quot;FAULT&quot;</span><span class="p">]</span>
+<span class="sd">        :param db: tango database</span>
+<span class="sd">        :type db: :class:`tango.Database`</span>
+<span class="sd">        :returns: door device name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s2">&quot;Door&quot;</span><span class="p">)</span></div>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) tango datasources warning states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ALARM&quot;</span><span class="p">,</span> <span class="s2">&quot;DISABLE&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MacroServerPools.isDoorValid">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorValid">[docs]</a>
+    <span class="k">def</span> <span class="nf">isDoorValid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; checks if the door has a macro server</span>
+
+<span class="sd">        :param door: door device name</span>
+<span class="sd">        :type door: :obj:`str`</span>
+<span class="sd">        :returns: True if valid</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">door</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+                <span class="n">db</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+                <span class="n">macroserver</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">macroserver</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">macroserver</span><span class="p">:</span>
+                <span class="n">door</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">door</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="MacroServerPools.updateMacroServer">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.updateMacroServer">[docs]</a>
@@ -284,212 +303,35 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span></div>
 
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__toCheck</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">configdevice</span><span class="p">,</span> <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">components</span><span class="p">,</span>
-                  <span class="n">datasources</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; prepares list of channels to check</span>
-
-<span class="sd">        :param configdevice: configuration device proxy</span>
-<span class="sd">        :type configdevice: :class:`tango.DeviceProxy` \</span>
-<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
-<span class="sd">        :param discomponentgroup: name dictionary of checker items</span>
-<span class="sd">        :type discomponentgroup: :obj:`dict` &lt;:obj:`str` ,</span>
-<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
-<span class="sd">        :param components: component list</span>
-<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param datasources: datasource list</span>
-<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param channels: pool channel list</span>
-<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param nonexisting: non-exising pool channels</span>
-<span class="sd">        :type nonexisting: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :returns: list of CheckerItems</span>
-<span class="sd">        :rtype: :obj:`list` &lt;:class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="n">configdevice</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">pyevalfromscript</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">availablecomponents</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
-            <span class="n">configdevice</span><span class="p">,</span> <span class="s2">&quot;availableComponents&quot;</span><span class="p">)</span>
-        <span class="n">availabledatasouces</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
-            <span class="n">configdevice</span><span class="p">,</span> <span class="s2">&quot;availableDataSources&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">availablecomponents</span><span class="p">):</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not defined in Configuration Server&quot;</span> <span class="o">%</span> <span class="n">k</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">availabledatasouces</span><span class="p">):</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">k</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not defined i&lt;n Configuration Server&quot;</span> <span class="o">%</span> <span class="n">k</span>
-        <span class="n">toCheck</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">cps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">availablecomponents</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">([</span><span class="n">acp</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">cp</span><span class="p">,</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">availabledatasouces</span><span class="p">:</span>
-                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span>
-                            <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">cp</span><span class="p">))</span>
-                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">ds</span>
-                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
-                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
-                            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> of </span><span class="si">%s</span><span class="s2"> not defined in Configuration Server&quot;</span> \
-                            <span class="o">%</span> <span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">cp</span><span class="p">)</span>
-                        <span class="k">break</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">__createCheckItem</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="n">dss</span><span class="p">,</span> <span class="n">toCheck</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">,</span>
-                                      <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">describer</span><span class="p">)</span>
-        <span class="n">adss</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">availabledatasouces</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ads</span> <span class="ow">in</span> <span class="n">adss</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">([</span><span class="n">ads</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">ads</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ads</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">__createCheckItem</span><span class="p">(</span><span class="n">ads</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">toCheck</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">,</span>
-                                  <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">describer</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">toCheck</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__createCheckItem</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dss</span><span class="p">,</span> <span class="n">toCheck</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">,</span>
-                          <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">describer</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates Checker Item</span>
-
-<span class="sd">        :param name: item name</span>
-<span class="sd">        :type name: :obj:`str`</span>
-<span class="sd">        :param dss: datasource dictionary</span>
-<span class="sd">        :type dss: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
-<span class="sd">        :param toCheck: dictionary with checker items</span>
-<span class="sd">        :type toCheck: :obj:`dict` &lt;:obj:`str` ,</span>
-<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
-<span class="sd">        :param nonexisting: non-exising pool channels</span>
-<span class="sd">        :type nonexisting: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param discomponentgroup: name dictionary of checker items</span>
-<span class="sd">        :type discomponentgroup: :obj:`dict` &lt;:obj:`str` ,</span>
-<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
-<span class="sd">        :param channels: pool channel list</span>
-<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param describer: describer instance</span>
-<span class="sd">        :type describer: :class:`nxsrecconfig.Describer.Describer`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dss</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">tgds</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="s1">&#39;TANGO&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">tgds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toCheck</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">toCheck</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="n">srec</span> <span class="o">=</span> <span class="n">tgds</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-                    <span class="n">attr</span> <span class="o">=</span> <span class="n">srec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">toCheck</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">TangoDSItem</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">ds</span><span class="p">),</span>
-                                    <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">srec</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span>
-                                    <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">attr</span><span class="p">)))</span>
-                <span class="k">elif</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">nonexisting</span><span class="p">:</span>
-                    <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">ds</span>
-                    <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
-                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not defined in Pool&quot;</span> <span class="o">%</span> <span class="n">ds</span>
-
-                    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">toCheck</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                        <span class="n">toCheck</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="k">break</span>
-                <span class="k">elif</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toCheck</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">toCheck</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="n">toCheck</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TangoDSItem</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">ds</span><span class="p">)))</span>
-
-<div class="viewcode-block" id="MacroServerPools.checkChannels">
-<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels">[docs]</a>
-    <span class="k">def</span> <span class="nf">checkChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">configdevice</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span>
-                      <span class="n">componentgroup</span><span class="p">,</span> <span class="n">datasourcegroup</span><span class="p">,</span>
-                      <span class="n">channelerrors</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; checks component channels</span>
+<div class="viewcode-block" id="MacroServerPools.nonExistingChannels">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.nonExistingChannels">[docs]</a>
+    <span class="k">def</span> <span class="nf">nonExistingChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">channels</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the channels which are not found in the pools</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
-<span class="sd">        :param configdevice: configuration server</span>
-<span class="sd">        :type configdevice: :class:`tango.DeviceProxy` \</span>
-<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
-<span class="sd">        :param channels: pool channels</span>
+<span class="sd">        :param channels: channel names</span>
 <span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param componentgroup: preselected component group</span>
-<span class="sd">        :type componentgroup: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt;</span>
-<span class="sd">        :param channelerrors: list of deactivated component errors</span>
-<span class="sd">        :type channelerrors: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :returns: json dictionary with selected active components</span>
-<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        :returns: channels not found in the pools</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">channelerrors</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">discomponentgroup</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPools</span><span class="p">(</span><span class="n">door</span><span class="p">)</span>
         <span class="n">fnames</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span><span class="n">pools</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
-        <span class="n">nonexisting</span> <span class="o">=</span> <span class="p">[</span><span class="n">dev</span> <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">channels</span> <span class="k">if</span> <span class="n">dev</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fnames</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-
-        <span class="n">toCheck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__toCheck</span><span class="p">(</span>
-            <span class="n">configdevice</span><span class="p">,</span> <span class="n">discomponentgroup</span><span class="p">,</span>
-            <span class="p">[</span><span class="n">cp</span> <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">componentgroup</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-             <span class="k">if</span> <span class="n">componentgroup</span><span class="p">[</span><span class="n">cp</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">ds</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">datasourcegroup</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-             <span class="k">if</span> <span class="n">datasourcegroup</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">],</span>
-            <span class="n">channels</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">)</span>
-
-        <span class="n">cqueue</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">checkeritem</span> <span class="ow">in</span> <span class="n">toCheck</span><span class="p">:</span>
-            <span class="n">cqueue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">checkeritem</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__numberOfThreads</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__numberOfThreads</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">toCheck</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__numberOfThreads</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">toCheck</span><span class="p">))):</span>
-            <span class="n">thd</span> <span class="o">=</span> <span class="n">CheckerThread</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">cqueue</span><span class="p">)</span>
-            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceErrorStates</span>
-            <span class="n">thd</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangoSourceWarningStates</span>
-            <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thd</span><span class="p">)</span>
-            <span class="n">thd</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
-            <span class="n">th</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">checkeritem</span> <span class="ow">in</span> <span class="n">toCheck</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">checkeritem</span><span class="o">.</span><span class="n">errords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">checkeritem</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">checkeritem</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__updategroup</span><span class="p">(</span><span class="n">componentgroup</span><span class="p">,</span> <span class="n">discomponentgroup</span><span class="p">,</span>
-                           <span class="n">channelerrors</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__updategroup</span><span class="p">(</span><span class="n">datasourcegroup</span><span class="p">,</span> <span class="n">discomponentgroup</span><span class="p">,</span>
-                           <span class="n">channelerrors</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">componentgroup</span><span class="p">),</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">datasourcegroup</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">dev</span> <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">channels</span> <span class="k">if</span> <span class="n">dev</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fnames</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></div>
 
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__updategroup</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">disgroup</span><span class="p">,</span> <span class="n">channelerrors</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates selection dictionary</span>
+<div class="viewcode-block" id="MacroServerPools.channelSource">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.channelSource">[docs]</a>
+    <span class="k">def</span> <span class="nf">channelSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the tango source of a pool channel</span>
 
-<span class="sd">        :param group: selection dictionary</span>
-<span class="sd">        :type group: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt;</span>
-<span class="sd">        :param disgroup: dictionary with checker items</span>
-<span class="sd">        :type disgroup: :obj:`dict` &lt;:obj:`str` ,</span>
-<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
-<span class="sd">        :param channelerrors: list with channel errors</span>
-<span class="sd">        :type channelerrors: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :param name: channel name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :returns: tango attribute name or None</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">disgroup</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">checkeritem</span> <span class="o">=</span> <span class="n">disgroup</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span>
-                <span class="n">channelerrors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-                    <span class="p">{</span><span class="s2">&quot;component&quot;</span><span class="p">:</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">acp</span><span class="p">),</span>
-                     <span class="s2">&quot;datasource&quot;</span><span class="p">:</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">checkeritem</span><span class="o">.</span><span class="n">errords</span><span class="p">),</span>
-                     <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">checkeritem</span><span class="o">.</span><span class="n">message</span><span class="p">)}</span>
-                <span class="p">))</span>
-                <span class="k">if</span> <span class="n">checkeritem</span><span class="o">.</span><span class="n">active</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-                    <span class="n">group</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="k">elif</span> <span class="n">group</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
-                    <span class="n">group</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">group</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
-                    <span class="n">group</span><span class="p">[</span><span class="n">acp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getSource</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="MacroServerPools.isDoorRunning">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.isDoorRunning">[docs]</a>
@@ -532,32 +374,15 @@
 <span class="sd">        :param data: dictionary with resulting data</span>
 <span class="sd">        :type data: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ScanDir&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;ScanFile&quot;</span><span class="p">]</span>
-
         <span class="n">msp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="n">door</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">OldTangoError</span><span class="p">(</span>
                 <span class="s2">&quot;Reading Encoded Attributes not supported in tango &lt; 9.2.5&quot;</span><span class="p">)</span>
         <span class="n">rec</span> <span class="o">=</span> <span class="n">msp</span><span class="o">.</span><span class="n">Environment</span>
-        <span class="n">nenv</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">vl</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">rec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pickle&#39;</span><span class="p">:</span>
             <span class="n">dc</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">pickleloads</span><span class="p">(</span><span class="n">rec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">if</span> <span class="s1">&#39;new&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">nenv</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">var</span> <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">params</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;NeXus</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">var</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">vl</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span>
-                    <span class="k">elif</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">nenv</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">vl</span> <span class="o">=</span> <span class="n">nenv</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">continue</span>
-                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-                        <span class="n">vl</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">vl</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_readSelectorEnv</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">],</span> <span class="n">names</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MacroServerPools.setSelectorEnv">
@@ -572,9 +397,6 @@
 <span class="sd">        :param cmddata: command data dictionary</span>
 <span class="sd">        :type cmddata: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ScanDir&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;ScanFile&quot;</span><span class="p">]</span>
-
         <span class="n">msp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="n">door</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">OldTangoError</span><span class="p">(</span>
@@ -583,31 +405,8 @@
         <span class="k">if</span> <span class="n">rec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pickle&#39;</span><span class="p">:</span>
             <span class="n">dc</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">pickleloads</span><span class="p">(</span><span class="n">rec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">if</span> <span class="s1">&#39;new&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="p">{}}</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
-                        <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span><span class="p">:</span> <span class="p">{}}}</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span><span class="p">:</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span><span class="p">]}}</span>
-
-                <span class="n">nenv</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pureVar</span><span class="p">:</span>
-                        <span class="n">vl</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">vl</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">var</span><span class="p">])</span>
-                        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
-                            <span class="n">vl</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-                        <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">var</span><span class="p">)]</span> <span class="o">=</span> <span class="n">vl</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">nenv</span><span class="p">[(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">var</span><span class="p">)]</span> <span class="o">=</span> <span class="n">vl</span>
-
-                <span class="k">if</span> <span class="n">cmddata</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">cmddata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="n">nenv</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
-                <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">msp</span><span class="p">)</span></div>
+                <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selectorEnvUpdate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmddata</span><span class="p">)},</span> <span class="n">msp</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MacroServerPools.getScanEnv">
@@ -620,24 +419,16 @@
 <span class="sd">        :returns: JSON String with important variables</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ScanDir&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;ScanFile&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;ScanID&quot;</span><span class="p">,</span>
-                  <span class="c1"># &quot;ActiveMntGrp&quot;,</span>
-                  <span class="s2">&quot;NeXusSelectorDevice&quot;</span><span class="p">]</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">msp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="n">door</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">OldTangoError</span><span class="p">(</span>
-                <span class="s2">&quot;Reading Encoded Attributes not supported in &quot;</span>
-                <span class="s2">&quot;tango &lt; 9.2.5&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;Reading Encoded Attributes not supported in tango &lt; 9.2.5&quot;</span><span class="p">)</span>
         <span class="n">rec</span> <span class="o">=</span> <span class="n">msp</span><span class="o">.</span><span class="n">Environment</span>
         <span class="k">if</span> <span class="n">rec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pickle&#39;</span><span class="p">:</span>
             <span class="n">dc</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">pickleloads</span><span class="p">(</span><span class="n">rec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">if</span> <span class="s1">&#39;new&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">res</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readScanEnv</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
 
 
@@ -657,21 +448,162 @@
         <span class="n">msp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="n">door</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">OldTangoError</span><span class="p">(</span>
-                <span class="s2">&quot;Reading Encoded Attributes not supported in &quot;</span>
-                <span class="s2">&quot;tango &lt; 9.2.5&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;Reading Encoded Attributes not supported in tango &lt; 9.2.5&quot;</span><span class="p">)</span>
         <span class="n">rec</span> <span class="o">=</span> <span class="n">msp</span><span class="o">.</span><span class="n">Environment</span>
         <span class="k">if</span> <span class="n">rec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pickle&#39;</span><span class="p">:</span>
             <span class="n">dc</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">pickleloads</span><span class="p">(</span><span class="n">rec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">if</span> <span class="s1">&#39;new&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">if</span> <span class="s1">&#39;ScanID&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="n">scanID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="s2">&quot;ScanID&quot;</span><span class="p">])</span>
-            <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="p">{}}</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">var</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">var</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s1">&#39;ScanID&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">scanID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">][</span><span class="s2">&quot;ScanID&quot;</span><span class="p">])</span>
-            <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">msp</span><span class="p">)</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scanEnvUpdate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;ScanID&#39;</span> <span class="ow">in</span> <span class="n">new</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">scanID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new</span><span class="p">[</span><span class="s2">&quot;ScanID&quot;</span><span class="p">])</span>
+            <span class="n">MSUtils</span><span class="o">.</span><span class="n">writeEnvAttr</span><span class="p">({</span><span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="n">new</span><span class="p">},</span> <span class="n">msp</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">scanID</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.getEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getEnv">[docs]</a>
+    <span class="k">def</span> <span class="nf">getEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides a macroserver environment variable</span>
+
+<span class="sd">        :param var: variable name</span>
+<span class="sd">        :type var: :obj:`str`</span>
+<span class="sd">        :param ms: macroserver device name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        :returns: variable value</span>
+<span class="sd">        :rtype: `any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.setEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setEnv">[docs]</a>
+    <span class="k">def</span> <span class="nf">setEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets a macroserver environment variable</span>
+
+<span class="sd">        :param var: variable name</span>
+<span class="sd">        :type var: :obj:`str`</span>
+<span class="sd">        :param value: variable value</span>
+<span class="sd">        :type value: `any`</span>
+<span class="sd">        :param ms: macroserver device name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.setEnvs">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setEnvs">[docs]</a>
+    <span class="k">def</span> <span class="nf">setEnvs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varvalues</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets macroserver environment variables</span>
+
+<span class="sd">        :param varvalues: variable names and values</span>
+<span class="sd">        :type varvalues: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param ms: macroserver device name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span><span class="n">varvalues</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.usetEnv">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.usetEnv">[docs]</a>
+    <span class="k">def</span> <span class="nf">usetEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; unsets a macroserver environment variable</span>
+
+<span class="sd">        :param var: variable name</span>
+<span class="sd">        :type var: :obj:`str`</span>
+<span class="sd">        :param ms: macroserver device name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">MSUtils</span><span class="o">.</span><span class="n">usetEnv</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.createMntGrp">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.createMntGrp">[docs]</a>
+    <span class="k">def</span> <span class="nf">createMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">timer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a measurement group in the pool</span>
+
+<span class="sd">        :param pool: pool proxy</span>
+<span class="sd">        :type pool: :class:`tango.DeviceProxy`</span>
+<span class="sd">        :param name: measurement group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param timer: timer name</span>
+<span class="sd">        :type timer: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+                <span class="n">pool</span><span class="p">,</span> <span class="s2">&quot;CreateMeasurementGroup&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">timer</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">CommunicationFailed</span> <span class="k">as</span> <span class="n">cf</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> \
+               <span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s2">&quot;API_DeviceTimedOut&quot;</span><span class="p">:</span>
+                <span class="n">TangoUtils</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.deleteMntGrp">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.deleteMntGrp">[docs]</a>
+    <span class="k">def</span> <span class="nf">deleteMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; deletes a measurement group from the pool</span>
+
+<span class="sd">        :param pool: pool proxy</span>
+<span class="sd">        :type pool: :class:`tango.DeviceProxy`</span>
+<span class="sd">        :param name: measurement group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="s2">&quot;DeleteElement&quot;</span><span class="p">,</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.mntGrpConfiguration">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.mntGrpConfiguration">[docs]</a>
+    <span class="k">def</span> <span class="nf">mntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the measurement group configuration</span>
+
+<span class="sd">        :param device: measurement group device name</span>
+<span class="sd">        :type device: :obj:`str`</span>
+<span class="sd">        :returns: JSON configuration</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.setMntGrpConfiguration">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.setMntGrpConfiguration">[docs]</a>
+    <span class="k">def</span> <span class="nf">setMntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">conf</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the measurement group configuration</span>
+
+<span class="sd">        :param device: measurement group device name</span>
+<span class="sd">        :type device: :obj:`str`</span>
+<span class="sd">        :param conf: JSON configuration</span>
+<span class="sd">        :type conf: :obj:`str`</span>
+<span class="sd">        :returns: the configuration read back from the device</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">conf</span>
+        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MacroServerPools.testMntGrpConfiguration">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.testMntGrpConfiguration">[docs]</a>
+    <span class="k">def</span> <span class="nf">testMntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">conf</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the configuration the measurement group makes of conf</span>
+<span class="sd">            and restores its current configuration</span>
+
+<span class="sd">        :param device: measurement group device name</span>
+<span class="sd">        :type device: :obj:`str`</span>
+<span class="sd">        :param conf: JSON configuration</span>
+<span class="sd">        :type conf: :obj:`str`</span>
+<span class="sd">        :returns: the configuration read back from the device</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+        <span class="n">oldconf</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
+        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">conf</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
+        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">oldconf</span>
+        <span class="k">return</span> <span class="n">conf</span></div>
 </div>
 
 </pre></div>

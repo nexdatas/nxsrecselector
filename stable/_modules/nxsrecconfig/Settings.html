@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Settings &#8212; nxsrecconfig 4.14.0 documentation</title>
+    <title>nxsrecconfig.Settings &#8212; nxsrecconfig 4.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=8edb52cd"></script>
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.14</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -52,6 +52,10 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +64,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -118,6 +124,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
@@ -167,11 +174,11 @@
 <span class="kn">from</span> <span class="nn">.Describer</span> <span class="kn">import</span> <span class="n">Describer</span>
 <span class="kn">from</span> <span class="nn">.DynamicComponent</span> <span class="kn">import</span> <span class="n">DynamicComponent</span>
 <span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">MSUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">PYTG_BUG_213</span><span class="p">)</span>
+    <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">PYTG_BUG_213</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.ProfileManager</span> <span class="kn">import</span> <span class="n">ProfileManager</span>
 <span class="kn">from</span> <span class="nn">.Selector</span> <span class="kn">import</span> <span class="n">Selector</span>
 <span class="kn">from</span> <span class="nn">.Release</span> <span class="kn">import</span> <span class="n">__version__</span>
-<span class="kn">from</span> <span class="nn">.MacroServerPools</span> <span class="kn">import</span> <span class="n">MacroServerPools</span>
+<span class="kn">from</span> <span class="nn">.Backends</span> <span class="kn">import</span> <span class="n">createBackend</span>
 <span class="kn">from</span> <span class="nn">.StreamSet</span> <span class="kn">import</span> <span class="n">StreamSet</span>
 
 
@@ -193,7 +200,8 @@
                  <span class="n">globaluserdata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">cacheconfiguration</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">syncmntgrp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">checkdescription</span><span class="o">=</span><span class="kc">True</span>
+                 <span class="n">checkdescription</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">backend</span><span class="o">=</span><span class="kc">None</span>
                  <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; contructor</span>
 
@@ -220,6 +228,9 @@
 <span class="sd">        :type syncmntgrp: :obj:`bool`</span>
 <span class="sd">        :param checkdescription: apply checks for preselected components</span>
 <span class="sd">        :type checkdescription: :obj:`bool`</span>
+<span class="sd">        :param backend: scan backend name, i.e. ``sardana``, ``bliss``</span>
+<span class="sd">                        or ``null``, ``sardana`` if None</span>
+<span class="sd">        :type backend: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
@@ -279,9 +290,9 @@
                 <span class="s2">&quot;tango &lt; 9.2.5&quot;</span>
                 <span class="s2">&quot; is not supported &quot;</span><span class="p">)</span>
 
-        <span class="c1">#: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \</span>
+        <span class="c1">#: (:class:`nxsrecconfg.ScanBackend.ScanBackend`) \</span>
         <span class="c1">#:     configuration selection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span> <span class="o">=</span> <span class="n">MacroServerPools</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfThreads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span> <span class="o">=</span> <span class="n">createBackend</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfThreads</span><span class="p">)</span>
 
         <span class="c1">#: (:class:`nxsrecconfg.Selector.Selector`) \</span>
         <span class="c1">#:   configuration selector</span>
@@ -328,7 +339,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-            <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+            <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">amntgrp</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amntgrp</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1127,6 +1138,18 @@
     <span class="n">macroServer</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getMacroServer</span><span class="p">,</span>
                            <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;macroserver device name&#39;</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">__getBackend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get method for backend attribute</span>
+
+<span class="sd">        :returns: scan backend name, i.e. ``sardana``, ``bliss`` or ``null``</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1">#: (:obj:`str`) scan backend name</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getBackend</span><span class="p">,</span>
+                       <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;scan backend name&#39;</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">__getWriterDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; get method for writerDevice attribute</span>
 
@@ -1155,7 +1178,7 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ScanDir&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ScanDir&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__setScanDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set method for ScanDir attribute</span>
@@ -1164,7 +1187,7 @@
 <span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s1">&#39;ScanDir&#39;</span><span class="p">,</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">ms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s1">&#39;ScanDir&#39;</span><span class="p">,</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">ms</span><span class="p">)</span>
 
     <span class="c1">#: the json data string</span>
     <span class="n">scanDir</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getScanDir</span><span class="p">,</span> <span class="n">__setScanDir</span><span class="p">,</span>
@@ -1177,7 +1200,7 @@
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-        <span class="n">sid</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ScanID&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+        <span class="n">sid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ScanID&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -1194,7 +1217,7 @@
 <span class="sd">        :type name: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s1">&#39;ScanID&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s1">&#39;ScanID&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
 
     <span class="c1">#: (:obj:`int`) the json data string</span>
     <span class="n">scanID</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getScanID</span><span class="p">,</span> <span class="n">__setScanID</span><span class="p">,</span>
@@ -1207,7 +1230,7 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ScanFile&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ScanFile&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="k">else</span> <span class="n">val</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 
@@ -1222,7 +1245,7 @@
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">jname</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">jname</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">jname</span> <span class="o">=</span> <span class="n">jname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s1">&#39;ScanFile&#39;</span><span class="p">,</span> <span class="n">jname</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s1">&#39;ScanFile&#39;</span><span class="p">,</span> <span class="n">jname</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
 
     <span class="c1">#: (:obj:`str`) the json data string</span>
     <span class="n">scanFile</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getScanFile</span><span class="p">,</span> <span class="n">__setScanFile</span><span class="p">,</span>
@@ -1838,7 +1861,7 @@
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">dcpcreator</span> <span class="o">=</span> <span class="n">DynamicComponent</span><span class="p">(</span>
             <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusPath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultNeXusType</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">defaultUserDataPath</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">defaultUserDataPath</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">dcpcreator</span><span class="o">.</span><span class="n">setStepDSources</span><span class="p">(</span>

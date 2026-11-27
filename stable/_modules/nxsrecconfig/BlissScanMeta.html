@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nxsrecconfig.BlissScanMeta &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for nxsrecconfig.BlissScanMeta</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2014-2026 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; NeXus metadata of selector profiles for BLISS scans</span>
+
+<span class="sd">The descriptive part of the NeXus configuration selected by NXSRecSelector,</span>
+<span class="sd">i.e. its INIT and FINAL fields, is added to BLISS scans as user scan</span>
+<span class="sd">metadata, so the BLISS writer stores it in the scan entry.  STEP fields</span>
+<span class="sd">are not written, the scan data are stored by BLISS itself.</span>
+
+<span class="sd">In a BLISS session::</span>
+
+<span class="sd">    from nxsrecconfig.BlissScanMeta import NXSScanMeta</span>
+<span class="sd">    nxsmeta = NXSScanMeta()     # the selector module with the null backend</span>
+<span class="sd">    nxsmeta.register()</span>
+
+<span class="sd">The profile of the active BLISS measurement group is used by default.</span>
+
+<span class="sd">The INIT fields are evaluated when the scan starts and the FINAL fields</span>
+<span class="sd">when the scan ends, by NXSDataWriter (:mod:`nxswriter`) with the ``h5map``</span>
+<span class="sd">writer of :mod:`nxstools`, which builds the NeXus tree in memory.</span>
+<span class="sd">Links to the written fields are kept, links to STEP fields are dropped.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">posixpath</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">.WriterConfiguration</span> <span class="kn">import</span> <span class="n">WriterConfiguration</span><span class="p">,</span> <span class="n">NumpyEncoder</span>
+
+
+<span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) fields exported at the start of the scan</span>
+<span class="n">START_SKIP</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;STEP&quot;</span><span class="p">,</span> <span class="s2">&quot;FINAL&quot;</span><span class="p">]</span>
+
+<span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) fields exported at the end of the scan</span>
+<span class="n">END_SKIP</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;STEP&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="h5map_value">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.h5map_value">[docs]</a>
+<span class="k">def</span> <span class="nf">h5map_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; converts an h5map data item to a value of the BLISS metadata</span>
+
+<span class="sd">    :param value: h5map data item</span>
+<span class="sd">    :type value: `any`</span>
+<span class="sd">    :returns: value or None for streams and virtual datasets</span>
+<span class="sd">    :rtype: `any`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;inline&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;inline_b64&quot;</span><span class="p">:</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span>
+            <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="p">[]))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="h5map_to_nxdict">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.h5map_to_nxdict">[docs]</a>
+<span class="k">def</span> <span class="nf">h5map_to_nxdict</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; converts an h5map group to a silx-like NeXus dictionary</span>
+
+<span class="sd">    Group attributes are stored as ``@name`` keys, dataset attributes as</span>
+<span class="sd">    ``dataset@name`` keys and links as ``&gt;name`` keys.</span>
+
+<span class="sd">    :param group: h5map group</span>
+<span class="sd">    :type group: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :returns: NeXus dictionary</span>
+<span class="sd">    :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nxdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">nxdict</span><span class="p">[</span><span class="s2">&quot;@</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">h5map_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="n">nxdict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">h5map_to_nxdict</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">h5map_value</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">nxdict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">for</span> <span class="n">aname</span><span class="p">,</span> <span class="n">avalue</span> <span class="ow">in</span> <span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">nxdict</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">@</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">aname</span><span class="p">)]</span> <span class="o">=</span> <span class="n">h5map_value</span><span class="p">(</span><span class="n">avalue</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;soft_link&quot;</span><span class="p">:</span>
+            <span class="n">nxdict</span><span class="p">[</span><span class="s2">&quot;&gt;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span><span class="p">[</span><span class="s2">&quot;target_path&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;external_link&quot;</span><span class="p">:</span>
+            <span class="n">nxdict</span><span class="p">[</span><span class="s2">&quot;&gt;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">::</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">child</span><span class="p">[</span><span class="s2">&quot;target_file&quot;</span><span class="p">],</span> <span class="n">child</span><span class="p">[</span><span class="s2">&quot;target_path&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">nxdict</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_has</span><span class="p">(</span><span class="n">nxdict</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; checks if a dictionary has an item</span>
+
+<span class="sd">    :param nxdict: NeXus dictionary</span>
+<span class="sd">    :type nxdict: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param path: item path relative to the dictionary</span>
+<span class="sd">    :type path: :obj:`str`</span>
+<span class="sd">    :returns: True if the item exists</span>
+<span class="sd">    :rtype: :obj:`bool`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">nxdict</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">nm</span> <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">nm</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="s2">&quot;&gt;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">_relink</span><span class="p">(</span><span class="n">nxdict</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="p">()):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; makes entry links relative and removes dangling links</span>
+
+<span class="sd">    The BLISS writer names the scan entry itself, so links to the entry</span>
+<span class="sd">    of the NeXus configuration become relative.</span>
+
+<span class="sd">    :param nxdict: NeXus dictionary of a group in the entry</span>
+<span class="sd">    :type nxdict: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param entry: absolute path of the configuration entry</span>
+<span class="sd">    :type entry: :obj:`str`</span>
+<span class="sd">    :param root: NeXus dictionary of the entry</span>
+<span class="sd">    :type root: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param parents: names of the group and its parents in the entry</span>
+<span class="sd">    :type parents: :obj:`tuple` &lt;:obj:`str`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">nxdict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">nxdict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">_relink</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">parents</span> <span class="o">+</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
+        <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;::&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
+                <span class="n">posixpath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">parents</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+                <span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]</span>
+                <span class="k">if</span> <span class="n">_has</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+                    <span class="n">nxdict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span>
+                        <span class="n">target</span><span class="p">,</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">parents</span><span class="p">))</span>
+                    <span class="k">continue</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">_has</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)):</span>
+                    <span class="k">continue</span>
+            <span class="n">nxdict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_prune</span><span class="p">(</span><span class="n">nxdict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; removes groups without fields and links</span>
+
+<span class="sd">    :param nxdict: NeXus dictionary</span>
+<span class="sd">    :type nxdict: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :returns: True if the group has no fields and links</span>
+<span class="sd">    :rtype: :obj:`bool`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">nxdict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nxdict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_prune</span><span class="p">(</span><span class="n">nxdict</span><span class="p">[</span><span class="n">key</span><span class="p">]):</span>
+            <span class="n">nxdict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">nxdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="entry_metadata">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.entry_metadata">[docs]</a>
+<span class="k">def</span> <span class="nf">entry_metadata</span><span class="p">(</span><span class="n">h5map</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the content of the NXentry groups of an h5map</span>
+
+<span class="sd">    :param h5map: h5map of the file root</span>
+<span class="sd">    :type h5map: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :returns: NeXus dictionary with the content of the entries</span>
+<span class="sd">    :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">h5map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">nxclass</span> <span class="o">=</span> <span class="n">h5map_value</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NX_class&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">nxclass</span> <span class="o">!=</span> <span class="s2">&quot;NXentry&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">h5map_to_nxdict</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ky</span> <span class="k">for</span> <span class="n">ky</span> <span class="ow">in</span> <span class="n">content</span> <span class="k">if</span> <span class="n">ky</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)]:</span>
+            <span class="n">content</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">_relink</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="n">_prune</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">metadata</span></div>
+
+
+
+<div class="viewcode-block" id="NXSScanMeta">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta">[docs]</a>
+<span class="k">class</span> <span class="nc">NXSScanMeta</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; BLISS user scan metadata of NXSRecSelector profiles</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">userdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">writerproperties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param selector: NXSRecSelector device name or proxy,</span>
+<span class="sd">                         or :class:`nxsrecconfig.Settings.Settings`,</span>
+<span class="sd">                         the selector module with the null backend if None</span>
+<span class="sd">        :type selector: :obj:`str` or `any`</span>
+<span class="sd">        :param profile: profile name or a function of a scan returning it,</span>
+<span class="sd">                        the active BLISS measurement group if None</span>
+<span class="sd">        :type profile: :obj:`str` or callable</span>
+<span class="sd">        :param userdata: user data or a function of a scan returning them,</span>
+<span class="sd">                         added to the ``UserData`` of the profile</span>
+<span class="sd">        :type userdata: :obj:`dict` &lt;:obj:`str`, `any`&gt; or callable</span>
+<span class="sd">        :param writerproperties: properties of NXSDataWriter,</span>
+<span class="sd">                                 e.g. ``{&quot;addingLogs&quot;: False}``</span>
+<span class="sd">        :type writerproperties: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param log: logger with debug, info and warning methods</span>
+<span class="sd">        :type log: :class:`logging.Logger` or `any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:obj:`str` or `any`) selector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">selector</span>
+        <span class="c1">#: (:obj:`str` or callable) profile name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">profile</span>
+        <span class="c1">#: (:obj:`dict` or callable) user data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">userdata</span> <span class="o">=</span> <span class="n">userdata</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) NXSDataWriter properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writerproperties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">writerproperties</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="c1">#: (:class:`logging.Logger` or `any`) logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span> <span class="ow">or</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;nxsrecconfig&quot;</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, `any`&gt;) writers of running scans</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:class:`bliss.scanning.scan_meta.ScanMeta`) registered scan meta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`str`) registered category</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__category</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`str`) registered metadata name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">selector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; NXSRecSelector device or module</span>
+
+<span class="sd">        :returns: selector</span>
+<span class="sd">        :rtype: :class:`tango.DeviceProxy` or</span>
+<span class="sd">                :class:`nxsrecconfig.Settings.Settings`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.Settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;null&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">tango</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span>
+
+<div class="viewcode-block" id="NXSScanMeta.register">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.register">[docs]</a>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scanmeta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;nexdatas&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; registers the metadata in the BLISS user scan metadata</span>
+
+<span class="sd">        The empty category merges the metadata into the scan entry.</span>
+
+<span class="sd">        :param scanmeta: scan metadata, the user scan metadata if None</span>
+<span class="sd">        :type scanmeta: :class:`bliss.scanning.scan_meta.ScanMeta`</span>
+<span class="sd">        :param category: metadata category</span>
+<span class="sd">        :type category: :obj:`str`</span>
+<span class="sd">        :param name: metadata name in the category</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bliss.scanning.scan_meta</span> <span class="kn">import</span> <span class="n">META_TIMING</span><span class="p">,</span> <span class="n">get_user_scan_meta</span>
+        <span class="k">if</span> <span class="n">scanmeta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scanmeta</span> <span class="o">=</span> <span class="n">get_user_scan_meta</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+        <span class="n">scanmeta</span><span class="o">.</span><span class="n">add_categories</span><span class="p">([</span><span class="n">category</span><span class="p">])</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">scanmeta</span><span class="o">.</span><span class="n">_scan_meta_category</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">timing</span> <span class="o">=</span> <span class="n">META_TIMING</span><span class="o">.</span><span class="n">START</span> <span class="o">|</span> <span class="n">META_TIMING</span><span class="o">.</span><span class="n">END</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span> <span class="o">=</span> <span class="n">scanmeta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__category</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="NXSScanMeta.unregister">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.unregister">[docs]</a>
+    <span class="k">def</span> <span class="nf">unregister</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; removes the metadata from the BLISS user scan metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span><span class="o">.</span><span class="n">_scan_meta_category</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__category</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">meta</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__closeAll</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the metadata of a scan, called by BLISS</span>
+
+<span class="sd">        The first call of a scan opens the entry, i.e. provides INIT fields,</span>
+<span class="sd">        the second one closes it, i.e. provides FINAL fields.</span>
+
+<span class="sd">        :param scan: BLISS scan</span>
+<span class="sd">        :type scan: :class:`bliss.scanning.scan.Scan`</span>
+<span class="sd">        :returns: NeXus dictionary</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">scan</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__profileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the profile name of a scan</span>
+
+<span class="sd">        :param scan: BLISS scan</span>
+<span class="sd">        :type scan: :class:`bliss.scanning.scan.Scan`</span>
+<span class="sd">        :returns: profile name or None</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">bliss.common.measurementgroup</span> <span class="kn">import</span> <span class="n">get_active_name</span>
+            <span class="k">return</span> <span class="n">get_active_name</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__userData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides user data of a scan</span>
+
+<span class="sd">        :param scan: BLISS scan</span>
+<span class="sd">        :type scan: :class:`bliss.scanning.scan.Scan`</span>
+<span class="sd">        :returns: user data</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">userdata</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">userdata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">userdata</span> <span class="ow">or</span> <span class="p">{})</span>
+
+<div class="viewcode-block" id="NXSScanMeta.configuration">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.configuration">[docs]</a>
+    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_info</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">userdata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates the NXSDataWriter configuration and its INIT record</span>
+
+<span class="sd">        :param scan_info: scan info</span>
+<span class="sd">        :type scan_info: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param profile: profile name, the current profile if None</span>
+<span class="sd">        :type profile: :obj:`str`</span>
+<span class="sd">        :param userdata: user data</span>
+<span class="sd">        :type userdata: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: XML configuration and the INIT record</span>
+<span class="sd">        :rtype: (:obj:`str`, :obj:`dict` &lt;:obj:`str`, `any`&gt;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span>
+        <span class="n">wc</span> <span class="o">=</span> <span class="n">WriterConfiguration</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+        <span class="n">odd</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">mntGrp</span><span class="p">)</span> <span class="o">!=</span> <span class="n">profile</span><span class="p">:</span>
+            <span class="n">selector</span><span class="o">.</span><span class="n">mntGrp</span> <span class="o">=</span> <span class="n">profile</span>
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">and</span> <span class="n">profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="n">wc</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;availableProfiles&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;NXSScanMeta: a profile for &#39;</span><span class="si">%s</span><span class="s2">&#39; does not exist, &quot;</span>
+                <span class="s2">&quot;the mandatory components are used&quot;</span> <span class="o">%</span> <span class="n">profile</span><span class="p">)</span>
+            <span class="n">odd</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wc</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;fetchProfile&quot;</span><span class="p">)</span>
+        <span class="n">wc</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">serverVar</span><span class="p">(</span><span class="s2">&quot;profileConfiguration&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">wc</span><span class="o">.</span><span class="n">oddmntgrp</span> <span class="o">=</span> <span class="n">odd</span>
+
+        <span class="n">serialno</span> <span class="o">=</span> <span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scan_nb&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">variables</span>
+        <span class="n">variables</span><span class="p">[</span><span class="s2">&quot;serialno&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;_</span><span class="si">%05i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="n">serialno</span><span class="p">)</span>
+        <span class="n">variables</span><span class="p">[</span><span class="s2">&quot;scan_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serialno</span>
+        <span class="n">variables</span><span class="p">[</span><span class="s2">&quot;scan_title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="n">variables</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="n">variables</span><span class="p">[</span><span class="s2">&quot;measurement_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">profile</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;serialno&quot;</span><span class="p">:</span> <span class="n">serialno</span><span class="p">,</span>
+            <span class="s2">&quot;scan_title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">filename</span><span class="p">,</span>
+            <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_time&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;npoints&quot;</span><span class="p">,</span> <span class="s2">&quot;count_time&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="n">udata</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">confVar</span><span class="p">(</span><span class="s2">&quot;UserData&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">udata</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">udata</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">udata</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">udata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">userdata</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="n">envRec</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;datadesc&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">}</span>
+                         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})],</span>
+        <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xml</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">envRec</span><span class="p">,</span> <span class="n">udata</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">wc</span><span class="o">.</span><span class="n">removeDynamicComponent</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;NXSScanMeta: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">udata</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xml</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__writer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; opens an NXSDataWriter entry in memory</span>
+
+<span class="sd">        :param filename: file name</span>
+<span class="sd">        :type filename: :obj:`str`</span>
+<span class="sd">        :param xml: XML configuration</span>
+<span class="sd">        :type xml: :obj:`str`</span>
+<span class="sd">        :param record: INIT record</span>
+<span class="sd">        :type record: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: NXSDataWriter</span>
+<span class="sd">        :rtype: :class:`nxswriter.TangoDataWriter.TangoDataWriter`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">nxswriter.TangoDataWriter</span> <span class="kn">import</span> <span class="n">TangoDataWriter</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">TangoDataWriter</span><span class="p">()</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">addingLogs</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">writerproperties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="s2">&quot;h5map&quot;</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">filename</span> <span class="ow">or</span> <span class="s2">&quot;nxsscanmeta.nxs&quot;</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">openFile</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">xmlsettings</span> <span class="o">=</span> <span class="n">xml</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">jsonrecord</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NumpyEncoder</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">openEntry</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">closeFile</span><span class="p">()</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">writer</span>
+
+<div class="viewcode-block" id="NXSScanMeta.start">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.start">[docs]</a>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; opens the entry and provides its INIT fields</span>
+
+<span class="sd">        :param scan: BLISS scan</span>
+<span class="sd">        :type scan: :class:`bliss.scanning.scan.Scan`</span>
+<span class="sd">        :returns: NeXus dictionary</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># entries of scans which have not ended</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__closeAll</span><span class="p">()</span>
+        <span class="n">scan_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">scan_info</span><span class="p">)</span>
+        <span class="n">xml</span><span class="p">,</span> <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configuration</span><span class="p">(</span>
+            <span class="n">scan_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileName</span><span class="p">(</span><span class="n">scan</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userData</span><span class="p">(</span><span class="n">scan</span><span class="p">))</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writer</span><span class="p">(</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">),</span> <span class="n">xml</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">scan</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entry_metadata</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getFile</span><span class="p">()</span><span class="o">.</span><span class="n">h5map</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">START_SKIP</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="NXSScanMeta.end">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.end">[docs]</a>
+    <span class="k">def</span> <span class="nf">end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; closes the entry and provides its FINAL fields</span>
+
+<span class="sd">        :param scan: BLISS scan</span>
+<span class="sd">        :type scan: :class:`bliss.scanning.scan.Scan`</span>
+<span class="sd">        :returns: NeXus dictionary</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">writer</span><span class="p">,</span> <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">scan</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_time&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">jsonrecord</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NumpyEncoder</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">closeEntry</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">entry_metadata</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getFile</span><span class="p">()</span><span class="o">.</span><span class="n">h5map</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">END_SKIP</span><span class="p">))</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">closeFile</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__closeAll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; closes writers of all scans</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">writers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">writer</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">writers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">closeFile</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;NXSScanMeta: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

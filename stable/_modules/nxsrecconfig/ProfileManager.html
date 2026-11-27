@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ProfileManager &#8212; nxsrecconfig 4.14.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &#8212; nxsrecconfig 4.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=8edb52cd"></script>
+    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.14</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -52,6 +52,10 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
@@ -60,11 +64,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
 </li>
@@ -118,6 +124,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
@@ -154,12 +161,7 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">tango</span>
-<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">PyTango</span> <span class="k">as</span> <span class="nn">tango</span>
-
-<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">MSUtils</span><span class="p">,</span> <span class="n">Utils</span>
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">Utils</span>
 <span class="kn">from</span> <span class="nn">.Describer</span> <span class="kn">import</span> <span class="n">Describer</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -253,6 +255,15 @@
         <span class="c1">#: (:obj:`bool`) apply checks for preselected components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkdescription</span> <span class="o">=</span> <span class="n">checkdescription</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__backend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; scan backend of the selector</span>
+
+<span class="sd">        :returns: scan backend</span>
+<span class="sd">        :rtype: :class:`nxsrecconfig.ScanBackend.ScanBackend`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">backend</span>
+
     <span class="k">def</span> <span class="nf">__updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updatas MacroServer name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -291,7 +302,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="n">mntgrps</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="n">fpool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getActivePool</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fpool</span><span class="p">:</span>
             <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
@@ -318,7 +329,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="n">motors</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="n">fpool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getActivePool</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fpool</span><span class="p">:</span>
             <span class="n">motors</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMotorPositionAttributes</span><span class="p">(</span>
@@ -481,13 +492,17 @@
 <span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
-            <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">([</span><span class="n">pool</span><span class="p">],</span> <span class="s1">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mntgrps</span><span class="p">:</span>
-                <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
-                    <span class="n">pool</span><span class="p">,</span> <span class="s2">&quot;DeleteElement&quot;</span><span class="p">,</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
-            <span class="n">MSUtils</span><span class="o">.</span><span class="n">usetEnv</span><span class="p">(</span><span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">supportsMntGrps</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
+                <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">pool</span><span class="p">],</span> <span class="s1">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mntgrps</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">deleteMntGrp</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span>
+            <span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amntgrp</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">usetEnv</span><span class="p">(</span>
+                <span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="n">inst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">inst</span><span class="o">.</span><span class="n">AvailableSelections</span><span class="p">():</span>
             <span class="n">inst</span><span class="o">.</span><span class="n">deleteSelection</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
@@ -507,6 +522,8 @@
 <span class="sd">        :returns: json dictionary with mntgrp configuration information</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">supportsMntGrps</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__updateProfileWithoutMntGrp</span><span class="p">(</span><span class="n">resetDoor</span><span class="p">)</span>
         <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s2">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
             <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
@@ -521,9 +538,7 @@
         <span class="n">mginfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createMntGrpConf</span><span class="p">(</span>
             <span class="n">datasources</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
         <span class="n">conf</span> <span class="o">=</span> <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;configuration&#39;</span><span class="p">]</span>
-        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">]))</span>
-        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">conf</span>
-        <span class="n">conf</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">setMntGrpConfiguration</span><span class="p">(</span><span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">],</span> <span class="n">conf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s1">&#39;MntGrpConfiguration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf</span>
         <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;configuration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf</span>
         <span class="k">if</span> <span class="n">resetDoor</span><span class="p">:</span>
@@ -546,7 +561,7 @@
                 <span class="n">unique_snapshot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">)</span>
         <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unique_snapshot</span>
 
-        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span>
             <span class="p">{</span><span class="s1">&#39;PreScanSnapshot&#39;</span><span class="p">:</span> <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">],</span>
              <span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">:</span> <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;alias&#39;</span><span class="p">]},</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span>
@@ -564,7 +579,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">toActive</span><span class="p">:</span>
             <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
-            <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+            <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">toActive</span> <span class="ow">or</span> <span class="n">amntgrp</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amntgrp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">(</span><span class="n">sync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -574,6 +589,61 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span></div>
 
 
+    <span class="k">def</span> <span class="nf">__updateProfileWithoutMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resetDoor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores the profile for backends without measurement groups</span>
+
+<span class="sd">        :param resetDoor: reset door device name flag</span>
+<span class="sd">        :type resetDoor: :obj:`bool`</span>
+<span class="sd">        :returns: empty json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">resetDoor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;ActiveMntGrp&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]},</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">selectsChannels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">selectChannels</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selectedChannels</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__selectedChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides selected channels of the scan system,</span>
+<span class="sd">            i.e. selected datasources and STEP datasources of the selected</span>
+<span class="sd">            components which are channels of the backend</span>
+
+<span class="sd">        :returns: ordered channel names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="n">available</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="s2">&quot;AcqChannelList&quot;</span><span class="p">))</span>
+        <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s2">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">mcp</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="n">description</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">description</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">grp</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">param</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> \
+                           <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;STEP&#39;</span> <span class="ow">and</span> \
+                           <span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TANGO&#39;</span><span class="p">,</span> <span class="s1">&#39;CLIENT&#39;</span><span class="p">]:</span>
+                            <span class="n">channels</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+        <span class="n">channels</span> <span class="o">&amp;=</span> <span class="n">available</span>
+        <span class="n">ordered</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;OrderedChannels&quot;</span><span class="p">])</span>
+                   <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">]</span>
+        <span class="n">ordered</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">channels</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">ordered</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">ordered</span>
+
 <div class="viewcode-block" id="ProfileManager.mntGrpConfiguration">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration">[docs]</a>
     <span class="k">def</span> <span class="nf">mntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -582,15 +652,16 @@
 <span class="sd">        :returns: string with mntgrp configuration</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">supportsMntGrps</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
         <span class="n">mntGrpName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s2">&quot;MntGrp&quot;</span><span class="p">]</span>
         <span class="n">fullname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMntGrpName</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">))</span>
-        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span> <span class="k">if</span> <span class="n">fullname</span> <span class="k">else</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">dpmg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fullname</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
-        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ProfileManager.isMntGrpUpdated">
@@ -601,6 +672,8 @@
 <span class="sd">        :returns: True if it is different to the current setting</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">supportsMntGrps</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
         <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s2">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
             <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
@@ -614,21 +687,18 @@
         <span class="n">mgconf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">())</span>
 
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="n">amg</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">amg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
 
         <span class="n">mginfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createMntGrpConf</span><span class="p">(</span>
             <span class="n">datasources</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
         <span class="n">llconf</span> <span class="o">=</span> <span class="n">mginfo</span><span class="p">[</span><span class="s2">&quot;configuration&quot;</span><span class="p">]</span>
 
-        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">]))</span>
-        <span class="n">oldconf</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
-        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">llconf</span>
-        <span class="n">llconf</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
-        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">oldconf</span>
+        <span class="n">llconf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">testMntGrpConfiguration</span><span class="p">(</span>
+            <span class="n">mginfo</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">],</span> <span class="n">llconf</span><span class="p">)</span>
 
-        <span class="n">amg2</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">amg2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">amg</span> <span class="o">!=</span> <span class="n">amg2</span><span class="p">:</span>
-            <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span>
                 <span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">amg</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="n">state2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">!=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state2</span><span class="p">):</span>
@@ -662,7 +732,7 @@
         <span class="n">tangods</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">snpds</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__syncsnapshot</span><span class="p">:</span>
-            <span class="n">snapshot</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span>
+            <span class="n">snapshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span>
                 <span class="s1">&#39;PreScanSnapshot&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
             <span class="n">tangods</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">snapshot</span><span class="p">]</span>
         <span class="n">poolds</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1295,18 +1365,11 @@
 <span class="sd">        :returns: measurement group full name</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">mfullname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">amntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s1">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="n">apool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getActivePool</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">apool</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">apool</span><span class="p">,</span> <span class="s2">&quot;CreateMeasurementGroup&quot;</span><span class="p">,</span>
-                                   <span class="p">[</span><span class="n">mntGrpName</span><span class="p">,</span> <span class="n">timer</span><span class="p">])</span>
-            <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">CommunicationFailed</span> <span class="k">as</span> <span class="n">cf</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> \
-                   <span class="n">cf</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s2">&quot;API_DeviceTimedOut&quot;</span><span class="p">:</span>
-                    <span class="n">TangoUtils</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">apool</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__backend</span><span class="o">.</span><span class="n">createMntGrp</span><span class="p">(</span><span class="n">apool</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">,</span> <span class="n">timer</span><span class="p">)</span>
             <span class="n">mfullname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMntGrpName</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">mfullname</span>
