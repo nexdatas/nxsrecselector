@@ -36,7 +36,8 @@ import numpy
 from nxsrecconfig import BlissDataSources as BDModule
 from nxsrecconfig.BlissDataSources import (
     DataSourceReader, convert, description, fillValue, numpyType)
-from nxsrecconfig.BlissSession import NXSBlissSession
+from nxsrecconfig.BlissSession import (
+    NXSBlissSession, NXSBlissWatcher, NXSNexDatas, setup_nexdatas)
 from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import PoolUtils, Utils
 
@@ -106,6 +107,64 @@ class FakeRedis(object):
         if not hsh:
             self.data.pop(key, None)
 
+    def publish(self, channel, message):
+        subscribers = [sub for sub in getattr(self, "subscribers", [])
+                       if channel in sub.channels]
+        for sub in subscribers:
+            sub.queue.append(
+                {"type": "message", "channel": channel, "data": message})
+        return len(subscribers)
+
+    def pubsub(self, ignore_subscribe_messages=False):
+        return FakePubSub(self)
+
+
+class FakePubSub(object):
+    """ Redis subscription stand-in """
+
+    def __init__(self, redis):
+        self.redis = redis
+        self.channels = []
+        self.queue = []
+        self.closed = False
+
+    def subscribe(self, *channels):
+        self.channels.extend(channels)
+        if not hasattr(self.redis, "subscribers"):
+            self.redis.subscribers = []
+        self.redis.subscribers.append(self)
+
+    def unsubscribe(self):
+        self.channels = []
+        if self in getattr(self.redis, "subscribers", []):
+            self.redis.subscribers.remove(self)
+
+    def close(self):
+        self.closed = True
+
+    def get_message(self, timeout=0):
+        return self.queue.pop(0) if self.queue else None
+
+
+class FakeDataStore(object):
+    """ blissdata data store stand-in """
+
+    def __init__(self, scans=None):
+        self.scans = scans or {}
+        self.queries = []
+
+    def search_existing_scans(self, **kwargs):
+        self.queries.append(kwargs)
+        if "fail" in self.scans:
+            raise RuntimeError("no redis search")
+        keys = [key for key, (session, number, _) in self.scans.items()
+                if session == kwargs.get("session") and
+                number == kwargs.get("number")]
+        return "0-0", keys
+
+    def get_scans_state(self, keys):
+        return {key: self.scans[key][2] for key in keys}
+
 
 class FakeBlissAPI(object):
     """ BLISS session stand-in """
@@ -120,6 +179,8 @@ class FakeBlissAPI(object):
         self.calls = []
         self.controller = "nxsds"
         self.datasources = {}
+        self.saving = {}
+        self.extra = []
 
     def session(self):
         return "demo"
@@ -134,9 +195,10 @@ class FakeBlissAPI(object):
              "shape": [], "dtype": "uint32"},
             {"fullname": "lima1:image", "controller": "lima1",
              "shape": [-1, -1], "dtype": "uint16"},
-        ] + [{"fullname": "nxsds:%s" % ds, "controller": "nxsds",
-              "shape": [], "dtype": "float64"}
-             for ds in sorted(self.datasources)]
+        ] + list(self.extra) + [
+            {"fullname": "nxsds:%s" % ds, "controller": "nxsds",
+             "shape": [], "dtype": "float64"}
+            for ds in sorted(self.datasources)]
 
     def setDataSources(self, datasources):
         self.calls.append(("setDataSources", sorted(datasources)))
@@ -169,6 +231,20 @@ class FakeBlissAPI(object):
     def setActiveMntGrp(self, name):
         self.calls.append(("setActiveMntGrp", name))
         self.active = name
+
+    def scanSaving(self):
+        return {"ScanDir": self.saving.get("dir", "/data/demo"),
+                "ScanFile": [self.saving.get("file", "data.h5")],
+                "data_policy": self.saving.get("policy", "None")}
+
+    def setScanSaving(self, scandir=None, scanfile=None):
+        if self.saving.get("policy") == "ESRF":
+            raise PermissionError("ESRF data policy")
+        self.calls.append(("setScanSaving", scandir, scanfile))
+        if scandir:
+            self.saving["dir"] = scandir
+        if scanfile:
+            self.saving["file"] = scanfile.split(".")[0] + ".h5"
 
 
 class FakeDescriber(object):
@@ -857,6 +933,189 @@ class DataSourceControllerTest(unittest.TestCase):
         # the counter with a new type is recreated
         self.assertTrue(new["energy"] is not old["energy"])
         self.assertEqual(new["energy"].typename, "float64")
+
+
+class Log(object):
+    """ logger collecting messages """
+
+    def __init__(self):
+        self.messages = []
+
+    def debug(self, msg):
+        self.messages.append(("debug", msg))
+
+    def info(self, msg):
+        self.messages.append(("info", msg))
+
+    def warning(self, msg):
+        self.messages.append(("warning", msg))
+
+    def warnings(self):
+        return [m for (k, m) in self.messages if k == "warning"]
+
+
+class BlissAutomationTest(unittest.TestCase):
+
+    def session(self):
+        redis = FakeRedis()
+        api = FakeBlissAPI()
+        log = Log()
+        return redis, api, NXSBlissSession(redis=redis, api=api, log=log), log
+
+    def test_notify(self):
+        redis, api, session, _ = self.session()
+        sub = redis.pubsub()
+        sub.subscribe(sessionKey("demo", "changed"))
+        backend = BlissBackend(redis=redis)
+        backend.setEnv("ScanDir", "/tmp", "demo")
+        backend.usetEnv("ScanDir", "demo")
+        backend.selectChannels("demo", "mg1", [])
+        backend.selectDataSources("demo", "mg1", {})
+        self.assertEqual([m["data"] for m in sub.queue],
+                         ["env", "env", "mntgrps", "datasources"])
+        # the session does not notify itself
+        sub.queue = []
+        session.sync()
+        session.scanStarted({"scan_nb": 3})
+        session.scanEnded()
+        self.assertEqual(sub.queue, [])
+
+    def test_is_door_running(self):
+        redis = FakeRedis()
+        store = FakeDataStore({"k1": ("demo", 3, 2), "k2": ("demo", 4, 4)})
+        backend = BlissBackend(redis=redis, datastore=store)
+        self.assertFalse(backend.isDoorRunning("demo"))
+        backend.setEnv("ScanRunning", {"session": "demo", "number": 3},
+                       "demo")
+        self.assertTrue(backend.isDoorRunning("demo"))
+        self.assertEqual(store.queries[-1], {"session": "demo", "number": 3})
+        # closed scans are not running, e.g. after a session crash
+        backend.setEnv("ScanRunning", {"session": "demo", "number": 4},
+                       "demo")
+        self.assertFalse(backend.isDoorRunning("demo"))
+        # scans which are not created yet are running
+        backend.setEnv("ScanRunning", {"session": "demo", "number": 5},
+                       "demo")
+        self.assertTrue(backend.isDoorRunning("demo"))
+        # without blissdata the published flag is used
+        store.scans["fail"] = None
+        backend.setEnv("ScanRunning", {"session": "demo", "number": 4},
+                       "demo")
+        self.assertTrue(backend.isDoorRunning("demo"))
+        backend.setEnv("ScanRunning", True, "demo")
+        self.assertTrue(backend.isDoorRunning("demo"))
+
+    def test_scan_paths(self):
+        redis, api, session, log = self.session()
+        session.publish()
+        backend = BlissBackend(redis=redis)
+        self.assertEqual(backend.getEnv("ScanDir", "demo"), "/data/demo")
+        self.assertEqual(backend.getEnv("ScanFile", "demo"), ["data.h5"])
+        self.assertEqual(json.loads(backend.getScanEnv("demo"))["ScanDir"],
+                         "/data/demo")
+        # unchanged paths are not applied
+        session.sync()
+        self.assertTrue(all(c[0] != "setScanSaving" for c in api.calls))
+        # paths changed by the selector
+        backend.setScanEnv("demo", json.dumps(
+            {"ScanDir": "/data/new", "ScanFile": ["scan.nxs"]}))
+        session.sync()
+        self.assertEqual(api.calls[-1],
+                         ("setScanSaving", "/data/new", "scan.nxs"))
+        # the BLISS paths are published
+        self.assertEqual(backend.getEnv("ScanDir", "demo"), "/data/new")
+        self.assertEqual(backend.getEnv("ScanFile", "demo"), ["scan.h5"])
+        backend.setEnv("ScanFile", "other.h5", "demo")
+        session.sync()
+        self.assertEqual(api.calls[-1], ("setScanSaving", None, "other.h5"))
+
+    def test_esrf_data_policy(self):
+        redis, api, session, log = self.session()
+        api.saving["policy"] = "ESRF"
+        session.publish()
+        backend = BlissBackend(redis=redis)
+        backend.setEnv("ScanDir", "/data/new", "demo")
+        session.sync()
+        self.assertTrue(any("ESRF" in w for w in log.warnings()))
+        # the BLISS paths are published again
+        self.assertEqual(backend.getEnv("ScanDir", "demo"), "/data/demo")
+
+    def test_scan_state(self):
+        redis, api, session, log = self.session()
+        session.publish()
+        self.assertFalse(session.scanRunning)
+        session.scanStarted({"scan_nb": 12})
+        backend = BlissBackend(redis=redis)
+        running = backend.getEnv("ScanRunning", "demo")
+        self.assertEqual(running["session"], "demo")
+        self.assertEqual(running["number"], 12)
+        self.assertTrue(running["since"])
+        self.assertEqual(backend.getEnv("ScanID", "demo"), 12)
+        self.assertTrue(session.scanRunning)
+        self.assertEqual(log.warnings(), [])
+        session.scanEnded({"scan_nb": 12})
+        self.assertFalse(session.scanRunning)
+        # selections changed after the scan creation
+        backend.selectChannels("demo", "mg1", ["p201_ct1"])
+        self.assertEqual(session.pending(), ["mg1"])
+        session.scanStarted({"scan_nb": 13})
+        self.assertTrue(any("mg1" in w for w in log.warnings()))
+
+    def test_watcher(self):
+        redis, api, session, log = self.session()
+        session.sync()
+        watcher = NXSBlissWatcher(session, interval=0.01)
+        watcher.signature = session.signature()
+        self.assertFalse(watcher.poll())
+        backend = BlissBackend(redis=redis)
+        backend.selectChannels("demo", "mg1", ["p201_ct1"])
+        # changes are applied after the scan
+        session.scanStarted({"scan_nb": 1})
+        self.assertFalse(watcher.poll())
+        self.assertEqual(api.mgs["mg1"]["enabled"], ["diode:diode"])
+        session.scanEnded()
+        self.assertTrue(watcher.poll())
+        self.assertEqual(api.mgs["mg1"]["enabled"], ["p201:ct1"])
+        self.assertEqual(session.pending(), [])
+        self.assertFalse(watcher.poll())
+        # new counters of the session are published
+        api.extra.append({"fullname": "new:ct", "controller": "new",
+                          "shape": [], "dtype": "float64"})
+        self.assertFalse(watcher.poll())
+        names = PoolUtils.getElementNames(
+            backend.getPools("demo"), "AcqChannelList")
+        self.assertTrue("new_ct" in names)
+        watcher.stop()
+
+    def test_watcher_start_stop(self):
+        redis, api, session, log = self.session()
+        watcher = NXSBlissWatcher(session, interval=0.01)
+        watcher.start()
+        watcher.start()
+        self.assertEqual(len(redis.subscribers), 1)
+        watcher.stop()
+        self.assertEqual(redis.subscribers, [])
+
+    def test_setup_nexdatas(self):
+        redis = FakeRedis()
+        api = FakeBlissAPI()
+        nexdatas = setup_nexdatas(redis=redis, api=api, watch=False,
+                                  scanmeta=False)
+        self.assertTrue(isinstance(nexdatas, NXSNexDatas))
+        self.assertEqual(nexdatas.session.session, "demo")
+        backend = BlissBackend(redis=redis)
+        self.assertEqual(backend.getEnv("ScanDir", "demo"), "/data/demo")
+        self.assertEqual(nexdatas.meta, None)
+        self.assertEqual(nexdatas.watcher, None)
+        nexdatas.stop()
+
+        nexdatas = setup_nexdatas(redis=redis, api=api, scanmeta=False,
+                                  interval=0.01)
+        self.assertTrue(isinstance(nexdatas.watcher, NXSBlissWatcher))
+        self.assertEqual(nexdatas.watcher.signature,
+                         nexdatas.session.signature())
+        nexdatas.stop()
+        self.assertEqual(redis.subscribers, [])
 
 
 if __name__ == '__main__':

@@ -377,6 +377,33 @@ class BlissScanMetaTest(unittest.TestCase):
         self.assertEqual(init2["title"], "ct 1")
 
     @unittest.skipUnless(WRITER, "nxswriter or nxstools not available")
+    def test_session(self):
+        class Session(object):
+            def __init__(self):
+                self.calls = []
+
+            def scanStarted(self, scan_info):
+                self.calls.append(("started", scan_info["scan_nb"]))
+
+            def scanEnded(self, scan_info):
+                self.calls.append(("ended", scan_info["scan_nb"]))
+                raise RuntimeError("redis down")
+
+        session = Session()
+        log = Log()
+        meta = NXSScanMeta(ProfileSelector(profiles={"mg1": profile()}),
+                           profile="mg1", userdata={"energy": 7.0},
+                           log=log, session=session)
+        scan = Scan(scan_nb=5, title="ct")
+        meta(scan)
+        self.assertEqual(session.calls, [("started", 5)])
+        final = meta(scan)
+        self.assertEqual(session.calls, [("started", 5), ("ended", 5)])
+        # errors of the session do not break the scan metadata
+        self.assertTrue("end_time" in final)
+        self.assertTrue(any("redis down" in w for w in log.warnings()))
+
+    @unittest.skipUnless(WRITER, "nxswriter or nxstools not available")
     def test_missing_profile(self):
         selector = ProfileSelector(profiles={"mg1": profile()},
                                    components=["source"])

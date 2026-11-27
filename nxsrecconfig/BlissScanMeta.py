@@ -216,7 +216,7 @@ class NXSScanMeta(object):
     """
 
     def __init__(self, selector=None, profile=None, userdata=None,
-                 writerproperties=None, log=None):
+                 writerproperties=None, log=None, session=None):
         """ constructor
 
         :param selector: NXSRecSelector device name or proxy,
@@ -234,7 +234,12 @@ class NXSScanMeta(object):
         :type writerproperties: :obj:`dict` <:obj:`str`, `any`>
         :param log: logger with debug, info and warning methods
         :type log: :class:`logging.Logger` or `any`
+        :param session: BLISS session of the selector publishing
+                        running scans
+        :type session: :class:`nxsrecconfig.BlissSession.NXSBlissSession`
         """
+        #: (:class:`nxsrecconfig.BlissSession.NXSBlissSession`) session
+        self.session = session
         #: (:obj:`str` or `any`) selector
         self.__selector = selector
         #: (:obj:`str` or callable) profile name
@@ -471,6 +476,11 @@ class NXSScanMeta(object):
         # entries of scans which have not ended
         self.__closeAll()
         scan_info = dict(scan.scan_info)
+        if self.session is not None:
+            try:
+                self.session.scanStarted(scan_info)
+            except Exception as e:
+                self.log.warning("NXSScanMeta: %s" % str(e))
         xml, record = self.configuration(
             scan_info, self.__profileName(scan), self.__userData(scan))
         writer = self.__writer(scan_info.get("filename"), xml, record)
@@ -509,6 +519,11 @@ class NXSScanMeta(object):
         :rtype: :obj:`dict` <:obj:`str`, `any`>
         """
         writer, record = self.__writers.pop(id(scan))
+        if self.session is not None:
+            try:
+                self.session.scanEnded(scan.scan_info)
+            except Exception as e:
+                self.log.warning("NXSScanMeta: %s" % str(e))
         try:
             data = record["data"]
             data["end_time"] = scan.scan_info.get("end_time") or \
