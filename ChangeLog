@@ -9,6 +9,7 @@
 	* add the canfail option of BLISS sessions filling or stopping scans for datasources which cannot be read
 	* add counters of selected channels missing in BLISS measurement groups
 	* add BlissH5Map adding STEP fields of profiles as links to BLISS scan data, i.e. NXSScanMeta.register(links=True)
+	* fix the error message of datasources not defined in the configuration server
 	* tagged as v4.16.0
 
 2026-11-26 Jan Kotanski <jankotan@gmail.com>

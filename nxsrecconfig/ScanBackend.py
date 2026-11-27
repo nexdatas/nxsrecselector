@@ -486,7 +486,7 @@ class ScanBackend(object):
             discomponentgroup[Utils.tostr(k)].errords = k
             discomponentgroup[Utils.tostr(k)].active = False
             discomponentgroup[Utils.tostr(k)].message = \
-                "%s not defined i<n Configuration Server" % k
+                "%s not defined in Configuration Server" % k
         toCheck = {}
         cps = set(components) & set(availablecomponents)
         for acp in cps:
