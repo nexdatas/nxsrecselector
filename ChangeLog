@@ -1,3 +1,8 @@
+2026-XX-YY Jan Kotanski <jankotan@gmail.com>
+	* add BlissDataSources reading STEP datasources without BLISS counters, i.e. TANGO, DB and PYEVAL, by BLISS counters
+	* add counters of selected channels missing in BLISS measurement groups
+	* tagged as v4.16.X
+
 2026-11-26 Jan Kotanski <jankotan@gmail.com>
 	* add scan backends: sardana, bliss and null (without scan control system)
 	* add the Backend device property and attribute

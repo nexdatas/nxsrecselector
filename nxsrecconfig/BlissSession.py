@@ -29,18 +29,60 @@ the BLISS measurement groups.  In a BLISS session::
 
 The selector has to use the ``bliss`` backend with the session name
 as its ``Door``.
+
+Selected STEP datasources which are not BLISS counters, e.g. TANGO, DB
+or PYEVAL datasources, are read by counters of
+:class:`nxsrecconfig.BlissDataSources.NXSDataSourceController`
+which are added to the measurement groups.
 """
 
 import json
 
 from .BlissBackend import (
     BlissBackend, channelName, redisConnection, sessionKey)
+from .BlissDataSources import CONTROLLER
 
 
 class BlissAPI(object):
 
     """ access to the current BLISS session
     """
+
+    def __init__(self, controller=CONTROLLER, userdata=None):
+        """ constructor
+
+        :param controller: name of the datasource counter controller
+        :type controller: :obj:`str`
+        :param userdata: user data of CLIENT datasources used e.g. by
+                         PYEVAL datasources or a function returning them
+        :type userdata: :obj:`dict` <:obj:`str`, `any`> or callable
+        """
+        #: (:obj:`str`) name of the datasource counter controller
+        self.controller = controller
+        #: (:obj:`dict` or callable) user data
+        self.userdata = userdata
+        #: (:class:`nxsrecconfig.BlissDataSources.NXSDataSourceController`)
+        #:     datasource counter controller
+        self.__controller = None
+
+    def setDataSources(self, datasources):
+        """ sets the datasources read by the datasource counters
+
+        :param datasources: datasource XML definitions by datasource names
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :returns: full names of the datasource counters by datasource names
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
+        """
+        if self.__controller is None:
+            if not datasources:
+                return {}
+            from .BlissDataSources import (
+                DataSourceReader, NXSDataSourceController)
+            self.__controller = NXSDataSourceController(
+                self.controller, DataSourceReader(self.userdata))
+        self.__controller.setDataSources(datasources)
+        return {cnt.name: cnt.fullname
+                for cnt in self.__controller.counters}
 
     def session(self):
         """ provides the session name
@@ -120,6 +162,13 @@ class BlissAPI(object):
                 name, {"counters": list(fullnames)})
             return
         mg = mgs[name]
+        missing = [fn for fn in fullnames if fn not in mg.available]
+        if missing:
+            from bliss import global_map
+            counters = [cnt for cnt in global_map.get_counters_iter()
+                        if cnt.fullname in missing]
+            if counters:
+                mg.add(*counters)
         mg.disable_all()
         names = [fn for fn in fullnames if fn in mg.available]
         if names:
@@ -141,7 +190,7 @@ class NXSBlissSession(object):
         and applies the selected channels
     """
 
-    def __init__(self, session=None, redis=None, api=None):
+    def __init__(self, session=None, redis=None, api=None, userdata=None):
         """ constructor
 
         :param session: session name, the current session if None
@@ -151,13 +200,18 @@ class NXSBlissSession(object):
         :type redis: :class:`redis.Redis`
         :param api: BLISS session access
         :type api: :class:`BlissAPI`
+        :param userdata: user data of CLIENT datasources used by
+                         datasource counters or a function returning them
+        :type userdata: :obj:`dict` <:obj:`str`, `any`> or callable
         """
         #: (:class:`BlissAPI`) BLISS session access
-        self.api = api or BlissAPI()
+        self.api = api or BlissAPI(userdata=userdata)
         #: (:obj:`str`) session name
         self.session = session or self.api.session()
         #: (:class:`redis.Redis`) Redis connection
         self.redis = redis if redis is not None else redisConnection()
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) datasource counters
+        self.__dscounters = {}
 
     def elements(self):
         """ provides the session elements in the format of Sardana pools
@@ -166,7 +220,11 @@ class NXSBlissSession(object):
         :rtype: :obj:`dict` <:obj:`str`, :obj:`list` <:obj:`dict`>>
         """
         channels = []
+        controller = getattr(self.api, "controller", None)
         for cnt in self.api.counters():
+            # datasource counters are selected as datasources
+            if controller and cnt.get("controller") == controller:
+                continue
             channels.append({
                 "name": channelName(cnt["fullname"]),
                 "full_name": cnt["fullname"],
@@ -213,17 +271,32 @@ class NXSBlissSession(object):
                 backend.setEnv("ActiveMntGrp", active, self.session)
 
     def apply(self):
-        """ applies the selected channels to the measurement groups
-            and activates the measurement group of the selector
+        """ applies the selected channels and datasources to
+            the measurement groups and activates the measurement group
+            of the selector
 
         :returns: names of updated measurement groups
         :rtype: :obj:`list` <:obj:`str`>
         """
         key = sessionKey(self.session, "mntgrps")
         requests = self.redis.hgetall(key) or {}
+        dsrequests = {
+            name: json.loads(value) for name, value in
+            (self.redis.hgetall(
+                sessionKey(self.session, "datasources")) or {}).items()}
+        datasources = {}
+        for dss in dsrequests.values():
+            datasources.update(dss or {})
+        if datasources or self.__dscounters:
+            self.__dscounters = self.api.setDataSources(datasources)
+        dscounters = self.__dscounters
         updated = []
         for name, value in requests.items():
-            self.api.selectChannels(name, json.loads(value))
+            fullnames = list(json.loads(value))
+            fullnames.extend(
+                dscounters[ds] for ds in sorted(dsrequests.get(name) or {})
+                if ds in dscounters and dscounters[ds] not in fullnames)
+            self.api.selectChannels(name, fullnames)
             updated.append(name)
         if requests:
             self.redis.hdel(key, *requests.keys())

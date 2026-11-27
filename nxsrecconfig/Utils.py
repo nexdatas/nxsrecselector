@@ -27,6 +27,8 @@ import numpy
 import fnmatch
 import socket
 
+import lxml.etree
+
 try:
     import tango
 except Exception:
@@ -177,6 +179,41 @@ class Utils(object):
                      + [child.tail for child in node if child.tail]
             return str("".join(tnodes)).strip()
         return ""
+
+    @classmethod
+    def dataSourceNode(cls, xml):
+        """ provides the datasource node of a datasource XML definition
+
+        :param xml: datasource XML definition
+        :type xml: :obj:`str`
+        :returns: datasource node or None
+        :rtype: :class:`lxml.etree.Element`
+        """
+        if not xml:
+            return None
+        try:
+            root = lxml.etree.fromstring(
+                bytes(cls.tostr(xml), "UTF-8"),
+                parser=lxml.etree.XMLParser(collect_ids=False))
+        except Exception:
+            return None
+        if root.tag == "datasource":
+            return root
+        return root.find(".//datasource")
+
+    @classmethod
+    def dataSourceType(cls, xml):
+        """ provides the type of a datasource XML definition
+
+        :param xml: datasource XML definition
+        :type xml: :obj:`str`
+        :returns: datasource type, e.g. TANGO, DB, PYEVAL or CLIENT
+        :rtype: :obj:`str`
+        """
+        node = cls.dataSourceNode(xml)
+        if node is None:
+            return None
+        return node.get("type")
 
     @classmethod
     def stringToDictJson(cls, string, toBool=False):

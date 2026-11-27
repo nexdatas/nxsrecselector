@@ -49,6 +49,11 @@ class ScanBackend(object):
     #:   group devices
     selectsChannels = False
 
+    #: (:obj:`list` <:obj:`str`>) types of STEP datasources without
+    #:   channels which are read by the scan system
+    #:   via :meth:`selectDataSources`
+    dataSourceTypes = []
+
     def __init__(self, numberOfThreads=None):
         """ constructor
 
@@ -334,6 +339,20 @@ class ScanBackend(object):
         :type mntgrp: :obj:`str`
         :param channels: ordered channel names
         :type channels: :obj:`list` <:obj:`str`>
+        """
+
+    def selectDataSources(self, ms, mntgrp, datasources):
+        """ selects STEP datasources without channels of the scan system
+            to be read in scans of a measurement group
+
+        It is used by backends with :attr:`dataSourceTypes`
+
+        :param ms: scan server name
+        :type ms: :obj:`str`
+        :param mntgrp: measurement group name
+        :type mntgrp: :obj:`str`
+        :param datasources: datasource XML definitions by datasource names
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
 
     # helpers for the environment variables

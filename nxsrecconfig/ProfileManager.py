@@ -430,18 +430,27 @@ class ProfileManager(object):
             {"ActiveMntGrp": self.__selector["MntGrp"]},
             self.__macroServerName)
         if self.__backend.selectsChannels:
+            channels, datasources = self.__selectedChannels()
+            if self.__backend.dataSourceTypes:
+                self.__backend.selectDataSources(
+                    self.__macroServerName, self.__selector["MntGrp"],
+                    datasources)
             self.__backend.selectChannels(
                 self.__macroServerName, self.__selector["MntGrp"],
-                self.__selectedChannels())
+                channels)
         return "{}"
 
     def __selectedChannels(self):
         """ provides selected channels of the scan system,
             i.e. selected datasources and STEP datasources of the selected
-            components which are channels of the backend
+            components which are channels of the backend,
+            and XML definitions of the other selected STEP datasources
+            of :attr:`dataSourceTypes` of the backend
 
-        :returns: ordered channel names
-        :rtype: :obj:`list` <:obj:`str`>
+        :returns: ordered channel names, datasource XML definitions
+                  by datasource names
+        :rtype: (:obj:`list` <:obj:`str`>,
+                 :obj:`dict` <:obj:`str`, :obj:`str`>)
         """
         self.__updatePools()
         available = set(PoolUtils.getElementNames(
@@ -453,21 +462,58 @@ class ProfileManager(object):
         self.__updateConfigServer()
         describer = Describer(self.__configServer, True)
         description = describer.components(components, '', '')
-        channels = set(self.__dataSources(
+        selected = set(self.__dataSources(
             self.__componentDataSources(description)))
+        channels = set(selected)
+        steps = set(selected)
+        shapes = {}
         for grp in description:
             for dss in grp.values():
                 for ds, params in dss.items():
                     for param in params:
                         if param and len(param) > 2 and \
-                           param[0] == 'STEP' and \
-                           param[1] in ['TANGO', 'CLIENT']:
-                            channels.add(Utils.tostr(ds))
+                           param[0] == 'STEP':
+                            ds = Utils.tostr(ds)
+                            steps.add(ds)
+                            if param[1] in ['TANGO', 'CLIENT']:
+                                channels.add(ds)
+                            if len(param) > 4 and param[4]:
+                                shapes[ds] = param[4]
         channels &= available
         ordered = [ch for ch in json.loads(self.__selector["OrderedChannels"])
                    if ch in channels]
         ordered.extend(sorted(channels - set(ordered)))
-        return ordered
+        datasources = {}
+        if self.__backend.dataSourceTypes:
+            datasources = self.__dataSourceXMLs(
+                [ds for ds in sorted(steps - available)
+                 if ds not in shapes])
+        return ordered, datasources
+
+    def __dataSourceXMLs(self, names):
+        """ provides XML definitions of scalar datasources of
+            :attr:`dataSourceTypes` of the backend
+
+        :param names: datasource names
+        :type names: :obj:`list` <:obj:`str`>
+        :returns: datasource XML definitions by datasource names
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
+        """
+        if not names:
+            return {}
+        available = set(TangoUtils.command(
+            self.__configServer, "availableDataSources") or [])
+        names = [name for name in names if name in available]
+        if not names:
+            return {}
+        xmls = TangoUtils.command(
+            self.__configServer, "dataSources", names) or []
+        datasources = {}
+        for name, xml in zip(names, xmls):
+            dstype = Utils.dataSourceType(xml)
+            if dstype in self.__backend.dataSourceTypes:
+                datasources[name] = Utils.tostr(xml)
+        return datasources
 
     def mntGrpConfiguration(self):
         """ provides configuration of mntgrp

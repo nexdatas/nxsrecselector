@@ -27,9 +27,39 @@ from nxsrecconfig import ProfileManager as PMModule
 from nxsrecconfig.Backends import BACKENDS, createBackend
 from nxsrecconfig.BlissBackend import (
     BlissBackend, BlissPool, channelName, sessionKey)
+from nxsrecconfig.BlissDataSources import DataSourceReader, scalarValue
 from nxsrecconfig.BlissSession import NXSBlissSession
 from nxsrecconfig.ProfileManager import ProfileManager
-from nxsrecconfig.Utils import PoolUtils
+from nxsrecconfig.Utils import PoolUtils, Utils
+
+try:
+    import nxswriter.DataSourcePool  # noqa: F401
+    NXSWRITER = True
+except Exception:
+    NXSWRITER = False
+
+
+def dsxml(name, dstype, body=""):
+    """ provides a datasource XML definition of the configuration server """
+    return ('<?xml version="1.0" ?><definition>'
+            '<datasource name="%s" type="%s">%s</datasource></definition>'
+            % (name, dstype, body))
+
+
+DATASOURCES = {
+    "robz": dsxml("robz", "TANGO",
+                  '<device member="attribute" name="a/b/c"/>'
+                  '<record name="pos"/>'),
+    "mypyeval": dsxml("mypyeval", "PYEVAL",
+                      '<result name="result">ds.result = 2</result>'),
+    "myclient": dsxml("myclient", "CLIENT", '<record name="myclient"/>'),
+    "myspectrum": dsxml("myspectrum", "TANGO",
+                        '<device member="attribute" name="a/b/c"/>'
+                        '<record name="spectrum"/>'),
+    "slit_gap": dsxml("slit_gap", "TANGO",
+                      '<device member="attribute" name="a/b/c"/>'
+                      '<record name="gap"/>'),
+}
 
 
 class FakeRedis(object):
@@ -80,6 +110,8 @@ class FakeBlissAPI(object):
         }
         self.active = "mg1"
         self.calls = []
+        self.controller = "nxsds"
+        self.datasources = {}
 
     def session(self):
         return "demo"
@@ -94,7 +126,14 @@ class FakeBlissAPI(object):
              "shape": [], "dtype": "uint32"},
             {"fullname": "lima1:image", "controller": "lima1",
              "shape": [-1, -1], "dtype": "uint16"},
-        ]
+        ] + [{"fullname": "nxsds:%s" % ds, "controller": "nxsds",
+              "shape": [], "dtype": "float64"}
+             for ds in sorted(self.datasources)]
+
+    def setDataSources(self, datasources):
+        self.calls.append(("setDataSources", sorted(datasources)))
+        self.datasources = dict(datasources)
+        return {ds: "nxsds:%s" % ds for ds in datasources}
 
     def axes(self):
         return ["roby", "robz"]
@@ -108,6 +147,11 @@ class FakeBlissAPI(object):
     def selectChannels(self, name, fullnames):
         self.calls.append(("selectChannels", name, list(fullnames)))
         if name in self.mgs:
+            # mg.add() of counters missing in the measurement group
+            known = [cnt["fullname"] for cnt in self.counters()]
+            self.mgs[name]["available"].extend(
+                fn for fn in fullnames
+                if fn in known and fn not in self.mgs[name]["available"])
             self.mgs[name]["enabled"] = [
                 fn for fn in fullnames if fn in self.mgs[name]["available"]]
         else:
@@ -179,6 +223,12 @@ class FakeSelector(object):
             def deleteSelection(self, name):
                 selector.deleted.append(name)
                 selector.selections.remove(name)
+
+            def availableDataSources(self):
+                return sorted(DATASOURCES)
+
+            def dataSources(self, names):
+                return [DATASOURCES[name] for name in names]
         return Config()
 
 
@@ -397,7 +447,12 @@ class ProfileManagerBlissTest(unittest.TestCase):
             "default": {"robz": [("STEP", "TANGO", "a/b/c/pos", None,
                                   None)],
                         "lima1_image": [("STEP", "CLIENT", "lima1_image",
-                                         None, None)]},
+                                         None, None)],
+                        "mypyeval": [("STEP", "PYEVAL", None, None, None)],
+                        "myclient": [("STEP", "CLIENT", "myclient", None,
+                                      None)],
+                        "myspectrum": [("STEP", "TANGO", "a/b/c/spectrum",
+                                        None, [10])]},
         }]
 
     def tearDown(self):
@@ -421,20 +476,107 @@ class ProfileManagerBlissTest(unittest.TestCase):
             json.loads(redis.hget(sessionKey("demo", "mntgrps"), "mg1")),
             ["p201:ct2", "lima1:image", "p201:ct1"])
 
+        # scalar TANGO, DB and PYEVAL STEP datasources without counters
+        dss = json.loads(
+            redis.hget(sessionKey("demo", "datasources"), "mg1"))
+        self.assertEqual(sorted(dss), ["mypyeval", "robz"])
+        self.assertEqual(dss["robz"], DATASOURCES["robz"])
+
         session.sync()
+        self.assertEqual(api.datasources, dss)
         self.assertEqual(api.mgs["mg1"]["enabled"],
-                         ["p201:ct2", "p201:ct1"])
+                         ["p201:ct2", "lima1:image", "p201:ct1",
+                          "nxsds:mypyeval", "nxsds:robz"])
+        # datasource counters are not published as channels
+        names = PoolUtils.getElementNames(
+            backend.getPools("demo"), "AcqChannelList")
+        self.assertTrue("nxsds_robz" not in names)
+        self.assertTrue("robz" not in names)
+        # the same selection again
+        pm.updateProfile()
+        self.assertEqual(sorted(json.loads(
+            redis.hget(sessionKey("demo", "datasources"), "mg1"))),
+            ["mypyeval", "robz"])
 
         selector["MntGrp"] = "mg2"
         pm.updateProfile()
         session.sync()
         self.assertEqual(api.active, "mg2")
+        self.assertEqual(api.mgs["mg2"]["enabled"],
+                         ["p201:ct2", "lima1:image", "p201:ct1",
+                          "nxsds:mypyeval", "nxsds:robz"])
+
+        # deselected datasources are removed from the measurement group,
+        # the counters are kept for the other measurement groups
+        FakeDescriber.description[0]["default"].pop("robz")
+        pm.updateProfile()
+        session.sync()
+        self.assertEqual(sorted(api.datasources), ["mypyeval", "robz"])
+        self.assertEqual(api.mgs["mg2"]["enabled"],
+                         ["p201:ct2", "lima1:image", "p201:ct1",
+                          "nxsds:mypyeval"])
+        selector["MntGrp"] = "mg1"
+        pm.updateProfile()
+        session.sync()
+        self.assertEqual(sorted(api.datasources), ["mypyeval"])
+        self.assertEqual(api.active, "mg1")
+        selector["MntGrp"] = "mg2"
+        pm.updateProfile()
+        session.sync()
         self.assertEqual(pm.availableMntGrps(), ["mg2", "mg1"])
 
         pm.deleteProfile("mg1")
         self.assertEqual(selector.deleted, ["mg1"])
         # BLISS measurement groups are kept
         self.assertTrue("mg1" in api.mgs)
+
+
+@unittest.skipIf(not NXSWRITER, "nxswriter is not available")
+class DataSourceReaderTest(unittest.TestCase):
+
+    def test_scalar_value(self):
+        self.assertEqual(scalarValue({"value": 3}), 3.0)
+        self.assertEqual(scalarValue({"value": [4.5]}), 4.5)
+        self.assertEqual(scalarValue(2), 2.0)
+        for value in [None, "abc", [1, 2], {}]:
+            self.assertTrue(scalarValue({"value": value}) !=
+                            scalarValue({"value": value}))
+
+    def test_datasource_type(self):
+        self.assertEqual(Utils.dataSourceType(DATASOURCES["robz"]), "TANGO")
+        self.assertEqual(
+            Utils.dataSourceType('<datasource type="DB" name="d"/>'), "DB")
+        self.assertEqual(Utils.dataSourceType("<definition/>"), None)
+        self.assertEqual(Utils.dataSourceType("<wrong"), None)
+        self.assertEqual(Utils.dataSourceType(None), None)
+
+    def test_read(self):
+        userdata = {"energy": 7.5}
+        reader = DataSourceReader(userdata=lambda: userdata)
+        reader.setDataSources({
+            "pe": dsxml("pe", "PYEVAL",
+                        '<result name="result">ds.result = 2.5 * 2'
+                        '</result>'),
+            "pe2": dsxml("pe2", "PYEVAL",
+                         '<datasource type="CLIENT" name="energy">'
+                         '<record name="energy"/></datasource>'
+                         '<result name="result">'
+                         'ds.result = ds.energy + 1</result>'),
+            "cl": dsxml("cl", "CLIENT", '<record name="energy"/>'),
+            "bad": dsxml("bad", "UNKNOWN"),
+            "wrong": "<datasource",
+        })
+        self.assertEqual(reader.names(), ["cl", "pe", "pe2"])
+        values = reader.read(["pe", "pe2", "cl", "missing"])
+        self.assertEqual(values[:3], [5.0, 8.5, 7.5])
+        self.assertTrue(values[3] != values[3])
+        userdata["energy"] = 8.0
+        self.assertEqual(reader.read(["pe2", "cl"]), [9.0, 8.0])
+
+        reader.setDataSources({"pe": dsxml(
+            "pe", "PYEVAL", '<result name="result">ds.result = 1</result>')})
+        self.assertEqual(reader.names(), ["pe"])
+        self.assertEqual(reader.read(["pe"]), [1.0])
 
 
 if __name__ == '__main__':
