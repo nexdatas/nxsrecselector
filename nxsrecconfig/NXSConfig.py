@@ -197,6 +197,15 @@ class NXSRecSelector(tango.LatestDeviceImpl):
         self.debug_stream("In read_MacroServer()")
         attr.set_value(self.__stg.macroServer)
 
+    def read_Backend(self, attr):
+        """ Read Backend attribute
+
+        :param attr: read attribute
+        :type attr: :class:`tango.Attribute`
+        """
+        self.debug_stream("In read_Backend()")
+        attr.set_value(self.__stg.backend)
+
     def read_Door(self, attr):
         """ Read Door attribute
 
@@ -2010,7 +2019,8 @@ class NXSRecSelectorClass(tango.DeviceClass):
          ["nxsmntgrp"]],
         'Backend':
         [tango.DevString,
-         "scan backend, i.e. sardana or null (without scan control system)",
+         "scan backend, i.e. sardana, bliss "
+         "or null (without scan control system)",
          ["sardana"]],
         'PoolBlacklist':
         [tango.DevVarStringArray,
@@ -2360,6 +2370,14 @@ class NXSRecSelectorClass(tango.DeviceClass):
                  'label': "CacheComponent",
                  'description': "current cache compoent name",
              }],
+        'Backend':
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
+             {
+                 'label': "Backend",
+                 'description': "scan backend, i.e. sardana, bliss or null",
+            }],
         'MacroServer':
             [[tango.DevString,
               tango.SCALAR,

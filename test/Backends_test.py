@@ -291,7 +291,7 @@ class ScanBackendTest(unittest.TestCase):
 class BackendFactoryTest(unittest.TestCase):
 
     def test_backends(self):
-        self.assertEqual(sorted(BACKENDS), ["null", "sardana"])
+        self.assertEqual(sorted(BACKENDS), ["bliss", "null", "sardana"])
         self.assertEqual(DEFAULTBACKEND, "sardana")
         self.assertTrue(issubclass(SardanaBackend, MacroServerPools))
         self.assertTrue(issubclass(MacroServerPools, ScanBackend))
@@ -307,7 +307,7 @@ class BackendFactoryTest(unittest.TestCase):
 
     def test_create_wrong(self):
         with self.assertRaises(ValueError):
-            createBackend("bliss")
+            createBackend("tine")
 
     @unittest.skipUnless(TANGODB, "tango database is not available")
     def test_create_default(self):

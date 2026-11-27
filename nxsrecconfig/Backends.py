@@ -17,12 +17,14 @@
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-""" scan backends: ``sardana`` and ``null``
+""" scan backends: ``sardana``, ``bliss`` and ``null``
 
 The ``sardana`` backend uses the Sardana MacroServer and its pools.
 The ``null`` backend runs without any scan control system, e.g. to
 select components for scans of other systems: it has no channels and
 no measurement groups, and keeps its scan environment in memory.
+The ``bliss`` backend uses BLISS sessions published in Redis,
+see :mod:`nxsrecconfig.BlissBackend`.
 """
 
 import copy
@@ -31,6 +33,7 @@ import json
 from .Utils import Utils
 from .ScanBackend import ScanBackend
 from .MacroServerPools import MacroServerPools
+from .BlissBackend import BlissBackend
 
 
 class SardanaBackend(MacroServerPools):
@@ -271,6 +274,7 @@ class NullBackend(ScanBackend):
 BACKENDS = {
     "sardana": SardanaBackend,
     "null": NullBackend,
+    "bliss": BlissBackend,
 }
 
 #: (:obj:`str`) default scan backend

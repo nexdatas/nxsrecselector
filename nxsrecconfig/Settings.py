@@ -86,8 +86,8 @@ class Settings(object):
         :type syncmntgrp: :obj:`bool`
         :param checkdescription: apply checks for preselected components
         :type checkdescription: :obj:`bool`
-        :param backend: scan backend name, i.e. ``sardana`` or ``null``,
-                        ``sardana`` if None
+        :param backend: scan backend name, i.e. ``sardana``, ``bliss``
+                        or ``null``, ``sardana`` if None
         :type backend: :obj:`str`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
@@ -969,8 +969,8 @@ class Settings(object):
     def __getBackend(self):
         """ get method for backend attribute
 
-        :returns: scan backend name, e.g. ``sardana`` or ``null``
-        :rtype :obj:`str`
+        :returns: scan backend name, i.e. ``sardana``, ``bliss`` or ``null``
+        :rtype: :obj:`str`
         """
         return self.__msp.name
 

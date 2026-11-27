@@ -324,10 +324,12 @@ class ProfileManager(object):
         :type name: :obj:`str`
         """
         self.__updatePools()
-        for pool in self.__pools:
-            mntgrps = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
-            if name in mntgrps:
-                self.__backend.deleteMntGrp(pool, name)
+        if self.__backend.supportsMntGrps:
+            for pool in self.__pools:
+                mntgrps = PoolUtils.getElementNames(
+                    [pool], 'MeasurementGroupList')
+                if name in mntgrps:
+                    self.__backend.deleteMntGrp(pool, name)
         amntgrp = self.__backend.getEnv(
             'ActiveMntGrp', self.__macroServerName)
         if amntgrp == name:
@@ -427,7 +429,45 @@ class ProfileManager(object):
         self.__backend.setEnvs(
             {"ActiveMntGrp": self.__selector["MntGrp"]},
             self.__macroServerName)
+        if self.__backend.selectsChannels:
+            self.__backend.selectChannels(
+                self.__macroServerName, self.__selector["MntGrp"],
+                self.__selectedChannels())
         return "{}"
+
+    def __selectedChannels(self):
+        """ provides selected channels of the scan system,
+            i.e. selected datasources and STEP datasources of the selected
+            components which are channels of the backend
+
+        :returns: ordered channel names
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        self.__updatePools()
+        available = set(PoolUtils.getElementNames(
+            self.__pools, "AcqChannelList"))
+        mcp = self.__selector.configCommand("mandatoryComponents") or []
+        components = list(
+            set(self.components()) | set(self.preselectedComponents()) |
+            set(mcp))
+        self.__updateConfigServer()
+        describer = Describer(self.__configServer, True)
+        description = describer.components(components, '', '')
+        channels = set(self.__dataSources(
+            self.__componentDataSources(description)))
+        for grp in description:
+            for dss in grp.values():
+                for ds, params in dss.items():
+                    for param in params:
+                        if param and len(param) > 2 and \
+                           param[0] == 'STEP' and \
+                           param[1] in ['TANGO', 'CLIENT']:
+                            channels.add(Utils.tostr(ds))
+        channels &= available
+        ordered = [ch for ch in json.loads(self.__selector["OrderedChannels"])
+                   if ch in channels]
+        ordered.extend(sorted(channels - set(ordered)))
+        return ordered
 
     def mntGrpConfiguration(self):
         """ provides configuration of mntgrp
@@ -435,6 +475,8 @@ class ProfileManager(object):
         :returns: string with mntgrp configuration
         :rtype: :obj:`str`
         """
+        if not self.__backend.supportsMntGrps:
+            return "{}"
         self.__updatePools()
         self.__updateMacroServer()
         mntGrpName = self.__selector["MntGrp"]

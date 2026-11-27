@@ -1,9 +1,11 @@
-2026-XX-YY Jan Kotanski <jankotan@gmail.com>
-	* add scan backends: sardana and null (without scan control system)
-	* add the Backend device property
+2026-11-26 Jan Kotanski <jankotan@gmail.com>
+	* add scan backends: sardana, bliss and null (without scan control system)
+	* add the Backend device property and attribute
 	* fix tango sources with host and port in dynamic components
 	* add WriterConfiguration creating the writer configuration of a profile for any scan system
-	* tagged as v4.14.X
+	* add BlissScanMeta providing INIT and FINAL fields of a profile as BLISS user scan metadata
+	* add BlissSession publishing BLISS sessions for the bliss backend and applying selected channels to BLISS measurement groups
+	* tagged as v4.15.0
 
 2026-11-25 Jan Kotanski <jankotan@gmail.com>
 	* remove python2 support
