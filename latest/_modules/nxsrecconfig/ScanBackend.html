@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.ScanBackend &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <title>nxsrecconfig.ScanBackend &#8212; nxsrecconfig 4.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="../../_static/documentation_options.js?v=6d71c67f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -54,6 +54,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
@@ -124,6 +126,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.16.0/index.html">v4.16.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
@@ -190,6 +193,11 @@
     <span class="c1">#:   by :meth:`selectChannels` for backends without measurement</span>
     <span class="c1">#:   group devices</span>
     <span class="n">selectsChannels</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) types of STEP datasources without</span>
+    <span class="c1">#:   channels which are read by the scan system</span>
+    <span class="c1">#:   via :meth:`selectDataSources`</span>
+    <span class="n">dataSourceTypes</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
@@ -544,6 +552,25 @@
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 
+<div class="viewcode-block" id="ScanBackend.selectDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.selectDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">selectDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">mntgrp</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; selects STEP datasources without channels of the scan system</span>
+<span class="sd">            to be read in scans of a measurement group</span>
+
+<span class="sd">        It is used by backends with :attr:`dataSourceTypes`</span>
+
+<span class="sd">        :param ms: scan server name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        :param mntgrp: measurement group name</span>
+<span class="sd">        :type mntgrp: :obj:`str`</span>
+<span class="sd">        :param datasources: datasource descriptions by datasource names,</span>
+<span class="sd">                            i.e. dictionaries with ``xml`` definitions,</span>
+<span class="sd">                            ``nxtype`` NeXus types and ``rank``</span>
+<span class="sd">        :type datasources: :obj:`dict` &lt;:obj:`str`, :obj:`dict`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
     <span class="c1"># helpers for the environment variables</span>
 
     <span class="k">def</span> <span class="nf">_readSelectorEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -673,7 +700,7 @@
             <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">k</span>
             <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">discomponentgroup</span><span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not defined i&lt;n Configuration Server&quot;</span> <span class="o">%</span> <span class="n">k</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not defined in Configuration Server&quot;</span> <span class="o">%</span> <span class="n">k</span>
         <span class="n">toCheck</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">availablecomponents</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>

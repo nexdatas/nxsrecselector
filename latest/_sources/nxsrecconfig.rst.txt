@@ -20,6 +20,22 @@ nxsrecconfig.BlissBackend module
     :undoc-members:
     :show-inheritance:
 
+nxsrecconfig.BlissDataSources module
+------------------------------------
+
+.. automodule:: nxsrecconfig.BlissDataSources
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nxsrecconfig.BlissH5Map module
+------------------------------
+
+.. automodule:: nxsrecconfig.BlissH5Map
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 nxsrecconfig.BlissScanMeta module
 ---------------------------------
 

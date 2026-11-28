@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nxsrecconfig.BlissDataSources &#8212; nxsrecconfig 4.16.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=6d71c67f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.16.0/index.html">v4.16.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for nxsrecconfig.BlissDataSources</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2014-2026 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; BLISS counters of NeXus configuration datasources</span>
+
+<span class="sd">STEP datasources selected in NXSRecSelector which are not BLISS counters,</span>
+<span class="sd">i.e. TANGO, DB, PYEVAL or CLIENT datasources of the configuration server,</span>
+<span class="sd">are read in BLISS scans by counters of :class:`NXSDataSourceController`.</span>
+<span class="sd">The datasources are evaluated by :mod:`nxswriter` datasources,</span>
+<span class="sd">i.e. in the same way as by NXSDataWriter.</span>
+
+<span class="sd">* numeric and boolean datasources of any rank are BLISS channels</span>
+<span class="sd">  with the type of their NeXus fields and free dimensions,</span>
+<span class="sd">* string datasources are collected at each scan point and stored</span>
+<span class="sd">  as scan metadata of the controller at the end of the scan,</span>
+<span class="sd">* CLIENT datasources are read from user data, they are skipped</span>
+<span class="sd">  if their records are not in the user data,</span>
+<span class="sd">* datasources which cannot be read are filled with NaN for floats,</span>
+<span class="sd">  the maximal value for integers, False for booleans or an empty string,</span>
+<span class="sd">  or the scan is stopped if ``canfail`` is False.</span>
+
+<span class="sd">The controller is created and updated by</span>
+<span class="sd">:class:`nxsrecconfig.BlissSession.NXSBlissSession`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">lxml.etree</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">Utils</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">bliss.common.counter</span> <span class="kn">import</span> <span class="n">Counter</span>
+    <span class="kn">from</span> <span class="nn">bliss.controllers.counter</span> <span class="kn">import</span> <span class="n">CounterController</span>
+    <span class="kn">from</span> <span class="nn">bliss.scanning.acquisition.counter</span> <span class="kn">import</span> \
+        <span class="n">BaseCounterAcquisitionSlave</span>
+    <span class="kn">from</span> <span class="nn">bliss.scanning.scan_meta</span> <span class="kn">import</span> <span class="n">META_TIMING</span>
+    <span class="c1">#: (:obj:`bool`) BLISS is available</span>
+    <span class="n">BLISS_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">Counter</span> <span class="o">=</span> <span class="nb">object</span>
+    <span class="n">CounterController</span> <span class="o">=</span> <span class="nb">object</span>
+    <span class="n">BaseCounterAcquisitionSlave</span> <span class="o">=</span> <span class="nb">object</span>
+    <span class="n">META_TIMING</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">BLISS_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="c1">#: (:obj:`str`) default name of the datasource counter controller</span>
+<span class="n">CONTROLLER</span> <span class="o">=</span> <span class="s2">&quot;nxsds&quot;</span>
+
+<span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) numpy types of NeXus types</span>
+<span class="n">NXTYPES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;NX_FLOAT32&quot;</span><span class="p">:</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_FLOAT64&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_FLOAT&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_NUMBER&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_INT&quot;</span><span class="p">:</span> <span class="s2">&quot;int64&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_INT64&quot;</span><span class="p">:</span> <span class="s2">&quot;int64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_INT32&quot;</span><span class="p">:</span> <span class="s2">&quot;int32&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_INT16&quot;</span><span class="p">:</span> <span class="s2">&quot;int16&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_INT8&quot;</span><span class="p">:</span> <span class="s2">&quot;int8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_UINT64&quot;</span><span class="p">:</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_UINT32&quot;</span><span class="p">:</span> <span class="s2">&quot;uint32&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_UINT16&quot;</span><span class="p">:</span> <span class="s2">&quot;uint16&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_UINT8&quot;</span><span class="p">:</span> <span class="s2">&quot;uint8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_UINT&quot;</span><span class="p">:</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_POSINT&quot;</span><span class="p">:</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_DATE_TIME&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span> <span class="s2">&quot;ISO8601&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span> <span class="s2">&quot;NX_CHAR&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NX_BOOLEAN&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="description">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.description">[docs]</a>
+<span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides a datasource description</span>
+
+<span class="sd">    :param value: datasource description or its XML definition</span>
+<span class="sd">    :type value: :obj:`dict` &lt;:obj:`str`, `any`&gt; or :obj:`str`</span>
+<span class="sd">    :returns: datasource description with ``xml``, ``nxtype`` and ``rank``</span>
+<span class="sd">    :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;xml&quot;</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xml&quot;</span><span class="p">),</span> <span class="s2">&quot;nxtype&quot;</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nxtype&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;xml&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;nxtype&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="numpyType">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.numpyType">[docs]</a>
+<span class="k">def</span> <span class="nf">numpyType</span><span class="p">(</span><span class="n">nxtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the numpy type of a NeXus type</span>
+
+<span class="sd">    :param nxtype: NeXus type, e.g. ``NX_INT32``</span>
+<span class="sd">    :type nxtype: :obj:`str`</span>
+<span class="sd">    :returns: numpy type name, ``float64`` for unknown types</span>
+<span class="sd">    :rtype: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">NXTYPES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nxtype</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fillValue">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.fillValue">[docs]</a>
+<span class="k">def</span> <span class="nf">fillValue</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the fill value of data which cannot be read</span>
+
+<span class="sd">    :param dtype: numpy type name</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :returns: NaN for floats, the maximal value for integers,</span>
+<span class="sd">              False for booleans and an empty string for strings</span>
+<span class="sd">    :rtype: `any`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;bool&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">npdtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">npdtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="s2">&quot;iu&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">npdtype</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+
+<div class="viewcode-block" id="convert">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.convert">[docs]</a>
+<span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">rank</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; converts a datasource value to the type and rank of its field</span>
+
+<span class="sd">    :param value: datasource value</span>
+<span class="sd">    :type value: `any`</span>
+<span class="sd">    :param dtype: numpy type name</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param rank: field rank</span>
+<span class="sd">    :type rank: :obj:`int`</span>
+<span class="sd">    :returns: converted value</span>
+<span class="sd">    :rtype: :class:`numpy.ndarray` or :obj:`str`</span>
+<span class="sd">    :raises: :exc:`ValueError` if the value cannot be converted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;a scalar value is expected&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="n">rank</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(())</span>
+        <span class="k">elif</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="n">rank</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rank</span> <span class="o">-</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> <span class="o">+</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;rank </span><span class="si">%s</span><span class="s2"> is expected, got shape </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">arr</span></div>
+
+
+
+<div class="viewcode-block" id="DataSourceReader">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader">[docs]</a>
+<span class="k">class</span> <span class="nc">DataSourceReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; reads NeXus configuration datasources by nxswriter datasources</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param userdata: user data of CLIENT datasources</span>
+<span class="sd">                         or a function returning them</span>
+<span class="sd">        :type userdata: :obj:`dict` &lt;:obj:`str`, `any`&gt; or callable</span>
+<span class="sd">        :param log: logger with debug, info and warning methods</span>
+<span class="sd">        :type log: :class:`logging.Logger` or `any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">nxswriter.DataSourcePool</span> <span class="kn">import</span> <span class="n">DataSourcePool</span>
+        <span class="kn">from</span> <span class="nn">nxswriter.DecoderPool</span> <span class="kn">import</span> <span class="n">DecoderPool</span>
+
+        <span class="c1">#: (:obj:`dict` or callable) user data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">userdata</span> <span class="o">=</span> <span class="n">userdata</span>
+        <span class="c1">#: (:class:`logging.Logger` or `any`) logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span> <span class="ow">or</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;nxsrecconfig&quot;</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) errors of the last reading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:class:`nxswriter.DataSourcePool.DataSourcePool`) pool</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pool</span> <span class="o">=</span> <span class="n">DataSourcePool</span><span class="p">()</span>
+        <span class="c1">#: (:class:`nxswriter.DecoderPool.DecoderPool`) decoders</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span> <span class="o">=</span> <span class="n">DecoderPool</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) datasources by names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sources</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`dict`&gt;) descriptions by names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__descriptions</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="DataSourceReader.names">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.names">[docs]</a>
+    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides names of the datasources</span>
+
+<span class="sd">        :returns: datasource names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sources</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="DataSourceReader.description">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.description">[docs]</a>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides a datasource description</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :returns: datasource description with ``xml``, ``nxtype``</span>
+<span class="sd">                  and ``rank``</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__descriptions</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="DataSourceReader.setDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.setDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">setDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the datasources</span>
+
+<span class="sd">        Datasources which cannot be set up and CLIENT datasources</span>
+<span class="sd">        without user data are skipped.</span>
+
+<span class="sd">        :param datasources: datasource descriptions or XML definitions</span>
+<span class="sd">                            by datasource names</span>
+<span class="sd">        :type datasources: :obj:`dict` &lt;:obj:`str`, :obj:`dict`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">datasources</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">description</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                       <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">datasources</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sources</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">datasources</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sources</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__descriptions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">datasources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sources</span> <span class="ow">and</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">__descriptions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="n">desc</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sources</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__descriptions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">desc</span><span class="p">[</span><span class="s2">&quot;xml&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;nxsrecconfig: datasource </span><span class="si">%s</span><span class="s2"> cannot be set up: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__descriptions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__userdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the user data</span>
+
+<span class="sd">        :returns: user data</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">userdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">userdata</span><span class="p">()</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">userdata</span><span class="p">)</span> \
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">userdata</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">userdata</span> <span class="ow">or</span> <span class="p">{})</span>
+
+    <span class="k">def</span> <span class="nf">__create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a nxswriter datasource</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param xml: datasource XML definition</span>
+<span class="sd">        :type xml: :obj:`str`</span>
+<span class="sd">        :returns: nxswriter datasource or None for CLIENT datasources</span>
+<span class="sd">                  without user data</span>
+<span class="sd">        :rtype: :class:`nxswriter.DataSources.DataSource`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">dataSourceNode</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wrong XML definition&quot;</span><span class="p">)</span>
+        <span class="n">dstype</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="o">.</span><span class="n">hasDataSource</span><span class="p">(</span><span class="n">dstype</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown datasource type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dstype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dstype</span> <span class="o">==</span> <span class="s2">&quot;CLIENT&quot;</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;record&quot;</span><span class="p">)</span>
+            <span class="n">rname</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">rname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userdata</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;nxsrecconfig: CLIENT datasource </span><span class="si">%s</span><span class="s2"> skipped: &quot;</span>
+                    <span class="s2">&quot;no user data of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">rname</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dstype</span><span class="p">)(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">source</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;setJSON&quot;</span><span class="p">):</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">setJSON</span><span class="p">({</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userdata</span><span class="p">()})</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;setDataSources&quot;</span><span class="p">):</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">setDataSources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;setDecoders&quot;</span><span class="p">):</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">setDecoders</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">source</span>
+
+<div class="viewcode-block" id="DataSourceReader.read">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.read">[docs]</a>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads datasource values</span>
+
+<span class="sd">        :param names: datasource names</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :returns: values, None for datasources which cannot be read,</span>
+<span class="sd">                  their errors are in :attr:`errors`</span>
+<span class="sd">        :rtype: :obj:`list` `any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># new reading of tango groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">gjson</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userdata</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown datasource&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;setJSON&quot;</span><span class="p">):</span>
+                        <span class="n">source</span><span class="o">.</span><span class="n">setJSON</span><span class="p">(</span><span class="n">gjson</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getData</span><span class="p">()</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> \
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no data&quot;</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">values</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NXSDataSourceCounter">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceCounter">[docs]</a>
+<span class="k">class</span> <span class="nc">NXSDataSourceCounter</span><span class="p">(</span><span class="n">Counter</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; BLISS counter of a NeXus configuration datasource</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">controller</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param controller: counter controller</span>
+<span class="sd">        :type controller: :class:`NXSDataSourceController`</span>
+<span class="sd">        :param dtype: numpy type name, ``str`` for strings</span>
+<span class="sd">        :type dtype: :obj:`str`</span>
+<span class="sd">        :param rank: field rank</span>
+<span class="sd">        :type rank: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Counter</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">controller</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span> <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)))</span>
+        <span class="c1">#: (:obj:`str`) numpy type name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">typename</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="c1">#: (:obj:`int`) field rank</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; data shape with free dimensions</span>
+
+<span class="sd">        :returns: shape</span>
+<span class="sd">        :rtype: :obj:`tuple` &lt;:obj:`int`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; string datasource flag</span>
+
+<span class="sd">        :returns: True for string datasources stored as scan metadata</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">typename</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave">[docs]</a>
+<span class="k">class</span> <span class="nc">NXSDataSourceAcquisitionSlave</span><span class="p">(</span><span class="n">BaseCounterAcquisitionSlave</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; BLISS acquisition object of datasource counters,</span>
+<span class="sd">        it reads all datasources once per scan point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">counters</span><span class="p">,</span> <span class="n">ctrl_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">count_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">npoints</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param counters: counter controller and counters</span>
+<span class="sd">        :type counters: :obj:`list`</span>
+<span class="sd">        :param ctrl_params: controller parameters</span>
+<span class="sd">        :type ctrl_params: :obj:`dict`</span>
+<span class="sd">        :param count_time: count time</span>
+<span class="sd">        :type count_time: :obj:`float`</span>
+<span class="sd">        :param npoints: number of points, 0 for endless acquisition</span>
+<span class="sd">        :type npoints: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseCounterAcquisitionSlave</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">counters</span><span class="p">,</span> <span class="n">count_time</span><span class="o">=</span><span class="n">count_time</span><span class="p">,</span>
+            <span class="n">npoints</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">npoints</span><span class="p">),</span> <span class="n">prepare_once</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">start_once</span><span class="o">=</span><span class="n">npoints</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctrl_params</span><span class="o">=</span><span class="n">ctrl_params</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`list`&gt;) string values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strings</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_do_add_counter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; adds a counter, string counters have no channels</span>
+
+<span class="sd">        :param counter: counter</span>
+<span class="sd">        :type counter: :class:`NXSDataSourceCounter`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="s2">&quot;isstring&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_counters</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="p">[</span><span class="n">counter</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">BaseCounterAcquisitionSlave</span><span class="o">.</span><span class="n">_do_add_counter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave.prepare">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.prepare">[docs]</a>
+    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; prepares the acquisition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_acq_points</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">startScan</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_device</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave.start">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.start">[docs]</a>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; starts the acquisition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop_flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_device</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave.stop">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.stop">[docs]</a>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stops the acquisition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop_flag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_device</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave.trigger">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.trigger">[docs]</a>
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the datasources of one scan point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop_flag</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">counters</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_counters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="o">*</span><span class="n">counters</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">counters</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counters</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">channels</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+                    <span class="n">channel</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">counter</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="p">[</span><span class="n">counter</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_acq_points</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave.reading">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.reading">[docs]</a>
+    <span class="k">def</span> <span class="nf">reading</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; the datasources are read by :meth:`trigger`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceAcquisitionSlave.get_acquisition_metadata">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.get_acquisition_metadata">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_acquisition_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides string datasource values at the end of the scan</span>
+
+<span class="sd">        :param timing: metadata timing</span>
+<span class="sd">        :type timing: :class:`bliss.scanning.scan_meta.META_TIMING`</span>
+<span class="sd">        :returns: metadata</span>
+<span class="sd">        :rtype: :obj:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">META_TIMING</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">timing</span> <span class="o">==</span> <span class="n">META_TIMING</span><span class="o">.</span><span class="n">END</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strings</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">BaseCounterAcquisitionSlave</span><span class="o">.</span><span class="n">get_acquisition_metadata</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="n">timing</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NXSDataSourceController">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController">[docs]</a>
+<span class="k">class</span> <span class="nc">NXSDataSourceController</span><span class="p">(</span><span class="n">CounterController</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; BLISS counter controller of NeXus configuration datasources</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">CONTROLLER</span><span class="p">,</span> <span class="n">reader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">canfail</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: controller name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param reader: datasource reader</span>
+<span class="sd">        :type reader: :class:`DataSourceReader`</span>
+<span class="sd">        :param canfail: fill values of datasources which cannot be read,</span>
+<span class="sd">                        stop the scan otherwise</span>
+<span class="sd">        :type canfail: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">BLISS_AVAILABLE</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;BLISS is not available&quot;</span><span class="p">)</span>
+        <span class="n">CounterController</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="c1">#: (:class:`DataSourceReader`) datasource reader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">reader</span> <span class="ow">or</span> <span class="n">DataSourceReader</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`bool`) fill values of datasources which cannot be read</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canfail</span> <span class="o">=</span> <span class="n">canfail</span>
+        <span class="c1">#: (:obj:`set` &lt;:obj:`str`&gt;) datasources with reported errors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__reported</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NXSDataSourceController.get_acquisition_object">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.get_acquisition_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_acquisition_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acq_params</span><span class="p">,</span> <span class="n">ctrl_params</span><span class="p">,</span>
+                               <span class="n">parent_acq_params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the acquisition object</span>
+
+<span class="sd">        :param acq_params: acquisition parameters</span>
+<span class="sd">        :type acq_params: :obj:`dict`</span>
+<span class="sd">        :param ctrl_params: controller parameters</span>
+<span class="sd">        :type ctrl_params: :obj:`dict`</span>
+<span class="sd">        :param parent_acq_params: parent acquisition parameters</span>
+<span class="sd">        :type parent_acq_params: :obj:`dict`</span>
+<span class="sd">        :returns: acquisition object</span>
+<span class="sd">        :rtype: :class:`NXSDataSourceAcquisitionSlave`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">NXSDataSourceAcquisitionSlave</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_params</span><span class="o">=</span><span class="n">ctrl_params</span><span class="p">,</span> <span class="o">**</span><span class="n">acq_params</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceController.get_default_chain_parameters">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.get_default_chain_parameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_default_chain_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_params</span><span class="p">,</span> <span class="n">acq_params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides default acquisition parameters</span>
+
+<span class="sd">        :param scan_params: scan parameters</span>
+<span class="sd">        :type scan_params: :obj:`dict`</span>
+<span class="sd">        :param acq_params: acquisition parameters</span>
+<span class="sd">        :type acq_params: :obj:`dict`</span>
+<span class="sd">        :returns: acquisition parameters</span>
+<span class="sd">        :rtype: :obj:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;count_time&quot;</span><span class="p">:</span> <span class="n">acq_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;count_time&quot;</span><span class="p">,</span> <span class="n">scan_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;count_time&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;npoints&quot;</span><span class="p">:</span> <span class="n">acq_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;npoints&quot;</span><span class="p">,</span> <span class="n">scan_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;npoints&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceController.setDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.setDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">setDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the datasources and creates their counters</span>
+
+<span class="sd">        :param datasources: datasource descriptions or XML definitions</span>
+<span class="sd">                            by datasource names</span>
+<span class="sd">        :type datasources: :obj:`dict` &lt;:obj:`str`, :obj:`dict`&gt;</span>
+<span class="sd">        :returns: full names of the counters</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">setDataSources</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counters</span><span class="p">):</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="n">cnt</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">desc</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+               <span class="n">cnt</span><span class="o">.</span><span class="n">typename</span> <span class="o">!=</span> <span class="n">numpyType</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="s2">&quot;nxtype&quot;</span><span class="p">])</span> <span class="ow">or</span> \
+               <span class="n">cnt</span><span class="o">.</span><span class="n">rank</span> <span class="o">!=</span> <span class="n">desc</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span>
+        <span class="n">existing</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">counters</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">:</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">NXSDataSourceCounter</span><span class="p">(</span>
+                    <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">numpyType</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="s2">&quot;nxtype&quot;</span><span class="p">]),</span> <span class="n">desc</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">cnt</span><span class="o">.</span><span class="n">fullname</span> <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">counters</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceController.startScan">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.startScan">[docs]</a>
+    <span class="k">def</span> <span class="nf">startScan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets error reports at the scan start</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__reported</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NXSDataSourceController.read_all">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.read_all">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">counters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the datasources of the counters</span>
+
+<span class="sd">        :param counters: counters</span>
+<span class="sd">        :type counters: :obj:`list` &lt;:class:`NXSDataSourceCounter`&gt;</span>
+<span class="sd">        :returns: values converted to the counter types and ranks</span>
+<span class="sd">        :rtype: :obj:`list` `any`</span>
+<span class="sd">        :raises: :exc:`RuntimeError` if a datasource cannot be read</span>
+<span class="sd">                 and :attr:`canfail` is False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">([</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">counters</span><span class="p">])</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">counters</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cnt</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">cnt</span><span class="o">.</span><span class="n">typename</span><span class="p">,</span> <span class="n">cnt</span><span class="o">.</span><span class="n">rank</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canfail</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;nxsrecconfig: datasource </span><span class="si">%s</span><span class="s2"> cannot be read: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">errors</span><span class="p">[</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">cnt</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reported</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__reported</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;nxsrecconfig: datasource </span><span class="si">%s</span><span class="s2"> cannot be read: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">errors</span><span class="p">[</span><span class="n">cnt</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+            <span class="n">fill</span> <span class="o">=</span> <span class="n">fillValue</span><span class="p">(</span><span class="n">cnt</span><span class="o">.</span><span class="n">typename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cnt</span><span class="o">.</span><span class="n">rank</span> <span class="ow">and</span> <span class="n">cnt</span><span class="o">.</span><span class="n">typename</span> <span class="o">!=</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span>
+                <span class="n">fill</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="n">cnt</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span>
+                                  <span class="n">dtype</span><span class="o">=</span><span class="n">cnt</span><span class="o">.</span><span class="n">typename</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cnt</span><span class="o">.</span><span class="n">rank</span><span class="p">:</span>
+                <span class="n">fill</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="n">cnt</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">fill</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fill</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

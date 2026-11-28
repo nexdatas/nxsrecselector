@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nxsrecconfig.BlissH5Map &#8212; nxsrecconfig 4.16.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="../../_static/documentation_options.js?v=6d71c67f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          nxsrecconfig</a>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nxsrecconfig.html">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.ScanBackend">nxsrecconfig.ScanBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.WriterConfiguration">nxsrecconfig.WriterConfiguration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v4.16.0/index.html">v4.16.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.1/index.html">v4.13.1</a></li>
+      <li><a class="reference external" href="../../index/../../v4.13.0/index.html">v4.13.0</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for nxsrecconfig.BlissH5Map</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2014-2026 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; NeXus structure of selector profiles in BLISS HDF5 mappings</span>
+
+<span class="sd">BLISS describes its scan files by h5maps of :mod:`blissdata`, generated</span>
+<span class="sd">by ``scan_info_to_h5map`` of :mod:`blisswriter` at the start and at the</span>
+<span class="sd">end of each scan.  The hook of this module adds the STEP fields of the</span>
+<span class="sd">NeXus configuration, at their NeXus paths, to the scan entry as soft</span>
+<span class="sd">links to the datasets written by BLISS, i.e. the scan file has the NeXus</span>
+<span class="sd">structure of the profile as with NXSDataWriter, and the BLISS one.</span>
+
+<span class="sd">The hook is added by ``add_h5map_hook`` of :mod:`bliss.scanning.h5map_hooks`</span>
+<span class="sd">if BLISS provides it.  Otherwise ``scan_info_to_h5map`` of</span>
+<span class="sd">:mod:`bliss.scanning.scan` is wrapped by the hook.</span>
+
+<span class="sd">The STEP fields are provided by</span>
+<span class="sd">:class:`nxsrecconfig.BlissScanMeta.NXSScanMeta` registered with</span>
+<span class="sd">``links=True``, which also provides INIT and FINAL fields::</span>
+
+<span class="sd">    from nxsrecconfig.BlissScanMeta import NXSScanMeta</span>
+<span class="sd">    nxsmeta = NXSScanMeta(&quot;p09/nxsrecselector/1&quot;)</span>
+<span class="sd">    nxsmeta.register(links=True)</span>
+
+<span class="sd">Overlays are trees of h5map-like dictionaries with groups and</span>
+<span class="sd">``{&quot;type&quot;: &quot;step&quot;, &quot;stream&quot;: &lt;stream name&gt;}`` items.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">posixpath</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">.BlissBackend</span> <span class="kn">import</span> <span class="n">channelName</span>
+<span class="kn">from</span> <span class="nn">.BlissDataSources</span> <span class="kn">import</span> <span class="n">CONTROLLER</span>
+
+
+<span class="c1">#: (:obj:`list` &lt;:class:`NXSH5MapHook`&gt;) installed hook</span>
+<span class="n">_HOOK</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="c1">#: (:obj:`set` &lt;:obj:`str`&gt;) types of h5map items which are not datasets</span>
+<span class="c1">#:   given by their values</span>
+<span class="n">H5TYPES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;external_binary_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;soft_link&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;external_link&quot;</span><span class="p">,</span> <span class="s2">&quot;virtual_dataset&quot;</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides a field of an h5map item, i.e. a dictionary or a model</span>
+
+<span class="sd">    :param item: h5map item</span>
+<span class="sd">    :type item: :obj:`dict` or :class:`pydantic.BaseModel`</span>
+<span class="sd">    :param key: field name</span>
+<span class="sd">    :type key: :obj:`str`</span>
+<span class="sd">    :param default: default value</span>
+<span class="sd">    :type default: `any`</span>
+<span class="sd">    :returns: field value</span>
+<span class="sd">    :rtype: `any`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="itemType">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.itemType">[docs]</a>
+<span class="k">def</span> <span class="nf">itemType</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the type of an h5map item</span>
+
+<span class="sd">    Datasets without attributes can be given by their values.</span>
+
+<span class="sd">    :param item: h5map item</span>
+<span class="sd">    :type item: :obj:`dict` or :class:`pydantic.BaseModel` or `any`</span>
+<span class="sd">    :returns: item type, e.g. ``group``, ``dataset`` or ``soft_link``</span>
+<span class="sd">    :rtype: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">_get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> \
+        <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">tp</span> <span class="k">if</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">H5TYPES</span> <span class="k">else</span> <span class="s2">&quot;dataset&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="attributeValue">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.attributeValue">[docs]</a>
+<span class="k">def</span> <span class="nf">attributeValue</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides a plain value of an h5map attribute</span>
+
+<span class="sd">    :param value: h5map attribute value</span>
+<span class="sd">    :type value: `any`</span>
+<span class="sd">    :returns: plain value</span>
+<span class="sd">    :rtype: `any`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;root&quot;</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">root</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="streamNames">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.streamNames">[docs]</a>
+<span class="k">def</span> <span class="nf">streamNames</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">controller</span><span class="o">=</span><span class="n">CONTROLLER</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides stream names of selector channels and datasources</span>
+
+<span class="sd">    :param channels: full names of BLISS scan channels</span>
+<span class="sd">    :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">    :param controller: name of the datasource counter controller</span>
+<span class="sd">    :type controller: :obj:`str`</span>
+<span class="sd">    :returns: stream names by selector names</span>
+<span class="sd">    :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">channels</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">channelName</span><span class="p">(</span><span class="n">fullname</span><span class="p">),</span> <span class="n">fullname</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">channels</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">short</span> <span class="o">=</span> <span class="n">fullname</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;axis&quot;</span><span class="p">,</span> <span class="n">controller</span><span class="p">)</span> <span class="ow">and</span> <span class="n">short</span><span class="p">:</span>
+            <span class="c1"># motors and datasource counters keep their names</span>
+            <span class="n">names</span><span class="p">[</span><span class="n">channelName</span><span class="p">(</span><span class="n">short</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fullname</span>
+    <span class="k">return</span> <span class="n">names</span></div>
+
+
+
+<div class="viewcode-block" id="stepOverlay">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.stepOverlay">[docs]</a>
+<span class="k">def</span> <span class="nf">stepOverlay</span><span class="p">(</span><span class="n">h5map</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the overlay of STEP stream fields of NXentry groups</span>
+
+<span class="sd">    Links to STEP fields are STEP fields of the same streams.</span>
+
+<span class="sd">    :param h5map: h5map of a file root exported by the nxstools</span>
+<span class="sd">                  h5map writer with stream names of STEP fields</span>
+<span class="sd">    :type h5map: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :returns: overlay of the entry content, None without STEP fields</span>
+<span class="sd">    :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">overlay</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">h5map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;group&quot;</span> <span class="ow">or</span> <span class="n">attributeValue</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NX_class&quot;</span><span class="p">))</span> \
+                <span class="o">!=</span> <span class="s2">&quot;NXentry&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">streams</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_streamFields</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">streams</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">streams</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">_streamTree</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">streams</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">overlay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">overlay</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                           <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+            <span class="n">overlay</span><span class="p">[</span><span class="s2">&quot;children&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="s2">&quot;children&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">overlay</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_streamValue</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the stream name of an h5map item</span>
+
+<span class="sd">    :param item: h5map item</span>
+<span class="sd">    :type item: :obj:`dict` or :class:`pydantic.BaseModel` or `any`</span>
+<span class="sd">    :returns: stream name or None</span>
+<span class="sd">    :rtype: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">itemType</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="k">if</span> <span class="n">_get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">_get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">))</span> <span class="ow">and</span> \
+       <span class="n">_get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;stream&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_streamFields</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">streams</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; collects stream fields of a group</span>
+
+<span class="sd">    :param group: h5map group</span>
+<span class="sd">    :type group: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param path: group path relative to the entry</span>
+<span class="sd">    :type path: :obj:`str`</span>
+<span class="sd">    :param streams: stream names by field paths relative to the entry</span>
+<span class="sd">    :type streams: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cpath</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="n">_streamFields</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">cpath</span><span class="p">,</span> <span class="n">streams</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">_streamValue</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="n">streams</span><span class="p">[</span><span class="n">cpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">stream</span>
+
+
+<span class="k">def</span> <span class="nf">_streamTree</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">streams</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides groups, stream fields and links to them of a group</span>
+
+<span class="sd">    :param group: h5map group</span>
+<span class="sd">    :type group: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param entry: absolute entry path</span>
+<span class="sd">    :type entry: :obj:`str`</span>
+<span class="sd">    :param path: group path relative to the entry</span>
+<span class="sd">    :type path: :obj:`str`</span>
+<span class="sd">    :param streams: stream names by field paths relative to the entry</span>
+<span class="sd">    :type streams: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :returns: overlay group or None without stream fields</span>
+<span class="sd">    :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cpath</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="n">name</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">_streamTree</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">cpath</span><span class="p">,</span> <span class="n">streams</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;soft_link&quot;</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">posixpath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">entry</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target_path&quot;</span><span class="p">))))</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="ow">and</span> \
+               <span class="n">target</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">:</span>
+                <span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;step&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="n">streams</span><span class="p">[</span><span class="n">target</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]]}</span>
+        <span class="k">elif</span> <span class="n">cpath</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">:</span>
+            <span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="n">streams</span><span class="p">[</span><span class="n">cpath</span><span class="p">]}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">children</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">nxclass</span> <span class="o">=</span> <span class="n">attributeValue</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NX_class&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">nxclass</span><span class="p">:</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nxclass</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">:</span> <span class="n">attributes</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="n">children</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="itemPaths">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.itemPaths">[docs]</a>
+<span class="k">def</span> <span class="nf">itemPaths</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides paths of streams and of other datasets of an h5map group</span>
+
+<span class="sd">    :param group: h5map group</span>
+<span class="sd">    :type group: :obj:`dict` or :class:`pydantic.BaseModel`</span>
+<span class="sd">    :param path: group path</span>
+<span class="sd">    :type path: :obj:`str`</span>
+<span class="sd">    :returns: dataset paths by stream names, paths of other datasets</span>
+<span class="sd">    :rtype: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;,</span>
+<span class="sd">             :obj:`list` &lt;:obj:`str`&gt;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">streams</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">spath</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">streams</span> <span class="ow">or</span> \
+           <span class="nb">len</span><span class="p">(</span><span class="n">spath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)):</span>
+            <span class="n">streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="n">spath</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_get</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cpath</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">itemType</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="n">cstreams</span><span class="p">,</span> <span class="n">cdatasets</span> <span class="o">=</span> <span class="n">itemPaths</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">cpath</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">stream</span><span class="p">,</span> <span class="n">spath</span> <span class="ow">in</span> <span class="n">cstreams</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">add</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">spath</span><span class="p">)</span>
+            <span class="n">datasets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cdatasets</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;virtual_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;external_binary_dataset&quot;</span><span class="p">):</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">_streamValue</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="n">add</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">cpath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpath</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span></div>
+
+
+
+<div class="viewcode-block" id="targetPath">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.targetPath">[docs]</a>
+<span class="k">def</span> <span class="nf">targetPath</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the path of a BLISS dataset of a stream</span>
+
+<span class="sd">    Datasets of streams are looked for first, then datasets of the</span>
+<span class="sd">    stream controller with the stream short name, e.g. string datasource</span>
+<span class="sd">    values stored as scan metadata of the datasource counter controller.</span>
+
+<span class="sd">    :param stream: stream name</span>
+<span class="sd">    :type stream: :obj:`str`</span>
+<span class="sd">    :param streams: dataset paths by stream names</span>
+<span class="sd">    :type streams: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :param datasets: paths of other datasets</span>
+<span class="sd">    :type datasets: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">    :returns: dataset path or None</span>
+<span class="sd">    :rtype: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">stream</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span>
+    <span class="n">controller</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">short</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">controller</span> <span class="ow">and</span> <span class="n">short</span><span class="p">:</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">controller</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">short</span><span class="p">)</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">((</span><span class="n">path</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">datasets</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">)),</span>
+                       <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">found</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="DictItems">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.DictItems">[docs]</a>
+<span class="k">class</span> <span class="nc">DictItems</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; creates h5map items as dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DictItems.group">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.DictItems.group">[docs]</a>
+    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a group</span>
+
+<span class="sd">        :param attributes: group attributes</span>
+<span class="sd">        :type attributes: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: h5map group</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">attributes</span><span class="p">),</span>
+                <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">{}}</span></div>
+
+
+<div class="viewcode-block" id="DictItems.link">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.DictItems.link">[docs]</a>
+    <span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a soft link</span>
+
+<span class="sd">        :param target: target path</span>
+<span class="sd">        :type target: :obj:`str`</span>
+<span class="sd">        :returns: h5map soft link</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;soft_link&quot;</span><span class="p">,</span> <span class="s2">&quot;target_path&quot;</span><span class="p">:</span> <span class="n">target</span><span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ModelItems">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelItems</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; creates h5map items as :mod:`blissdata.h5map` models</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param module: h5map model module, :mod:`blissdata.h5map` if None</span>
+<span class="sd">        :type module: :obj:`module`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">blissdata</span> <span class="kn">import</span> <span class="n">h5map</span> <span class="k">as</span> <span class="n">module</span>
+        <span class="c1">#: (:obj:`module`) h5map model module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">module</span>
+
+<div class="viewcode-block" id="ModelItems.group">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems.group">[docs]</a>
+    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a group</span>
+
+<span class="sd">        :param attributes: group attributes</span>
+<span class="sd">        :type attributes: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: h5map group</span>
+<span class="sd">        :rtype: :class:`blissdata.h5map.Group`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">Group</span><span class="p">(</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">InlineRaw</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+            <span class="n">children</span><span class="o">=</span><span class="p">{})</span></div>
+
+
+<div class="viewcode-block" id="ModelItems.link">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems.link">[docs]</a>
+    <span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a soft link</span>
+
+<span class="sd">        :param target: target path</span>
+<span class="sd">        :type target: :obj:`str`</span>
+<span class="sd">        :returns: h5map soft link</span>
+<span class="sd">        :rtype: :class:`blissdata.h5map.SoftLink`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">SoftLink</span><span class="p">(</span><span class="n">target_path</span><span class="o">=</span><span class="n">target</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="applyOverlay">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.applyOverlay">[docs]</a>
+<span class="k">def</span> <span class="nf">applyOverlay</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">items</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; adds overlay fields as soft links to an h5map group</span>
+
+<span class="sd">    Existing items of the group are kept.</span>
+
+<span class="sd">    :param group: h5map group</span>
+<span class="sd">    :type group: :obj:`dict` or :class:`blissdata.h5map.Group`</span>
+<span class="sd">    :param overlay: overlay group</span>
+<span class="sd">    :type overlay: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param streams: dataset paths by stream names</span>
+<span class="sd">    :type streams: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :param datasets: paths of other datasets</span>
+<span class="sd">    :type datasets: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">    :param path: group path</span>
+<span class="sd">    :type path: :obj:`str`</span>
+<span class="sd">    :param log: logger</span>
+<span class="sd">    :type log: :class:`logging.Logger`</span>
+<span class="sd">    :param items: item factory, :class:`DictItems` if None</span>
+<span class="sd">    :type items: :class:`DictItems` or :class:`ModelItems`</span>
+<span class="sd">    :returns: number of added links</span>
+<span class="sd">    :rtype: :obj:`int`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span> <span class="ow">or</span> <span class="n">DictItems</span><span class="p">()</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">_get</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">overlay</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cpath</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">children</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">child</span> <span class="o">=</span> <span class="n">items</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span>
+                <span class="n">nadded</span> <span class="o">=</span> <span class="n">applyOverlay</span><span class="p">(</span>
+                    <span class="n">child</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">cpath</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">nadded</span><span class="p">:</span>
+                    <span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span>
+                <span class="n">added</span> <span class="o">+=</span> <span class="n">nadded</span>
+            <span class="k">elif</span> <span class="n">itemType</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+                <span class="n">added</span> <span class="o">+=</span> <span class="n">applyOverlay</span><span class="p">(</span>
+                    <span class="n">child</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">cpath</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">log</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;nxsrecconfig: </span><span class="si">%s</span><span class="s2"> exists, skipped&quot;</span> <span class="o">%</span> <span class="n">cpath</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">targetPath</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">],</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="ow">and</span> <span class="n">target</span> <span class="o">!=</span> <span class="n">cpath</span><span class="p">:</span>
+                <span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+                <span class="n">added</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">added</span></div>
+
+
+
+<div class="viewcode-block" id="addProfileLinks">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.addProfileLinks">[docs]</a>
+<span class="k">def</span> <span class="nf">addProfileLinks</span><span class="p">(</span><span class="n">mapping</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; adds STEP fields of a profile to NXentry groups of an h5map</span>
+
+<span class="sd">    :param mapping: h5map of a file root</span>
+<span class="sd">    :type mapping: :obj:`dict` or :class:`blissdata.h5map.Group`</span>
+<span class="sd">    :param overlay: overlay of the entry content</span>
+<span class="sd">    :type overlay: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :param log: logger</span>
+<span class="sd">    :type log: :class:`logging.Logger`</span>
+<span class="sd">    :param items: item factory, :class:`DictItems` if None</span>
+<span class="sd">    :type items: :class:`DictItems` or :class:`ModelItems`</span>
+<span class="sd">    :returns: number of added links</span>
+<span class="sd">    :rtype: :obj:`int`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_get</span><span class="p">(</span><span class="n">mapping</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">itemType</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;group&quot;</span> <span class="ow">or</span> <span class="n">attributeValue</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">_get</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NX_class&quot;</span><span class="p">))</span> \
+                <span class="o">!=</span> <span class="s2">&quot;NXentry&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span>
+        <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span> <span class="o">=</span> <span class="n">itemPaths</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
+        <span class="n">added</span> <span class="o">+=</span> <span class="n">applyOverlay</span><span class="p">(</span>
+            <span class="n">child</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">added</span></div>
+
+
+
+<div class="viewcode-block" id="scanKey">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.scanKey">[docs]</a>
+<span class="k">def</span> <span class="nf">scanKey</span><span class="p">(</span><span class="n">scan_info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the key of a scan</span>
+
+<span class="sd">    :param scan_info: scan info</span>
+<span class="sd">    :type scan_info: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">    :returns: file name and scan number</span>
+<span class="sd">    :rtype: (:obj:`str`, :obj:`int`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">posixpath</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+            <span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scan_nb&quot;</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="NXSH5MapHook">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook">[docs]</a>
+<span class="k">class</span> <span class="nc">NXSH5MapHook</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; hook of the BLISS h5map generation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param log: logger</span>
+<span class="sd">        :type log: :class:`logging.Logger`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:class:`logging.Logger`) logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span> <span class="ow">or</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;nxsrecconfig&quot;</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`tuple`, :obj:`dict`&gt;) overlays by scans</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overlays</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (callable) the original h5map generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`module`) module of the h5map generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`module`) module of the BLISS h5map hooks, i.e.</span>
+        <span class="c1">#:     :mod:`bliss.scanning.h5map_hooks`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="NXSH5MapHook.setOverlay">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.setOverlay">[docs]</a>
+    <span class="k">def</span> <span class="nf">setOverlay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_info</span><span class="p">,</span> <span class="n">overlay</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the overlay of a scan</span>
+
+<span class="sd">        :param scan_info: scan info</span>
+<span class="sd">        :type scan_info: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param overlay: overlay of the entry content or None</span>
+<span class="sd">        :type overlay: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">scanKey</span><span class="p">(</span><span class="n">scan_info</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overlay</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overlays</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">overlay</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overlays</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NXSH5MapHook.apply">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_info</span><span class="p">,</span> <span class="n">mappings</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; adds profile links to the h5maps of a scan</span>
+
+<span class="sd">        :param scan_info: scan info</span>
+<span class="sd">        :type scan_info: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param mappings: h5map models or dictionaries by file names,</span>
+<span class="sd">                         updated in place</span>
+<span class="sd">        :type mappings: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param end: the last h5maps of the scan,</span>
+<span class="sd">                    the scan info with ``end_reason`` if None</span>
+<span class="sd">        :type end: :obj:`bool`</span>
+<span class="sd">        :returns: updated mappings</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">scanKey</span><span class="p">(</span><span class="n">scan_info</span><span class="p">)</span>
+        <span class="n">overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlays</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="s2">&quot;end_reason&quot;</span> <span class="ow">in</span> <span class="n">scan_info</span>
+        <span class="k">if</span> <span class="n">end</span><span class="p">:</span>
+            <span class="c1"># the last h5map of the scan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overlays</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">overlay</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mappings</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mappings</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span> <span class="o">!=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="n">mapping</span> <span class="o">=</span> <span class="n">mappings</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">DictItems</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mapping</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> \
+                <span class="k">else</span> <span class="n">ModelItems</span><span class="p">()</span>
+            <span class="n">addProfileLinks</span><span class="p">(</span><span class="n">mapping</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mappings</span></div>
+
+
+<div class="viewcode-block" id="NXSH5MapHook.blissHook">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.blissHook">[docs]</a>
+    <span class="k">def</span> <span class="nf">blissHook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">mappings</span><span class="p">,</span> <span class="n">timing</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; adds profile links to the h5maps of a scan,</span>
+<span class="sd">            called by :mod:`bliss.scanning.h5map_hooks`</span>
+
+<span class="sd">        :param scan: BLISS scan</span>
+<span class="sd">        :type scan: :class:`bliss.scanning.scan.Scan`</span>
+<span class="sd">        :param mappings: h5maps by file names, updated in place</span>
+<span class="sd">        :type mappings: :obj:`dict` &lt;:obj:`str`,</span>
+<span class="sd">                        :class:`blissdata.h5map.Group`&gt;</span>
+<span class="sd">        :param timing: ``META_TIMING.START`` or ``META_TIMING.END``</span>
+<span class="sd">        :type timing: :class:`bliss.scanning.scan_meta.META_TIMING`</span>
+<span class="sd">        :returns: updated mappings</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :class:`blissdata.h5map.Group`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scan_info</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">scan_info</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">timing</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">timing</span><span class="p">))</span> <span class="o">==</span> <span class="s2">&quot;END&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="n">mappings</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;nxsrecconfig: profile links cannot be added: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">end</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">overlays</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">scanKey</span><span class="p">(</span><span class="n">scan_info</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mappings</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_info</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; generates h5maps with profile links</span>
+
+<span class="sd">        :param scan_info: scan info</span>
+<span class="sd">        :type scan_info: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: h5maps by file names</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="n">mappings</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;nxsrecconfig: profile links cannot be added: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mappings</span></div>
+
+
+
+<div class="viewcode-block" id="installHook">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.installHook">[docs]</a>
+<span class="k">def</span> <span class="nf">installHook</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; installs the h5map hook in BLISS</span>
+
+<span class="sd">    The hook is added to the BLISS h5map hooks if BLISS provides them,</span>
+<span class="sd">    otherwise ``scan_info_to_h5map`` of the BLISS scan module is wrapped.</span>
+
+<span class="sd">    :param module: module with ``scan_info_to_h5map`` to be wrapped,</span>
+<span class="sd">                   :mod:`bliss.scanning.scan` if None</span>
+<span class="sd">    :type module: :obj:`module`</span>
+<span class="sd">    :param log: logger</span>
+<span class="sd">    :type log: :class:`logging.Logger`</span>
+<span class="sd">    :param registry: module with ``add_h5map_hook`` and</span>
+<span class="sd">                     ``remove_h5map_hook``,</span>
+<span class="sd">                     :mod:`bliss.scanning.h5map_hooks` if available</span>
+<span class="sd">                     and *module* is None</span>
+<span class="sd">    :type registry: :obj:`module`</span>
+<span class="sd">    :returns: the installed hook</span>
+<span class="sd">    :rtype: :class:`NXSH5MapHook`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_HOOK</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_HOOK</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">hook</span> <span class="o">=</span> <span class="n">NXSH5MapHook</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">bliss.scanning</span> <span class="kn">import</span> <span class="n">h5map_hooks</span> <span class="k">as</span> <span class="n">registry</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">registry</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hook</span><span class="o">.</span><span class="n">registry</span> <span class="o">=</span> <span class="n">registry</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">add_h5map_hook</span><span class="p">(</span><span class="n">hook</span><span class="o">.</span><span class="n">blissHook</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">bliss.scanning.scan</span> <span class="k">as</span> <span class="nn">module</span>
+        <span class="n">hook</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">module</span>
+        <span class="n">hook</span><span class="o">.</span><span class="n">original</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">scan_info_to_h5map</span>
+        <span class="n">module</span><span class="o">.</span><span class="n">scan_info_to_h5map</span> <span class="o">=</span> <span class="n">hook</span>
+    <span class="n">_HOOK</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hook</span></div>
+
+
+
+<div class="viewcode-block" id="uninstallHook">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissH5Map.uninstallHook">[docs]</a>
+<span class="k">def</span> <span class="nf">uninstallHook</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; removes the h5map hook from BLISS</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="n">_HOOK</span><span class="p">:</span>
+        <span class="n">hook</span> <span class="o">=</span> <span class="n">_HOOK</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">hook</span><span class="o">.</span><span class="n">registry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hook</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">remove_h5map_hook</span><span class="p">(</span><span class="n">hook</span><span class="o">.</span><span class="n">blissHook</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">hook</span><span class="o">.</span><span class="n">module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                <span class="n">hook</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">scan_info_to_h5map</span> <span class="ow">is</span> <span class="n">hook</span><span class="p">:</span>
+            <span class="n">hook</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">scan_info_to_h5map</span> <span class="o">=</span> <span class="n">hook</span><span class="o">.</span><span class="n">original</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

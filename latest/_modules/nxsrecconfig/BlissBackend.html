@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.BlissBackend &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <title>nxsrecconfig.BlissBackend &#8212; nxsrecconfig 4.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="../../_static/documentation_options.js?v=6d71c67f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -54,6 +54,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
@@ -124,6 +126,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.16.0/index.html">v4.16.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
@@ -176,6 +179,13 @@
 <span class="sd">* ``nxsselector:&lt;session&gt;:env``: scan environment variables in JSON</span>
 <span class="sd">* ``nxsselector:&lt;session&gt;:mntgrps``: BLISS full names of channels</span>
 <span class="sd">  selected for measurement groups, in JSON</span>
+<span class="sd">* ``nxsselector:&lt;session&gt;:changed``: Redis channel notifying the session</span>
+<span class="sd">  about changes of the selector, see</span>
+<span class="sd">  :class:`nxsrecconfig.BlissSession.NXSBlissWatcher`</span>
+<span class="sd">* ``nxsselector:&lt;session&gt;:datasources``: descriptions of STEP</span>
+<span class="sd">  datasources without BLISS counters selected for measurement groups,</span>
+<span class="sd">  i.e. their XML definitions, NeXus types and ranks, in JSON,</span>
+<span class="sd">  see :mod:`nxsrecconfig.BlissDataSources`</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
@@ -226,6 +236,24 @@
 
 
 
+<div class="viewcode-block" id="redisURL">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissBackend.redisURL">[docs]</a>
+<span class="k">def</span> <span class="nf">redisURL</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides the URL of the BLISS Redis database</span>
+
+<span class="sd">    :param url: Redis URL, from ``NXSBLISS_REDIS_URL`` or Beacon if None</span>
+<span class="sd">    :type url: :obj:`str`</span>
+<span class="sd">    :returns: Redis URL</span>
+<span class="sd">    :rtype: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NXSBLISS_REDIS_URL&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">blissdata.beacon.data</span> <span class="kn">import</span> <span class="n">BeaconData</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">BeaconData</span><span class="p">()</span><span class="o">.</span><span class="n">get_redis_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">url</span></div>
+
+
+
 <div class="viewcode-block" id="redisConnection">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissBackend.redisConnection">[docs]</a>
 <span class="k">def</span> <span class="nf">redisConnection</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -237,11 +265,7 @@
 <span class="sd">    :rtype: :class:`redis.Redis`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">redis</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NXSBLISS_REDIS_URL&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">blissdata.beacon.data</span> <span class="kn">import</span> <span class="n">BeaconData</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">BeaconData</span><span class="p">()</span><span class="o">.</span><span class="n">get_redis_db</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="o">.</span><span class="n">from_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="o">.</span><span class="n">from_url</span><span class="p">(</span><span class="n">redisURL</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 
@@ -314,16 +338,48 @@
     <span class="c1">#: (:obj:`bool`) the backend selects channels of its measurement groups</span>
     <span class="n">selectsChannels</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">redis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) types of STEP datasources without</span>
+    <span class="c1">#:   BLISS counters which are read by BLISS sessions</span>
+    <span class="n">dataSourceTypes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TANGO&quot;</span><span class="p">,</span> <span class="s2">&quot;DB&quot;</span><span class="p">,</span> <span class="s2">&quot;PYEVAL&quot;</span><span class="p">,</span> <span class="s2">&quot;CLIENT&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">redis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">notify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">datastore</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param numberOfThreads: number of threads</span>
 <span class="sd">        :type numberOfThreads: :obj:`str`</span>
 <span class="sd">        :param redis: Redis connection, see :func:`redisConnection`</span>
 <span class="sd">        :type redis: :class:`redis.Redis`</span>
+<span class="sd">        :param notify: notify sessions about changes</span>
+<span class="sd">        :type notify: :obj:`bool`</span>
+<span class="sd">        :param datastore: blissdata data store checking scan states,</span>
+<span class="sd">                          created from :func:`redisURL` if None</span>
+<span class="sd">        :type datastore: :class:`blissdata.redis_engine.store.DataStore`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ScanBackend</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfThreads</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__redis</span> <span class="o">=</span> <span class="n">redis</span>
+        <span class="c1">#: (:obj:`bool`) notify sessions about changes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notify</span> <span class="o">=</span> <span class="n">notify</span>
+        <span class="c1">#: (:class:`blissdata.redis_engine.store.DataStore`) data store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datastore</span> <span class="o">=</span> <span class="n">datastore</span>
+
+<div class="viewcode-block" id="BlissBackend.notifySession">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.notifySession">[docs]</a>
+    <span class="k">def</span> <span class="nf">notifySession</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; notifies a session about a change of the selector</span>
+
+<span class="sd">        :param ms: session name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        :param kind: kind of the change, e.g. ``env`` or ``mntgrps``</span>
+<span class="sd">        :type kind: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">notify</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">ms</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">sessionKey</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;changed&quot;</span><span class="p">),</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">redis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -446,12 +502,51 @@
     <span class="k">def</span> <span class="nf">isDoorRunning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; checks if a scan is running</span>
 
+<span class="sd">        The session publishes its running scan, i.e. ``ScanRunning``</span>
+<span class="sd">        with the session name and the scan number.  Scans which are</span>
+<span class="sd">        closed in blissdata are not running, e.g. after a session crash.</span>
+
 <span class="sd">        :param ms: session name</span>
 <span class="sd">        :type ms: :obj:`str`</span>
-<span class="sd">        :returns: True if the session publishes a running scan</span>
+<span class="sd">        :returns: True if the session runs a scan</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s2">&quot;ScanRunning&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="p">))</span></div>
+        <span class="n">running</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s2">&quot;ScanRunning&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">running</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">running</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">running</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scanStates</span><span class="p">(</span>
+                <span class="n">running</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;session&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">ms</span><span class="p">,</span> <span class="n">running</span><span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">states</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">state</span> <span class="o">&gt;=</span> <span class="mi">4</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">):</span>
+                <span class="c1"># all scans of the number are CLOSED</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="BlissBackend.scanStates">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.scanStates">[docs]</a>
+    <span class="k">def</span> <span class="nf">scanStates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides blissdata states of scans</span>
+
+<span class="sd">        :param session: session name</span>
+<span class="sd">        :type session: :obj:`str`</span>
+<span class="sd">        :param number: scan number</span>
+<span class="sd">        :type number: :obj:`int`</span>
+<span class="sd">        :returns: states of the scans, i.e. CREATED: 0, PREPARED: 1,</span>
+<span class="sd">                  STARTED: 2, STOPPED: 3, CLOSED: 4,</span>
+<span class="sd">                  or None if blissdata is not available</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`int`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datastore</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">blissdata.redis_engine.store</span> <span class="kn">import</span> <span class="n">DataStore</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datastore</span> <span class="o">=</span> <span class="n">DataStore</span><span class="p">(</span><span class="n">redisURL</span><span class="p">())</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datastore</span><span class="o">.</span><span class="n">search_existing_scans</span><span class="p">(</span>
+                <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">))</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datastore</span><span class="o">.</span><span class="n">get_scans_state</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
 
     <span class="k">def</span> <span class="nf">__channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">listattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -549,7 +644,8 @@
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="n">sessionKey</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">),</span> <span class="n">mapping</span><span class="o">=</span><span class="p">{</span>
             <span class="n">var</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">varvalues</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span></div>
+            <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">varvalues</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notifySession</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BlissBackend.usetEnv">
@@ -563,7 +659,8 @@
 <span class="sd">        :type ms: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">ms</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hdel</span><span class="p">(</span><span class="n">sessionKey</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">),</span> <span class="n">var</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hdel</span><span class="p">(</span><span class="n">sessionKey</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">),</span> <span class="n">var</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">notifySession</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">__env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
@@ -670,7 +767,33 @@
         <span class="n">fullnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">existing</span><span class="p">[</span><span class="n">ch</span><span class="p">][</span><span class="s2">&quot;full_name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span>
                      <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="n">sessionKey</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;mntgrps&quot;</span><span class="p">),</span> <span class="n">mntgrp</span><span class="p">,</span>
-                        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fullnames</span><span class="p">))</span></div>
+                        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fullnames</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notifySession</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;mntgrps&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlissBackend.selectDataSources">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.selectDataSources">[docs]</a>
+    <span class="k">def</span> <span class="nf">selectDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">mntgrp</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; requests STEP datasources without BLISS counters</span>
+<span class="sd">            to be read in scans of a measurement group of the session</span>
+
+<span class="sd">        The session creates BLISS counters of the datasources,</span>
+<span class="sd">        see :meth:`nxsrecconfig.BlissSession.NXSBlissSession.apply`</span>
+
+<span class="sd">        :param ms: session name</span>
+<span class="sd">        :type ms: :obj:`str`</span>
+<span class="sd">        :param mntgrp: measurement group name</span>
+<span class="sd">        :type mntgrp: :obj:`str`</span>
+<span class="sd">        :param datasources: datasource descriptions by datasource names,</span>
+<span class="sd">                            i.e. dictionaries with ``xml`` definitions,</span>
+<span class="sd">                            ``nxtype`` NeXus types and ``rank``</span>
+<span class="sd">        :type datasources: :obj:`dict` &lt;:obj:`str`, :obj:`dict`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ms</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">mntgrp</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="n">sessionKey</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;datasources&quot;</span><span class="p">),</span> <span class="n">mntgrp</span><span class="p">,</span>
+                        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">datasources</span> <span class="ow">or</span> <span class="p">{}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notifySession</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;datasources&quot;</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">__nomntgrps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

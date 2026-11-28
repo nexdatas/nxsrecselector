@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.Utils &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <title>nxsrecconfig.Utils &#8212; nxsrecconfig 4.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="../../_static/documentation_options.js?v=6d71c67f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -54,6 +54,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
@@ -124,6 +126,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.16.0/index.html">v4.16.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
@@ -166,6 +169,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">fnmatch</span>
 <span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="kn">import</span> <span class="nn">lxml.etree</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">tango</span>
@@ -336,6 +341,103 @@
                      <span class="o">+</span> <span class="p">[</span><span class="n">child</span><span class="o">.</span><span class="n">tail</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span> <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tail</span><span class="p">]</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tnodes</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) controller keys of measurement group</span>
+    <span class="c1">#:    configurations set by Sardana with blissdata publishing</span>
+    <span class="n">MNTGRP_RUNTIME_CTRL_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;streamable&quot;</span><span class="p">]</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) channel keys of measurement group</span>
+    <span class="c1">#:    configurations set by Sardana with blissdata publishing,</span>
+    <span class="c1">#:    e.g. stream references of running scans</span>
+    <span class="n">MNTGRP_RUNTIME_CHANNEL_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;value_stream_ref&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Utils.stripMntGrpRuntimeKeys">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stripMntGrpRuntimeKeys">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">stripMntGrpRuntimeKeys</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">conf</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; removes keys of measurement group configurations which are</span>
+<span class="sd">            set by Sardana at runtime, i.e. stream references of scans</span>
+<span class="sd">            and streamable controller flags of blissdata publishing</span>
+
+<span class="sd">        :param conf: measurement group configuration</span>
+<span class="sd">        :type conf: :obj:`str` or :obj:`dict`</span>
+<span class="sd">        :returns: configuration without the runtime keys,</span>
+<span class="sd">                  of the type of the given configuration</span>
+<span class="sd">        :rtype: :obj:`str` or :obj:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">isstr</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">isstr</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dct</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">conf</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dct</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">conf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dct</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">conf</span><span class="p">))</span>
+        <span class="n">controllers</span> <span class="o">=</span> <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;controllers&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controllers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">controllers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">units</span> <span class="o">=</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span>
+                <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctrl</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">groups</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                        <span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="nb">dict</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">MNTGRP_RUNTIME_CTRL_KEYS</span><span class="p">:</span>
+                        <span class="n">grp</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">channels</span> <span class="o">=</span> <span class="n">grp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">MNTGRP_RUNTIME_CHANNEL_KEYS</span><span class="p">:</span>
+                                    <span class="n">ch</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span> <span class="k">if</span> <span class="n">isstr</span> <span class="k">else</span> <span class="n">dct</span></div>
+
+
+<div class="viewcode-block" id="Utils.dataSourceNode">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.dataSourceNode">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">dataSourceNode</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the datasource node of a datasource XML definition</span>
+
+<span class="sd">        :param xml: datasource XML definition</span>
+<span class="sd">        :type xml: :obj:`str`</span>
+<span class="sd">        :returns: datasource node or None</span>
+<span class="sd">        :rtype: :class:`lxml.etree.Element`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">xml</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span>
+                <span class="nb">bytes</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">xml</span><span class="p">),</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
+                <span class="n">parser</span><span class="o">=</span><span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;datasource&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">root</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//datasource&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Utils.dataSourceType">
+<a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.dataSourceType">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">dataSourceType</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the type of a datasource XML definition</span>
+
+<span class="sd">        :param xml: datasource XML definition</span>
+<span class="sd">        :type xml: :obj:`str`</span>
+<span class="sd">        :returns: datasource type, e.g. TANGO, DB, PYEVAL or CLIENT</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">dataSourceNode</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Utils.stringToDictJson">

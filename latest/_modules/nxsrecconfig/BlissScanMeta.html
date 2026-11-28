@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nxsrecconfig.BlissScanMeta &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <title>nxsrecconfig.BlissScanMeta &#8212; nxsrecconfig 4.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="../../_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="../../_static/documentation_options.js?v=6d71c67f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -54,6 +54,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
@@ -124,6 +126,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v4.16.0/index.html">v4.16.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v4.13.2/index.html">v4.13.2</a></li>
@@ -176,6 +179,10 @@
 <span class="sd">when the scan ends, by NXSDataWriter (:mod:`nxswriter`) with the ``h5map``</span>
 <span class="sd">writer of :mod:`nxstools`, which builds the NeXus tree in memory.</span>
 <span class="sd">Links to the written fields are kept, links to STEP fields are dropped.</span>
+
+<span class="sd">With ``nxsmeta.register(links=True)`` the STEP fields are added at their</span>
+<span class="sd">NeXus paths as links to the datasets of the BLISS channels,</span>
+<span class="sd">see :mod:`nxsrecconfig.BlissH5Map`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">base64</span>
@@ -194,6 +201,9 @@
 
 <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) fields exported at the end of the scan</span>
 <span class="n">END_SKIP</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;STEP&quot;</span><span class="p">,</span> <span class="s2">&quot;INIT&quot;</span><span class="p">]</span>
+
+<span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) fields exported as links to scan data</span>
+<span class="n">STEP_SKIP</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;FINAL&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="h5map_value">
@@ -360,7 +370,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">userdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">writerproperties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">writerproperties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param selector: NXSRecSelector device name or proxy,</span>
@@ -378,7 +388,12 @@
 <span class="sd">        :type writerproperties: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param log: logger with debug, info and warning methods</span>
 <span class="sd">        :type log: :class:`logging.Logger` or `any`</span>
+<span class="sd">        :param session: BLISS session of the selector publishing</span>
+<span class="sd">                        running scans</span>
+<span class="sd">        :type session: :class:`nxsrecconfig.BlissSession.NXSBlissSession`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:class:`nxsrecconfig.BlissSession.NXSBlissSession`) session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
         <span class="c1">#: (:obj:`str` or `any`) selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">selector</span>
         <span class="c1">#: (:obj:`str` or callable) profile name</span>
@@ -397,6 +412,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__category</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`str`) registered metadata name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:class:`nxsrecconfig.BlissH5Map.NXSH5MapHook`) h5map hook</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">selector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -416,7 +433,8 @@
 
 <div class="viewcode-block" id="NXSScanMeta.register">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.register">[docs]</a>
-    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scanmeta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;nexdatas&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scanmeta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;nexdatas&quot;</span><span class="p">,</span>
+                 <span class="n">links</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; registers the metadata in the BLISS user scan metadata</span>
 
 <span class="sd">        The empty category merges the metadata into the scan entry.</span>
@@ -427,6 +445,9 @@
 <span class="sd">        :type category: :obj:`str`</span>
 <span class="sd">        :param name: metadata name in the category</span>
 <span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param links: add STEP fields of the profile as links to</span>
+<span class="sd">                      the scan data, see :mod:`nxsrecconfig.BlissH5Map`</span>
+<span class="sd">        :type links: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">bliss.scanning.scan_meta</span> <span class="kn">import</span> <span class="n">META_TIMING</span><span class="p">,</span> <span class="n">get_user_scan_meta</span>
         <span class="k">if</span> <span class="n">scanmeta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -438,7 +459,10 @@
         <span class="n">meta</span><span class="o">.</span><span class="n">timing</span> <span class="o">=</span> <span class="n">META_TIMING</span><span class="o">.</span><span class="n">START</span> <span class="o">|</span> <span class="n">META_TIMING</span><span class="o">.</span><span class="n">END</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span> <span class="o">=</span> <span class="n">scanmeta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__category</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="n">name</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">links</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.BlissH5Map</span> <span class="kn">import</span> <span class="n">installHook</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span> <span class="o">=</span> <span class="n">installHook</span><span class="p">(</span><span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NXSScanMeta.unregister">
@@ -451,6 +475,10 @@
             <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">meta</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scanmeta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.BlissH5Map</span> <span class="kn">import</span> <span class="n">uninstallHook</span>
+            <span class="n">uninstallHook</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__closeAll</span><span class="p">()</span></div>
 
 
@@ -613,12 +641,40 @@
         <span class="c1"># entries of scans which have not ended</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__closeAll</span><span class="p">()</span>
         <span class="n">scan_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">scan_info</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">scanStarted</span><span class="p">(</span><span class="n">scan_info</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;NXSScanMeta: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="n">xml</span><span class="p">,</span> <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configuration</span><span class="p">(</span>
             <span class="n">scan_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileName</span><span class="p">(</span><span class="n">scan</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userData</span><span class="p">(</span><span class="n">scan</span><span class="p">))</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writer</span><span class="p">(</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">),</span> <span class="n">xml</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">scan</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__setOverlay</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">scan_info</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">entry_metadata</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getFile</span><span class="p">()</span><span class="o">.</span><span class="n">h5map</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">START_SKIP</span><span class="p">))</span></div>
 
+
+    <span class="k">def</span> <span class="nf">__setOverlay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">scan_info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets STEP fields of the scan for the h5map hook</span>
+
+<span class="sd">        :param writer: NXSDataWriter</span>
+<span class="sd">        :type writer: :class:`nxswriter.TangoDataWriter.TangoDataWriter`</span>
+<span class="sd">        :param scan_info: scan info</span>
+<span class="sd">        :type scan_info: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.BlissH5Map</span> <span class="kn">import</span> <span class="n">stepOverlay</span><span class="p">,</span> <span class="n">streamNames</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">streamNames</span><span class="p">(</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span>
+            <span class="n">overlay</span> <span class="o">=</span> <span class="n">stepOverlay</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getFile</span><span class="p">()</span><span class="o">.</span><span class="n">h5map</span><span class="p">(</span>
+                <span class="n">streams</span><span class="o">=</span><span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span>
+                <span class="n">names</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dsname</span><span class="p">),</span>
+                <span class="n">skip</span><span class="o">=</span><span class="n">STEP_SKIP</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span><span class="o">.</span><span class="n">setOverlay</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="n">overlay</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;NXSScanMeta: STEP fields cannot be linked: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__hook</span><span class="o">.</span><span class="n">setOverlay</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NXSScanMeta.end">
 <a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.end">[docs]</a>
@@ -631,6 +687,11 @@
 <span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">writer</span><span class="p">,</span> <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__writers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">scan</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">scanEnded</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">scan_info</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;NXSScanMeta: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">scan_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_time&quot;</span><span class="p">)</span> <span class="ow">or</span> \

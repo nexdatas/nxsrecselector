@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to nxsrecconfig’s documentation! &#8212; nxsrecconfig 4.15.0 documentation</title>
+    <title>Welcome to nxsrecconfig’s documentation! &#8212; nxsrecconfig 4.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=4468db6d" />
-    <script src="_static/documentation_options.js?v=ff0e1894"></script>
+    <script src="_static/documentation_options.js?v=6d71c67f"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="#">
           nxsrecconfig</a>
-        <span class="navbar-text navbar-version pull-left"><b>4.15</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>4.16</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -56,6 +56,8 @@
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Backends">nxsrecconfig.Backends module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissBackend">nxsrecconfig.BlissBackend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissSession">nxsrecconfig.BlissSession module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
@@ -166,6 +168,7 @@
       <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="index/../../v4.16.0/index.html">v4.16.0</a></li>
       <li><a class="reference external" href="index/../../v4.15.0/index.html">v4.15.0</a></li>
       <li><a class="reference external" href="index/../../v4.14.0/index.html">v4.14.0</a></li>
       <li><a class="reference external" href="index/../../v4.13.2/index.html">v4.13.2</a></li>
@@ -367,6 +370,7 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend"><code class="docutils literal notranslate"><span class="pre">BlissBackend</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.channelSource"><code class="docutils literal notranslate"><span class="pre">BlissBackend.channelSource()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.createMntGrp"><code class="docutils literal notranslate"><span class="pre">BlissBackend.createMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.dataSourceTypes"><code class="docutils literal notranslate"><span class="pre">BlissBackend.dataSourceTypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.defaultDoor"><code class="docutils literal notranslate"><span class="pre">BlissBackend.defaultDoor()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.deleteMntGrp"><code class="docutils literal notranslate"><span class="pre">BlissBackend.deleteMntGrp()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.elements"><code class="docutils literal notranslate"><span class="pre">BlissBackend.elements()</span></code></a></li>
@@ -380,8 +384,12 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.mntGrpConfiguration"><code class="docutils literal notranslate"><span class="pre">BlissBackend.mntGrpConfiguration()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.name"><code class="docutils literal notranslate"><span class="pre">BlissBackend.name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.nonExistingChannels"><code class="docutils literal notranslate"><span class="pre">BlissBackend.nonExistingChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.notify"><code class="docutils literal notranslate"><span class="pre">BlissBackend.notify</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.notifySession"><code class="docutils literal notranslate"><span class="pre">BlissBackend.notifySession()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.redis"><code class="docutils literal notranslate"><span class="pre">BlissBackend.redis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.scanStates"><code class="docutils literal notranslate"><span class="pre">BlissBackend.scanStates()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.selectChannels"><code class="docutils literal notranslate"><span class="pre">BlissBackend.selectChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.selectDataSources"><code class="docutils literal notranslate"><span class="pre">BlissBackend.selectDataSources()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.selectsChannels"><code class="docutils literal notranslate"><span class="pre">BlissBackend.selectsChannels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.sessions"><code class="docutils literal notranslate"><span class="pre">BlissBackend.sessions()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.BlissBackend.setEnv"><code class="docutils literal notranslate"><span class="pre">BlissBackend.setEnv()</span></code></a></li>
@@ -404,7 +412,92 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.PREFIX"><code class="docutils literal notranslate"><span class="pre">PREFIX</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.channelName"><code class="docutils literal notranslate"><span class="pre">channelName()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.redisConnection"><code class="docutils literal notranslate"><span class="pre">redisConnection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.redisURL"><code class="docutils literal notranslate"><span class="pre">redisURL()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissBackend.sessionKey"><code class="docutils literal notranslate"><span class="pre">sessionKey()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissDataSources">nxsrecconfig.BlissDataSources module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.BLISS_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">BLISS_AVAILABLE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.CONTROLLER"><code class="docutils literal notranslate"><span class="pre">CONTROLLER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader"><code class="docutils literal notranslate"><span class="pre">DataSourceReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.description"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.errors"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.errors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.log"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.log</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.names"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.read"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.read()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.setDataSources"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.setDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.DataSourceReader.userdata"><code class="docutils literal notranslate"><span class="pre">DataSourceReader.userdata</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.get_acquisition_metadata"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.get_acquisition_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.prepare"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.prepare()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.reading"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.reading()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.start"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.stop"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.strings"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.strings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceAcquisitionSlave.trigger"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceAcquisitionSlave.trigger()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.canfail"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.canfail</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.get_acquisition_object"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.get_acquisition_object()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.get_default_chain_parameters"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.get_default_chain_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.read_all"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.read_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.reader"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.reader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.setDataSources"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.setDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceController.startScan"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceController.startScan()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceCounter"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceCounter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceCounter.isstring"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceCounter.isstring</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceCounter.rank"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceCounter.rank</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceCounter.shape"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceCounter.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXSDataSourceCounter.typename"><code class="docutils literal notranslate"><span class="pre">NXSDataSourceCounter.typename</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.NXTYPES"><code class="docutils literal notranslate"><span class="pre">NXTYPES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.description"><code class="docutils literal notranslate"><span class="pre">description()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.fillValue"><code class="docutils literal notranslate"><span class="pre">fillValue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissDataSources.numpyType"><code class="docutils literal notranslate"><span class="pre">numpyType()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissH5Map">nxsrecconfig.BlissH5Map module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.DictItems"><code class="docutils literal notranslate"><span class="pre">DictItems</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.DictItems.group"><code class="docutils literal notranslate"><span class="pre">DictItems.group()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.DictItems.link"><code class="docutils literal notranslate"><span class="pre">DictItems.link()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.H5TYPES"><code class="docutils literal notranslate"><span class="pre">H5TYPES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems"><code class="docutils literal notranslate"><span class="pre">ModelItems</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems.group"><code class="docutils literal notranslate"><span class="pre">ModelItems.group()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems.link"><code class="docutils literal notranslate"><span class="pre">ModelItems.link()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.ModelItems.module"><code class="docutils literal notranslate"><span class="pre">ModelItems.module</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.apply"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.apply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.blissHook"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.blissHook()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.log"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.log</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.module"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.module</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.original"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.original</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.overlays"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.overlays</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.registry"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.registry</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.NXSH5MapHook.setOverlay"><code class="docutils literal notranslate"><span class="pre">NXSH5MapHook.setOverlay()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.addProfileLinks"><code class="docutils literal notranslate"><span class="pre">addProfileLinks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.applyOverlay"><code class="docutils literal notranslate"><span class="pre">applyOverlay()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.attributeValue"><code class="docutils literal notranslate"><span class="pre">attributeValue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.installHook"><code class="docutils literal notranslate"><span class="pre">installHook()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.itemPaths"><code class="docutils literal notranslate"><span class="pre">itemPaths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.itemType"><code class="docutils literal notranslate"><span class="pre">itemType()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.scanKey"><code class="docutils literal notranslate"><span class="pre">scanKey()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.stepOverlay"><code class="docutils literal notranslate"><span class="pre">stepOverlay()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.streamNames"><code class="docutils literal notranslate"><span class="pre">streamNames()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.targetPath"><code class="docutils literal notranslate"><span class="pre">targetPath()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissH5Map.uninstallHook"><code class="docutils literal notranslate"><span class="pre">uninstallHook()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.BlissScanMeta">nxsrecconfig.BlissScanMeta module</a><ul>
@@ -416,6 +509,7 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.profile"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.profile</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.register"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.register()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.selector"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.selector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.session"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.session</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.start"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.start()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.unregister"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.unregister()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.NXSScanMeta.userdata"><code class="docutils literal notranslate"><span class="pre">NXSScanMeta.userdata</span></code></a></li>
@@ -423,6 +517,7 @@ for MacroServer to 3 and restart servers.</p>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.START_SKIP"><code class="docutils literal notranslate"><span class="pre">START_SKIP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.STEP_SKIP"><code class="docutils literal notranslate"><span class="pre">STEP_SKIP</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.entry_metadata"><code class="docutils literal notranslate"><span class="pre">entry_metadata()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.h5map_to_nxdict"><code class="docutils literal notranslate"><span class="pre">h5map_to_nxdict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissScanMeta.h5map_value"><code class="docutils literal notranslate"><span class="pre">h5map_value()</span></code></a></li>
@@ -432,23 +527,61 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI"><code class="docutils literal notranslate"><span class="pre">BlissAPI</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.activeMntGrp"><code class="docutils literal notranslate"><span class="pre">BlissAPI.activeMntGrp()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.axes"><code class="docutils literal notranslate"><span class="pre">BlissAPI.axes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.canfail"><code class="docutils literal notranslate"><span class="pre">BlissAPI.canfail</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.controller"><code class="docutils literal notranslate"><span class="pre">BlissAPI.controller</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.counters"><code class="docutils literal notranslate"><span class="pre">BlissAPI.counters()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.mntgrps"><code class="docutils literal notranslate"><span class="pre">BlissAPI.mntgrps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.scanSaving"><code class="docutils literal notranslate"><span class="pre">BlissAPI.scanSaving()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.selectChannels"><code class="docutils literal notranslate"><span class="pre">BlissAPI.selectChannels()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.session"><code class="docutils literal notranslate"><span class="pre">BlissAPI.session()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.setActiveMntGrp"><code class="docutils literal notranslate"><span class="pre">BlissAPI.setActiveMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.setDataSources"><code class="docutils literal notranslate"><span class="pre">BlissAPI.setDataSources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.setScanSaving"><code class="docutils literal notranslate"><span class="pre">BlissAPI.setScanSaving()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.BlissAPI.userdata"><code class="docutils literal notranslate"><span class="pre">BlissAPI.userdata</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.api"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.api</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.apply"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.apply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.applyPaths"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.applyPaths()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.backend"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.backend</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.elements"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.log"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.log</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.pending"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.pending()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.publish"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.publish()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.publishPaths"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.publishPaths()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.redis"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.redis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.scanEnded"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.scanEnded()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.scanRunning"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.scanRunning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.scanStarted"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.scanStarted()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.session"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.signature"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.signature()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissSession.sync"><code class="docutils literal notranslate"><span class="pre">NXSBlissSession.sync()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.changed"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.interval"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.interval</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.log"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.log</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.poll"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.poll()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.run"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.session"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.signature"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.signature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.start"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.stop"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.subscribe"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.subscribe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSBlissWatcher.unsubscribe"><code class="docutils literal notranslate"><span class="pre">NXSBlissWatcher.unsubscribe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSNexDatas"><code class="docutils literal notranslate"><span class="pre">NXSNexDatas</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSNexDatas.meta"><code class="docutils literal notranslate"><span class="pre">NXSNexDatas.meta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSNexDatas.session"><code class="docutils literal notranslate"><span class="pre">NXSNexDatas.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSNexDatas.stop"><code class="docutils literal notranslate"><span class="pre">NXSNexDatas.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSNexDatas.sync"><code class="docutils literal notranslate"><span class="pre">NXSNexDatas.sync()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.NXSNexDatas.watcher"><code class="docutils literal notranslate"><span class="pre">NXSNexDatas.watcher</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.BlissSession.setup_nexdatas"><code class="docutils literal notranslate"><span class="pre">setup_nexdatas()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a><ul>
@@ -789,6 +922,7 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.channelSource"><code class="docutils literal notranslate"><span class="pre">ScanBackend.channelSource()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.checkChannels"><code class="docutils literal notranslate"><span class="pre">ScanBackend.checkChannels()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.createMntGrp"><code class="docutils literal notranslate"><span class="pre">ScanBackend.createMntGrp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.dataSourceTypes"><code class="docutils literal notranslate"><span class="pre">ScanBackend.dataSourceTypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.defaultDoor"><code class="docutils literal notranslate"><span class="pre">ScanBackend.defaultDoor()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.deleteMntGrp"><code class="docutils literal notranslate"><span class="pre">ScanBackend.deleteMntGrp()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.getEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.getEnv()</span></code></a></li>
@@ -803,6 +937,7 @@ for MacroServer to 3 and restart servers.</p>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.nonExistingChannels"><code class="docutils literal notranslate"><span class="pre">ScanBackend.nonExistingChannels()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.poolBlacklist"><code class="docutils literal notranslate"><span class="pre">ScanBackend.poolBlacklist</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.selectChannels"><code class="docutils literal notranslate"><span class="pre">ScanBackend.selectChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.selectDataSources"><code class="docutils literal notranslate"><span class="pre">ScanBackend.selectDataSources()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.selectsChannels"><code class="docutils literal notranslate"><span class="pre">ScanBackend.selectsChannels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setEnv"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setEnv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.ScanBackend.ScanBackend.setEnvs"><code class="docutils literal notranslate"><span class="pre">ScanBackend.setEnvs()</span></code></a></li>
@@ -1025,12 +1160,17 @@ for MacroServer to 3 and restart servers.</p>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils"><code class="docutils literal notranslate"><span class="pre">Utils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.MNTGRP_RUNTIME_CHANNEL_KEYS"><code class="docutils literal notranslate"><span class="pre">Utils.MNTGRP_RUNTIME_CHANNEL_KEYS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.MNTGRP_RUNTIME_CTRL_KEYS"><code class="docutils literal notranslate"><span class="pre">Utils.MNTGRP_RUNTIME_CTRL_KEYS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict"><code class="docutils literal notranslate"><span class="pre">Utils.compareDict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.dataSourceNode"><code class="docutils literal notranslate"><span class="pre">Utils.dataSourceNode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.dataSourceType"><code class="docutils literal notranslate"><span class="pre">Utils.dataSourceType()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.getRecord"><code class="docutils literal notranslate"><span class="pre">Utils.getRecord()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.getText"><code class="docutils literal notranslate"><span class="pre">Utils.getText()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.pickleloads"><code class="docutils literal notranslate"><span class="pre">Utils.pickleloads()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToDictJson"><code class="docutils literal notranslate"><span class="pre">Utils.stringToDictJson()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson"><code class="docutils literal notranslate"><span class="pre">Utils.stringToListJson()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stripMntGrpRuntimeKeys"><code class="docutils literal notranslate"><span class="pre">Utils.stripMntGrpRuntimeKeys()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.toString"><code class="docutils literal notranslate"><span class="pre">Utils.toString()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.tostr"><code class="docutils literal notranslate"><span class="pre">Utils.tostr()</span></code></a></li>
 </ul>
