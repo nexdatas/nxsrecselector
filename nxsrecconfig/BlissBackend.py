@@ -36,6 +36,13 @@ Redis keys of a session:
 * ``nxsselector:<session>:env``: scan environment variables in JSON
 * ``nxsselector:<session>:mntgrps``: BLISS full names of channels
   selected for measurement groups, in JSON
+* ``nxsselector:<session>:changed``: Redis channel notifying the session
+  about changes of the selector, see
+  :class:`nxsrecconfig.BlissSession.NXSBlissWatcher`
+* ``nxsselector:<session>:datasources``: descriptions of STEP
+  datasources without BLISS counters selected for measurement groups,
+  i.e. their XML definitions, NeXus types and ranks, in JSON,
+  see :mod:`nxsrecconfig.BlissDataSources`
 """
 
 import json
@@ -80,6 +87,21 @@ def channelName(fullname):
     return re.sub(r"[^0-9a-zA-Z_]+", "_", str(fullname))
 
 
+def redisURL(url=None):
+    """ provides the URL of the BLISS Redis database
+
+    :param url: Redis URL, from ``NXSBLISS_REDIS_URL`` or Beacon if None
+    :type url: :obj:`str`
+    :returns: Redis URL
+    :rtype: :obj:`str`
+    """
+    url = url or os.environ.get("NXSBLISS_REDIS_URL")
+    if not url:
+        from blissdata.beacon.data import BeaconData
+        url = BeaconData().get_redis_db()
+    return url
+
+
 def redisConnection(url=None):
     """ opens the Redis connection of BLISS
 
@@ -89,11 +111,7 @@ def redisConnection(url=None):
     :rtype: :class:`redis.Redis`
     """
     import redis
-    url = url or os.environ.get("NXSBLISS_REDIS_URL")
-    if not url:
-        from blissdata.beacon.data import BeaconData
-        url = BeaconData().get_redis_db()
-    return redis.Redis.from_url(url, decode_responses=True)
+    return redis.Redis.from_url(redisURL(url), decode_responses=True)
 
 
 def _decode(value, default=None):
@@ -157,16 +175,45 @@ class BlissBackend(ScanBackend):
     #: (:obj:`bool`) the backend selects channels of its measurement groups
     selectsChannels = True
 
-    def __init__(self, numberOfThreads=None, redis=None):
+    #: (:obj:`list` <:obj:`str`>) types of STEP datasources without
+    #:   BLISS counters which are read by BLISS sessions
+    dataSourceTypes = ["TANGO", "DB", "PYEVAL", "CLIENT"]
+
+    def __init__(self, numberOfThreads=None, redis=None, notify=True,
+                 datastore=None):
         """ constructor
 
         :param numberOfThreads: number of threads
         :type numberOfThreads: :obj:`str`
         :param redis: Redis connection, see :func:`redisConnection`
         :type redis: :class:`redis.Redis`
+        :param notify: notify sessions about changes
+        :type notify: :obj:`bool`
+        :param datastore: blissdata data store checking scan states,
+                          created from :func:`redisURL` if None
+        :type datastore: :class:`blissdata.redis_engine.store.DataStore`
         """
         ScanBackend.__init__(self, numberOfThreads)
         self.__redis = redis
+        #: (:obj:`bool`) notify sessions about changes
+        self.notify = notify
+        #: (:class:`blissdata.redis_engine.store.DataStore`) data store
+        self.__datastore = datastore
+
+    def notifySession(self, ms, kind):
+        """ notifies a session about a change of the selector
+
+        :param ms: session name
+        :type ms: :obj:`str`
+        :param kind: kind of the change, e.g. ``env`` or ``mntgrps``
+        :type kind: :obj:`str`
+        """
+        if not self.notify or not ms:
+            return
+        try:
+            self.redis.publish(sessionKey(ms, "changed"), kind)
+        except Exception:
+            pass
 
     @property
     def redis(self):
@@ -266,12 +313,48 @@ class BlissBackend(ScanBackend):
     def isDoorRunning(self, ms):
         """ checks if a scan is running
 
+        The session publishes its running scan, i.e. ``ScanRunning``
+        with the session name and the scan number.  Scans which are
+        closed in blissdata are not running, e.g. after a session crash.
+
         :param ms: session name
         :type ms: :obj:`str`
-        :returns: True if the session publishes a running scan
+        :returns: True if the session runs a scan
         :rtype: :obj:`bool`
         """
-        return bool(self.getEnv("ScanRunning", ms))
+        running = self.getEnv("ScanRunning", ms)
+        if not running:
+            return False
+        if isinstance(running, dict) and running.get("number") is not None:
+            states = self.scanStates(
+                running.get("session") or ms, running["number"])
+            if states and all(state >= 4 for state in states):
+                # all scans of the number are CLOSED
+                return False
+        return True
+
+    def scanStates(self, session, number):
+        """ provides blissdata states of scans
+
+        :param session: session name
+        :type session: :obj:`str`
+        :param number: scan number
+        :type number: :obj:`int`
+        :returns: states of the scans, i.e. CREATED: 0, PREPARED: 1,
+                  STARTED: 2, STOPPED: 3, CLOSED: 4,
+                  or None if blissdata is not available
+        :rtype: :obj:`list` <:obj:`int`>
+        """
+        try:
+            if self.__datastore is None:
+                from blissdata.redis_engine.store import DataStore
+                self.__datastore = DataStore(redisURL())
+            _, keys = self.__datastore.search_existing_scans(
+                session=session, number=int(number))
+            states = self.__datastore.get_scans_state(keys)
+            return [int(state) for state in states.values()]
+        except Exception:
+            return None
 
     def __channels(self, session, listattrs=None):
         """ provides the published channels and motors of a session
@@ -355,6 +438,7 @@ class BlissBackend(ScanBackend):
         self.redis.hset(sessionKey(ms, "env"), mapping={
             var: json.dumps(value, default=str)
             for var, value in varvalues.items()})
+        self.notifySession(ms, "env")
 
     def usetEnv(self, var, ms):
         """ unsets a scan environment variable
@@ -366,6 +450,7 @@ class BlissBackend(ScanBackend):
         """
         if ms:
             self.redis.hdel(sessionKey(ms, "env"), var)
+            self.notifySession(ms, "env")
 
     def __env(self, ms):
         """ provides the scan environment
@@ -458,6 +543,29 @@ class BlissBackend(ScanBackend):
                      if ch in existing]
         self.redis.hset(sessionKey(ms, "mntgrps"), mntgrp,
                         json.dumps(fullnames))
+        self.notifySession(ms, "mntgrps")
+
+    def selectDataSources(self, ms, mntgrp, datasources):
+        """ requests STEP datasources without BLISS counters
+            to be read in scans of a measurement group of the session
+
+        The session creates BLISS counters of the datasources,
+        see :meth:`nxsrecconfig.BlissSession.NXSBlissSession.apply`
+
+        :param ms: session name
+        :type ms: :obj:`str`
+        :param mntgrp: measurement group name
+        :type mntgrp: :obj:`str`
+        :param datasources: datasource descriptions by datasource names,
+                            i.e. dictionaries with ``xml`` definitions,
+                            ``nxtype`` NeXus types and ``rank``
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`dict`>
+        """
+        if not ms or not mntgrp:
+            return
+        self.redis.hset(sessionKey(ms, "datasources"), mntgrp,
+                        json.dumps(datasources or {}))
+        self.notifySession(ms, "datasources")
 
     def __nomntgrps(self, *args, **kwargs):
         """ measurement group devices are not supported

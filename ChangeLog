@@ -1,3 +1,17 @@
+2026-11-27 Jan Kotanski <jankotan@gmail.com>
+	* ignore value_stream_ref and streamable keys of Sardana measurement groups with the blissdata publisher in comparisons and profiles
+	* use add_h5map_hook of bliss.scanning.h5map_hooks if BLISS provides it, wrap scan_info_to_h5map otherwise
+	* add setup_nexdatas and NXSBlissWatcher applying selector changes to BLISS sessions automatically
+	* publish running BLISS scans checked by blissdata scan states
+	* synchronize ScanDir and ScanFile with BLISS SCAN_SAVING, outside the ESRF data policy
+	* add BlissDataSources reading STEP datasources without BLISS counters, i.e. TANGO, DB, PYEVAL and CLIENT, by BLISS counters
+	* store datasource counters with types and ranks of their NeXus fields, string datasources as scan metadata
+	* add the canfail option of BLISS sessions filling or stopping scans for datasources which cannot be read
+	* add counters of selected channels missing in BLISS measurement groups
+	* add BlissH5Map adding STEP fields of profiles as links to BLISS scan data, i.e. NXSScanMeta.register(links=True)
+	* fix the error message of datasources not defined in the configuration server
+	* tagged as v4.16.0
+
 2026-11-26 Jan Kotanski <jankotan@gmail.com>
 	* add scan backends: sardana, bliss and null (without scan control system)
 	* add the Backend device property and attribute

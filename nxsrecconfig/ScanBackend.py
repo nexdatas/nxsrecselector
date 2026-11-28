@@ -49,6 +49,11 @@ class ScanBackend(object):
     #:   group devices
     selectsChannels = False
 
+    #: (:obj:`list` <:obj:`str`>) types of STEP datasources without
+    #:   channels which are read by the scan system
+    #:   via :meth:`selectDataSources`
+    dataSourceTypes = []
+
     def __init__(self, numberOfThreads=None):
         """ constructor
 
@@ -336,6 +341,22 @@ class ScanBackend(object):
         :type channels: :obj:`list` <:obj:`str`>
         """
 
+    def selectDataSources(self, ms, mntgrp, datasources):
+        """ selects STEP datasources without channels of the scan system
+            to be read in scans of a measurement group
+
+        It is used by backends with :attr:`dataSourceTypes`
+
+        :param ms: scan server name
+        :type ms: :obj:`str`
+        :param mntgrp: measurement group name
+        :type mntgrp: :obj:`str`
+        :param datasources: datasource descriptions by datasource names,
+                            i.e. dictionaries with ``xml`` definitions,
+                            ``nxtype`` NeXus types and ``rank``
+        :type datasources: :obj:`dict` <:obj:`str`, :obj:`dict`>
+        """
+
     # helpers for the environment variables
 
     def _readSelectorEnv(self, env, names, data):
@@ -465,7 +486,7 @@ class ScanBackend(object):
             discomponentgroup[Utils.tostr(k)].errords = k
             discomponentgroup[Utils.tostr(k)].active = False
             discomponentgroup[Utils.tostr(k)].message = \
-                "%s not defined i<n Configuration Server" % k
+                "%s not defined in Configuration Server" % k
         toCheck = {}
         cps = set(components) & set(availablecomponents)
         for acp in cps:

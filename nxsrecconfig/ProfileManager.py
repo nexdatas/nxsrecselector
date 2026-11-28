@@ -367,7 +367,8 @@ class ProfileManager(object):
         mginfo = self.__createMntGrpConf(
             datasources, componentdatasources, description)
         conf = mginfo['configuration']
-        conf = self.__backend.setMntGrpConfiguration(mginfo['device'], conf)
+        conf = Utils.stripMntGrpRuntimeKeys(
+            self.__backend.setMntGrpConfiguration(mginfo['device'], conf))
         self.__selector['MntGrpConfiguration'] = conf
         mginfo['configuration'] = conf
         if resetDoor:
@@ -430,18 +431,28 @@ class ProfileManager(object):
             {"ActiveMntGrp": self.__selector["MntGrp"]},
             self.__macroServerName)
         if self.__backend.selectsChannels:
+            channels, datasources = self.__selectedChannels()
+            if self.__backend.dataSourceTypes:
+                self.__backend.selectDataSources(
+                    self.__macroServerName, self.__selector["MntGrp"],
+                    datasources)
             self.__backend.selectChannels(
                 self.__macroServerName, self.__selector["MntGrp"],
-                self.__selectedChannels())
+                channels)
         return "{}"
 
     def __selectedChannels(self):
         """ provides selected channels of the scan system,
             i.e. selected datasources and STEP datasources of the selected
-            components which are channels of the backend
+            components which are channels of the backend,
+            and XML definitions of the other selected STEP datasources
+            of :attr:`dataSourceTypes` of the backend
 
-        :returns: ordered channel names
-        :rtype: :obj:`list` <:obj:`str`>
+        :returns: ordered channel names, datasource descriptions
+                  by datasource names, i.e. dictionaries with ``xml``
+                  definitions, ``nxtype`` NeXus types and ``rank``
+        :rtype: (:obj:`list` <:obj:`str`>,
+                 :obj:`dict` <:obj:`str`, :obj:`dict`>)
         """
         self.__updatePools()
         available = set(PoolUtils.getElementNames(
@@ -453,21 +464,71 @@ class ProfileManager(object):
         self.__updateConfigServer()
         describer = Describer(self.__configServer, True)
         description = describer.components(components, '', '')
-        channels = set(self.__dataSources(
+        selected = set(self.__dataSources(
             self.__componentDataSources(description)))
+        channels = set(selected)
+        steps = set(selected)
+        fields = {}
         for grp in description:
             for dss in grp.values():
                 for ds, params in dss.items():
                     for param in params:
                         if param and len(param) > 2 and \
-                           param[0] == 'STEP' and \
-                           param[1] in ['TANGO', 'CLIENT']:
-                            channels.add(Utils.tostr(ds))
+                           param[0] == 'STEP':
+                            ds = Utils.tostr(ds)
+                            steps.add(ds)
+                            if param[1] in ['TANGO', 'CLIENT']:
+                                channels.add(ds)
+                            if ds not in fields:
+                                fields[ds] = {
+                                    "nxtype": (param[3]
+                                               if len(param) > 3 else None),
+                                    "rank": (len(param[4])
+                                             if len(param) > 4 and param[4]
+                                             else 0)}
         channels &= available
         ordered = [ch for ch in json.loads(self.__selector["OrderedChannels"])
                    if ch in channels]
         ordered.extend(sorted(channels - set(ordered)))
-        return ordered
+        datasources = {}
+        if self.__backend.dataSourceTypes:
+            datasources = self.__dataSourceDescriptions(
+                sorted(steps - available), fields)
+        return ordered, datasources
+
+    def __dataSourceDescriptions(self, names, fields):
+        """ provides descriptions of datasources of
+            :attr:`dataSourceTypes` of the backend
+
+        :param names: datasource names
+        :type names: :obj:`list` <:obj:`str`>
+        :param fields: NeXus types and ranks of the datasource fields
+        :type fields: :obj:`dict` <:obj:`str`, :obj:`dict`>
+        :returns: datasource descriptions by datasource names,
+                  i.e. dictionaries with ``xml`` definitions,
+                  ``nxtype`` NeXus types and ``rank``
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`dict`>
+        """
+        if not names:
+            return {}
+        available = set(TangoUtils.command(
+            self.__configServer, "availableDataSources") or [])
+        names = [name for name in names if name in available]
+        if not names:
+            return {}
+        xmls = TangoUtils.command(
+            self.__configServer, "dataSources", names) or []
+        datasources = {}
+        for name, xml in zip(names, xmls):
+            dstype = Utils.dataSourceType(xml)
+            if dstype in self.__backend.dataSourceTypes:
+                field = fields.get(name) or {}
+                datasources[name] = {
+                    "xml": Utils.tostr(xml),
+                    "nxtype": field.get("nxtype"),
+                    "rank": field.get("rank") or 0,
+                }
+        return datasources
 
     def mntGrpConfiguration(self):
         """ provides configuration of mntgrp
@@ -484,7 +545,8 @@ class ProfileManager(object):
             self.__pools, mntGrpName))
         if not fullname:
             return "{}"
-        return self.__backend.mntGrpConfiguration(fullname)
+        return Utils.stripMntGrpRuntimeKeys(
+            self.__backend.mntGrpConfiguration(fullname))
 
     def isMntGrpUpdated(self):
         """ check if active measurement group was changed
@@ -524,7 +586,7 @@ class ProfileManager(object):
         if json.dumps(state) != json.dumps(state2):
             self.__selector.set(state)
 
-        lsconf = json.loads(llconf)
+        lsconf = json.loads(Utils.stripMntGrpRuntimeKeys(llconf))
         return Utils.compareDict(mgconf, lsconf)
 
     def importMntGrp(self):

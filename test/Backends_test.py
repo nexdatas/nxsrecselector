@@ -466,5 +466,43 @@ class SelectorNullBackendTest(unittest.TestCase):
             json.loads(selector.getScanEnvVariables()), {"ScanID": 7})
 
 
+class MntGrpRuntimeKeysTest(unittest.TestCase):
+
+    def conf(self, runtime=True):
+        ch1 = {"name": "exp_c01", "index": 0, "enabled": True}
+        ch2 = {"name": "lima", "index": 1, "enabled": True,
+               "value_ref_enabled": True}
+        if runtime:
+            ch1["value_stream_ref"] = {}
+            ch2["value_stream_ref"] = {"backend": "blissdata",
+                                       "scan_key": "esrf:scan:1"}
+        ctrl1 = {"synchronization": 0, "channels": {"expchan/c/1": ch1}}
+        ctrl2 = {"units": {"0": {"channels": {"expchan/l/1": ch2}}}}
+        if runtime:
+            ctrl1["streamable"] = True
+            ctrl2["units"]["0"]["streamable"] = True
+        return {"label": "mg1", "timer": "exp_t01",
+                "controllers": {"ctrl1": ctrl1, "ctrl2": ctrl2}}
+
+    def test_strip(self):
+        conf = self.conf()
+        stripped = Utils.stripMntGrpRuntimeKeys(conf)
+        self.assertEqual(stripped, self.conf(False))
+        # the given configuration is not changed
+        self.assertEqual(conf, self.conf())
+        jconf = Utils.stripMntGrpRuntimeKeys(json.dumps(conf))
+        self.assertEqual(json.loads(jconf), self.conf(False))
+        # configurations of older Sardana versions stay the same
+        self.assertEqual(Utils.stripMntGrpRuntimeKeys(self.conf(False)),
+                         self.conf(False))
+        self.assertTrue(Utils.compareDict(
+            Utils.stripMntGrpRuntimeKeys(self.conf()),
+            Utils.stripMntGrpRuntimeKeys(self.conf(False))))
+        for value in ["{}", "", "[1]", "{wrong", "{\"controllers\": 3}"]:
+            self.assertEqual(Utils.stripMntGrpRuntimeKeys(value),
+                             value if value[:1] != "{" or value == "{wrong"
+                             else json.dumps(json.loads(value)))
+
+
 if __name__ == '__main__':
     unittest.main()
